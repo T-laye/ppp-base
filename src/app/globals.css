@@ -25,6 +25,9 @@ body {
   @apply text-[#242526] bg-[#fefefe];
 }
 
+section {
+  @apply px-4;
+}
 h3 {
   @apply text-base text-center;
 }
