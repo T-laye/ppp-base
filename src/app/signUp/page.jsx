@@ -74,8 +74,8 @@ export default function SignUp() {
   return (
     <main className="bg-primar min-h-screen container mx-auto">
       <SignHeader signInPage={false} />
-      <section className="px-4">
-        <h3 className="mt-12">
+      <section className="px-4 pb-10">
+        <h3 className="mt-8">
           Choose Account Type <br /> To Sign Up
         </h3>
 
