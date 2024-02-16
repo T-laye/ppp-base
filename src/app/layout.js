@@ -15,3 +15,6 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+// localStorage: window.localStorage
+// url: window.localStorage.href
