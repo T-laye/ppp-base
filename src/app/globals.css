@@ -41,6 +41,13 @@ label {
 input {
   @apply text-base caret-primary focus:border outline-none focus:outline-none focus:border-primary border border-gray-200 h-11 rounded-xl px-2 duration-200;
 }
+
+select {
+  @apply text-black text-base outline-none focus:outline-none focus:border-primary h-11 rounded-xl px-2 duration-200  border border-gray-200;
+}
+option {
+  @apply text-white text-base bg-customGray ;
+}
 .logo {
   font-family: cursive;
 }

@@ -1,11 +1,8 @@
 export function signUp_validate(values) {
   const errors = {};
 
-  if (!values.firstName) {
-    errors.firstName = "Required";
-  }
-  if (!values.lastName) {
-    errors.lastName = "Required";
+  if (!values.fullName) {
+    errors.fullName = "Required";
   }
 
   if (!values.email) {
@@ -14,16 +11,30 @@ export function signUp_validate(values) {
     errors.email = "Invalid email address";
   }
 
+  if (!values.phone) {
+    errors.phone = "Required";
+  } else if (!/^\+?\d{10,}$/i.test(values.phone)) {
+    errors.phone = "Invalid phone number";
+  }
+
+  if (!values.address) {
+    errors.address = 'Required';
+  }
+
+  
+  if (!values.gender || values.gender === "Select Gender") {
+    errors.gender = "Please select gender";
+  }
+  if (!values.userRole) {
+    errors.userRole = "";
+  }
+
   if (!values.password) {
     errors.password = "Required";
   } else if (values.password.length < 6) {
     errors.password = "Must be at least 6 characters";
   } else if (values.password.includes(" ")) {
     errors.password = "Invalid Password";
-  }
-
-  if (!values.agreement) {
-    errors.agreement = "Please check the checkbox";
   }
 
   return errors;

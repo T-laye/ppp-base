@@ -19,10 +19,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
-  const customToastStyle = {
-    backgroundColor: "#333333",
-    color: "#ffffff",
-  };
+ 
 
   const viewPassword = () => {
     setShowPassword(!showPassword);

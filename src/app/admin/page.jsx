@@ -117,12 +117,12 @@ export default function AdminSignIn() {
             {formik.touched.password && formik.errors.password && (
               <div className="text-error text-sm">{formik.errors.password}</div>
             )}
-            <div className="text-sm mt-4 font-medium text-right">
+            {/* <div className="text-sm mt-4 font-medium text-right">
               <Link href="/signIn/forgotPassword" className="text-gray-500">
                 {" "}
                 Forgot Password ?
               </Link>
-            </div>
+            </div> */}
             <button
               type="submit"
               className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
