@@ -1,33 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Roboto:wght@300;400;500&family=Rubik:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700;1,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Unica+One&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -moz-tap-highlight-color: transparent;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+* > * {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -moz-tap-highlight-color: transparent;
 }
-
+html {
+  font-family: "Rubik", sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  overflow-x: hidden;
+  @apply text-[#242526] bg-[#fefefe];
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+section {
+  @apply px-4;
+}
+h3 {
+  @apply text-base text-center;
+}
+
+label {
+  /* margin-bottom: 10px; */
+  /* margin-left: 5px; */
+  @apply font-medium text-base;
+}
+
+input {
+  @apply text-base caret-primary focus:border outline-none focus:outline-none focus:border-primary border border-gray-200 h-11 rounded-xl px-2 duration-200;
+}
+
+select {
+  @apply text-black text-base outline-none focus:outline-none focus:border-primary h-11 rounded-xl px-2 duration-200  border border-gray-200;
+}
+option {
+  @apply text-white text-base bg-customGray ;
+}
+.logo {
+  font-family: cursive;
+}
+
+.btn {
+  @apply px-3 py-2 rounded-xl text-white text-sm text-center font-medium duration-200;
+}
+.btn:hover {
+  @apply scale-[0.95] duration-200 bg-primaryMedium;
+}
+.btn:active {
+  @apply scale-100 duration-200;
 }

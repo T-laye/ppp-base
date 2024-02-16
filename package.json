@@ -9,13 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "formik": "^2.4.5",
+    "next": "14.1.0",
     "@prisma/client": "^5.9.1",
     "next": "14.1.0",
     "react": "^18",
+    "react-dom": "^18",
+    "react-icons": "^5.0.1",
+    "react-toast": "^1.0.3",
+    "react-toastify": "^10.0.4"
     "react-dom": "^18"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "postcss": "^8",
