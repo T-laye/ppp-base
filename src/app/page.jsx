@@ -1,5 +1,4 @@
 "use client";
-import Header from "@/components/Header";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -10,6 +9,8 @@ import Loader from "@/components/Loader.jsx";
 // import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { signIn_validate } from "@/lib/validate";
+import { toast } from "react-toastify";
+import SignHeader from "@/components/SignHeader";
 
 export default function Home() {
   const [role, setRole] = useState(false);
@@ -43,8 +44,12 @@ export default function Home() {
 
   async function handleSubmit(values) {
     const { email, password } = values;
-    setIsLoading(true);
     console.log(email, password);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      toast.success("Successful");
+    }, 2000);
   }
 
   const getInputClassNames = (fieldName) =>
@@ -66,7 +71,7 @@ export default function Home() {
 
   return (
     <main className="bg-primar min-h-screen container mx-auto">
-      <Header />
+      <SignHeader signInPage={true} />
       <section className="px-4">
         <h3 className="mt-12">
           Choose Account Type <br /> To Sign In
@@ -75,7 +80,7 @@ export default function Home() {
         <div className="mt-8">
           <div
             onClick={handleRole}
-            className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-44 px-4 py-1.5 rounded-xl mx-auto"
+            className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-44 px-4 py-1.5 rounded-xl mx-auto cursor-pointer"
           >
             <div className=" w-1/2 px-2">Staff</div>
             <div className=" w-1/2 text-end">Operator</div>
@@ -144,7 +149,7 @@ export default function Home() {
                   {formik.errors.password}
                 </div>
               )}
-              <div className="text-sm mt-3 font-medium text-right">
+              <div className="text-sm mt-4 font-medium text-right">
                 <Link href="/signIn/forgotPassword" className="text-gray-500">
                   {" "}
                   Forgot Password ?
@@ -152,14 +157,14 @@ export default function Home() {
               </div>
               <button
                 type="submit"
-                className={`btn w-full  mt-6 flex justify-center text-white font-medium duration-200 rounded-xl  ${
+                className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
                   isFormValid
                     ? `${isLoading ? "bg-customGray" : "bg-primary"}`
                     : "bg-customGray cursor-not-allowed"
                 } `}
                 disabled={!isFormValid || isLoading}
               >
-                {isLoading ? <Loader /> : "Submit"}
+                {isLoading ? <Loader /> : "Sign In"}
               </button>
             </form>
           </div>

@@ -1,4 +1,6 @@
 import "./globals.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata = {
   title: "PPP-Base",
@@ -8,7 +10,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="max-w-2xl mx-auto  ">{children}</body>
+      <body className="max-w-2xl mx-auto  ">
+        {children}
+
+        <ToastContainer closeOnClick pauseOnHover />
+      </body>
     </html>
   );
 }
