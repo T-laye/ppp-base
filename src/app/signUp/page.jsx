@@ -31,7 +31,7 @@ export default function SignUp() {
       phone: "",
       address: "",
       gender: "",
-      userRole: role ? "Operator" : "Staff",
+      designation: role ? "Operator" : "Staff",
       password: "",
     },
     validate: signUp_validate,

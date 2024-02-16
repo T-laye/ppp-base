@@ -50,6 +50,9 @@ export default function AdminSignIn() {
       setIsLoading(false);
       toast.success("Successful");
     }, 2000);
+    setTimeout(() => {
+      router.push('/admin/dashboard')
+    }, 500);
   }
 
   const getInputClassNames = (fieldName) =>
@@ -71,7 +74,7 @@ export default function AdminSignIn() {
           PPP-BASE
         </div>
 
-        <h3 className="mt-10 text-2xl font-bold">Admin Login</h3>
+        <h3 className="mt-8 text-2xl font-bold">Admin Login</h3>
 
         <div className="mt-8">
           <form onSubmit={formik.handleSubmit} className="mb-4">

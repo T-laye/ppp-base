@@ -25,8 +25,8 @@ export function signUp_validate(values) {
   if (!values.gender || values.gender === "Select Gender") {
     errors.gender = "Please select gender";
   }
-  if (!values.userRole) {
-    errors.userRole = "";
+  if (!values.designation) {
+    errors.designation = "";
   }
 
   if (!values.password) {
