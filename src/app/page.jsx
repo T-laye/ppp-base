@@ -19,7 +19,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
- 
 
   const viewPassword = () => {
     setShowPassword(!showPassword);
@@ -68,19 +67,28 @@ export default function Home() {
 
   return (
     <main className="bg-primar min-h-screen container mx-auto">
-      <SignHeader signInPage={true} />
+      {/* <SignHeader signInPage={true} /> */}
       <section className="px-4">
-        <h3 className="mt-12">
+        <div className="h-28 w-full object-contain mt-5">
+          <Image
+            src="/images/logo-removebg.png"
+            alt="PPP-Base Logo"
+            height={200}
+            width={200}
+            className="h-full w-full object-contain"
+          />
+        </div>
+        <h3 className="mt-4 ">
           Choose Account Type <br /> To Sign In
         </h3>
 
         <div className="mt-8">
           <div
             onClick={handleRole}
-            className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-44 px-4 py-1.5 rounded-xl mx-auto cursor-pointer"
+            className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-60 px-4 py-1.5 rounded-xl mx-auto cursor-pointer"
           >
-            <div className=" w-1/2 px-2">Staff</div>
-            <div className=" w-1/2 text-end">Operator</div>
+            <div className=" w-1/2 px-2">Personnel</div>
+            <div className=" w-1/2 text-end">Management</div>
             <div
               className={`${
                 role
@@ -88,7 +96,7 @@ export default function Home() {
                   : "duration-200 translate-x-0 -left-0.5"
               }  absolute duration-200 text-center text-base w-1/2 bg-primary text-white font-medium  top-0 rounded-xl py-1.5  `}
             >
-              {role ? "Operator" : "Staff"}
+              {role ? "Management" : "Personnel"}
             </div>
           </div>
         </div>
@@ -102,7 +110,7 @@ export default function Home() {
             <form onSubmit={formik.handleSubmit} className="mb-4">
               <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="email">
-                  {role ? "Operator's Email" : "Staff's Email"}
+                  {role ? "Management's Email" : "Personnel's Email"}
                 </label>
                 <input
                   id="email"

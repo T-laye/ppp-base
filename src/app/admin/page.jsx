@@ -51,7 +51,7 @@ export default function AdminSignIn() {
       toast.success("Successful");
     }, 2000);
     setTimeout(() => {
-      router.push('/admin/dashboard')
+      router.push("/admin/product");
     }, 500);
   }
 
@@ -70,11 +70,19 @@ export default function AdminSignIn() {
   return (
     <section>
       <div className="bgblue-200">
-        <div className="logo mt-20 text-primary font-medium text-4xl text-center">
-          PPP-BASE
+        <div className="logo mt-5 text-primary font-medium text-4xl text-center">
+          <div className="h-36 w-full object-contain">
+            <Image
+              src="/images/logo-removebg.png"
+              alt="PPP-Base Logo"
+              height={200}
+              width={200}
+              className="h-full w-full object-contain"
+            />
+          </div>
         </div>
 
-        <h3 className="mt-8 text-2xl font-bold">Admin Login</h3>
+        <h3 className="mt-4 text-2xl font-bold">Admin Login</h3>
 
         <div className="mt-8">
           <form onSubmit={formik.handleSubmit} className="mb-4">

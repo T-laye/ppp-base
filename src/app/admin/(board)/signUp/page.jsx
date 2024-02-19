@@ -31,7 +31,7 @@ export default function SignUp() {
       phone: "",
       address: "",
       gender: "",
-      designation: role ? "Operator" : "Staff",
+      designation: role ? "Management" : "Personnel",
       password: "",
     },
     validate: signUp_validate,
@@ -82,10 +82,10 @@ export default function SignUp() {
         <div className="mt-8">
           <div
             onClick={handleRole}
-            className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-44 px-4 py-1.5 rounded-xl mx-auto cursor-pointer"
+            className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-60 px-4 py-1.5 rounded-xl mx-auto cursor-pointer"
           >
-            <div className=" w-1/2 px-2">Staff</div>
-            <div className=" w-1/2 text-end">Operator</div>
+            <div className=" w-1/2 px-2">Personnel</div>
+            <div className=" w-1/2 text-end">Management</div>
             <div
               className={`${
                 role
@@ -93,7 +93,7 @@ export default function SignUp() {
                   : "duration-200 translate-x-0 -left-0.5"
               }  absolute duration-200 text-center text-base w-1/2 bg-primary text-white font-medium  top-0 rounded-xl py-1.5  `}
             >
-              {role ? "operator" : "staff"}
+              {role ? "Management" : "Personnel"}
             </div>
           </div>
         </div>
@@ -107,7 +107,7 @@ export default function SignUp() {
             <form onSubmit={formik.handleSubmit} className="mb-4">
               <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="fullName">
-                  {role ? "Operator's Full Name" : "Staff's Full Name"}
+                  {role ? "Management's Full Name" : "Personnel's Full Name"}
                 </label>
                 <input
                   id="fullName"

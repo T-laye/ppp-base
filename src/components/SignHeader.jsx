@@ -13,11 +13,11 @@ export default function SignHeader({ signInPage }) {
 
   return (
     <header className="bg-white h-[7vh] shadow-sm px-4 flex justify-between items-center">
-     <Logo />
+      <Logo />
       <div>
-        <button onClick={goToSignUp} className="btn bg-primary">
+        {/* <button onClick={goToSignUp} className="btn bg-primary">
           {signInPage ? "Sign Up" : "Sign In"}
-        </button>
+        </button> */}
       </div>
     </header>
   );
