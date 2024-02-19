@@ -6,7 +6,7 @@ export default function Logo() {
   return (
     <div className="logo text-primary font-medium text-base ">
       <Link href="/">
-        <div className="h-10 w-full object-contain">
+        <div className="h-12 w-full object-contain">
           <Image
             src="/images/logo-removebg.png"
             alt="PPP-Base Logo"
