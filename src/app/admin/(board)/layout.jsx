@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 export default function layout({ children }) {
   return (
     <div className="">
-      <header className=" max-w-2xl mx-auto bg-white h-[7vh] fixed top-0 left-0 right-0 shadow-sm px-4 flex justify-between items-center pt-2">
+      <header className=" max-w-2xl mx-auto bg-white h-[7vh] fixed top-0 left-0 right-0 shadow-sm px-4 flex justify-between items-center py-1">
         <Logo />
         <div>
           <IoIosMenu size={28} />
