@@ -16,7 +16,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed bottom-0  left-0 right-0 h-14 border-t border-t-gray-100 bg-white max-w-2xl mx-auto">
-      <ul className="h-full flex justify-evenly text-gray-500">
+      <ul className="h-full flex justify-evenly ">
         <Link href="/admin/product" legacyBehavior>
           <li
             className={`${
@@ -27,7 +27,7 @@ export default function Navbar() {
             <PiDropFill size={24} />
             {/* </div> */}
 
-            <a className="text-xs block ">Product</a>
+            <a className="text-xs max-[300px]:text-[10px] block ">Product</a>
           </li>
         </Link>
         <Link href="/admin/customers" legacyBehavior>
@@ -37,7 +37,7 @@ export default function Navbar() {
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
           >
             <FaUsers size={26} />
-            <a className="text-xs">Customers</a>
+            <a className="text-xs max-[300px]:text-[10px]">Customers</a>
           </li>
         </Link>
         <Link href="/admin/poc" legacyBehavior>
@@ -47,7 +47,7 @@ export default function Navbar() {
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
           >
             <GiGasPump size={24} />
-            <a className="text-xs">POC</a>
+            <a className="text-xs max-[300px]:text-[10px]">POC</a>
           </li>
         </Link>
         <Link href="/admin/personnels" legacyBehavior>
@@ -59,7 +59,7 @@ export default function Navbar() {
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
           >
             <BsPersonFillGear size={28} />
-            <a className="text-xs">Personnels</a>
+            <a className="text-xs max-[300px]:text-[10px]">Personnels</a>
           </li>
         </Link>
         <Link href="/admin/account" legacyBehavior>
@@ -69,7 +69,7 @@ export default function Navbar() {
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
           >
             <RiAccountCircleFill size={26} />
-            <a className="text-xs">Account</a>
+            <a className="text-xs max-[300px]:text-[10px]">Account</a>
           </li>
         </Link>
       </ul>
