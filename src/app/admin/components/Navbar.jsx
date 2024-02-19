@@ -6,16 +6,16 @@ import { GiGasPump } from "react-icons/gi";
 import { PiDropFill } from "react-icons/pi";
 import { BsPersonFillGear } from "react-icons/bs";
 import { RiAccountCircleFill } from "react-icons/ri";
-import {usePathname} from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
-    const pathname = usePathname();
+  const pathname = usePathname();
   //   const { pathName } = useRouter();
 
-  console.log(pathname);
+  //   console.log(pathname);
 
   return (
-    <nav className="fixed bottom-0 bg-red-40  left-0 right-0 h-[7vh] border-t border-t-gray-100 bg-white">
+    <nav className="fixed bottom-0 bg-red-40  left-0 right-0 h-[8vh] border-t border-t-gray-100 bg-white max-w-2xl mx-auto">
       <ul className="h-full flex justify-evenly text-gray-500">
         <Link href="/admin/product" legacyBehavior>
           <li
@@ -23,8 +23,11 @@ export default function Navbar() {
               pathname === "/admin/product" ? "text-primary" : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
           >
+            {/* <div className="h-2 bg-blue-600"> */}
             <PiDropFill size={24} />
-            <a className="text-xs">Product</a>
+            {/* </div> */}
+
+            <a className="text-xs block ">Product</a>
           </li>
         </Link>
         <Link href="/admin/customers" legacyBehavior>
