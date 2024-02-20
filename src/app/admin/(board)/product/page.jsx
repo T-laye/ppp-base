@@ -1,10 +1,16 @@
 import React from "react";
+import QuantityCards from "../../components/QuantityCards";
 
 export default function Product() {
   return (
-    <section className="pt-3 bg-red-400 h-screen">
-      <h3 className="font-medium text-lg">Dashboard</h3>
-      <h4 className="text-sm ">Hello, Admin</h4>
+    <section className="py-4 bg-red-40 min-h-screen">
+      <h4 className="font-medium text-base mt-2">Product Stats</h4>
+      {/* <h4 className="text-sm ">Hello, Admin</h4> */}
+      <div>
+        <QuantityCards title="Total Level" available={800} total={1000} />
+        <QuantityCards title="Fuel Level" available={250} total={600} />
+        <QuantityCards title="Desiel Level" available={100} total={400} />
+      </div>
     </section>
   );
 }
