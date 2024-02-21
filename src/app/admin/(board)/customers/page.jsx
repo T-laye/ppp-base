@@ -16,12 +16,12 @@ export default function Customers() {
 
   return (
     <section className="min-h-screen bg-green300 py-4">
-      <div className="flex justify-start space-x-3 items-center mt-2">
+      <div className="flex justify-start space-x-3 items-center mt-2 text-base">
         <div
           onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
           className={`${
             activeTab === 1 ? "bg-primary text-white" : "border text-gray-400 "
-          }  px-5 py-1 rounded-xl duration-200`}
+          }  px-3 py-1 rounded-xl duration-200 text-center`}
         >
           All
         </div>
@@ -29,7 +29,7 @@ export default function Customers() {
           onClick={() => setTab(2)} // Wrap the setTab function call in an arrow function
           className={`${
             activeTab === 2 ? "bg-primary text-white" : "border text-gray-400 "
-          }  px-4 py-1 rounded-xl duration-200`}
+          }  px-3 py-1 rounded-xl duration-200 text-center`}
         >
           Pending
         </div>
@@ -37,26 +37,19 @@ export default function Customers() {
           onClick={() => setTab(3)} // Wrap the setTab function call in an arrow function
           className={`${
             activeTab === 3 ? "bg-primary text-white" : "border text-gray-400 "
-          } px-4 py-1 rounded-xl duration-200`}
+          } px-3 py-1 rounded-xl duration-200 text-center`}
         >
           Approved
         </div>
       </div>
 
-      <div className="mt-5">
+      <div className="mt-4">
         <form action="" onSubmit={(e) => e.preventDefault()}>
-          {/* <input
-            type="text"
-            placeholder="Search"
-            name="customer"
-            id="customer"
-            className="w-full"
-          /> */}
           <div className="relative ">
             <input
               type="text"
               placeholder="Search by name"
-              className="w-full h-11 p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
+              className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
               value={term}
               onChange={handleChange}
             />
@@ -65,6 +58,7 @@ export default function Customers() {
             </div>
           </div>
         </form>
+        <div className="text-end mt-1 text-sm text-gray-500 pr-2">100</div>
       </div>
     </section>
   );
