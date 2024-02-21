@@ -110,7 +110,7 @@ export default function Home() {
             <form onSubmit={formik.handleSubmit} className="mb-4">
               <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="email">
-                  {role ? "Management's Email" : "Personnel's Email"}
+                  Email
                 </label>
                 <input
                   id="email"

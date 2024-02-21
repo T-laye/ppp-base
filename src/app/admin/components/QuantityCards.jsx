@@ -8,7 +8,7 @@ export default function QuantityCards({ title, available, total }) {
     return `${Math.round(result)}%`;
   };
 
-  console.log(barProgress());
+//   console.log(barProgress());
 
   const barColor = () => {
     if (percentage < 40) {
