@@ -5,8 +5,10 @@ export default function QuantityCards({ title, available, total }) {
 
   const barProgress = () => {
     const result = (available / total) * 100;
-    return `w-[${Math.round(result)}%]`;
+    return `${Math.round(result)}%`;
   };
+
+  console.log(barProgress());
 
   const barColor = () => {
     if (percentage < 40) {
@@ -18,7 +20,7 @@ export default function QuantityCards({ title, available, total }) {
 
   //   console.log(available);
   //   console.log(percentage);
-//   console.log(barProgress());
+  //   console.log(barProgress());
 
   return (
     <div className="rounded-xl border px-4 pt-1 pb-4 border-customGra  mt-4">
@@ -30,7 +32,8 @@ export default function QuantityCards({ title, available, total }) {
       </div>
       <div className="h-2 bg-gray-300 rounded-xl mt-4 overflow-hidden">
         <div
-          className={`h-full rounded-xl ${barProgress()}   ${barColor()} `}
+          style={{ width: barProgress() }}
+          className={`h-full rounded-xl w-[${barProgress()}%]   ${barColor()} `}
         ></div>
       </div>
     </div>
