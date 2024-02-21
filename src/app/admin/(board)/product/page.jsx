@@ -11,6 +11,13 @@ export default function Product() {
         <QuantityCards title="Fuel Level" available={250} total={600} />
         <QuantityCards title="Desiel Level" available={100} total={400} />
       </div>
+
+      <div>
+        <h4 className="font-medium text-base mt-4">Product Details</h4>
+
+
+
+      </div>
     </section>
   );
 }
