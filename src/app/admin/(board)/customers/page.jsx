@@ -4,8 +4,13 @@ import React, { useState } from "react";
 import CustomerList from "../../components/CustomerList";
 
 export default function Customers() {
+  const [product, setProduct] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const [term, setTerm] = useState("");
+
+  const handleProduct = () => {
+    setProduct(!product);
+  };
 
   const setTab = (tab) => {
     setActiveTab(tab);
@@ -17,14 +22,32 @@ export default function Customers() {
 
   return (
     <section className="min-h-screen bg-green300 py-4">
-      <div className="flex justify-start space-x-3 items-center mt-2 text-base">
+      <div className="mt-2">
+        <div
+          onClick={handleProduct}
+          className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-52 px-4 py-1.5 rounded-xl mx-auto cursor-pointer"
+        >
+          <div className=" w-1/2 px-2 text-center">Fuel</div>
+          <div className=" w-1/2 text-center">Diesel</div>
+          <div
+            className={`${
+              product
+                ? "translate-x-full left-0.5 duration-200"
+                : "duration-200 translate-x-0 -left-0.5"
+            }  absolute duration-200 text-center text-base w-1/2 bg-primary text-white font-medium  top-0 rounded-xl py-1.5  `}
+          >
+            {product ? "Diesl" : "Fuel"}
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-center space-x-3 items-center mt-4 text-base">
         <div
           onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
           className={`${
             activeTab === 1 ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
-          All
+          Queue
         </div>
         <div
           onClick={() => setTab(2)} // Wrap the setTab function call in an arrow function
@@ -32,16 +55,9 @@ export default function Customers() {
             activeTab === 2 ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
-          Pending
-        </div>
-        <div
-          onClick={() => setTab(3)} // Wrap the setTab function call in an arrow function
-          className={`${
-            activeTab === 3 ? "bg-primary text-white" : "border text-gray-400 "
-          } px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
-        >
           Approved
         </div>
+    
       </div>
 
       <div className="mt-4">
@@ -63,24 +79,33 @@ export default function Customers() {
 
         <div className="bg-gren-400 pt-3 pb-10">
           <ul>
-           {(activeTab === 1 ||
-              activeTab === 2) && <CustomerList name='John Doe' pending={true} />}
-           {(activeTab === 1 ||
-              activeTab === 2) && <CustomerList name='Mark Timmy' pending={true} />}
-           {(activeTab === 1 ||
-              activeTab === 3) && <CustomerList name='Tiebebedigha Tubolayefa' pending={false} />}
-           {(activeTab === 1 ||
-              activeTab === 2) && <CustomerList name='Mchael Tega' pending={true} />}
-           {(activeTab === 1 ||
-              activeTab === 4) && <CustomerList name='Susan Bournsmouth' pending={true} />}
-           {(activeTab === 1 ||
-              activeTab === 3) && <CustomerList name='Onoyake James' pending={false} />}
-           {(activeTab === 1 ||
-              activeTab === 2) && <CustomerList name='Etuk Obong' pending={true} />}
-           {(activeTab === 1 ||
-              activeTab === 3) && <CustomerList name='Ogar Jude' pending={false} />}
-           {(activeTab === 1 ||
-              activeTab === 3) && <CustomerList name='Marvelous Ike' pending={false} />}
+            {(activeTab === 1 || activeTab === 2) && (
+              <CustomerList name="John Doe" pending={true} />
+            )}
+            {(activeTab === 1 || activeTab === 2) && (
+              <CustomerList name="Mark Timmy" pending={true} />
+            )}
+            {(activeTab === 1 || activeTab === 3) && (
+              <CustomerList name="Tiebebedigha Tubolayefa" pending={false} />
+            )}
+            {(activeTab === 1 || activeTab === 2) && (
+              <CustomerList name="Mchael Tega" pending={true} />
+            )}
+            {(activeTab === 1 || activeTab === 4) && (
+              <CustomerList name="Susan Bournsmouth" pending={true} />
+            )}
+            {(activeTab === 1 || activeTab === 3) && (
+              <CustomerList name="Onoyake James" pending={false} />
+            )}
+            {(activeTab === 1 || activeTab === 2) && (
+              <CustomerList name="Etuk Obong" pending={true} />
+            )}
+            {(activeTab === 1 || activeTab === 3) && (
+              <CustomerList name="Ogar Jude" pending={false} />
+            )}
+            {(activeTab === 1 || activeTab === 3) && (
+              <CustomerList name="Marvelous Ike" pending={false} />
+            )}
           </ul>
         </div>
       </div>
