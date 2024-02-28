@@ -59,19 +59,28 @@ export default function Customers() {
             </div>
           </div>
         </form>
-        <div className="text-end mt-3 text-sm text-gray-500 pr-2">100</div>
+        <div className="text-end mt-3 text-sm text-gray-500 pr-2">09</div>
 
         <div className="bg-gren-400 pt-3 pb-10">
           <ul>
-           <CustomerList name='John Doe' pending={true} />
-           <CustomerList name='Mark Timmy' pending={true} />
-           <CustomerList name='Tiebebedigha Tubolayefa' pending={false} />
-           <CustomerList name='Mchael Tega' pending={true} />
-           <CustomerList name='Susan Bournsmouth' pending={true} />
-           <CustomerList name='Onoyake James' pending={false} />
-           <CustomerList name='Etuk Obong' pending={true} />
-           <CustomerList name='Ogar Jude' pending={false} />
-           <CustomerList name='Marvelous Ikechi' pending={false} />
+           {(activeTab === 1 ||
+              activeTab === 2) && <CustomerList name='John Doe' pending={true} />}
+           {(activeTab === 1 ||
+              activeTab === 2) && <CustomerList name='Mark Timmy' pending={true} />}
+           {(activeTab === 1 ||
+              activeTab === 3) && <CustomerList name='Tiebebedigha Tubolayefa' pending={false} />}
+           {(activeTab === 1 ||
+              activeTab === 2) && <CustomerList name='Mchael Tega' pending={true} />}
+           {(activeTab === 1 ||
+              activeTab === 4) && <CustomerList name='Susan Bournsmouth' pending={true} />}
+           {(activeTab === 1 ||
+              activeTab === 3) && <CustomerList name='Onoyake James' pending={false} />}
+           {(activeTab === 1 ||
+              activeTab === 2) && <CustomerList name='Etuk Obong' pending={true} />}
+           {(activeTab === 1 ||
+              activeTab === 3) && <CustomerList name='Ogar Jude' pending={false} />}
+           {(activeTab === 1 ||
+              activeTab === 3) && <CustomerList name='Marvelous Ike' pending={false} />}
           </ul>
         </div>
       </div>

@@ -15,6 +15,11 @@
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -moz-tap-highlight-color: transparent;
 }
+
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+  scrollbar-width: none;
+}
 html {
   font-family: "Rubik", sans-serif;
   overflow-x: hidden;
@@ -65,7 +70,7 @@ option {
   @apply px-3 py-2 rounded-xl text-white text-sm text-center font-medium duration-200 min-w-20;
 }
 .btn-secondary:hover {
-  @apply scale-[0.98] duration-200 ;
+  @apply scale-[0.98] duration-200;
 }
 .btn-secondary:active {
   @apply scale-100 duration-200;
