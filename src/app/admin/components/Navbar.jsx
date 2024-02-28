@@ -21,7 +21,7 @@ export default function Navbar() {
           <li
             className={`${
               pathname === "/admin/product" ? "text-primary" : "text-gray-500"
-            } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
+            } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             {/* <div className="h-2 bg-blue-600"> */}
             <PiDropFill size={24} />
@@ -34,7 +34,7 @@ export default function Navbar() {
           <li
             className={`${
               pathname === "/admin/customers" ? "text-primary" : "text-gray-500"
-            } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
+            } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <FaUsers size={26} />
             <a className="text-xs max-[300px]:text-[10px]">Customers</a>
@@ -44,7 +44,7 @@ export default function Navbar() {
           <li
             className={`${
               pathname === "/admin/poc" ? "text-primary" : "text-gray-500"
-            } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
+            } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <GiGasPump size={24} />
             <a className="text-xs max-[300px]:text-[10px]">POC</a>
@@ -56,7 +56,7 @@ export default function Navbar() {
               pathname === "/admin/personnels"
                 ? "text-primary"
                 : "text-gray-500"
-            } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
+            } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <BsPersonFillGear size={28} />
             <a className="text-xs max-[300px]:text-[10px]">Personnels</a>
@@ -66,7 +66,7 @@ export default function Navbar() {
           <li
             className={`${
               pathname === "/admin/account" ? "text-primary" : "text-gray-500"
-            } flex flex-col items-center justify-between bg-green-40 h-full py-2 `}
+            } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <RiAccountCircleFill size={26} />
             <a className="text-xs max-[300px]:text-[10px]">Account</a>

@@ -68,7 +68,7 @@ export default function AdminSignIn() {
   }, 5000);
 
   return (
-    <section>
+    <section className="min-h-screen">
       <div className="bgblue-200">
         <div className="logo mt-5 text-primary font-medium text-4xl text-center">
           <div className="h-36 w-full object-contain">

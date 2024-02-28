@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="max-w-2xl mx-auto  border">
+      <body className="max-w-2xl mx-auto  ">
         {children}
 
         <ToastContainer closeOnClick pauseOnHover />

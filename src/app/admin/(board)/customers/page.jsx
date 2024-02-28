@@ -1,6 +1,7 @@
 "use client";
 import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useState } from "react";
+import CustomerList from "../../components/CustomerList";
 
 export default function Customers() {
   const [activeTab, setActiveTab] = useState(1);
@@ -21,7 +22,7 @@ export default function Customers() {
           onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
           className={`${
             activeTab === 1 ? "bg-primary text-white" : "border text-gray-400 "
-          }  px-3 py-1 rounded-xl duration-200 text-center`}
+          }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
           All
         </div>
@@ -29,7 +30,7 @@ export default function Customers() {
           onClick={() => setTab(2)} // Wrap the setTab function call in an arrow function
           className={`${
             activeTab === 2 ? "bg-primary text-white" : "border text-gray-400 "
-          }  px-3 py-1 rounded-xl duration-200 text-center`}
+          }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
           Pending
         </div>
@@ -37,7 +38,7 @@ export default function Customers() {
           onClick={() => setTab(3)} // Wrap the setTab function call in an arrow function
           className={`${
             activeTab === 3 ? "bg-primary text-white" : "border text-gray-400 "
-          } px-3 py-1 rounded-xl duration-200 text-center`}
+          } px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
           Approved
         </div>
@@ -58,7 +59,21 @@ export default function Customers() {
             </div>
           </div>
         </form>
-        <div className="text-end mt-1 text-sm text-gray-500 pr-2">100</div>
+        <div className="text-end mt-3 text-sm text-gray-500 pr-2">100</div>
+
+        <div className="bg-gren-400 pt-3 pb-10">
+          <ul>
+           <CustomerList name='John Doe' pending={true} />
+           <CustomerList name='Mark Timmy' pending={true} />
+           <CustomerList name='Tiebebedigha Tubolayefa' pending={false} />
+           <CustomerList name='Mchael Tega' pending={true} />
+           <CustomerList name='Susan Bournsmouth' pending={true} />
+           <CustomerList name='Onoyake James' pending={false} />
+           <CustomerList name='Etuk Obong' pending={true} />
+           <CustomerList name='Ogar Jude' pending={false} />
+           <CustomerList name='Marvelous Ikechi' pending={false} />
+          </ul>
+        </div>
       </div>
     </section>
   );

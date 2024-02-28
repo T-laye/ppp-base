@@ -46,14 +46,14 @@ select {
   @apply text-black text-base outline-none focus:outline-none focus:border-primary h-11 rounded-xl px-2 duration-200  border border-gray-200;
 }
 option {
-  @apply text-white text-base bg-customGray ;
+  @apply text-white text-base bg-customGray;
 }
 .logo {
   font-family: cursive;
 }
 
 .btn {
-  @apply px-3 py-2 rounded-xl text-white text-sm text-center font-medium duration-200;
+  @apply px-3 py-2 rounded-xl text-white text-sm text-center font-medium duration-200 min-w-20;
 }
 .btn:hover {
   @apply scale-[0.95] duration-200 bg-primaryMedium;
