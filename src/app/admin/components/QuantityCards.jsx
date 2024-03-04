@@ -8,7 +8,7 @@ export default function QuantityCards({ title, available, total }) {
     return `${Math.round(result)}%`;
   };
 
-//   console.log(barProgress());
+  //   console.log(barProgress());
 
   const barColor = () => {
     if (percentage < 40) {
@@ -35,6 +35,29 @@ export default function QuantityCards({ title, available, total }) {
           style={{ width: barProgress() }}
           className={`h-full rounded-xl w-[${barProgress()}%]   ${barColor()} `}
         ></div>
+      </div>
+
+      <div className="mt-2">
+        {/* <div className="flex justify-between">
+          <div>Product Name</div>
+          <div>Fuel</div>
+        </div> */}
+        <div className="flex justify-between items-center mt-2">
+          <div>Customers In Queue</div>
+          <div>30</div>
+        </div>
+        <div className="flex justify-between items-center mt-2">
+          <div>Customers Approved</div>
+          <div>30</div>
+        </div>
+        <div className="flex justify-between items-center mt-2">
+          <div>Quantity Allocation</div>
+          <div>30</div>
+        </div>
+        <div className="flex justify-between items-center mt-2">
+          <div>Number of POC</div>
+          <div>30</div>
+        </div>
       </div>
     </div>
   );

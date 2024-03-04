@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import CustomerList from "../../components/CustomerList";
 
 export default function Customers() {
-  const [product, setProduct] = useState(false);
+  const [approved, setApproved] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const [term, setTerm] = useState("");
 
   const handleProduct = () => {
-    setProduct(!product);
+    setApproved(!approved);
   };
 
   const setTab = (tab) => {
@@ -22,21 +22,21 @@ export default function Customers() {
 
   return (
     <section className="min-h-screen bg-green300 py-4">
-      <div className="mt-2">
+      <div className="mt-4">
         <div
           onClick={handleProduct}
           className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-52 px-4 py-1.5 rounded-xl mx-auto cursor-pointer"
         >
-          <div className=" w-1/2 px-2 text-center">Fuel</div>
-          <div className=" w-1/2 text-center">Diesel</div>
+          <div className=" w-1/2 px-2 text-center">Queue</div>
+          <div className=" w-1/2 text-center">Approved</div>
           <div
             className={`${
-              product
+              approved
                 ? "translate-x-full left-0.5 duration-200"
                 : "duration-200 translate-x-0 -left-0.5"
             }  absolute duration-200 text-center text-base w-1/2 bg-primary text-white font-medium  top-0 rounded-xl py-1.5  `}
           >
-            {product ? "Diesl" : "Fuel"}
+            {approved ? "Approved" : "Queue"}
           </div>
         </div>
       </div>
@@ -47,7 +47,7 @@ export default function Customers() {
             activeTab === 1 ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
-          Queue
+          Fuel
         </div>
         <div
           onClick={() => setTab(2)} // Wrap the setTab function call in an arrow function
@@ -55,9 +55,8 @@ export default function Customers() {
             activeTab === 2 ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
-          Approved
+          Desiel
         </div>
-    
       </div>
 
       <div className="mt-4">
@@ -80,7 +79,7 @@ export default function Customers() {
         <div className="bg-gren-400 pt-3 pb-10">
           <ul>
             {(activeTab === 1 || activeTab === 2) && (
-              <CustomerList name="John Doe" pending={true} />
+              <CustomerList name="John Doe" pending={true}  />
             )}
             {(activeTab === 1 || activeTab === 2) && (
               <CustomerList name="Mark Timmy" pending={true} />

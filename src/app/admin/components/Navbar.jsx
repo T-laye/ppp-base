@@ -7,6 +7,7 @@ import { PiDropFill } from "react-icons/pi";
 import { BsPersonFillGear } from "react-icons/bs";
 import { RiAccountCircleFill } from "react-icons/ri";
 import { usePathname } from "next/navigation";
+import { BsCardList } from "react-icons/bs";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -30,14 +31,14 @@ export default function Navbar() {
             <a className="text-xs max-[300px]:text-[10px] block ">Product</a>
           </li>
         </Link>
-        <Link href="/admin/customers" legacyBehavior>
+        <Link href="/admin/vouchers" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/customers" ? "text-primary" : "text-gray-500"
+              pathname === "/admin/vouchers" ? "text-primary" : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
-            <FaUsers size={26} />
-            <a className="text-xs max-[300px]:text-[10px]">Customers</a>
+            <BsCardList  size={26} />
+            <a className="text-xs max-[300px]:text-[10px]">Vouchers</a>
           </li>
         </Link>
         <Link href="/admin/poc" legacyBehavior>
@@ -58,7 +59,7 @@ export default function Navbar() {
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
-            <BsPersonFillGear size={28} />
+            <FaUsers size={26} />
             <a className="text-xs max-[300px]:text-[10px]">Personnels</a>
           </li>
         </Link>
