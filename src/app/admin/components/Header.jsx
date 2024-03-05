@@ -3,9 +3,11 @@ import Logo from "@/components/Logo";
 import Link from "next/link";
 import React, { useState } from "react";
 import { BsCardList, BsPersonFillGear } from "react-icons/bs";
+import { FaListAlt } from "react-icons/fa";
 import { BsPersonPlus } from "react-icons/bs";
 import { GiGasPump } from "react-icons/gi";
 import { IoIosMenu } from "react-icons/io";
+import { FaHistory } from "react-icons/fa";
 import { PiDropFill } from "react-icons/pi";
 
 export default function Header() {
@@ -33,13 +35,13 @@ export default function Header() {
             <div className="bg-gren-300 flex justify-start">
               <Logo h="h-20" />
             </div>
-            <div className="flex flex-col bg-ble-400 gap-5 mt-5">
+            <div className="flex flex-col bg-ble-400 gap-5 mt-5 text-lg">
               <Link legacyBehavior href="/newVoucher">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
-                  <BsCardList size={26} />
+                  <FaListAlt size={20} />
                   <a href="">New Voucher</a>
                 </li>
               </Link>
@@ -84,7 +86,7 @@ export default function Header() {
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
-                  <PiDropFill size={20} />
+                  <FaHistory size={20} />
                   <a href="">Used Voucher</a>
                 </li>
               </Link>
