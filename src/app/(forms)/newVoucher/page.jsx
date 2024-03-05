@@ -199,7 +199,7 @@ export default function NewVoucher() {
                     ? `${isLoading ? "bg-customGray" : "bg-primary"}`
                     : "bg-customGray cursor-not-allowed"
                 } `}
-                // disabled={!isFormValid || isLoading}
+                disabled={!isFormValid || isLoading}
               >
                 {isLoading ? <Loader /> : "Submit"}
               </button>

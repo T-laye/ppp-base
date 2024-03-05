@@ -38,61 +38,115 @@ export function new_voucher_validate(values) {
     errors.phone = "Invalid phone number";
   }
 
-    if (!values.product || values.product === "Select product") {
-      errors.product = "Please select a product";
-    }
-    
-    if (!values.preferred_poc || values.preferred_poc === "Select POC") {
-      errors.preferred_poc = "Please select a POC";
-    }
-   
+  if (!values.product || values.product === "Select product") {
+    errors.product = "Please select a product";
+  }
+
+  if (!values.preferred_poc || values.preferred_poc === "Select POC") {
+    errors.preferred_poc = "Please select a POC";
+  }
 
   return errors;
 }
 
+export function product_validate(values) {
+  const errors = {};
+
+  if (!values.name) {
+    errors.name = "Required";
+  }
+  if (!values.allocation_per_voucher) {
+    errors.allocation_per_voucher = "Required";
+  }
+  if (!values.unit) {
+    errors.unit = "Required";
+  }
 
 
-// export function signUp_validate(values) {
-//   const errors = {};
+  return errors;
+}
+export function poc_validate(values) {
+  const errors = {};
 
-//   if (!values.fullName) {
-//     errors.fullName = "Required";
-//   }
+  if (!values.name) {
+    errors.name = "Required";
+  }
+  if (!values.address) {
+    errors.address = "Required";
+  }
 
-//   if (!values.email) {
-//     errors.email = "Required";
-//   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-//     errors.email = "Invalid email address";
-//   }
+  if (!values.email) {
+    errors.email = "Required";
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    errors.email = "Invalid email address";
+  }
 
-//   if (!values.phone) {
-//     errors.phone = "Required";
-//   } else if (!/^\+?\d{10,}$/i.test(values.phone)) {
-//     errors.phone = "Invalid phone number";
-//   }
+  if (!values.phone) {
+    errors.phone = "Required";
+  } else if (!/^\+?\d{10,}$/i.test(values.phone)) {
+    errors.phone = "Invalid phone number";
+  }
+  if (!values.available) {
+    errors.available = "Required";
+  }
+  if (!values.limit) {
+    errors.limit = "Required";
+  }
 
-//   if (!values.address) {
-//     errors.address = 'Required';
-//   }
+  if (!values.product || values.product === "Select product") {
+    errors.product = "Please select a product";
+  }
 
-  
-//   if (!values.gender || values.gender === "Select Gender") {
-//     errors.gender = "Please select gender";
-//   }
-//   if (!values.designation) {
-//     errors.designation = "";
-//   }
+  if (!values.personnel || values.personnel === "Select personnel") {
+    errors.personnel = "Please select a personnel";
+  }
+  if (!values.management || values.management === "Select management") {
+    errors.management = "Please select management";
+  }
 
-//   if (!values.password) {
-//     errors.password = "Required";
-//   } else if (values.password.length < 6) {
-//     errors.password = "Must be at least 6 characters";
-//   } else if (values.password.includes(" ")) {
-//     errors.password = "Invalid Password";
-//   }
+  return errors;
+}
 
-//   return errors;
-// }
+export function personnel_validate(values) {
+  const errors = {};
+
+  if (!values.fullName) {
+    errors.fullName = "Required";
+  }
+
+  if (!values.email) {
+    errors.email = "Required";
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
+    errors.email = "Invalid email address";
+  }
+
+  if (!values.phone) {
+    errors.phone = "Required";
+  } else if (!/^\+?\d{10,}$/i.test(values.phone)) {
+    errors.phone = "Invalid phone number";
+  }
+
+  if (!values.address) {
+    errors.address = 'Required';
+  }
+
+  // if (!values.gender || values.gender === "Select Gender") {
+  //   errors.gender = "Please select gender";
+  // }
+  // if (!values.designation) {
+  //   errors.designation = "";
+  // }
+
+  if (!values.password) {
+    errors.password = "Required";
+  } else if (values.password.length < 6) {
+    errors.password = "Must be at least 6 characters";
+  } else if (values.password.includes(" ")) {
+    errors.password = "Invalid Password";
+  }
+
+  return errors;
+}
 
 // export function signUp_location_validate(values) {
 //   const errors = {};
@@ -111,7 +165,6 @@ export function new_voucher_validate(values) {
 
 //   return errors;
 // }
-
 
 // export function forgotPassword_validate(values) {
 //   const errors = {};
@@ -178,21 +231,21 @@ export function new_voucher_validate(values) {
 //     errors.hustle = "Add hustle title";
 //   }
 
-  // if (!values.address) {
-  //   errors.address = 'Required';
-  // }
+// if (!values.address) {
+//   errors.address = 'Required';
+// }
 
-  // if (!values.businessPhone) {
-  //   errors.businessPhone = "Required";
-  // } else if (!/^\+?\d{10,}$/i.test(values.businessPhone)) {
-  //   errors.businessPhone = "Invalid phone number";
-  // }
+// if (!values.businessPhone) {
+//   errors.businessPhone = "Required";
+// } else if (!/^\+?\d{10,}$/i.test(values.businessPhone)) {
+//   errors.businessPhone = "Invalid phone number";
+// }
 
-  // if (!values.link) {
-  //   errors.link = 'Required';
-  // } else if (values.link.includes(' ')) {
-  //   errors.link = 'Invalid link';
-  // }
+// if (!values.link) {
+//   errors.link = 'Required';
+// } else if (values.link.includes(' ')) {
+//   errors.link = 'Invalid link';
+// }
 
 //   if (!values.hustleDescription) {
 //     errors.hustleDescription = "Required";

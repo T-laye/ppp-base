@@ -43,7 +43,7 @@ export default function Header() {
                   <a href="">New Voucher</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="/newManagement">
+              {/* <Link legacyBehavior href="/newManagement">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
@@ -51,7 +51,7 @@ export default function Header() {
                   <BsPersonPlus size={20} stroke="2" />
                   <a href="">New Management</a>
                 </li>
-              </Link>
+              </Link> */}
               <Link legacyBehavior href="/newPersonnel">
                 <li
                   onClick={handleNav}
