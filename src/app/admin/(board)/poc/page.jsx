@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
 import PocList from "../../components/PocList";
+import { poc } from "/public/dummy.js";
 
 export default function Poc() {
   const [product, setProduct] = useState(false);
@@ -10,13 +11,49 @@ export default function Poc() {
   const handleProduct = () => {
     setProduct(!product);
   };
+  const totalAssigned = poc.reduce((acc, p) => {
+    return acc + p.assigned;
+    
+  }, 0);
+
+  const totalAvail = poc.reduce((acc, p) => {
+    return acc + p.available;
+  }, 0);
+
+  // console.log("Total assigned:", totalAssigned);
+
+  // console.log(totalAssigned);
+
+  const renderPoc = () => {
+    return poc.map((p, i) => {
+      if (product === false && p.product === "fuel") {
+        return (
+          <PocList
+            key={i}
+            name={p?.name}
+            available={p.available}
+            total={p.assigned}
+          />
+        );
+      } else if (product === true && p.product === "diesel") {
+        return (
+          <PocList
+            key={i}
+            name={p?.name}
+            available={p.available}
+            total={p.assigned}
+          />
+        );
+      }
+    });
+  };
 
   const handleChange = (e) => {
     setTerm(e.target.value);
   };
 
   return (
-    <section className="min-h-screen bg-green300 py-4">
+    <section className="min-h-screen bg-green300 pt-4 pb-20">
       <div className="mt-3">
         <div
           onClick={handleProduct}
@@ -51,18 +88,19 @@ export default function Poc() {
           </div>
         </form>
         <div className="text-end mt-3 font-semibold text-base text-gray-500 pr-2">
-          540/1000
+          {Math.round(totalAvail)}/{Math.round(totalAssigned)}
         </div>
 
         <div className="bg-gren-400 pb-10">
           <ul>
-            <PocList name="Orlando" available={150} total={200} />
+            {/* <PocList name="Orlando" available={150} total={200} />
             <PocList name="Matrix" available={80} total={100} />
             <PocList name="Odafe" available={100} total={200} />
             <PocList name="NNPC" available={50} total={150} />
             <PocList name="Total" available={20} total={100} />
             <PocList name="Mobil" available={100} total={200} />
-            <PocList name="NewBridge" available={40} total={50} />
+            <PocList name="NewBridge" available={40} total={50} /> */}
+            {renderPoc()}
           </ul>
         </div>
       </div>

@@ -48,7 +48,7 @@ input {
 }
 
 select {
-  @apply text-black text-base outline-none focus:outline-none focus:border-primary h-11 rounded-xl px-2 duration-200  border border-gray-200;
+  @apply text-black text-base outline-none focus:outline-none focus:border-primary h-11 rounded-xl px-2 duration-200  border border-gray-200 w-full;
 }
 option {
   @apply text-white text-base bg-customGray;

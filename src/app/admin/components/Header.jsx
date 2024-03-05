@@ -34,7 +34,7 @@ export default function Header() {
               <Logo h="h-20" />
             </div>
             <div className="flex flex-col bg-ble-400 gap-5 mt-5">
-              <Link legacyBehavior href="#">
+              <Link legacyBehavior href="/newVoucher">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
@@ -43,7 +43,7 @@ export default function Header() {
                   <a href="">New Voucher</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="#">
+              <Link legacyBehavior href="/newManagement">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
@@ -52,7 +52,7 @@ export default function Header() {
                   <a href="">New Management</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="#">
+              <Link legacyBehavior href="/newPersonnel">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
@@ -61,7 +61,7 @@ export default function Header() {
                   <a href="">New Personnel</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="#">
+              <Link legacyBehavior href="/newPoc">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
@@ -70,7 +70,7 @@ export default function Header() {
                   <a href="">New POC</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="#">
+              <Link legacyBehavior href="/newProduct">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
@@ -79,7 +79,7 @@ export default function Header() {
                   <a href="">New Product</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="/">
+              <Link legacyBehavior href="/usedVoucher">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"

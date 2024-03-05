@@ -10,7 +10,6 @@ import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { signIn_validate } from "@/lib/validate";
 import { toast } from "react-toastify";
-import SignHeader from "@/components/SignHeader";
 
 export default function Home() {
   const [role, setRole] = useState(false);
