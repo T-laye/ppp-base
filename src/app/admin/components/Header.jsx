@@ -93,7 +93,7 @@ export default function Header() {
                   <a href="">Used Voucher</a>
                 </li>
               </Link>
-              {/* <Link legacyBehavior href="/admin">
+              <Link legacyBehavior href="/admin">
                 <li
                   onClick={handleNav}
                   className="flex items-center mt-auto text-error space-x-2 active:text-primary duration-200 hover:text-primary"
@@ -101,7 +101,7 @@ export default function Header() {
                   <TbLogout2 size={24} />
                   <a href="">Sign Out</a>
                 </li>
-              </Link> */}
+              </Link>
             </div>
           </ul>
           {/* <div className="">Logout</div> */}

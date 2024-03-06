@@ -9,6 +9,7 @@ import { GiGasPump } from "react-icons/gi";
 import { IoIosMenu } from "react-icons/io";
 import { FaHistory } from "react-icons/fa";
 import { PiDropFill } from "react-icons/pi";
+import { TbLogout2 } from "react-icons/tb";
 
 export default function Header() {
   const [openNav, setOpenNav] = useState(false);
@@ -88,6 +89,15 @@ export default function Header() {
                 >
                   <FaHistory size={20} />
                   <a href="">Used Voucher</a>
+                </li>
+              </Link>
+              <Link legacyBehavior href="/admin">
+                <li
+                  onClick={handleNav}
+                  className="flex items-center mt-auto text-error space-x-2 active:text-primary duration-200 hover:text-primary"
+                >
+                  <TbLogout2 size={24} />
+                  <a href="">Sign Out</a>
                 </li>
               </Link>
             </div>
