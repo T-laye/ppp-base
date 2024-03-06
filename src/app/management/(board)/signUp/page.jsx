@@ -8,14 +8,15 @@ import invisible from "/public/icons/invisible_eye.svg";
 import Loader from "@/components/Loader.jsx";
 // import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { signIn_validate } from "@/lib/validate";
+import { signIn_validate, signUp_validate } from "@/lib/validate";
 import { toast } from "react-toastify";
+import SignHeader from "@/components/SignHeader";
 
-export default function Home() {
+export default function SignUp() {
   const [role, setRole] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [pending, setPending] = useState(false);
 
   const router = useRouter();
 
@@ -25,10 +26,15 @@ export default function Home() {
 
   const formik = useFormik({
     initialValues: {
+      fullName: "",
       email: "",
+      phone: "",
+      address: "",
+      gender: "",
+      designation: role ? "Management" : "Personnel",
       password: "",
     },
-    validate: signIn_validate,
+    validate: signUp_validate,
     onSubmit: handleSubmit,
   });
   // console.log(formik.isValid);
@@ -38,18 +44,12 @@ export default function Home() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    const { email, password } = values;
-    console.log(email, password);
-    setIsLoading(true);
+    const { fullName, email, phone, password } = values;
 
-    if (role) {
-      router.push("/management/product");
-    } else {
-      router.push("/personnel");
-    }
-
+    console.log(values);
+    setPending(true);
     setTimeout(() => {
-      setIsLoading(false);
+      setPending(false);
       toast.success("Successful");
     }, 2000);
   }
@@ -73,19 +73,10 @@ export default function Home() {
 
   return (
     <main className="bg-primar min-h-screen container mx-auto">
-      {/* <SignHeader signInPage={true} /> */}
-      <section className="px-4">
-        <div className="h-28 w-full object-contain mt-5">
-          <Image
-            src="/images/logo-removebg.png"
-            alt="PPP-Base Logo"
-            height={200}
-            width={200}
-            className="h-full w-full object-contain"
-          />
-        </div>
-        <h3 className="mt-4 ">
-          Choose Account Type <br /> To Sign In
+      <SignHeader signInPage={false} />
+      <section className="px-4 pb-10">
+        <h3 className="mt-8">
+          Choose Account Type <br /> To Sign Up
         </h3>
 
         <div className="mt-8">
@@ -115,6 +106,24 @@ export default function Home() {
           <div className="mt-10">
             <form onSubmit={formik.handleSubmit} className="mb-4">
               <div className="flex flex-col mb-4">
+                <label className="text-sm mb-2" htmlFor="fullName">
+                  {role ? "Management's Full Name" : "Personnel's Full Name"}
+                </label>
+                <input
+                  id="fullName"
+                  name="fullName"
+                  type="text"
+                  placeholder="Enter Full Name"
+                  className={getInputClassNames("fullName")}
+                  {...formik.getFieldProps("fullName")}
+                />
+                {formik.touched.fullName && formik.errors.fullName && (
+                  <div className="text-error text-sm">
+                    {formik.errors.fullName}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="email">
                   Email
                 </label>
@@ -132,6 +141,65 @@ export default function Home() {
                   </div>
                 )}
               </div>
+              <div className="flex flex-col mb-4">
+                <label className="text-sm mb-2" htmlFor="phone">
+                  Phone
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="Enter phone"
+                  className={getInputClassNames("phone")}
+                  {...formik.getFieldProps("phone")}
+                />
+                {formik.touched.phone && formik.errors.phone && (
+                  <div className="text-error text-sm">
+                    {formik.errors.phone}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col   mb-6">
+                <label className="text-sm mb-2" htmlFor="address">
+                  Address
+                </label>
+                <input
+                  id="address"
+                  name="address"
+                  type="text"
+                  placeholder="Address"
+                  className={getInputClassNames("address")}
+                  {...formik.getFieldProps("address")}
+                />
+                {formik.touched.address && formik.errors.address && (
+                  <div className="text-error text-sm">
+                    {formik.errors.address}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col   mb-6">
+                <label className="text-sm mb-2" htmlFor="gender">
+                  Gender
+                </label>
+                <select
+                  id="gender"
+                  name="gender"
+                  placeholder="Select gender"
+                  className={getInputClassNames("gender")}
+                  {...formik.getFieldProps("gender")}
+                >
+                  <option>Select gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Others</option>
+                </select>
+                {formik.touched.gender && formik.errors.gender && (
+                  <div className="text-error text-sm">
+                    {formik.errors.gender}
+                  </div>
+                )}
+              </div>
               <div className="flex flex-col relative">
                 <label className="text-sm mb-2" htmlFor="password">
                   Password
@@ -146,7 +214,7 @@ export default function Home() {
                 />
                 <div
                   onClick={viewPassword}
-                  className=" absolute right-4 bottom-3 cursor-pointer"
+                  className=" absolute right-4 bottom-4 cursor-pointer"
                 >
                   {showPassword ? (
                     <Image height={18} src={invisible} alt="show icon" />
@@ -160,22 +228,16 @@ export default function Home() {
                   {formik.errors.password}
                 </div>
               )}
-              <div className="text-sm mt-4 font-medium text-right">
-                <Link href="/signIn/forgotPassword" className="text-gray-500">
-                  {" "}
-                  Forgot Password ?
-                </Link>
-              </div>
               <button
                 type="submit"
-                className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
+                className={`btn w-full h-11 mt-10 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
                   isFormValid
-                    ? `${isLoading ? "bg-customGray" : "bg-primary"}`
+                    ? `${pending ? "bg-customGray" : "bg-primary"}`
                     : "bg-customGray cursor-not-allowed"
                 } `}
-                disabled={!isFormValid || isLoading}
+                disabled={!isFormValid || pending}
               >
-                {isLoading ? <Loader /> : "Sign In"}
+                {pending ? <Loader /> : "Sign Up"}
               </button>
             </form>
           </div>

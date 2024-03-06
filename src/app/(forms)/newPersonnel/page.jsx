@@ -181,7 +181,7 @@ export default function NewPersonnel() {
                 </div>
               )}
 
-              <div className="flex space-x-4">
+              {/* <div className="flex space-x-4">
                 <div className="flex items-center mt-6 ">
                   <div>
                     <input
@@ -215,7 +215,7 @@ export default function NewPersonnel() {
                     <label htmlFor="checkbox">Make Management</label>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <button
                 type="submit"
