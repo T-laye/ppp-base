@@ -9,8 +9,8 @@ import Link from "next/link";
 import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
-import { product_validate } from "@/lib/validate";
 import { toast } from "react-toastify";
+import { product_validate } from "../../../../lib/validate";
 
 export default function NewProduct() {
   const [isFormValid, setIsFormValid] = useState(false);

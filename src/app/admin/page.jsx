@@ -10,8 +10,8 @@ import invisible from "/public/icons/invisible_eye.svg";
 import Loader from "@/components/Loader.jsx";
 // import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { signIn_validate } from "@/lib/validate";
 import { toast } from "react-toastify";
+import { signIn_validate } from "../../../lib/validate";
 
 export default function AdminSignIn() {
   const [showPassword, setShowPassword] = useState(false);

@@ -8,7 +8,7 @@ import invisible from "/public/icons/invisible_eye.svg";
 import Loader from "@/components/Loader.jsx";
 // import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { signIn_validate, signUp_validate } from "@/lib/validate";
+import { signIn_validate, signUp_validate } from "../../../../../lib/validate";
 import { toast } from "react-toastify";
 import SignHeader from "@/components/SignHeader";
 

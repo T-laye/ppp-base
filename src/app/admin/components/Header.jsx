@@ -7,6 +7,7 @@ import { FaListAlt } from "react-icons/fa";
 import { BsPersonPlus } from "react-icons/bs";
 import { GiGasPump } from "react-icons/gi";
 import { IoIosMenu } from "react-icons/io";
+import { TbLogout2 } from "react-icons/tb";
 import { FaHistory } from "react-icons/fa";
 import { PiDropFill } from "react-icons/pi";
 
@@ -42,7 +43,9 @@ export default function Header() {
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
                   <FaListAlt size={20} />
-                  <a href="">New Voucher</a>
+                  <a href="" className="">
+                    New Voucher
+                  </a>
                 </li>
               </Link>
               {/* <Link legacyBehavior href="/newManagement">
@@ -59,7 +62,7 @@ export default function Header() {
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
-                  <BsPersonFillGear size={20} />
+                  <BsPersonFillGear size={24} />
                   <a href="">New Personnel</a>
                 </li>
               </Link>
@@ -68,7 +71,7 @@ export default function Header() {
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
-                  <GiGasPump size={20} />
+                  <GiGasPump size={24} />
                   <a href="">New POC</a>
                 </li>
               </Link>
@@ -90,8 +93,18 @@ export default function Header() {
                   <a href="">Used Voucher</a>
                 </li>
               </Link>
+              {/* <Link legacyBehavior href="/admin">
+                <li
+                  onClick={handleNav}
+                  className="flex items-center mt-auto text-error space-x-2 active:text-primary duration-200 hover:text-primary"
+                >
+                  <TbLogout2 size={24} />
+                  <a href="">Sign Out</a>
+                </li>
+              </Link> */}
             </div>
           </ul>
+          {/* <div className="">Logout</div> */}
         </nav>
       </div>
     </header>

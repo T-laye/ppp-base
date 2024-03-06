@@ -7,8 +7,8 @@ import Link from "next/link";
 import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
-import { poc_validate } from "@/lib/validate";
 import { toast } from "react-toastify";
+import { poc_validate } from "../../../../lib/validate";
 
 export default function NewPoc() {
   const [isFormValid, setIsFormValid] = useState(false);
