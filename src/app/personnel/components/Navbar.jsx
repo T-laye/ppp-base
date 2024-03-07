@@ -5,9 +5,11 @@ import { FaUsers } from "react-icons/fa";
 import { GiGasPump } from "react-icons/gi";
 import { PiDropFill } from "react-icons/pi";
 import { BsPersonFillGear } from "react-icons/bs";
+import { TbReport } from "react-icons/tb";
 import { RiAccountCircleFill } from "react-icons/ri";
 import { usePathname } from "next/navigation";
 import { MdVerifiedUser } from "react-icons/md";
+import { FaHistory } from "react-icons/fa";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -21,7 +23,7 @@ export default function Navbar() {
         <Link href="/admin/product" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/product" ? "text-primary" : "text-gray-500"
+              pathname === "/personnel" ? "text-primary" : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <MdVerifiedUser size={22} />
@@ -31,54 +33,47 @@ export default function Navbar() {
             </a>
           </li>
         </Link>
-        {/* <Link href="/admin/vouchers" legacyBehavior>
+
+        <Link href="/personnel/poc" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/vouchers" ? "text-primary" : "text-gray-500"
-            } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-          >
-            <FaListAlt size={20} />
-            <a className="text-xs max-[300px]:text-[10px]">Vouchers</a>
-          </li>
-        </Link> */}
-        <Link href="/admin/poc" legacyBehavior>
-          <li
-            className={`${
-              pathname === "/admin/poc" ? "text-primary" : "text-gray-500"
+              pathname === "/personnel/poc" ? "text-primary" : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <GiGasPump size={24} />
             <a className="text-xs max-[300px]:text-[10px]">POC</a>
           </li>
         </Link>
-        <Link href="/admin/personnels" legacyBehavior>
+        <Link href="/personnel/report" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/personnels"
+              pathname === "/personnel/report"
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
-            <FaUsers size={26} />
+            <TbReport size={26} />
             <a className="text-xs max-[300px]:text-[10px]">Report</a>
           </li>
         </Link>
-        <Link href="/admin/personnels" legacyBehavior>
+        <Link href="/personnel/usedVoucher" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/personnels"
+              pathname === "/personnel/usedVoucher"
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
-            <FaHistory size={26} />
+            <FaHistory size={24} />
             <a className="text-xs max-[300px]:text-[10px]">Used Voucher</a>
           </li>
         </Link>
         <Link href="/personnel/account" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/account" ? "text-primary" : "text-gray-500"
+              pathname === "/personnel/account"
+                ? "text-primary"
+                : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <RiAccountCircleFill size={26} />
