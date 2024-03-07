@@ -9,6 +9,7 @@ import { GiGasPump } from "react-icons/gi";
 import { IoIosMenu } from "react-icons/io";
 import { FaHistory } from "react-icons/fa";
 import { PiDropFill } from "react-icons/pi";
+import { MdVerifiedUser } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
 
 export default function Header() {
@@ -46,15 +47,15 @@ export default function Header() {
                   <a href="">New Voucher</a>
                 </li>
               </Link>
-              {/* <Link legacyBehavior href="/newManagement">
+              <Link legacyBehavior href="/verification">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
-                  <BsPersonPlus size={20} stroke="2" />
-                  <a href="">New Management</a>
+                  <MdVerifiedUser  size={20}  />
+                  <a href="">Verify Voucher</a>
                 </li>
-              </Link> */}
+              </Link>
               <Link legacyBehavior href="/newPersonnel">
                 <li
                   onClick={handleNav}

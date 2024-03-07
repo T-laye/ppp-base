@@ -10,6 +10,7 @@ import { IoIosMenu } from "react-icons/io";
 import { TbLogout2 } from "react-icons/tb";
 import { FaHistory } from "react-icons/fa";
 import { PiDropFill } from "react-icons/pi";
+import { MdVerifiedUser } from "react-icons/md";
 
 export default function Header() {
   const [openNav, setOpenNav] = useState(false);
@@ -82,6 +83,15 @@ export default function Header() {
                 >
                   <PiDropFill size={20} />
                   <a href="">New Product</a>
+                </li>
+              </Link>
+              <Link legacyBehavior href="/verification">
+                <li
+                  onClick={handleNav}
+                  className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
+                >
+                  <MdVerifiedUser size={20} />
+                  <a href="">Verify Voucher</a>
                 </li>
               </Link>
               <Link legacyBehavior href="/usedVoucher">
