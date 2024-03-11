@@ -14,7 +14,6 @@ import { TbLogout2 } from "react-icons/tb";
 
 export default function Header() {
   const [openNav, setOpenNav] = useState(false);
-
   const handleNav = () => {
     setOpenNav(!openNav);
   };

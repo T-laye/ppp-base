@@ -3,7 +3,8 @@ import Link from "next/link";
 import React from "react";
 import { FaUsers } from "react-icons/fa";
 import { GiGasPump } from "react-icons/gi";
-import { PiDropFill } from "react-icons/pi";
+// import { PiDropFill } from "react-icons/pi";
+import { ImStatsBars } from "react-icons/im";
 import { BsPersonFillGear } from "react-icons/bs";
 import { RiAccountCircleFill } from "react-icons/ri";
 import { usePathname } from "next/navigation";
@@ -19,17 +20,18 @@ export default function Navbar() {
   return (
     <nav className="fixed z-5 bottom-0  left-0 right-0 h-14 border-t border-t-gray-100 bg-white max-w-2xl mx-auto">
       <ul className="h-full flex justify-evenly ">
-        <Link href="/admin/product" legacyBehavior>
+        <Link href="/admin/stats" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/product" ? "text-primary" : "text-gray-500"
+              pathname === "/admin/stats" ? "text-primary" : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             {/* <div className="h-2 bg-blue-600"> */}
-            <PiDropFill size={24} />
+            {/* <PiDropFill size={24} /> */}
+            <ImStatsBars size={24} />
             {/* </div> */}
 
-            <a className="text-xs max-[300px]:text-[10px] block ">Product</a>
+            <a className="text-xs max-[300px]:text-[10px] block ">Statistics</a>
           </li>
         </Link>
         <Link href="/admin/vouchers" legacyBehavior>
@@ -52,16 +54,16 @@ export default function Navbar() {
             <a className="text-xs max-[300px]:text-[10px]">POC</a>
           </li>
         </Link>
-        <Link href="/admin/personnels" legacyBehavior>
+        <Link href="/admin/workForce" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/personnels"
+              pathname === "/admin/workForce"
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <FaUsers size={26} />
-            <a className="text-xs max-[300px]:text-[10px]">Personnels</a>
+            <a className="text-xs max-[300px]:text-[10px]">Work Force</a>
           </li>
         </Link>
         <Link href="/admin/account" legacyBehavior>

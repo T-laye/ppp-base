@@ -14,7 +14,7 @@ export default function QuantityCards({ title, available, total }) {
     if (percentage < 40) {
       return "bg-error";
     } else if (percentage >= 40 && percentage < 65) {
-      return "bg-yellow-400";
+      return "bg-yellow-500";
     } else return "bg-primary";
   };
 
@@ -42,7 +42,7 @@ export default function QuantityCards({ title, available, total }) {
           <div>Product Name</div>
           <div>Fuel</div>
         </div> */}
-        <div className="flex justify-between items-center mt-2">
+        {/* <div className="flex justify-between items-center mt-2">
           <div>Customers In Queue</div>
           <div>30</div>
         </div>
@@ -57,7 +57,7 @@ export default function QuantityCards({ title, available, total }) {
         <div className="flex justify-between items-center mt-2">
           <div>Number of POC</div>
           <div>30</div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

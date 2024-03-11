@@ -72,3 +72,21 @@ option {
 .btn-secondary:active {
   @apply scale-100 duration-200;
 }
+
+.categoryCard {
+  /* box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.3); */
+  /* box-shadow: 0px 4px 4px 0px rgba(104, 104, 104, 0.1); */
+  /* box-shadow: 0 2px 8px 3px rgb(4, 4, 4, 0.1); */
+  /* @apply min-w-[110px] w-[110px] h-[100px] min-h-[100px] text-white rounded-xl  place-self-center  mb-7 max-[310px]:min-w-[120px] max-[310px]:min-h-[120px] max-[350px]:min-w-[140px] max-[350px]:min-h-[140px] min-[560px]:min-h-[130px] min-[560px]:min-w-[130px] flex; */
+  @apply w-[20%] min-w-36 flex flex-1 text-white rounded-xl;
+}
+
+.auto-gird {
+  display: grid;
+  /* padding: 0% 15%; */
+  grid-template-columns: repeat(auto-fit, minmax(10px, 1fr));
+  gap: 1rem;
+  justify-content: space-between;
+  /* @apply px-[10%] md:px-[10%] lg:px-[5%] ; */
+  /* @apply px-4; */
+}
