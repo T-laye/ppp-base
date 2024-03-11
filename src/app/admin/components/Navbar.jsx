@@ -23,7 +23,9 @@ export default function Navbar() {
         <Link href="/admin/stats" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/stats" ? "text-primary" : "text-gray-500"
+              pathname === "/admin/stats" || pathname.startsWith("/admin/stats")
+                ? "text-primary"
+                : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             {/* <div className="h-2 bg-blue-600"> */}
@@ -37,7 +39,10 @@ export default function Navbar() {
         <Link href="/admin/vouchers" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/vouchers" ? "text-primary" : "text-gray-500"
+              pathname === "/admin/vouchers" ||
+              pathname.startsWith("/admin/vouchers")
+                ? "text-primary"
+                : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <FaListAlt size={20} />
@@ -47,7 +52,9 @@ export default function Navbar() {
         <Link href="/admin/poc" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/poc" ? "text-primary" : "text-gray-500"
+              pathname === "/admin/poc" || pathname.startsWith("/admin/poc")
+                ? "text-primary"
+                : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <GiGasPump size={24} />
@@ -57,7 +64,8 @@ export default function Navbar() {
         <Link href="/admin/workForce" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/workForce"
+              pathname === "/admin/workForce" ||
+              pathname.startsWith("/admin/workForce")
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
@@ -69,7 +77,10 @@ export default function Navbar() {
         <Link href="/admin/account" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/account" ? "text-primary" : "text-gray-500"
+              pathname === "/admin/account" ||
+              pathname.startsWith("/admin/account")
+                ? "text-primary"
+                : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <RiAccountCircleFill size={26} />
