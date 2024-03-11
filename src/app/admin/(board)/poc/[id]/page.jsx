@@ -87,6 +87,7 @@ export default function Page() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+    setIsEditable(false);
       toast.success("Successful");
     }, 2000);
   }
