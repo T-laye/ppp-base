@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@prisma/client": "^5.10.2",
+    "bcrypt": "^5.1.1",
+    "bcrypt-salt": "^2.0.0",
     "formik": "^2.4.5",
     "next": "14.1.0",
     "react": "^18",

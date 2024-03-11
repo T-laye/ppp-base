@@ -15,10 +15,10 @@ model User {
   address     String
   phoneNumber String
   gender      Gender
-  Personel    Personel[]
+  Personel    Personnel[]
   Management  Management[]
 
-  @@index([email, id])
+  @@index([email, id, phoneNumber])
 }
 
 enum UserType {
@@ -36,7 +36,7 @@ enum Permission {
 
 model PointOfConsumption {
   pocId          String      @id @default(uuid())
-  personel       Personel    @relation(fields: [personelId], references: [personelId])
+  personel       Personnel    @relation(fields: [personelId], references: [personelId])
   management     Management  @relation(fields: [managementId], references: [managementId])
   address        String
   name           String
@@ -59,7 +59,7 @@ enum Gender {
   OTHER
 }
 
-model Personel {
+model Personnel {
   personelId          String               @id @default(uuid())
   user                User                 @relation(fields: [userId], references: [id])
   createdAt           DateTime             @default(now()) @db.Timestamptz()
@@ -68,6 +68,7 @@ model Personel {
   userId              String
 
   @@index([personelId])
+	@@map("Personel")
 }
 
 enum ProductType {
@@ -112,21 +113,21 @@ model Voucher {
 }
 
 model VoucherDispense {
-  Id              String      @id @default(uuid())
-  voucher         Voucher     @relation(fields: [voucherId], references: [voucherId])
-  createdAt       DateTime    @default(now()) @db.Timestamptz()
-  approvedByAdmin Admin       @relation(fields: [adminId], references: [adminId])
+  Id              String   @id @default(uuid())
+  voucher         Voucher  @relation(fields: [voucherId], references: [voucherId])
+  createdAt       DateTime @default(now()) @db.Timestamptz()
+  approvedByAdmin Admin    @relation(fields: [adminId], references: [adminId])
   adminId         String
-  dispenseDate    DateTime    @default(now()) @db.Timestamptz()
+  dispenseDate    DateTime @default(now()) @db.Timestamptz()
   vehicle         String
   vehicleNUmber   String
-  dateUsed        DateTime    @default(now()) @db.Timestamptz()
+  dateUsed        DateTime @default(now()) @db.Timestamptz()
   voucherId       String
 }
 
 model Performance {
   id                     String      @id @default(uuid())
-  staff                  Personel    @relation(fields: [personelId], references: [personelId])
+  staff                  Personnel    @relation(fields: [personelId], references: [personelId])
   personelId             String
   createdAt              DateTime    @default(now()) @db.Timestamptz()
   cusomtomersHandled     Int
