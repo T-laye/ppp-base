@@ -43,7 +43,7 @@ export default function Home() {
     setIsLoading(true);
 
     if (role) {
-      router.push("/management/product");
+      router.push("/management/stats");
     } else {
       router.push("/personnel");
     }
