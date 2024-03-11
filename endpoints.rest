@@ -1,0 +1,15 @@
+@hostname = http://localhost:3000/
+
+# gender has to be of type MALE | FEMALE (in caps)
+POST  {{hostname}}/api/register
+Content-Type: application/json
+
+{
+  "email": "da1336@gmail.com",
+  "password": "test125",
+  "gender": "MALE", 
+  "name": "okoro maduka",
+  "phoneNumber": "08012345678",
+  "address": "airport road"
+}
+
