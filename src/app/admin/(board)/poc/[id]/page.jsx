@@ -87,7 +87,7 @@ export default function Page() {
             />
           </div>
           <DetailList
-            title="Total Dispensed"
+            title="Total Product Dispensed"
             value={5000}
             icon={<ImDroplet size={16} />}
           />

@@ -64,6 +64,7 @@ export default function Page() {
           </button>
 
           <button className="btn bg-error w-full mt-5">Delete Person</button>
+          
           <button className="btn bg-yellow-500 w-full mt-5">
             Make Management
           </button>
