@@ -81,7 +81,7 @@ option {
   @apply w-[20%] min-w-36 flex flex-1 text-white rounded-xl;
 }
 .accountCard {
-  @apply sm:w-[100%] min-w-36 min-h-28 md:h-36 flex  flex-1 text-white rounded-xl;
+  @apply w-[100%] min-w-36 min-h-28 md:h-36 flex  flex-1 text-white rounded-xl;
 }
 
 .auto-gird {

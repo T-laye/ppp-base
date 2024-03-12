@@ -15,7 +15,7 @@ export default function Account() {
             Account
           </h2>
 
-          <div className="flex flex-wrap  sm:flex-col gap-5 mt-10 justify-center bg-geen-600">
+          <div className="flex flex-wrap  flex-col gap-5 mt-10 justify-center bg-geen-600">
             <AccountCard
               link="/admin/account/profile"
               title="Edit Profile"
