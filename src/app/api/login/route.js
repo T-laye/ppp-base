@@ -28,8 +28,8 @@ export async function POST(req, res) {
       const checkPassword = await bcrypt.compare(password, user.password);
       if (!checkPassword)
         return NextResponse.json(
-          ApiResponseDto({ message: "incorrect password", statusCode: 400 }),
-          { status: 400 }
+          ApiResponseDto({ message: "incorrect password", statusCode: 401 }),
+          { status: 401 }
         );
       const setToken = createAccessToken(user.id, user.email);
       const atCookie = serialize("ppp-base", setToken, {
@@ -52,6 +52,6 @@ export async function POST(req, res) {
       });
     }
   } catch (err) {
-    return NextResponse.json({ error: err.message, status: 200 }, { status: 500 });
+    return NextResponse.json({ error: err.message, status: 500 }, { status: 500 });
   }
 }
