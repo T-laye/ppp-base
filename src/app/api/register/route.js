@@ -15,7 +15,8 @@ export async function POST(req, res) {
     statusCode: 400,
   });
 
-  if (Object.keys(error).length > 0) return NextResponse.json(handleError, {status: 400});
+  if (Object.keys(error).length > 0)
+    return NextResponse.json(handleError, { status: 400 });
 
   const { email, password, address, phoneNumber, name, gender } = body;
   try {
@@ -36,13 +37,13 @@ export async function POST(req, res) {
         data: newUser,
         statusCode: 201,
       });
-      return NextResponse.json(createUserResponse, {status: 201});
+      return NextResponse.json(createUserResponse, { status: 201 });
     } else {
       const userExistsResponse = ApiResponseDto({
         message: `The user with email ${email} already exists`,
         statusCode: 403,
       });
-      return NextResponse.json(userExistsResponse, {status: 403});
+      return NextResponse.json(userExistsResponse, { status: 403 });
     }
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500 });
