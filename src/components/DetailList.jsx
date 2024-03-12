@@ -6,7 +6,7 @@ export default function DetailList({ title, value, icon }) {
       {icon}
       <div className="flex flex-col">
         <h4 className="text-xs font-semibold text-customGray">{title}</h4>
-        <div className="text-lg  font-semibold">{value}</div>
+        <div className="text-lg  font-medium">{value}</div>
       </div>
     </div>
   );
