@@ -78,7 +78,7 @@ export default function Page() {
             <DetailList
               title="Available"
               value={500}
-              icon={<PiDropHalfBottomFill size={16} />}
+              icon={<PiDropHalfBottomFill size={18} />}
             />
             <DetailList
               title="Limit"
