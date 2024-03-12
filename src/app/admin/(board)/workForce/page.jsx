@@ -2,11 +2,16 @@
 import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useState } from "react";
 import PersonnelList from "../../components/PersonnelList";
+import { useRouter } from "next/navigation";
 
-export default function Personnels() {
+export default function WorkForce() {
   const [activeTab, setActiveTab] = useState(1);
   const [term, setTerm] = useState("");
+  const router = useRouter();
 
+  const goToNewPersonnel = () => {
+    router.push("/newPersonnel");
+  };
   const setTab = (tab) => {
     setActiveTab(tab);
   };
@@ -17,7 +22,7 @@ export default function Personnels() {
 
   return (
     <section className="min-h-screen bg-green300 py-4">
-      <div className="flex justify-start space-x-3 items-center mt-2 text-base overflow-scroll hide-scroll">
+      {/* <div className="flex justify-start space-x-3 items-center mt-2 text-base overflow-scroll hide-scroll">
         <div
           onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
           className={`${
@@ -50,9 +55,17 @@ export default function Personnels() {
         >
           Admins
         </div>
+      </div> */}
+      <div className="mt-3 flex justify-center">
+        <button
+          onClick={goToNewPersonnel}
+          className="btn w-full max-w-md max-[285px]:mx-auto bg-primary"
+        >
+          Add New Personnel
+        </button>
       </div>
-
-      <div className="mt-4">
+      <div className="mt-8">
+        {/* <div className="flex justify-between gap-1"> */}
         <form action="" onSubmit={(e) => e.preventDefault()}>
           <div className="relative ">
             <input
@@ -67,6 +80,13 @@ export default function Personnels() {
             </div>
           </div>
         </form>
+        {/* <button
+            // onClick={goToNewVoucher}
+            className="btn text-xl max-[285px]:mx-auto bg-primary"
+          >
+            Add New
+          </button> */}
+        {/* </div> */}
         <div className="text-end mt-3 text-sm text-gray-500 pr-2">10</div>
 
         <div className="bg-gren-400 pt-3 pb-10">
@@ -77,34 +97,27 @@ export default function Personnels() {
             {(activeTab === 1 || activeTab === 2) && (
               <PersonnelList name="Mark Timmy" role="personnel" />
             )}
-            {(activeTab === 1 ||
-              activeTab === 4) && (
-                <PersonnelList name="Tiebebedigha Tubolayefa" role="admin" />
-              )}
-            {(activeTab === 1 ||
-              activeTab === 2) && (
-                <PersonnelList name="Mchael Tega" role="personnel" />
-              )}
-            {(activeTab === 1 ||
-              activeTab === 3) && (
-                <PersonnelList name="Susan Bournsmouth" role="management" />
-              )}
-            {(activeTab === 1 ||
-              activeTab === 3) && (
-                <PersonnelList name="Onoyake James" role="management" />
-              )}
-            {(activeTab === 1 ||
-              activeTab === 2) && (
-                <PersonnelList name="Etuk Obong" role="personnel" />
-              )}
-            {(activeTab === 1 ||
-              activeTab === 2) && (
-                <PersonnelList name="Ogar Jude" role="personnel" />
-              )}
-            {(activeTab === 1 ||
-              activeTab === 3) && (
-                <PersonnelList name="Marvelous Ikechi" role="management" />
-              )}
+            {(activeTab === 1 || activeTab === 4) && (
+              <PersonnelList name="Tiebebedigha Tubolayefa" role="admin" />
+            )}
+            {(activeTab === 1 || activeTab === 2) && (
+              <PersonnelList name="Mchael Tega" role="personnel" />
+            )}
+            {(activeTab === 1 || activeTab === 3) && (
+              <PersonnelList name="Susan Bournsmouth" role="management" />
+            )}
+            {(activeTab === 1 || activeTab === 3) && (
+              <PersonnelList name="Onoyake James" role="management" />
+            )}
+            {(activeTab === 1 || activeTab === 2) && (
+              <PersonnelList name="Etuk Obong" role="personnel" />
+            )}
+            {(activeTab === 1 || activeTab === 2) && (
+              <PersonnelList name="Ogar Jude" role="personnel" />
+            )}
+            {(activeTab === 1 || activeTab === 3) && (
+              <PersonnelList name="Marvelous Ikechi" role="management" />
+            )}
           </ul>
         </div>
       </div>

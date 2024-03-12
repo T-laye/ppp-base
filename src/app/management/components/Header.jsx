@@ -14,7 +14,6 @@ import { TbLogout2 } from "react-icons/tb";
 
 export default function Header() {
   const [openNav, setOpenNav] = useState(false);
-
   const handleNav = () => {
     setOpenNav(!openNav);
   };
@@ -92,7 +91,7 @@ export default function Header() {
                   <a href="">Used Voucher</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="/admin">
+              <Link legacyBehavior href="/">
                 <li
                   onClick={handleNav}
                   className="flex items-center mt-auto text-error space-x-2 active:text-primary duration-200 hover:text-primary"

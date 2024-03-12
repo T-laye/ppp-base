@@ -34,7 +34,7 @@ export default function Navbar() {
           </li>
         </Link>
 
-        <Link href="/personnel/poc" legacyBehavior>
+        {/* <Link href="/personnel/poc" legacyBehavior>
           <li
             className={`${
               pathname === "/personnel/poc" ? "text-primary" : "text-gray-500"
@@ -43,7 +43,7 @@ export default function Navbar() {
             <GiGasPump size={24} />
             <a className="text-xs max-[300px]:text-[10px]">POC</a>
           </li>
-        </Link>
+        </Link> 
         <Link href="/personnel/report" legacyBehavior>
           <li
             className={`${
@@ -55,7 +55,7 @@ export default function Navbar() {
             <TbReport size={26} />
             <a className="text-xs max-[300px]:text-[10px]">Report</a>
           </li>
-        </Link>
+        </Link>*/}
         <Link href="/personnel/usedVoucher" legacyBehavior>
           <li
             className={`${

@@ -51,7 +51,7 @@ export default function AdminSignIn() {
       toast.success("Successful");
     }, 2000);
     setTimeout(() => {
-      router.push("/admin/product");
+      router.push("/admin/stats");
     }, 500);
   }
 
