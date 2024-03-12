@@ -28,28 +28,28 @@ export default function Page() {
           <DetailList
             title="Product Name"
             value="Fuel"
-            icon={<ImDroplet size={20} />}
+            icon={<ImDroplet size={16} />}
           />
           <DetailList
             title="Allocation Per Voucher"
             value={25}
-            icon={<MdAssignmentTurnedIn size={24} />}
+            icon={<MdAssignmentTurnedIn size={16} />}
           />
           <DetailList
             title="Total Stock"
             value={5000}
             // icon={<PiBatteryVerticalFullFill  size={24} />}
-            icon={<ImDroplet size={20} />}
+            icon={<ImDroplet size={16} />}
           />
           <DetailList
             title="Available Stock"
             value={2500}
-            icon={<PiDropHalfBottomFill size={24} />}
+            icon={<PiDropHalfBottomFill size={16} />}
           />
           <DetailList
             title="Unit"
             value="Litres"
-            icon={<TbRulerMeasure size={24} />}
+            icon={<TbRulerMeasure size={16} />}
           />
 
           <button onClick={editProduct} className="btn bg-primary w-full mt-5">

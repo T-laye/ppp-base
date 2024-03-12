@@ -33,37 +33,37 @@ export default function Page() {
           <DetailList
             title="Full Name"
             value="John Doe"
-            icon={<FaUser size={20} />}
+            icon={<FaUser size={16} />}
           />
           <DetailList
             title="Email"
             value="john@gmail.com"
-            icon={<MdEmail size={24} />}
+            icon={<MdEmail size={16} />}
           />
           <DetailList
             title="Phone Number"
             value="09083039494"
-            icon={<BsFillTelephoneFill size={20} />}
+            icon={<BsFillTelephoneFill size={16} />}
           />
           <DetailList
             title="Product"
             value='Fuel'
-            icon={<ImDroplet size={24} />}
+            icon={<ImDroplet size={16} />}
           />
           <DetailList
             title="Amount Allocated"
             value={25}
-            icon={<MdAssignmentTurnedIn size={24} />}
+            icon={<MdAssignmentTurnedIn size={16} />}
           />
           <DetailList
             title="Preferred Point of Collection"
             value="Total Fueling Station"
-            icon={<BsFillFuelPumpDieselFill size={24} />}
+            icon={<BsFillFuelPumpDieselFill size={16} />}
           />
           <DetailList
             title="Third Party"
             value="Yes"
-            icon={<BsPeopleFill size={24} />}
+            icon={<BsPeopleFill size={16} />}
           />
 
           <button onClick={editVoucher} className="btn bg-primary w-full mt-5">

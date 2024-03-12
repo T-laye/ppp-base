@@ -103,24 +103,24 @@ export default function Page() {
     <section className="pt-8 pb-20 min-h-screen bg-ed-500">
       <div className="flex justify-between items-center">
         <GoBack />
-        <button
+        {/* <button
           onClick={handleEdit}
           className={`btn ${!isEditable ? "bg-primary" : "bg-customGray"}`}
         >
           {isEditable ? "Cancel" : "Edit"}
-        </button>
+        </button> */}
       </div>
       <h3 className="text-center text-lg font-medium mt-3">POC Details</h3>
 
-      <div className="mt-8">
+      <div className="mt-6">
         <form onSubmit={formik.handleSubmit} className="mb-4">
           <div className="flex flex-col mb-4">
             <label className="text-sm mb-2" htmlFor="name">
-              Name
+             POC Name
             </label>
             <input
               id="name"
-              disabled={!isEditable}
+              //   disabled={!isEditable}
               name="name"
               type="text"
               placeholder="Enter name"
@@ -136,7 +136,7 @@ export default function Page() {
               Email
             </label>
             <input
-              disabled={!isEditable}
+              //   disabled={!isEditable}
               id="email"
               name="email"
               type="email"
@@ -154,7 +154,7 @@ export default function Page() {
             </label>
             <input
               id="address"
-              disabled={!isEditable}
+              //   disabled={!isEditable}
               name="address"
               type="address"
               placeholder="Enter address"
@@ -170,7 +170,7 @@ export default function Page() {
               Phone Number
             </label>
             <input
-              disabled={!isEditable}
+              //   disabled={!isEditable}
               id="phone"
               name="phone"
               type="tel"
@@ -187,7 +187,7 @@ export default function Page() {
               Select Personnel
             </label>
             <select
-              disabled={!isEditable}
+              //   disabled={!isEditable}
               id="personnel"
               name="personnel"
               placeholder="Select personnel"
@@ -211,7 +211,7 @@ export default function Page() {
               Select Management
             </label>
             <select
-              disabled={!isEditable}
+              //   disabled={!isEditable}
               id="management"
               name="management"
               placeholder="Select management"
@@ -235,7 +235,7 @@ export default function Page() {
               Select Product
             </label>
             <select
-              disabled={!isEditable}
+              //   disabled={!isEditable}
               id="product"
               name="product"
               placeholder="Select Product"
@@ -256,7 +256,7 @@ export default function Page() {
               Stock Limit Level
             </label>
             <input
-              disabled={!isEditable}
+              //   disabled={!isEditable}
               id="limit"
               name="limit"
               type="number"
@@ -274,7 +274,7 @@ export default function Page() {
             </label>
             <input
               id="available"
-              disabled={!isEditable}
+              //   disabled={!isEditable}
               name="available"
               type="number"
               placeholder="Enter available"
@@ -307,19 +307,17 @@ export default function Page() {
             )}
           </div>
 
-          {isEditable && (
-            <button
-              type="submit"
-              className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
-                isFormValid
-                  ? `${isLoading ? "bg-customGray" : "bg-primary"}`
-                  : "bg-customGray cursor-not-allowed"
-              } `}
-              // disabled={!isFormValid || isLoading}
-            >
-              {isLoading ? <Loader /> : "Save"}
-            </button>
-          )}
+          <button
+            type="submit"
+            className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
+              isFormValid
+                ? `${isLoading ? "bg-customGray" : "bg-primary"}`
+                : "bg-customGray cursor-not-allowed"
+            } `}
+            // disabled={!isFormValid || isLoading}
+          >
+            {isLoading ? <Loader /> : "Save"}
+          </button>
         </form>
       </div>
     </section>
