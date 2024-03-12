@@ -55,6 +55,8 @@ export default function Page() {
           <button onClick={editProduct} className="btn bg-primary w-full mt-5">
             Edit Product
           </button>
+
+          <button className="btn bg-error w-full mt-5">Delete Product</button>
         </div>
       </div>
     </section>

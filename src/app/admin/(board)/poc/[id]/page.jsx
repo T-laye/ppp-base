@@ -13,6 +13,7 @@ import { MdEmail } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { BsFillFuelPumpDieselFill } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
+import { IoLocationSharp } from "react-icons/io5";
 
 export default function Page() {
   const router = useRouter();
@@ -44,6 +45,11 @@ export default function Page() {
             title="Phone Number"
             value="09083039494"
             icon={<BsFillTelephoneFill size={16} />}
+          />
+          <DetailList
+            title="Address"
+            value="No. 30 Okumagba Avenue, Warri, Delta State"
+            icon={<IoLocationSharp size={16} />}
           />
           <DetailList
             title="Personnel"
@@ -89,6 +95,8 @@ export default function Page() {
           <button onClick={editPOC} className="btn bg-primary w-full mt-5">
             Edit POC
           </button>
+
+          <button className="btn bg-error w-full mt-5">Delete POC</button>
         </div>
       </div>
     </section>

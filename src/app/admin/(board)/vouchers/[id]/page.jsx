@@ -47,7 +47,7 @@ export default function Page() {
           />
           <DetailList
             title="Product"
-            value='Fuel'
+            value="Fuel"
             icon={<ImDroplet size={16} />}
           />
           <DetailList
@@ -69,6 +69,8 @@ export default function Page() {
           <button onClick={editVoucher} className="btn bg-primary w-full mt-5">
             Edit Voucher
           </button>
+
+          <button className="btn bg-error w-full mt-5">Delete Voucher</button>
         </div>
       </div>
     </section>
