@@ -49,7 +49,7 @@ export default function Page() {
           <DetailList
             title="Address"
             value="No. 30 Okumagba Avenue, Warri, Delta State"
-            icon={<IoLocationSharp size={16} />}
+            icon={<IoLocationSharp size={20} />}
           />
           <DetailList
             title="Personnel"
@@ -78,7 +78,7 @@ export default function Page() {
             <DetailList
               title="Available"
               value={500}
-              icon={<PiDropHalfBottomFill size={16} />}
+              icon={<PiDropHalfBottomFill size={18} />}
             />
             <DetailList
               title="Limit"
