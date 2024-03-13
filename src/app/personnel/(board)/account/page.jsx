@@ -10,7 +10,7 @@ import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { edit_account_validate } from "../../../../../lib/validate";
+import {  edit_profile_validate } from "../../../../../lib/validate";
 
 export default function Account() {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -37,7 +37,7 @@ export default function Account() {
       password: "",
       newPassword: "",
     },
-    validate: edit_account_validate,
+    validate: edit_profile_validate,
     onSubmit: handleSubmit,
   });
   // console.log(formik.isValid);

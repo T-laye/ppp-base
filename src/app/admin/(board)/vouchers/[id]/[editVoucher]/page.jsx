@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { toast } from "react-toastify";
-import { new_voucher_validate } from "../../../../../../../lib/validate";
+import { new_customer_validate } from "../../../../../../../lib/validate";
 
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -22,11 +22,11 @@ export default function Page() {
       fullName: "James McClurckin",
       email: "james@gmail.com",
       phone: "09020301822",
-      product: "Fuel",
-      third_party: true,
-      preferred_poc: "Total Fueling Station",
+      // product: "Fuel",
+      // third_party: true,
+      // preferred_poc: "Total Fueling Station",
     },
-    validate: new_voucher_validate,
+    validate: new_customer_validate,
     onSubmit: handleSubmit,
   });
 
