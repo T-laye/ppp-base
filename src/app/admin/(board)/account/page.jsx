@@ -11,8 +11,8 @@ export default function Account() {
     <section className="bg-green300 min-h-screen">
       <div className="container mx-auto pt-5 pb-20">
         <div>
-          <h2 className="text-xl font-medium text-center mt-5 text-primary">
-            Account
+          <h2 className="text-xl font-medium text-center mt-5 ">
+            Account Settings
           </h2>
 
           <div className="flex flex-wrap  flex-col gap-5 mt-10 justify-center bg-geen-600">

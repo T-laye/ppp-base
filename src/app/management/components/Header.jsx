@@ -21,10 +21,13 @@ export default function Header() {
     <header className=" max-w-2xl mx-auto bg-white h-14 fixed top-0 left-0 right-0 shadow-sm    z-10">
       <div className="relative flex justify-between items-center px-4 py-1">
         <Logo />
-        <div className="cursor-pointer" onClick={handleNav}>
-          <IoIosMenu size={28} />
+        <div className="cursor-pointer text-error" onClick={handleNav}>
+          {/* <IoIosMenu size={28} /> */}
+          <Link href='/'>
+          <TbLogout2 size={28} />
+          </Link>
         </div>
-        <nav
+        {/* <nav
           onClick={handleNav}
           className={` ${
             openNav
@@ -73,15 +76,6 @@ export default function Header() {
                   <a href="">New POC</a>
                 </li>
               </Link>
-              {/* <Link legacyBehavior href="/newProduct">
-                <li
-                  onClick={handleNav}
-                  className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
-                >
-                  <PiDropFill size={20} />
-                  <a href="">New Product</a>
-                </li>
-              </Link> */}
               <Link legacyBehavior href="/usedVoucher">
                 <li
                   onClick={handleNav}
@@ -102,7 +96,7 @@ export default function Header() {
               </Link>
             </div>
           </ul>
-        </nav>
+        </nav> */}
       </div>
     </header>
   );

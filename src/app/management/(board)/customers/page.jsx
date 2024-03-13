@@ -1,7 +1,7 @@
 "use client";
 import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useState } from "react";
-import VoucherList from "../../components/CustomerList";
+import CustomerList from "../../components/CustomerList";
 
 export default function Customers() {
   const [approved, setApproved] = useState(false);
@@ -22,26 +22,8 @@ export default function Customers() {
 
   return (
     <section className="min-h-screen bg-green300 py-4">
-      {/* <div className="mt-4">
-        <div
-          onClick={handleProduct}
-          className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-52 px-4 py-1.5 rounded-xl mx-auto cursor-pointer"
-        >
-          <div className=" w-1/2 px-2 text-center">Queue</div>
-          <div className=" w-1/2 text-center">Approved</div>
-          <div
-            className={`${
-              approved
-                ? "translate-x-full left-0.5 duration-200"
-                : "duration-200 translate-x-0 -left-0.5"
-            }  absolute duration-200 text-center text-base w-1/2 bg-primary text-white font-medium  top-0 rounded-xl py-1.5  `}
-          >
-            {approved ? "Approved" : "Queue"}
-          </div>
-        </div>
-      </div> */}
-      <h4 className="font-medium text-base mt-2 text-center">Vouchers</h4>
-      <div className="flex  space-x-3 items-center mt-4 text-base">
+      <h4 className="font-medium text-base mt-2 text-center">Customers</h4>
+      {/* <div className="flex  space-x-3 items-center mt-4 text-base">
         <div
           onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
           className={`${
@@ -56,7 +38,7 @@ export default function Customers() {
             activeTab === 2 ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
-          Fuel
+          Active
         </div>
         <div
           onClick={() => setTab(3)} // Wrap the setTab function call in an arrow function
@@ -64,10 +46,14 @@ export default function Customers() {
             activeTab === 3 ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
-          Desiel
+          Inactive
         </div>
+      </div> */}
+      <div>
+        <button className="btn bg-primary w-full mx-auto mt-4 mb-5">
+          Add New Customer
+        </button>
       </div>
-
       <div className="mt-4">
         <form action="" onSubmit={(e) => e.preventDefault()}>
           <div className="relative ">
@@ -88,31 +74,31 @@ export default function Customers() {
         <div className="bg-gren-400 pt-3 pb-10">
           <ul>
             {(activeTab === 1 || activeTab === 2) && (
-              <VoucherList name="John Doe" pending={true} />
+              <CustomerList name="John Doe" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 2) && (
-              <VoucherList name="Mark Timmy" pending={true} />
+              <CustomerList name="Mark Timmy" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 3) && (
-              <VoucherList name="Tiebebedigha Tubolayefa" pending={false} />
+              <CustomerList name="Tiebebedigha Tubolayefa" pending={false} />
             )}
             {(activeTab === 1 || activeTab === 2) && (
-              <VoucherList name="Mchael Tega" pending={true} />
+              <CustomerList name="Mchael Tega" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 4) && (
-              <VoucherList name="Susan Bournsmouth" pending={true} />
+              <CustomerList name="Susan Bournsmouth" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 3) && (
-              <VoucherList name="Onoyake James" pending={false} />
+              <CustomerList name="Onoyake James" pending={false} />
             )}
             {(activeTab === 1 || activeTab === 2) && (
-              <VoucherList name="Etuk Obong" pending={true} />
+              <CustomerList name="Etuk Obong" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 3) && (
-              <VoucherList name="Ogar Jude" pending={false} />
+              <CustomerList name="Ogar Jude" pending={false} />
             )}
             {(activeTab === 1 || activeTab === 3) && (
-              <VoucherList name="Marvelous Ike" pending={false} />
+              <CustomerList name="Marvelous Ike" pending={false} />
             )}
           </ul>
         </div>
