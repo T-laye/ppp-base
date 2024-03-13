@@ -7,28 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserType {
-  ADMIN
-  OPERATORS
-  CUSTOMER
-  STAFF
-  SUPER_ADMIN
+model User {
+  id          String       @id @default(uuid())
+  email       String       @unique
+  name        String
+  password    String
+  address     String
+  phoneNumber String
+  gender      Gender
+  Personel    Personnel[]
+  Management  Management[]
+
+  @@index([email, id, phoneNumber])
 }
 
-model Customer {
-  customerId              String             @id @default(uuid())
-  fullName                String
-  phoneNumber             String
-  contactAddress          String
-  poc                     PointOfConsumption @relation(fields: [pointOfConsumptionPocId], references: [pocId])
-  gender                  Gender
-  thirdPartyPermission    Permission
-  occupation              String
-  product                 ProductType
-  pointOfConsumptionPocId String
-  Voucher                 Voucher[]
-  createdAt               DateTime           @default(now()) @db.Timestamptz()
-  VoucherDispense         VoucherDispense[]
+enum UserType {
+  ADMIN
+  MANAGEMENT
+  CUSTOMER
+  PERSONEL
+  SUPER_ADMIN
 }
 
 enum Permission {
@@ -37,16 +35,22 @@ enum Permission {
 }
 
 model PointOfConsumption {
-  pocId        String      @id @default(uuid())
-  Customer     Customer[]
-  // staffAssigned Staff
-  address      String
-  contactName  String
-  conatctPhone String
-  email        String
-  productType  ProductType
-  topUp        String
-  createdAt    DateTime    @default(now()) @db.Timestamptz()
+  pocId          String      @id @default(uuid())
+  personel       Personnel    @relation(fields: [personelId], references: [personelId])
+  management     Management  @relation(fields: [managementId], references: [managementId])
+  address        String
+  name           String
+  phoneNumber    String
+  email          String
+  productType    ProductType
+  createdAt      DateTime    @default(now()) @db.Timestamptz()
+  updatedAt      DateTime    @default(now()) @updatedAt
+  personelId     String
+  managementId   String
+  stockLimit     Int
+  stockAvailable Int
+
+  @@index([pocId, name])
 }
 
 enum Gender {
@@ -55,15 +59,16 @@ enum Gender {
   OTHER
 }
 
-model Staff {
-  staffId         String            @id @default(uuid())
-  fullName        String
-  email           String
-  phoneNumber     String
-  contactAddress  String
-  gender          Gender
-  createdAt       DateTime          @default(now()) @db.Timestamptz()
-  StaffPerfomance StaffPerfomance[]
+model Personnel {
+  personelId          String               @id @default(uuid())
+  user                User                 @relation(fields: [userId], references: [id])
+  createdAt           DateTime             @default(now()) @db.Timestamptz()
+  personelPerformance Performance[]
+  poc                 PointOfConsumption[]
+  userId              String
+
+  @@index([personelId])
+	@@map("Personel")
 }
 
 enum ProductType {
@@ -71,9 +76,21 @@ enum ProductType {
   DISEL
 }
 
-model Operators {
-  operatorId      String            @id @default(uuid())
+model Management {
+  managementId          String               @id @default(uuid())
+  user                  User                 @relation(fields: [userId], references: [id])
+  createdAt             DateTime             @default(now()) @db.Timestamptz()
+  managementPerformance Performance[]
+  poc                   PointOfConsumption[]
+  userId                String
+
+  @@index([managementId])
+}
+
+model Admin {
+  adminId         String            @id @default(uuid())
   fullName        String
+  password        String
   phoneNUmber     String            @unique
   email           String            @unique
   contactAddress  String
@@ -82,22 +99,13 @@ model Operators {
   VoucherDispense VoucherDispense[]
 }
 
-model Admin {
-  adminId        String   @id @default(uuid())
-  fullName       String
-  password       String
-  phoneNUmber    String   @unique
-  email          String   @unique
-  contactAddress String
-  designation    String
-  createdAt      DateTime @default(now()) @db.Timestamptz()
-}
-
 model Voucher {
   voucherId       String            @id @default(uuid())
   voucherCode     String            @unique
-  customer        Customer          @relation(fields: [customerId], references: [customerId])
-  customerId      String
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  thirdParty      Boolean
   createdAt       DateTime          @default(now()) @db.Timestamptz()
   collected       Boolean
   VoucherDispense VoucherDispense[]
@@ -105,28 +113,27 @@ model Voucher {
 }
 
 model VoucherDispense {
-  Id                 String      @id @default(uuid())
-  voucher            Voucher     @relation(fields: [voucherVoucherId], references: [voucherId])
-  createdAt          DateTime    @default(now()) @db.Timestamptz()
-  approvedBy         Operators   @relation(fields: [userId], references: [operatorId])
-  userId             String
-  dispenseDate       DateTime    @default(now()) @db.Timestamptz()
-  vehicle            String
-  vehicleNUmber      String
-  usedBy             Customer    @relation(fields: [customerCustomerId], references: [customerId])
-  dateUsed           DateTime    @default(now()) @db.Timestamptz()
-  voucherVoucherId   String
-  customerCustomerId String
-  productType        ProductType
+  Id              String   @id @default(uuid())
+  voucher         Voucher  @relation(fields: [voucherId], references: [voucherId])
+  createdAt       DateTime @default(now()) @db.Timestamptz()
+  approvedByAdmin Admin    @relation(fields: [adminId], references: [adminId])
+  adminId         String
+  dispenseDate    DateTime @default(now()) @db.Timestamptz()
+  vehicle         String
+  vehicleNUmber   String
+  dateUsed        DateTime @default(now()) @db.Timestamptz()
+  voucherId       String
 }
 
-model StaffPerfomance {
-  id                 String   @id @default(uuid())
-  staff              Staff    @relation(fields: [staffId], references: [staffId])
-  staffId            String
-  createdAt          DateTime @default(now()) @db.Timestamptz()
-  cusomtomersHandled Int
-  productsDispensed  Int
+model Performance {
+  id                     String      @id @default(uuid())
+  staff                  Personnel    @relation(fields: [personelId], references: [personelId])
+  personelId             String
+  createdAt              DateTime    @default(now()) @db.Timestamptz()
+  cusomtomersHandled     Int
+  productsDispensed      Int
+  Management             Management? @relation(fields: [managementManagementId], references: [managementId])
+  managementManagementId String?
 }
 
 // npx prisma migrate dev --name init
