@@ -9,9 +9,9 @@ export default function Loader({ w = "6", h = "6" }) {
         className={`animate-spin w-${w} h-${h}`}
         src={spinner}
         alt="Spinner"
-        // height={80}
-        // width={80}
-        aria-hidden="true"
+        height={80}
+        width={80}
+        // aria-hidden="true"
         priority
         as="image"
       />

@@ -24,6 +24,7 @@ html {
   font-family: "Rubik", sans-serif;
   overflow-x: hidden;
   scroll-behavior: smooth;
+  @apply bg-black;
 }
 body {
   overflow-x: hidden;
@@ -31,7 +32,7 @@ body {
 }
 
 section {
-  @apply px-4;
+  @apply px-4 bg-[#fefefe] min-h-screen;
 }
 h3 {
   @apply text-base text-center;
