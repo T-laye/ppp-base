@@ -20,7 +20,7 @@ export default function Verify() {
       phone: "090847384399",
       address: "No. 23 oacnj oskcol sjonoNCOJKCONC ACNOkcn",
       poc: "Exxon Mobil Fueling Station",
-      product: "",
+      product: "Fuel",
       pick_up_person: "",
       vehicle_type: "",
       vehicle_plate_number: "",
@@ -231,15 +231,16 @@ export default function Verify() {
                     Select Product
                   </label>
                   <select
+                    disabled
                     id="product"
                     name="product"
                     placeholder="Select Product"
                     className={getInputClassNames("product")}
                     {...formik.getFieldProps("product")}
                   >
-                    <option value="">Select Product</option>
-                    <option value="Fuel">Fuel</option>
-                    <option value="Desiel">Desiel</option>
+                    <option value={formik.values.product}>
+                      {formik.values.product}
+                    </option>
                   </select>
                   {formik.touched.product && formik.errors.product && (
                     <div className="text-error text-sm">
@@ -252,7 +253,7 @@ export default function Verify() {
                   <div>
                     <input
                       checked={formik.values.third_party}
-                      readOnly
+                      disabled
                       name="checkbox"
                       id="checkbox"
                       type="checkbox"
