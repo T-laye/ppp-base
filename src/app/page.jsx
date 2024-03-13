@@ -45,7 +45,7 @@ export default function Home() {
     if (role) {
       router.push("/management/stats");
     } else {
-      router.push("/personnel");
+      router.push("/personnel/stats");
     }
 
     setTimeout(() => {

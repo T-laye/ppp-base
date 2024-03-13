@@ -12,7 +12,7 @@ export default function QuantityCards({ title, available, total }) {
 
   const barColor = () => {
     if (percentage < 40) {
-      return "bg-error";
+      return "bg-error ";
     } else if (percentage >= 40 && percentage < 65) {
       return "bg-yellow-400";
     } else return "bg-primary";

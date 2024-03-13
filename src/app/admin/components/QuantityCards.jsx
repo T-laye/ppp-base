@@ -25,7 +25,7 @@ export default function QuantityCards({ title, available, total }) {
 
   return (
     <Link href="/admin/stats/productId">
-      <div className="rounded-xl border px-4 pt-1 pb-4 active:bg-primaryActive cursor-pointer active:border-primaryActive hover:bg-primaryActive duration-200 mt-4">
+      <div className="rounded-xl border px-4 pt-1 pb-4 hover:text-white active:bg-primaryActive cursor-pointer active:border-primaryActive hover:bg-primaryActive duration-200 mt-4">
         <div className="flex justify-between items-end">
           <h4 className="text-lg font-medium">{title}</h4>
           <div className="text-base">

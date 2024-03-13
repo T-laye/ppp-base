@@ -23,10 +23,11 @@ export default function Header() {
     <header className=" max-w-2xl mx-auto bg-white h-14 fixed top-0 left-0 right-0 shadow-sm    z-10">
       <div className="relative flex justify-between items-center px-4 py-1">
         <Logo />
-        <div className="cursor-pointer" onClick={handleNav}>
-          <IoIosMenu size={28} />
+        <div className="cursor-pointer text-error" >
+          {/* <IoIosMenu size={28} /> */}
+               <TbLogout2 size={28} />
         </div>
-        <nav
+        {/* <nav
           onClick={handleNav}
           className={` ${
             openNav
@@ -57,24 +58,6 @@ export default function Header() {
                   <a href="">Verify Voucher</a>
                 </li>
               </Link>
-              {/* <Link legacyBehavior href="/newPersonnel">
-                <li
-                  onClick={handleNav}
-                  className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
-                >
-                  <BsPersonFillGear size={20} />
-                  <a href="">New Personnel</a>
-                </li>
-              </Link> */}
-              {/* <Link legacyBehavior href="/newPoc">
-                <li
-                  onClick={handleNav}
-                  className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
-                >
-                  <GiGasPump size={20} />
-                  <a href="">New POC</a>
-                </li>
-              </Link> */}
               <Link legacyBehavior href="/usedVoucher">
                 <li
                   onClick={handleNav}
@@ -104,64 +87,8 @@ export default function Header() {
               </Link>
             </div>
           </ul>
-        </nav>
+        </nav> */}
       </div>
     </header>
   );
 }
-
-//  <ul className="h-full flex justify-evenly ">
-//         <Link href="/admin/product" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/product" ? "text-primary" : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             {/* <div className="h-2 bg-blue-600"> */}
-//             {/* </div> */}
-
-//             <a className="text-xs max-[300px]:text-[10px] block ">Product</a>
-//           </li>
-//         </Link>
-//         <Link href="/admin/customers" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/customers" ? "text-primary" : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             <FaUsers size={26} />
-//             <a className="text-xs max-[300px]:text-[10px]">Customers</a>
-//           </li>
-//         </Link>
-//         <Link href="/admin/poc" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/poc" ? "text-primary" : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             <a className="text-xs max-[300px]:text-[10px]">POC</a>
-//           </li>
-//         </Link>
-//         <Link href="/admin/personnels" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/personnels"
-//                 ? "text-primary"
-//                 : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             <BsPersonFillGear size={28} />
-//             <a className="text-xs max-[300px]:text-[10px]">Personnels</a>
-//           </li>
-//         </Link>
-//         <Link href="/admin/account" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/account" ? "text-primary" : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             <RiAccountCircleFill size={26} />
-//             <a className="text-xs max-[300px]:text-[10px]">Account</a>
-//           </li>
-//         </Link>
-//       </ul>

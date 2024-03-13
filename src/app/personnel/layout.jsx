@@ -11,7 +11,7 @@ export default function layout({ children }) {
       <main className="pt-12">{children}</main>
 
       <footer>
-        {/* <Navbar /> */}
+        <Navbar />
       </footer>
     </div>
   );

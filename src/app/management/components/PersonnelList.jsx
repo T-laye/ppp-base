@@ -11,7 +11,7 @@ export default function PersonnelList({ name, role }) {
   // };
 
   return (
-    <li className="flex mb-4 border border-gray-200 bg-red-30 active:text-primary active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-100">
+    <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white active:text-primary active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-100">
       <div>{name}</div>
       <div>
         {/* <FaUser size={24} className={`${userColor()}`} /> */}

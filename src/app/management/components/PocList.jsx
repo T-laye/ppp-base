@@ -25,7 +25,7 @@ export default function PocList({ name, available, total }) {
 
   return (
     <Link href="/management/stats/id">
-      <div className="rounded-xl border px-4 pt-1 pb-4 border-gray-200 bg-red-30 active:border-primaryActive hover:bg-primaryActive duration-200 mt-4">
+      <div className="rounded-xl border px-4 pt-1 pb-4 border-gray-200 hover:text-white active:border-primaryActive hover:bg-primaryActive duration-200 mt-4">
         <div className="flex justify-between items-end">
           <h4 className="text-lg font-medium">{name}</h4>
           <div className="text-base">
