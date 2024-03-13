@@ -11,7 +11,7 @@ import Loader from "@/components/Loader.jsx";
 // import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { new_voucher_validate } from "../../../../lib/validate";
+import { new_customer_validate } from "../../../../lib/validate";
 
 export default function NewVoucher() {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -28,7 +28,7 @@ export default function NewVoucher() {
       third_party: false,
       preferred_poc: "",
     },
-    validate: new_voucher_validate,
+    validate: new_customer_validate,
     onSubmit: handleSubmit,
   });
   // console.log(formik.isValid);
