@@ -50,8 +50,16 @@ export async function POST(req, res) {
         status: 200,
         headers: { "Set-Cookie": atCookie },
       });
+    } else {
+      return NextResponse.json(
+        ApiResponseDto({ message: "oops, user details not found" }),
+        { status: 403 }
+      );
     }
   } catch (err) {
-    return NextResponse.json({ error: err.message, status: 500 }, { status: 500 });
+    return NextResponse.json(
+      { error: err.message, status: 500 },
+      { status: 500 }
+    );
   }
 }

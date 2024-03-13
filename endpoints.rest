@@ -13,3 +13,14 @@ Content-Type: application/json
   "address": "airport road"
 }
 
+###
+POST  {{hostname}}/api/login
+Content-Type: application/json
+{
+  "email": "darkman@gmail.com",
+  "password": "test125"
+}
+
+###
+GET {{hostname}}/api/logout
+Content-Type: application/json
