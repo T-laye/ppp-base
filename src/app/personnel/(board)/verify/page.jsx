@@ -110,6 +110,11 @@ export default function Verify() {
               {/* <BiSearchAlt2 size={20} /> */}
             </div>
           </div>
+          {loading && (
+            <div className="text-error text-sm mt-1 font-medium">
+              Not less than 10 digits !!!
+            </div>
+          )}
           {/* </form> */}
         </div>
 
