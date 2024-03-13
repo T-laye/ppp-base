@@ -4,6 +4,8 @@ import ApiResponseDto from "../../../../lib/apiResponseHelper";
 import _isUserAvailable from "../../../../repo/check-user-available";
 import { prisma } from "../../../../config/prisma.connect";
 import hashPassword from "../../../../lib/hashHelper";
+import { serialize } from "cookie";
+import createAccessToken from "../../../../lib/sign-jwt";
 
 export async function POST(req, res) {
   const body = await req.json();
@@ -18,26 +20,78 @@ export async function POST(req, res) {
   if (Object.keys(error).length > 0)
     return NextResponse.json(handleError, { status: 400 });
 
-  const { email, password, address, phoneNumber, name, gender } = body;
+  const { email, password, address, phoneNumber, name, gender, role } = body;
   try {
     const userAvailable = await _isUserAvailable(email);
+    let roleUser;
     if (!userAvailable) {
-      const newUser = await prisma.user.create({
-        data: {
-          address,
-          email: email?.toLowerCase(),
-          gender,
-          name,
-          password: await hashPassword(password),
-          phoneNumber,
-        },
+      const newUser = await prisma.$transaction(async (prisma) => {
+        const createdUser = await prisma.user.create({
+          data: {
+            address,
+            email: email?.toLowerCase(),
+            gender,
+            name,
+            password: await hashPassword(password),
+            phoneNumber,
+            role,
+          },
+        });
+        
+        if (role === "ADMIN") {
+          roleUser = await prisma.admin.create({
+            data: {
+              user: {
+                connect: {
+                  id: createdUser.id,
+                },
+              },
+            },
+          });
+        } else if (role === "MANAGEMENT") {
+          roleUser = await prisma.management.create({
+            data: {
+              user: {
+                connect: {
+                  id: createdUser.id,
+                },
+              },
+            },
+          });
+        } else {
+          roleUser = await prisma.personnel.create({
+            data: {
+              user: {
+                connect: {
+                  id: createdUser.id,
+                },
+              },
+            },
+          });
+        }
+        return createdUser;
+      });
+
+      const setToken = createAccessToken(newUser.id, newUser.email);
+      const atCookie = serialize("ppp-base", setToken, {
+        httpOnly: false,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "development" ? false : true,
+        maxAge: 60 * 60 * 24 * 7, // expires in 1 week
+        path: "/",
       });
       const createUserResponse = ApiResponseDto({
         message: "User created successfully",
-        data: newUser,
+        data: {
+          user: newUser,
+          role: roleUser,
+        },
         statusCode: 201,
       });
-      return NextResponse.json(createUserResponse, { status: 201 });
+      return NextResponse.json(createUserResponse, {
+        status: 201,
+        headers: { "Set-Cookie": atCookie },
+      });
     } else {
       const userExistsResponse = ApiResponseDto({
         message: `The user with email ${email} already exists`,
