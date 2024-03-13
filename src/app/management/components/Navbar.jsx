@@ -88,7 +88,7 @@ export default function Navbar() {
             <a className="text-xs max-[300px]:text-[10px]">Personnels</a>
           </li>
         </Link> */}
-        <Link href="/management/account" legacyBehavior>
+        {/* <Link href="/management/account" legacyBehavior>
           <li
             className={`${
               pathname === "/management/account"
@@ -99,7 +99,7 @@ export default function Navbar() {
             <RiAccountCircleFill size={26} />
             <a className="text-xs max-[300px]:text-[10px]">Account</a>
           </li>
-        </Link>
+        </Link> */}
       </ul>
     </nav>
   );

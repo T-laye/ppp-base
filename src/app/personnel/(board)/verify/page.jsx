@@ -363,7 +363,7 @@ export default function Verify() {
                   } `}
                   disabled={!isFormValid || isLoading}
                 >
-                  {isLoading ? <Loader /> : "Create Voucher"}
+                  {isLoading ? <Loader /> : "Process Voucher"}
                 </button>
               </form>
             </div>

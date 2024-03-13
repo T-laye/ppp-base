@@ -55,11 +55,11 @@ export default function Navbar() {
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
-            <FaHistory size={24} />
-            <a className="text-xs max-[300px]:text-[10px]">Used Voucher</a>
+            <FaHistory size={22} />
+            <a className="text-xs max-[300px]:text-[10px]">UVC</a>
           </li>
         </Link>
-        <Link href="/personnel/account" legacyBehavior>
+        {/* <Link href="/personnel/account" legacyBehavior>
           <li
             className={`${
               pathname === "/personnel/account"
@@ -70,7 +70,7 @@ export default function Navbar() {
             <RiAccountCircleFill size={26} />
             <a className="text-xs max-[300px]:text-[10px]">Account</a>
           </li>
-        </Link>
+        </Link> */}
       </ul>
     </nav>
   );
