@@ -17,7 +17,7 @@ export default function Navbar() {
 
   //   console.log(pathname);
 
-  return ( 
+  return (
     <nav className="fixed z-5 bottom-0  left-0 right-0 h-14 border-t border-t-gray-100 bg-white max-w-2xl mx-auto">
       <ul className="h-full flex justify-evenly ">
         {/* <Link href="/management/product" legacyBehavior>
@@ -38,7 +38,7 @@ export default function Navbar() {
         <Link href="/management/stats" legacyBehavior>
           <li
             className={`${
-              pathname === "/management/stats" || pathname.startsWith("/admin/stats")
+              pathname.includes("/management/stats")
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
@@ -51,22 +51,11 @@ export default function Navbar() {
             <a className="text-xs max-[300px]:text-[10px] block ">Statistics</a>
           </li>
         </Link>
-        <Link href="/management/vouchers" legacyBehavior>
-          <li
-            className={`${
-              pathname === "/management/vouchers"
-                ? "text-primary"
-                : "text-gray-500"
-            } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-          >
-            <FaListAlt size={20} />
-            <a className="text-xs max-[300px]:text-[10px]">Vouchers</a>
-          </li>
-        </Link>
+
         <Link href="/management/customers" legacyBehavior>
           <li
             className={`${
-              pathname === "/management/customers"
+              pathname.includes("/management/customers")
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
@@ -74,6 +63,18 @@ export default function Navbar() {
             {/* <GiGasPump size={24} /> */}
             <FaUsers size={26} />
             <a className="text-xs max-[300px]:text-[10px]">Customers</a>
+          </li>
+        </Link>
+        <Link href="/management/vouchers" legacyBehavior>
+          <li
+            className={`${
+              pathname.includes("/management/vouchers")
+                ? "text-primary"
+                : "text-gray-500"
+            } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
+          >
+            <FaListAlt size={20} />
+            <a className="text-xs max-[300px]:text-[10px]">Vouchers</a>
           </li>
         </Link>
         {/* <Link href="/management/personnels" legacyBehavior>

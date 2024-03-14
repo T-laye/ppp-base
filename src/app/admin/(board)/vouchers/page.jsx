@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import VoucherList from "../../components/VoucherList";
 
-export default function Customers() {
+export default function Vouchers() {
   const [approved, setApproved] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const [term, setTerm] = useState("");

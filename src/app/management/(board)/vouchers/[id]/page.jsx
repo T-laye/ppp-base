@@ -13,13 +13,13 @@ import { MdEmail } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { BsFillFuelPumpDieselFill } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
-import { IoLocationSharp } from "react-icons/io5";
+import { FaLocationDot } from "react-icons/fa6";
 
 export default function Page() {
   const router = useRouter();
 
-  const editCustomer = () => {
-    router.push("/management/customers/id/editCustomer");
+  const editVoucher = () => {
+    router.push("/management/vouchers/id/editVoucher");
   };
   return (
     <section className="min-h-screen pt-8 pb-20">
@@ -28,7 +28,7 @@ export default function Page() {
       </div>
 
       <div>
-        <h3 className="font-semibold">Customer Details</h3>
+        <h3 className="font-semibold">Voucher Details</h3>
 
         <div className="mt-4">
           <DetailList
@@ -46,11 +46,16 @@ export default function Page() {
             value="09083039494"
             icon={<BsFillTelephoneFill size={16} />}
           />
-          {/* <DetailList
+          <DetailList
+            title="Address"
+            value="No. oajdcbk cjioachno aichaojcnajc ajschnajc ajcg abjcbc icacsc"
+            icon={<FaLocationDot size={16} />}
+          />
+          <DetailList
             title="Product"
             value="Fuel"
             icon={<ImDroplet size={16} />}
-          /> */}
+          />
           {/* <DetailList
             title="Amount Allocated"
             value={25}
@@ -61,22 +66,15 @@ export default function Page() {
             value="Total Fueling Station"
             icon={<BsFillFuelPumpDieselFill size={16} />}
           /> */}
-          {/* <DetailList
+          <DetailList
             title="Third Party"
             value="Yes"
             icon={<BsPeopleFill size={16} />}
-          /> */}
-          <DetailList
-            title="Address"
-            value="No. 23. poajikaco okcno;aojvnljbdbv jvabo;bvnj "
-            icon={<IoLocationSharp size={16} />}
           />
 
-          <button onClick={editCustomer} className="btn bg-primary w-full mt-5">
-            Edit Customer
+          <button onClick={editVoucher} className="btn bg-primary w-full mt-5">
+            Edit Voucher
           </button>
-
-          {/* <button className="btn bg-error w-full mt-5">Delete Customer</button> */}
         </div>
       </div>
     </section>

@@ -83,7 +83,7 @@ export default function Stats() {
         </div>
       </div>
       <div className="mt-10">
-        <h4 className="font-medium text-base mt-2 text-center">
+        <h4 className="font-medium text-base mt-5 text-center">
           Product Level Per POC
         </h4>
         <div className="flex space-x-3 items-center mt-4 text-base">
@@ -119,7 +119,7 @@ export default function Stats() {
           </div>
         </div>
 
-        <div>
+        <div className="mt-4">
           <PocList name="Total Fueling Station" available={420} total={600} />
           <PocList name="Oando Fueling Station" available={80} total={400} />
           <PocList name="Mobil Fueling Station " available={500} total={1200} />
