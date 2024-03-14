@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import QuantityCards from "../../components/QuantityCards";
 import { product } from "/public/dummy.js";
 import { poc } from "/public/dummy.js";
@@ -12,6 +13,11 @@ import { PiDropFill } from "react-icons/pi";
 import PocList from "../../components/PocList";
 
 export default function Stats() {
+  const [activeTab, setActiveTab] = useState(1);
+
+  const setTab = (tab) => {
+    setActiveTab(tab);
+  };
   //  console.log(product);
 
   // const totalAssigned = poc.reduce((acc, p) => {
@@ -80,7 +86,39 @@ export default function Stats() {
         <h4 className="font-medium text-base mt-2 text-center">
           Product Level Per POC
         </h4>
-        {/* <h4 className="text-sm ">Hello, Admin</h4> */}
+        <div className="flex space-x-3 items-center mt-4 text-base">
+          <div
+            onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
+            className={`${
+              activeTab === 1
+                ? "bg-primary text-white"
+                : "border text-gray-400 "
+            }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
+          >
+            All
+          </div>
+          <div
+            onClick={() => setTab(2)} // Wrap the setTab function call in an arrow function
+            className={`${
+              activeTab === 2
+                ? "bg-primary text-white"
+                : "border text-gray-400 "
+            }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
+          >
+            Fuel
+          </div>
+          <div
+            onClick={() => setTab(3)} // Wrap the setTab function call in an arrow function
+            className={`${
+              activeTab === 3
+                ? "bg-primary text-white"
+                : "border text-gray-400 "
+            }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
+          >
+            Desiel
+          </div>
+        </div>
+
         <div>
           <PocList name="Total Fueling Station" available={420} total={600} />
           <PocList name="Oando Fueling Station" available={80} total={400} />
