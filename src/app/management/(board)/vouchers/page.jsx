@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import VoucherList from "../../components/VoucherList";
 
-export default function Vouchers() {
+export default function Page() {
   const [approved, setApproved] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const [term, setTerm] = useState("");
@@ -53,7 +53,7 @@ export default function Vouchers() {
         </div>
 
         <div className="flex flex-wrap justify-between gap-2 bg-bue-400 mb-8">
-          <div
+          {/* <div
             onClick={handleProduct}
             className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-44 max-[300px]:w-40 px-2 py-1.5 rounded-xl  cursor-pointer max-[285px]:mx-auto"
           >
@@ -68,12 +68,9 @@ export default function Vouchers() {
             >
               {approved ? "Approved" : "Queue"}
             </div>
-          </div>
-          <button
-            onClick={goToCustomers}
-            className="btn max-[285px]:mx-auto bg-primary"
-          >
-            + Add
+          </div> */}
+          <button onClick={goToCustomers} className="btn w-full bg-primary">
+            Add Voucher
           </button>
         </div>
       </div>
