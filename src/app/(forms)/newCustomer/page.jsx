@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { new_customer_validate } from "../../../../lib/validate";
 
-export default function NewVoucher() {
+export default function NewCustomer() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 

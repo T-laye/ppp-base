@@ -38,14 +38,14 @@ export default function Header() {
               <Logo h="h-20" />
             </div>
             <div className="flex flex-col bg-ble-400 gap-5 mt-5 text-lg">
-              <Link legacyBehavior href="/newVoucher">
+              <Link legacyBehavior href="/newCustomer">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
                   <FaListAlt size={20} />
                   <a href="" className="">
-                    New Voucher
+                    New Customer
                   </a>
                 </li>
               </Link>

@@ -43,30 +43,35 @@ export default function Stats() {
         {/* <h4 className="text-sm ">Hello, Admin</h4> */}
         <div className="flex flex-wrap gap-3 mt-4">
           <StatsCard
+            link="/admin/customers"
             color="bg-error"
             number={340}
             title="Customers"
             icon={<FaUsers size={26} />}
           />
           <StatsCard
+            link="/admin/poc"
             number={324}
             color="bg-blue-700"
             title="POC"
             icon={<GiGasPump size={24} />}
           />
           <StatsCard
+            link="/admin/vouchers"
             color="bg-yellow-500"
             number={334}
             title="Queue"
             icon={<IoMdTimer size={24} />}
           />
           <StatsCard
+            link="/admin/vouchers"
             number={34}
             color="bg-primary"
             title="Approved"
             icon={<IoCheckmarkDoneCircle size={24} />}
           />
           <StatsCard
+            link="/admin/usedVouchers"
             number={3440}
             color="bg-customGray"
             title="Used Vouchers"

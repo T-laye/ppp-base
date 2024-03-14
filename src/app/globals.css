@@ -59,10 +59,10 @@ option {
   @apply px-3 py-2 rounded-xl text-white text-sm text-center font-medium duration-200 min-w-20;
 }
 .btn:hover {
-  @apply scale-[0.98] duration-200 bg-primaryMedium;
+  @apply scale-[0.98] duration-200 ;
 }
 .btn:active {
-  @apply scale-100 duration-200;
+  @apply scale-100 duration-200 active:bg-primaryActive;
 }
 .btn-secondary {
   @apply px-3 py-2 rounded-xl text-white text-sm text-center font-medium duration-200 min-w-20;
