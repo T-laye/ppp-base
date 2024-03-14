@@ -1,8 +1,8 @@
 "use client";
 import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useState } from "react";
-import PersonnelList from "../../components/PersonnelList";
 import { useRouter } from "next/navigation";
+import PersonnelList from "../../components/PersonnelList";
 
 export default function WorkForce() {
   const [activeTab, setActiveTab] = useState(1);
@@ -59,7 +59,7 @@ export default function WorkForce() {
       <div className="mt-3 flex justify-center">
         <button
           onClick={goToNewPersonnel}
-          className="btn w-full max-w-md max-[285px]:mx-auto bg-primary"
+          className="btn w-full  max-[285px]:mx-auto bg-primary"
         >
           Add New Personnel
         </button>

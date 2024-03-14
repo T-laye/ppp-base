@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { toast } from "react-toastify";
-import { new_customer_validate } from "../../../../../../../lib/validate";
+import { new_voucher_validate } from "../../../../../../../lib/validate";
 
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -22,11 +22,12 @@ export default function Page() {
       fullName: "James McClurckin",
       email: "james@gmail.com",
       phone: "09020301822",
-      // product: "Fuel",
-      // third_party: true,
+      address: "No. 3 sjajbckja aocjb akjbasiisjbsjc ",
+      product: "Fuel",
+      third_party: true,
       // preferred_poc: "Total Fueling Station",
     },
-    validate: new_customer_validate,
+    validate: new_voucher_validate,
     onSubmit: handleSubmit,
   });
 
@@ -108,7 +109,7 @@ export default function Page() {
           {isEditable ? "Cancel" : "Edit"}
         </button> */}
       </div>
-      <h3 className="text-center text-lg font-medium mt-3">Voucher Details</h3>
+      <h3 className="text-center text-lg font-medium mt-3">Edit Voucher Details</h3>
 
       <div className="mt-8">
         <form onSubmit={formik.handleSubmit} className="mb-4">
@@ -118,6 +119,7 @@ export default function Page() {
             </label>
             <input
               // disabled={!isEditable}
+              readOnly
               id="fullName"
               name="fullName"
               type="text"
@@ -135,6 +137,7 @@ export default function Page() {
             </label>
             <input
               // disabled={!isEditable}
+              readOnly
               id="email"
               name="email"
               type="email"
@@ -152,6 +155,7 @@ export default function Page() {
             </label>
             <input
               // disabled={!isEditable}
+              readOnly
               id="phone"
               name="phone"
               type="tel"
@@ -161,6 +165,24 @@ export default function Page() {
             />
             {formik.touched.phone && formik.errors.phone && (
               <div className="text-error text-sm">{formik.errors.phone}</div>
+            )}
+          </div>
+          <div className="flex flex-col mb-4">
+            <label className="text-sm mb-2" htmlFor="address">
+              Address
+            </label>
+            <input
+              // disabled={!isEditable}
+              readOnly
+              id="address"
+              name="address"
+              type="text"
+              placeholder="Enter Address"
+              className={getInputClassNames("address")}
+              {...formik.getFieldProps("address")}
+            />
+            {formik.touched.address && formik.errors.address && (
+              <div className="text-error text-sm">{formik.errors.address}</div>
             )}
           </div>
           <div className="flex flex-col  mb-6">
@@ -184,30 +206,6 @@ export default function Page() {
               <div className="text-error text-sm">{formik.errors.product}</div>
             )}
           </div>
-          <div className="flex flex-col  mb-6">
-            <label className="text-sm mb-2" htmlFor="preferred_poc">
-              Preferred POC
-            </label>
-            <select
-              // disabled={!isEditable}
-              id="preferred_poc"
-              name="preferred_poc"
-              placeholder="Select Preffered POC"
-              className={getInputClassNames("preferred_poc")}
-              {...formik.getFieldProps("preferred_poc")}
-            >
-              <option>{formik.values.preferred_poc}</option>
-              <option value="oando">Oando</option>
-              <option value="total">Total</option>
-              <option value="matrix">Matrix</option>
-              <option value="Mobil">Mobil</option>
-            </select>
-            {formik.touched.preferred_poc && formik.errors.preferred_poc && (
-              <div className="text-error text-sm">
-                {formik.errors.preferred_poc}
-              </div>
-            )}
-          </div>
           <div className="flex items-center mt-6 ">
             <div>
               <input
@@ -227,19 +225,17 @@ export default function Page() {
             </div>
           </div>
 
-      
-            <button
-              type="submit"
-              className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
-                isFormValid
-                  ? `${isLoading ? "bg-customGray" : "bg-primary"}`
-                  : "bg-customGray cursor-not-allowed"
-              } `}
-              // disabled={!isFormValid || isLoading}
-            >
-              {isLoading ? <Loader /> : "Save"}
-            </button>
-      
+          <button
+            type="submit"
+            className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
+              isFormValid
+                ? `${isLoading ? "bg-customGray" : "bg-primary"}`
+                : "bg-customGray cursor-not-allowed"
+            } `}
+            // disabled={!isFormValid || isLoading}
+          >
+            {isLoading ? <Loader /> : "Save"}
+          </button>
         </form>
       </div>
     </section>

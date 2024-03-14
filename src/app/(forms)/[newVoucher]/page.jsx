@@ -11,9 +11,9 @@ import Loader from "@/components/Loader.jsx";
 // import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { new_customer_validate } from "../../../../lib/validate";
+import {  new_voucher_validate } from "../../../../lib/validate";
 
-export default function NewCustomer() {
+export default function NewVoucher() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,12 +21,14 @@ export default function NewCustomer() {
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      address: "",
+      fullName: "James McClurckin",
+      email: "james@gmail.com",
+      phone: "09020301822",
+      address: "No. oacj olsc ojhioasc oiakcnajokncaokcnhoac",
+      product: "",
+      third_party: "",
     },
-    validate: new_customer_validate,
+    validate: new_voucher_validate,
     onSubmit: handleSubmit,
   });
   // console.log(formik.isValid);
@@ -66,7 +68,7 @@ export default function NewCustomer() {
 
         <div>
           <h2 className="text-xl font-medium text-center mt-5 text-primary">
-            Register New Customer
+            Register New Voucher
           </h2>
 
           <div className="mt-10">
@@ -76,6 +78,7 @@ export default function NewCustomer() {
                   Full Name
                 </label>
                 <input
+                  readOnly
                   id="fullName"
                   name="fullName"
                   type="text"
@@ -94,6 +97,7 @@ export default function NewCustomer() {
                   Email
                 </label>
                 <input
+                  readOnly
                   id="email"
                   name="email"
                   type="email"
@@ -112,6 +116,7 @@ export default function NewCustomer() {
                   Phone Number
                 </label>
                 <input
+                  readOnly
                   id="phone"
                   name="phone"
                   type="tel"
@@ -130,6 +135,7 @@ export default function NewCustomer() {
                   Address
                 </label>
                 <input
+                  readOnly
                   id="address"
                   name="address"
                   type="text"
@@ -143,6 +149,48 @@ export default function NewCustomer() {
                   </div>
                 )}
               </div>
+              <div className="flex flex-col  mb-6">
+                <label className="text-sm mb-2" htmlFor="product">
+                  Select Product
+                </label>
+                <select
+                  // disabled={!isEditable}
+                  id="product"
+                  name="product"
+                  placeholder="Select Product"
+                  className={getInputClassNames("product")}
+                  {...formik.getFieldProps("product")}
+                >
+                  <option>Select Product</option>
+                  <option value="fuel">Fuel</option>
+                  <option value="diesel">Diesel</option>
+                  {/* {renderJobCategories()} */}
+                </select>
+                {formik.touched.product && formik.errors.product && (
+                  <div className="text-error text-sm">
+                    {formik.errors.product}
+                  </div>
+                )}
+              </div>
+
+              <div className="flex items-center mt-6 ">
+                <div>
+                  <input
+                    name="third_party"
+                    id="checkbox"
+                    // disabled={!isEditable}
+                    type="checkbox"
+                    className={`h-[14px] w-[14px] rounded-md ${getInputClassNames(
+                      "third_party"
+                    )}`}
+                    onChange={formik.handleChange}
+                  />
+                </div>
+                <div className="text-sm ml-2">
+                  <label htmlFor="checkbox">Allow Third Party</label>
+                </div>
+              </div>
+
               <button
                 type="submit"
                 className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${

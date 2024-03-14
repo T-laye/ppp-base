@@ -14,12 +14,21 @@ import { BsFillTelephoneFill } from "react-icons/bs";
 import { BsFillFuelPumpDieselFill } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
 import { IoLocationSharp } from "react-icons/io5";
+import { toast } from "react-toastify";
+import { FaLocationDot } from "react-icons/fa6";
 
 export default function Page() {
   const router = useRouter();
 
   const editCustomer = () => {
-    router.push("/management/customers/id/editCustomer");
+    router.push("/admin/stats/customers/id/editCustomer");
+  };
+  const deleteCustomer = () => {
+    toast.success("Successfully Deleted");
+    router.back();
+  };
+  const addVoucher = () => {
+    router.push("/newVoucher");
   };
   return (
     <section className="min-h-screen pt-8 pb-20">
@@ -28,7 +37,7 @@ export default function Page() {
       </div>
 
       <div>
-        <h3 className="font-semibold">Voucher Details</h3>
+        <h3 className="font-semibold">Customer Details</h3>
 
         <div className="mt-4">
           <DetailList
@@ -45,6 +54,11 @@ export default function Page() {
             title="Phone Number"
             value="09083039494"
             icon={<BsFillTelephoneFill size={16} />}
+          />
+          <DetailList
+            title="Address"
+            value="No. oajdcbk cjioachno aichaojcnajc ajschnajc ajcg abjcbc icacsc"
+            icon={<FaLocationDot size={16} />}
           />
           {/* <DetailList
             title="Product"
@@ -72,8 +86,18 @@ export default function Page() {
             icon={<IoLocationSharp size={16} />}
           />
 
-          <button onClick={editCustomer} className="btn bg-primary w-full mt-5">
+          <button onClick={addVoucher} className="btn bg-primary w-full mt-5">
+            Create Voucher
+          </button>
+
+          <button
+            onClick={editCustomer}
+            className="btn bg-yellow-500 w-full mt-5"
+          >
             Edit Customer
+          </button>
+          <button onClick={deleteCustomer} className="btn bg-error w-full mt-5">
+            Delete Customer
           </button>
 
           {/* <button className="btn bg-error w-full mt-5">Delete Customer</button> */}

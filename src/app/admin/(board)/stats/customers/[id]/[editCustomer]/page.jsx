@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { toast } from "react-toastify";
-import { new_customer_validate } from "../../../../../../../lib/validate";
+import { new_customer_validate } from "../../../../../../../../lib/validate";
 
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);

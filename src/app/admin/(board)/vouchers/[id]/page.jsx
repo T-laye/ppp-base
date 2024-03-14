@@ -13,6 +13,7 @@ import { MdEmail } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { BsFillFuelPumpDieselFill } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
+import { FaLocationDot } from "react-icons/fa6";
 
 export default function Page() {
   const router = useRouter();
@@ -46,20 +47,25 @@ export default function Page() {
             icon={<BsFillTelephoneFill size={16} />}
           />
           <DetailList
+            title="Address"
+            value="No. oajdcbk cjioachno aichaojcnajc ajschnajc ajcg abjcbc icacsc"
+            icon={<FaLocationDot size={16} />}
+          />
+          <DetailList
             title="Product"
             value="Fuel"
             icon={<ImDroplet size={16} />}
           />
-          <DetailList
+          {/* <DetailList
             title="Amount Allocated"
             value={25}
             icon={<MdAssignmentTurnedIn size={16} />}
-          />
-          <DetailList
+          /> */}
+          {/* <DetailList
             title="Preferred Point of Collection"
             value="Total Fueling Station"
             icon={<BsFillFuelPumpDieselFill size={16} />}
-          />
+          /> */}
           <DetailList
             title="Third Party"
             value="Yes"
@@ -70,6 +76,9 @@ export default function Page() {
             Edit Voucher
           </button>
 
+          <button className="btn bg-yellow-500 w-full mt-5">
+            Approve Voucher
+          </button>
           <button className="btn bg-error w-full mt-5">Delete Voucher</button>
         </div>
       </div>

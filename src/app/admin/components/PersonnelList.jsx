@@ -8,12 +8,12 @@ export default function PersonnelList({ name, role }) {
       return "text-primary";
     } else if (role === "management") {
       return "text-yellow-400";
-    } else return;
+    } else return "text-customGray";
   };
 
   return (
     <Link href="/admin/workForce/id">
-      <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-activePrimary active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
+      <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
         <div>{name}</div>
         <div>
           <FaUser size={24} className={`${userColor()}`} />

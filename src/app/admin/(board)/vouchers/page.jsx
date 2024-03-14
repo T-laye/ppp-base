@@ -1,8 +1,8 @@
 "use client";
 import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useState } from "react";
-import CustomerList from "../../components/CustomerList";
 import { useRouter } from "next/navigation";
+import VoucherList from "../../components/VoucherList";
 
 export default function Customers() {
   const [approved, setApproved] = useState(false);
@@ -14,8 +14,8 @@ export default function Customers() {
     setApproved(!approved);
   };
 
-  const goToNewVoucher = () => {
-    router.push("/newVoucher");
+  const goToCustomers = () => {
+    router.push("/admin/stats/customers");
   };
 
   const setTab = (tab) => {
@@ -70,7 +70,7 @@ export default function Customers() {
             </div>
           </div>
           <button
-            onClick={goToNewVoucher}
+            onClick={goToCustomers}
             className="btn max-[285px]:mx-auto bg-primary"
           >
             + Add
@@ -97,31 +97,31 @@ export default function Customers() {
         <div className="bg-gren-400 pt-3 pb-10">
           <ul>
             {(activeTab === 1 || activeTab === 2) && (
-              <CustomerList name="John Doe" pending={true} />
+              <VoucherList name="John Doe" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 2) && (
-              <CustomerList name="Mark Timmy" pending={true} />
+              <VoucherList name="Mark Timmy" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 3) && (
-              <CustomerList name="Tiebebedigha Tubolayefa" pending={false} />
+              <VoucherList name="Tiebebedigha Tubolayefa" pending={false} />
             )}
             {(activeTab === 1 || activeTab === 2) && (
-              <CustomerList name="Mchael Tega" pending={true} />
+              <VoucherList name="Mchael Tega" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 4) && (
-              <CustomerList name="Susan Bournsmouth" pending={true} />
+              <VoucherList name="Susan Bournsmouth" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 3) && (
-              <CustomerList name="Onoyake James" pending={false} />
+              <VoucherList name="Onoyake James" pending={false} />
             )}
             {(activeTab === 1 || activeTab === 2) && (
-              <CustomerList name="Etuk Obong" pending={true} />
+              <VoucherList name="Etuk Obong" pending={true} />
             )}
             {(activeTab === 1 || activeTab === 3) && (
-              <CustomerList name="Ogar Jude" pending={false} />
+              <VoucherList name="Ogar Jude" pending={false} />
             )}
             {(activeTab === 1 || activeTab === 3) && (
-              <CustomerList name="Marvelous Ike" pending={false} />
+              <VoucherList name="Marvelous Ike" pending={false} />
             )}
           </ul>
         </div>

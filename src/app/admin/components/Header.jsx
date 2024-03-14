@@ -11,6 +11,7 @@ import { TbLogout2 } from "react-icons/tb";
 import { FaHistory } from "react-icons/fa";
 import { PiDropFill } from "react-icons/pi";
 import { MdVerifiedUser } from "react-icons/md";
+import { FaUser } from "react-icons/fa6";
 
 export default function Header() {
   const [openNav, setOpenNav] = useState(false);
@@ -43,7 +44,7 @@ export default function Header() {
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
-                  <FaListAlt size={20} />
+                  <FaUser size={20} />
                   <a href="" className="">
                     New Customer
                   </a>
