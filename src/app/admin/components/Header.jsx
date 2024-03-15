@@ -95,7 +95,7 @@ export default function Header() {
                   <a href="">Verify Voucher</a>
                 </li>
               </Link> */}
-              <Link legacyBehavior href="/usedVoucher">
+              <Link legacyBehavior href="/admin/usedVoucher">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"

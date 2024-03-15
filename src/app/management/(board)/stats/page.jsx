@@ -58,6 +58,7 @@ export default function Stats() {
           /> */}
           <StatsCard
             number={324}
+            link="#"
             color="bg-blue-700"
             title="POC"
             icon={<GiGasPump size={24} />}
@@ -69,12 +70,14 @@ export default function Stats() {
             icon={<IoMdTimer size={24} />}
           /> */}
           <StatsCard
+            link="#"
             number={34}
             color="bg-primary"
             title="Total Product Dispensed"
             icon={<PiDropFill size={24} />}
           />
           <StatsCard
+            link="/management/stats/usedVoucher"
             number={3440}
             color="bg-customGray"
             title="Used Voucher"

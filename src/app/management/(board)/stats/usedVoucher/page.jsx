@@ -2,7 +2,6 @@
 import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useEffect, useState } from "react";
 import UvcList from "@/components/UvcList";
-import GoBack from "@/components/GoBack";
 
 export default function UsedVoucher() {
   const [term, setTerm] = useState("");
@@ -25,9 +24,6 @@ export default function UsedVoucher() {
 
   return (
     <section className="pt-5 pb-20">
-      <div className="mt-4">
-        <GoBack />
-      </div>
       <h4 className="font-medium text-base mt-2 text-center">Used Vouchers</h4>
 
       <div className="mt-4">
