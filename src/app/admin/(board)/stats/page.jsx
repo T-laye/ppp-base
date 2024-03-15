@@ -71,7 +71,7 @@ export default function Stats() {
             icon={<IoCheckmarkDoneCircle size={24} />}
           />
           <StatsCard
-            link="/admin/usedVouchers"
+            link="/admin/stats/usedVoucher"
             number={3440}
             color="bg-customGray"
             title="Used Vouchers"
