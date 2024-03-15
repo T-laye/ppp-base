@@ -101,7 +101,7 @@ export default function Header() {
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
                   <FaHistory size={20} />
-                  <a href="">Used Voucher</a>
+                  <a href="">UVC</a>
                 </li>
               </Link>
               <Link legacyBehavior href="/admin">

@@ -78,7 +78,7 @@ export default function Stats() {
       </div>
       <div className="mt-10">
         <h4 className="font-medium text-base mt-2 text-center">
-          Product Level Per POC
+          Product Level at POC
         </h4>
         {/* <h4 className="text-sm ">Hello, Admin</h4> */}
         <div>

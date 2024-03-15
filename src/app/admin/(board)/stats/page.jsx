@@ -43,7 +43,7 @@ export default function Stats() {
         {/* <h4 className="text-sm ">Hello, Admin</h4> */}
         <div className="flex flex-wrap gap-3 mt-4">
           <StatsCard
-            link="/admin/customers"
+            link="/admin/stats/customers"
             color="bg-error"
             number={340}
             title="Customers"
