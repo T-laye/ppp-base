@@ -66,7 +66,7 @@ export default function Page() {
           <button className="btn bg-yellow-500 w-full mt-5">
             Make Management
           </button>
-          <button className="btn bg-blue-500 w-full mt-5">Make Editor</button>
+          <button className="btn bg-blue-500 w-full mt-5">Enable Edit</button>
           <button className="btn bg-customGray w-full mt-5">Make Admin</button>
           <button className="btn bg-error w-full mt-5">Delete Person</button>
         </div>
