@@ -130,7 +130,7 @@ export default function Page() {
 
       {showAddVoucher && (
         <div className="bg-[#5C5F6290] backdrop-blur-sm  px-4 min-h-screen absolute top-0 left-0 right-0 bottom-0 z-50">
-          <div className="bg-white min-w-[270px] w-full mt-10 mx-auto rounded-xl p-4">
+          <div className="bg-white min-w-[270px] w-full mt-10 mx-auto rounded-xl px-4 pt-4 pb-8">
             <div className="text-end text-primary  flex justify-end ">
               <button>
                 <MdOutlineCancel size={24} onClick={handleAddVoucher} />
@@ -155,11 +155,11 @@ export default function Page() {
               </div>
             </form>
 
-            <div className="mt-5">
+           { term !== '' && <div className="mt-5">
               <CustomerList name="Marvelous Ike" />
               <CustomerList name="James Manager" />
               <CustomerList name="Olorunfemi Adeola" />
-            </div>
+            </div>}
           </div>
         </div>
       )}
