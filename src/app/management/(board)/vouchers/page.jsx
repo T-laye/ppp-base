@@ -129,8 +129,8 @@ export default function Page() {
       {/* New Voucher modal */}
 
       {showAddVoucher && (
-        <div className="bg-[#5C5F6290] backdrop-blur-sm flex  justifycenter px-4 min-h-screen absolute top-0 left-0 right-0 bottom-0 z-50">
-          <div className="bg-white min-w-[270px] w-4/5 mt-10 mx-auto rounded-xl p-4">
+        <div className="bg-[#5C5F6290] backdrop-blur-sm  px-4 min-h-screen absolute top-0 left-0 right-0 bottom-0 z-50">
+          <div className="bg-white min-w-[270px] w-full mt-10 mx-auto rounded-xl p-4">
             <div className="text-end text-primary  flex justify-end ">
               <button>
                 <MdOutlineCancel size={24} onClick={handleAddVoucher} />
