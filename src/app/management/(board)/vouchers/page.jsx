@@ -3,15 +3,18 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import VoucherList from "../../components/VoucherList";
+import CustomerList from "../../components/CustomerList";
+import { MdOutlineCancel } from "react-icons/md";
 
 export default function Page() {
   const [approved, setApproved] = useState(false);
+  const [showAddVoucher, setShowAddVoucher] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
   const [term, setTerm] = useState("");
   const router = useRouter();
 
-  const handleProduct = () => {
-    setApproved(!approved);
+  const handleAddVoucher = () => {
+    setShowAddVoucher(!showAddVoucher);
   };
 
   const goToCustomers = () => {
@@ -27,7 +30,7 @@ export default function Page() {
   };
 
   return (
-    <section className="min-h-screen bg-green300 py-4">
+    <section className="relative min-h-screen bg-green300 py-4">
       <div className="mt-4 bg-red400">
         <div className="flex max-[285px]:justify-center space-x-3 items-center mt4 mb-5 text-base">
           <div
@@ -69,7 +72,7 @@ export default function Page() {
               {approved ? "Approved" : "Queue"}
             </div>
           </div> */}
-          <button onClick={goToCustomers} className="btn w-full bg-primary">
+          <button onClick={handleAddVoucher} className="btn w-full bg-primary">
             Add Voucher
           </button>
         </div>
@@ -123,6 +126,43 @@ export default function Page() {
           </ul>
         </div>
       </div>
+      {/* New Voucher modal */}
+
+      {showAddVoucher && (
+        <div className="bg-[#5C5F6290] backdrop-blur-sm flex  justifycenter px-4 min-h-screen absolute top-0 left-0 right-0 bottom-0 z-50">
+          <div className="bg-white min-w-[270px] w-4/5 mt-10 mx-auto rounded-xl p-4">
+            <div className="text-end text-primary  flex justify-end ">
+              <button>
+                <MdOutlineCancel size={24} onClick={handleAddVoucher} />
+              </button>
+            </div>
+            <form
+              action=""
+              onSubmit={(e) => e.preventDefault()}
+              className="mt-4"
+            >
+              <div className="relative ">
+                <input
+                  type="text"
+                  placeholder="Search by customer name"
+                  className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
+                  value={term}
+                  onChange={handleChange}
+                />
+                <div className="absolute top-3 right-2.5 text-gray-400">
+                  <BiSearchAlt2 size={20} />
+                </div>
+              </div>
+            </form>
+
+            <div className="mt-5">
+              <CustomerList name="Marvelous Ike" />
+              <CustomerList name="James Manager" />
+              <CustomerList name="Olorunfemi Adeola" />
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

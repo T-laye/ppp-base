@@ -12,6 +12,7 @@ export default function Verify() {
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [valid, setValid] = useState(false);
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -42,6 +43,7 @@ export default function Verify() {
     setTimeout(() => {
       setIsLoading(false);
       toast.success("Successful");
+      router.push("/personnel/verify/success");
     }, 2000);
   }
 

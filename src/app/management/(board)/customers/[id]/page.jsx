@@ -21,6 +21,10 @@ export default function Page() {
   const editCustomer = () => {
     router.push("/management/customers/id/editCustomer");
   };
+  const createVoucher = () => {
+    router.push("/newVoucher");
+  };
+
   return (
     <section className="min-h-screen pt-8 pb-20">
       <div className="mb-3">
@@ -72,7 +76,13 @@ export default function Page() {
             icon={<IoLocationSharp size={16} />}
           />
 
-          <button onClick={editCustomer} className="btn bg-primary w-full mt-5">
+          <button
+            onClick={createVoucher}
+            className="btn bg-primary w-full mt-5"
+          >
+            Create Voucher
+          </button>
+          <button onClick={editCustomer} className="btn bg-yellow-500 w-full mt-5">
             Edit Customer
           </button>
 

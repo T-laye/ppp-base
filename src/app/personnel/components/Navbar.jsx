@@ -36,7 +36,9 @@ export default function Navbar() {
         <Link href="/personnel/verify" legacyBehavior>
           <li
             className={`${
-              pathname === "/personnel/verify" ? "text-primary" : "text-gray-500"
+              pathname.startsWith("/personnel/verify")
+                ? "text-primary"
+                : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <MdVerifiedUser size={22} />
