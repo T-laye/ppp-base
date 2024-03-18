@@ -1,7 +1,8 @@
 // redux/store.js
 
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./reducers/counter"; // You'll define this later
+import loginReducer from "./reducers/loginSlice"; // You'll define this later
+import registerReducer from "./reducers/registerWorkerSlice"; // You'll define this later
 
 const store = configureStore({
   devTools: process.env.NODE_ENV !== "production",
@@ -12,7 +13,8 @@ const store = configureStore({
           immutableCheck: false,
         }),
   reducer: {
-    counter: counterReducer,
+    login: loginReducer,
+    register: registerReducer,
     // Add other reducers here if needed
   },
 });

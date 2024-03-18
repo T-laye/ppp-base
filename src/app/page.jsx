@@ -10,12 +10,15 @@ import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { signIn_validate } from "../../lib/validate";
+import { loginUser } from "@/redux/apiCalls/login";
+import { useDispatch } from "react-redux";
 
 export default function Home() {
   const [role, setRole] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const router = useRouter();
 
@@ -37,21 +40,9 @@ export default function Home() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
-  async function handleSubmit(values) {
+  function handleSubmit(values) {
     const { email, password } = values;
-    console.log(email, password);
-    setIsLoading(true);
-
-    if (role) {
-      router.push("/management/stats");
-    } else {
-      router.push("/personnel/stats");
-    }
-
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Successful");
-    }, 2000);
+    // loginUser({ email, password }, dispatch, router);
   }
 
   const getInputClassNames = (fieldName) =>
@@ -160,15 +151,15 @@ export default function Home() {
                   {formik.errors.password}
                 </div>
               )}
-              <div className="text-sm mt-4 font-medium text-right">
+              {/* <div className="text-sm mt-4 font-medium text-right">
                 <Link href="/signIn/forgotPassword" className="text-gray-500">
                   {" "}
                   Forgot Password ?
                 </Link>
-              </div>
+              </div> */}
               <button
                 type="submit"
-                className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
+                className={`btn w-full h-11 mt-8 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
                   isFormValid
                     ? `${isLoading ? "bg-customGray" : "bg-primary"}`
                     : "bg-customGray cursor-not-allowed"

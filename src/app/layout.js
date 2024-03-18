@@ -14,14 +14,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <Providers>
+      <html lang="en">
+        <body className="max-w-2xl mx-auto  ">
+          {children}
 
-    <html lang="en">
-      <body className="max-w-2xl mx-auto  ">
-        {children}
-
-        <ToastContainer closeOnClick pauseOnHover />
-      </body>
-    </html>
+          <ToastContainer closeOnClick pauseOnHover />
+        </body>
+      </html>
     </Providers>
   );
 }

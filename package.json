@@ -11,6 +11,7 @@
   "dependencies": {
     "@prisma/client": "^5.10.2",
     "@reduxjs/toolkit": "^2.2.1",
+    "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "bcrypt-salt": "^2.0.0",
     "cookie": "^0.6.0",
