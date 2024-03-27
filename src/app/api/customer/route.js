@@ -2,6 +2,7 @@ import { verify } from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../config/prisma.connect";
+import ApiResponseDto from "../../../../lib/apiResponseHelper";
 
 export async function POST(req, res) {
   const cookiesStore = cookies();
@@ -16,7 +17,7 @@ export async function POST(req, res) {
     const payload = verify(token.value, process.env.ACCESS_TOKEN_SECRET);
     const { id, email } = payload;
     const user = await prisma.user.findUnique({
-      where: { email: email },
+      where: { id: id, email },
       include: {
         Management: true,
         Personel: true,
@@ -28,15 +29,35 @@ export async function POST(req, res) {
         { status: 403 }
       );
     const body = await req.json();
-      const { name, v_email, phone, product, poc, thirdParty } = body;
-    //   const addNewVoucher = await prisma.voucher.create({
-          
-    //   })
-  } catch (err) {}
-  // get the jwt
-  // decode the jwt
-  // search if the id is available, return relations
-  // then get the details from the body
-  // return saved response
-  const body = await req.json();
+    const { name, c_email, phone, product, pocId, thirdParty } = body;
+    const addNewVoucher = await prisma.customer.create({
+      data: {
+        name,
+        email: c_email,
+        phoneNumber: phone,
+        product,
+        thirdParty,
+        poc: {
+          connect: {
+            pocId: pocId,
+          },
+        },
+        createdBy: {
+          connect: {
+            id: user.id,
+          },
+        },
+      },
+    });
+    const createResponse = ApiResponseDto({
+      message: "successfully",
+      data: addNewVoucher,
+      statusCode: 201,
+    });
+    return NextResponse.json(createResponse, {
+      status: 201,
+    });
+  } catch (err) {
+    return NextResponse.json({ message: err.message, status: 500 });
+  }
 }
