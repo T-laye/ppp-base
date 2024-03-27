@@ -7,7 +7,6 @@ import { prisma } from "../../../../config/prisma.connect";
 export async function POST(req, res) {
   try {
     const cookiesStore = cookies();
-    console.log(cookiesStore);
     const token = cookiesStore.get("ppp-base");
     const handleError = ApiResponseDto({
       message: "you are not logged in",
