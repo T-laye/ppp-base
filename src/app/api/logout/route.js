@@ -31,7 +31,6 @@ export async function GET() {
       headers: { "Set-Cookie": atCookie },
     });
   } catch (err) {
-    console.log(err);
     return NextResponse.json({ error: err, status: 500 }, { status: 500 });
   }
 }

@@ -42,7 +42,7 @@ export async function POST(req, res) {
       const loginResponse = ApiResponseDto({
         message: "login successful",
         data: {
-          cookie: atCookie,
+          user: user
         },
         statusCode: 200,
       });
