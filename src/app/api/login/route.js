@@ -46,18 +46,18 @@ export async function POST(req, res) {
         },
         statusCode: 200,
       });
-      return NextResponse.json(loginResponse, {
+      return new NextResponse.json(loginResponse, {
         status: 200,
         headers: { "Set-Cookie": atCookie },
       });
     } else {
-      return NextResponse.json(
+      return new NextResponse.json(
         ApiResponseDto({ message: "oops, user details not found" }),
         { status: 403 }
       );
     }
   } catch (err) {
-    return NextResponse.json(
+    return new NextResponse.json(
       { error: err.message, status: 500 },
       { status: 500 }
     );
