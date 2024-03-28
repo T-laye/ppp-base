@@ -7,7 +7,7 @@ import _isUserAvailable from "../../../../repo/check-user-available";
 import createAccessToken from "../../../../lib/sign-jwt";
 import { serialize } from "cookie";
 
-export async function POST(req, res) {
+export async function OPTIONS(req, res) {
   const body = await req.json();
   const error = signIn_validate(body);
   const handleError = ApiResponseDto({
