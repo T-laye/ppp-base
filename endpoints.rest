@@ -13,6 +13,11 @@ Content-Type: application/json
   "address": "airport road"
 }
 
+{
+  "email": "okoro@gmail.com",
+  "password": "test125"
+}
+
 ###
 POST  {{hostname}}/api/login
 Content-Type: application/json
