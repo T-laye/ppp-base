@@ -42,7 +42,7 @@ export default function Home() {
 
   function handleSubmit(values) {
     const { email, password } = values;
-    // loginUser({ email, password }, dispatch, router);
+    loginUser({ email, password }, dispatch, router);
   }
 
   const getInputClassNames = (fieldName) =>
