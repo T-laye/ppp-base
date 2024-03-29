@@ -12,18 +12,17 @@ import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { signIn_validate } from "../../../lib/validate";
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "@/redux/slices/usersApiSlice";
+import { setCredentials } from "@/redux/slices/authSlice";
 
 export default function AdminSignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
+  const dispatch = useDispatch();
   const router = useRouter();
-  const customToastStyle = {
-    backgroundColor: "#333333",
-    color: "#ffffff",
-  };
-
+  const [login, { isLoading, error }] = useLoginMutation();
+  const { userInfo } = useSelector((state) => state.auth);
   const viewPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -32,6 +31,7 @@ export default function AdminSignIn() {
     initialValues: {
       email: "",
       password: "",
+      role:'ADMIN'
     },
     validate: signIn_validate,
     onSubmit: handleSubmit,
@@ -42,17 +42,21 @@ export default function AdminSignIn() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
-  async function handleSubmit(values) {
+   async function handleSubmit(values) {
     const { email, password } = values;
-    console.log(email, password);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Successful");
-    }, 2000);
-    setTimeout(() => {
-      router.push("/admin/stats");
-    }, 500);
+    const route = "/admin/stats"
+    // loginUser({ email, password }, dispatch, router);
+    try {
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res.data }));
+      console.log(res);
+      console.log(values);
+      toast.success(res.message);
+      router.push(route);
+    } catch (e) {
+      toast.error(e.data.message);
+      console.log(e);
+    }
   }
 
   const getInputClassNames = (fieldName) =>

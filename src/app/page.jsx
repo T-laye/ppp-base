@@ -38,6 +38,7 @@ export default function Home() {
     initialValues: {
       email: "",
       password: "",
+      role: role ? "MANAGEMENT" : "PERSONEL",
     },
     validate: signIn_validate,
     onSubmit: handleSubmit,
@@ -50,17 +51,18 @@ export default function Home() {
 
   async function handleSubmit(values) {
     const { email, password } = values;
+    const route = role ? "/management/stats" : "/personnel/stats";
     // loginUser({ email, password }, dispatch, router);
     try {
       const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      // router.push("/personnel/stats");
+      dispatch(setCredentials({ ...res.data }));
       console.log(res);
+      console.log(values);
       toast.success(res.message);
+      router.push(route);
     } catch (e) {
       toast.error(e.data.message);
       console.log(e);
-      // router.push("/personnel/stats");
     }
   }
 

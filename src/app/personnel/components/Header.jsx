@@ -32,6 +32,7 @@ export default function Header() {
       await logoutApiCall().unwrap();
       dispatch(logout());
       router.push("/");
+      console.log("log out");
     } catch (err) {
       console.log(err);
     }
