@@ -109,12 +109,12 @@ export default function Home() {
             <div className=" w-1/2 text-end">Management</div>
             <div
               className={`${
-                role
+                userRole
                   ? "translate-x-full left-0.5 duration-200"
                   : "duration-200 translate-x-0 -left-0.5"
               }  absolute duration-200 text-center text-base w-1/2 bg-primary text-white font-medium  top-0 rounded-xl py-1.5  `}
             >
-              {role ? "Management" : "Personnel"}
+              {userRole ? "Management" : "Personnel"}
             </div>
           </div>
         </div>
@@ -193,6 +193,4 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </main>
-  );
-}
+   
