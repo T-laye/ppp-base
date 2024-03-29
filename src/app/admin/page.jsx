@@ -47,7 +47,7 @@ export default function AdminSignIn() {
     const route = "/admin/stats"
     // loginUser({ email, password }, dispatch, router);
     try {
-      const res = await login({ email, password }).unwrap();
+      const res = await login({ email, password, }).unwrap();
       dispatch(setCredentials({ ...res.data }));
       console.log(res);
       console.log(values);

@@ -54,7 +54,7 @@ export default function Home() {
     const route = role ? "/management/stats" : "/personnel/stats";
     // loginUser({ email, password }, dispatch, router);
     try {
-      const res = await login({ email, password }).unwrap();
+      const res = await login({ email, password, role }).unwrap();
       dispatch(setCredentials({ ...res.data }));
       console.log(res);
       console.log(values);

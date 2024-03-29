@@ -28,10 +28,10 @@ export async function POST(req, res) {
       const checkPassword = await bcrypt.compare(password, user.password);
       if (!checkPassword)
         return NextResponse.json(
-          ApiResponseDto({ message: "incorrect password", statusCode: 401 }),
+          ApiResponseDto({ message: "incorrect email or password", statusCode: 401 }),
           { status: 401 }
         );
-      const setToken = createAccessToken(user.id, user.email);
+      const setToken = createAccessToken(user.id, user.email, user.role);
       const atCookie = serialize("ppp-base", setToken, {
         httpOnly: false,
         sameSite: "strict",
