@@ -7,7 +7,7 @@ import _isUserAvailable from "../../../../repo/check-user-available";
 import createAccessToken from "../../../../lib/sign-jwt";
 import { serialize } from "cookie";
 
-export async function OPTIONS(req, res) {
+export async function POST(req, res) {
   const body = await req.json();
   const error = signIn_validate(body);
   const handleError = ApiResponseDto({
@@ -46,18 +46,18 @@ export async function OPTIONS(req, res) {
         },
         statusCode: 200,
       });
-      return new NextResponse.json(loginResponse, {
+      return NextResponse.json(loginResponse, {
         status: 200,
         headers: { "Set-Cookie": atCookie },
       });
     } else {
-      return new NextResponse.json(
+      return NextResponse.json(
         ApiResponseDto({ message: "oops, user details not found" }),
         { status: 403 }
       );
     }
   } catch (err) {
-    return new NextResponse.json(
+    return NextResponse.json(
       { error: err.message, status: 500 },
       { status: 500 }
     );

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Logo from "@/components/Logo";
 import React, { Suspense, useEffect, useState } from "react";
 import { IoIosMenu } from "react-icons/io";
@@ -27,7 +27,7 @@ export default function Layout({ children }) {
     })();
   }, [router]);
   // console.log(isAuth);
- if (!isAuth) {
+  if (!isAuth) {
     return (
       <section className="h-screen">
         <div className="flex justify-center items-center h-full">
@@ -38,18 +38,19 @@ export default function Layout({ children }) {
       </section>
     );
   } else {
-  return (
-    <div className="">
-      <Header />
-      <Suspense>
-        <main className="pt-12">{children}</main>
-      </Suspense>
+    return (
+      <div className="">
+        <Header />
+        <Suspense>
+          <main className="pt-12">{children}</main>
+        </Suspense>
 
-      <footer>
-        <Navbar />
-      </footer>
-    </div>
-  );}
+        <footer>
+          <Navbar />
+        </footer>
+      </div>
+    );
+  }
 }
 
 async function getUser() {
