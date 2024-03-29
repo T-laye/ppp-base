@@ -10,17 +10,25 @@ import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { signIn_validate } from "../../lib/validate";
-import { loginUser } from "@/redux/apiCalls/login";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "@/redux/slices/usersApiSlice";
+import { setCredentials } from "@/redux/slices/authSlice";
 
 export default function Home() {
   const [role, setRole] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
-
   const router = useRouter();
+  const [login, { isLoading, error }] = useLoginMutation();
+  const { userInfo } = useSelector((state) => state.auth);
+
+  // useEffect(() => {
+  //   if (!userInfo) {
+  //     router.push("/");
+  //   }
+  // }, [router, userInfo]);
 
   const viewPassword = () => {
     setShowPassword(!showPassword);
@@ -40,9 +48,20 @@ export default function Home() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
-  function handleSubmit(values) {
+  async function handleSubmit(values) {
     const { email, password } = values;
-    loginUser({ email, password }, dispatch, router);
+    // loginUser({ email, password }, dispatch, router);
+    try {
+      const res = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ ...res }));
+      // router.push("/personnel/stats");
+      console.log(res);
+      toast.success(res.message);
+    } catch (e) {
+      toast.error(e.data.message);
+      console.log(e);
+      // router.push("/personnel/stats");
+    }
   }
 
   const getInputClassNames = (fieldName) =>

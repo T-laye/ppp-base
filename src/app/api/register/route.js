@@ -8,6 +8,7 @@ import { serialize } from "cookie";
 import createAccessToken from "../../../../lib/sign-jwt";
 
 export async function POST(req, res) {
+  console.log(req)
   const body = await req.json();
   const error = signIn_validate(body);
   const handleError = ApiResponseDto({

@@ -13,19 +13,37 @@ import { MdVerifiedUser } from "react-icons/md";
 import { TbLogout2 } from "react-icons/tb";
 import { ImStatsBars } from "react-icons/im";
 import { RiAccountCircleFill } from "react-icons/ri";
+import { useLogoutMutation } from "@/redux/slices/usersApiSlice";
+import { logout } from "../../../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [openNav, setOpenNav] = useState(false);
   const handleNav = () => {
     setOpenNav(!openNav);
   };
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      router.push("/");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <header className=" max-w-2xl mx-auto bg-white h-14 fixed top-0 left-0 right-0 shadow-sm    z-10">
       <div className="relative flex justify-between items-center px-4 py-1">
         <Logo />
-        <div className="cursor-pointer text-error" >
+        <div className="cursor-pointer text-error">
           {/* <IoIosMenu size={28} /> */}
-               <TbLogout2 size={28} />
+          <TbLogout2 size={28} onClick={logoutHandler} />
         </div>
         {/* <nav
           onClick={handleNav}
