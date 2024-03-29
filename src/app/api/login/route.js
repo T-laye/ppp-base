@@ -52,7 +52,7 @@ export async function POST(req, res) {
       });
     } else {
       return NextResponse.json(
-        ApiResponseDto({ message: "oops, user details not found" }),
+        ApiResponseDto({ message: "Invalid user email or passoword" }),
         { status: 403 }
       );
     }
