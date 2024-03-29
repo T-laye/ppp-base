@@ -19,12 +19,19 @@ export async function POST(req, res) {
   if (Object.keys(error).length > 0)
     return NextResponse.json(handleError, { status: 400 });
 
-  const { email, password } = body;
+  const { email, password, role } = body;
   try {
     const user = await prisma.user.findUnique({
       where: { email: email },
     });
-    if (user) {
+    const checkRole = user.role === role
+    if (user ) {
+      if(!checkRole){
+        return NextResponse.json(
+          ApiResponseDto({ message: "Unauthorized Access" }),
+          { status: 403 }
+        );
+      }
       const checkPassword = await bcrypt.compare(password, user.password);
       if (!checkPassword)
         return NextResponse.json(
