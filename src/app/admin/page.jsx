@@ -31,7 +31,7 @@ export default function AdminSignIn() {
     initialValues: {
       email: "",
       password: "",
-      role:'ADMIN'
+      role: "ADMIN",
     },
     validate: signIn_validate,
     onSubmit: handleSubmit,
@@ -42,12 +42,12 @@ export default function AdminSignIn() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
-   async function handleSubmit(values) {
-    const { email, password } = values;
-    const route = "/admin/stats"
+  async function handleSubmit(values) {
+    const { email, password, role } = values;
+    const route = "/admin/stats";
     // loginUser({ email, password }, dispatch, router);
     try {
-      const res = await login({ email, password, }).unwrap();
+      const res = await login({ email, password, role }).unwrap();
       dispatch(setCredentials({ ...res.data }));
       console.log(res);
       console.log(values);

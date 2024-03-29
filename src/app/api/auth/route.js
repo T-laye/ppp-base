@@ -17,13 +17,16 @@ export async function GET() {
     );
   }
 
-  const { value } = token;
+  //   const { value } = token;
 
   try {
-    const v = verify(value, process.env.ACCESS_TOKEN_SECRET);
+    // const v = verify(value, process.env.ACCESS_TOKEN_SECRET);
+    const { value } = token;
+    const decoded = verify(value, process.env.ACCESS_TOKEN_SECRET);
 
     const response = {
-      user: "Authenticated",
+      user: decoded,
+      status: "Authenticated",
     };
     return new Response(JSON.stringify(response));
   } catch (e) {
