@@ -24,7 +24,7 @@ export default function Layout({ children }) {
         // if no error
         setIsAuth(true);
       }
-      console.log(user);
+      // console.log(user);
     })();
   }, [router]);
   // console.log(isAuth);

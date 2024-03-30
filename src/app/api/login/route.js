@@ -24,8 +24,8 @@ export async function POST(req, res) {
     const user = await prisma.user.findUnique({
       where: { email: email },
     });
-    const checkRole = user.role === role
     if (user ) {
+      const checkRole = user.role === role
       if(!checkRole){
         return NextResponse.json(
           ApiResponseDto({ message: "Unauthorized Access" }),
