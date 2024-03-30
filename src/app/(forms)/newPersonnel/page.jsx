@@ -10,7 +10,7 @@ import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { useRegisterMutation } from "@/redux/slices/registerPersonnelApiSlice";
+import { useRegisterMutation } from "@/redux/slices/registerApiSlice";
 import { personnel_validate } from "../../../../lib/validate";
 
 export default function NewPersonnel() {

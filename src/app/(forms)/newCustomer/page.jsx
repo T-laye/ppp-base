@@ -1,21 +1,17 @@
 "use client";
 import GoBack from "@/components/GoBack";
 import React from "react";
-import Image from "next/image";
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import { useFormik } from "formik";
-import visible from "/public/icons/visible_eye.svg";
-import invisible from "/public/icons/invisible_eye.svg";
 import Loader from "@/components/Loader.jsx";
-// import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { new_customer_validate } from "../../../../lib/validate";
+import { useAddCustomerMutation } from "@/redux/slices/addCustomerApiSlice";
 
 export default function NewCustomer() {
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [addCustomer, { isLoading, error }] = useAddCustomerMutation();
 
   const router = useRouter();
 
@@ -35,27 +31,33 @@ export default function NewCustomer() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
-  async function handleSubmit(values) {
-    // const { email, password } = values;
-    console.log(values);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Successful");
-    }, 2000);
-  }
+   async function handleSubmit(values) {
+     const { fullName, email, phone, address } = values;
+     try {
+       const res = await addCustomer({
+         name: fullName,
+         email,
+         phoneNumber: phone,
+         address,
+       }).unwrap();
+       // dispatch(setCredentials({ ...res.data }));
+       // console.log(res);
+       // console.log(values);
+       toast.success(res.message);
+       // router.push();
+     } catch (e) {
+       toast.error(e.data.message);
+       // console.log(e);
+     }
+   }
+
 
   const getInputClassNames = (fieldName) =>
     `${
       formik.errors[fieldName] && formik.touched[fieldName]
-        ? "border-error text-error"
+        ? "border-red-300 text-red-300"
         : ""
     }`;
-
-  const [showBg, setShowBg] = useState(false);
-  setTimeout(() => {
-    setShowBg(!showBg);
-  }, 5000);
 
   return (
     <section className="bg-green300 min-h-screen">
