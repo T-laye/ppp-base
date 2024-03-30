@@ -15,7 +15,7 @@ import { useLoginMutation } from "@/redux/slices/usersApiSlice";
 import { setCredentials } from "@/redux/slices/authSlice";
 
 export default function Home() {
-  const [userRole, setRole] = useState(false);
+  const [userRole, setUserRole] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   // const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +38,6 @@ export default function Home() {
     initialValues: {
       email: "",
       password: "",
-      role: userRole ? "MANAGEMENT" : "PERSONEL",
     },
     validate: signIn_validate,
     onSubmit: handleSubmit,
@@ -50,19 +49,20 @@ export default function Home() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    const { email, password, role } = values;
+    const { email, password } = values;
+    const role = userRole ? "MANAGEMENT" : "PERSONEL";
     const route = userRole ? "/management/stats" : "/personnel/stats";
     // loginUser({ email, password }, dispatch, router);
     try {
       const res = await login({ email, password, role }).unwrap();
       dispatch(setCredentials({ ...res.data }));
-      console.log(res);
-      console.log(values);
+      // console.log(res);
+      // console.log(values);
       toast.success(res.message);
       router.push(route);
     } catch (e) {
       toast.error(e.data.message);
-      console.log(e);
+      // console.log(e);
     }
   }
 
@@ -79,7 +79,7 @@ export default function Home() {
   }, 5000);
 
   const handleRole = () => {
-    setRole(!userRole);
+    setUserRole(!userRole);
   };
   // console.log(role);
 

@@ -36,7 +36,7 @@ export default function AdminSignIn() {
     validate: signIn_validate,
     onSubmit: handleSubmit,
   });
-  // console.log(formik.isValid);
+  // console.log(userInfo);
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
@@ -44,15 +44,13 @@ export default function AdminSignIn() {
 
   async function handleSubmit(values) {
     const { email, password, role } = values;
-    const route = "/admin/stats";
-    // loginUser({ email, password }, dispatch, router);
     try {
       const res = await login({ email, password, role }).unwrap();
       dispatch(setCredentials({ ...res.data }));
-      console.log(res);
-      console.log(values);
+      // console.log(route);
+      // console.log(values);
       toast.success(res.message);
-      router.push(route);
+      router.push("/admin/stats");
     } catch (e) {
       toast.error(e.data.message);
       console.log(e);

@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import { useRouter } from "next/navigation";
 import { ImSpinner9 } from "react-icons/im";
+import axios from "axios";
 
 export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
@@ -15,7 +16,7 @@ export default function Layout({ children }) {
     (async () => {
       const { user } = await getUser();
 
-      if (!user) {
+      if (!user || user.user.role !== "ADMIN") {
         router.push("/admin");
         setIsAuth(false);
         return;
@@ -23,10 +24,11 @@ export default function Layout({ children }) {
         // if no error
         setIsAuth(true);
       }
-      // console.log(user);
+      console.log(user);
     })();
   }, [router]);
   // console.log(isAuth);
+
   if (!isAuth) {
     return (
       <section className="h-screen">
@@ -56,12 +58,13 @@ export default function Layout({ children }) {
 async function getUser() {
   try {
     const { data } = await axios.get("/api/auth");
+    // console.log(res);
     return {
       user: data,
       // error: null,
     };
-    // console.log(res);
   } catch (e) {
+    // console.log(e);
     return {
       user: null,
       // error,

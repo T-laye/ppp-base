@@ -19,20 +19,20 @@ import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [openNav, setOpenNav] = useState(false);
-   const dispatch = useDispatch();
-   const router = useRouter();
-   const [logoutApiCall] = useLogoutMutation();
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [logoutApiCall] = useLogoutMutation();
 
-   const logoutHandler = async () => {
-     try {
-       await logoutApiCall().unwrap();
-       dispatch(logout());
-       router.push("/");
-       console.log("log out");
-     } catch (err) {
-       console.log(err);
-     }
-   };
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      router.push("/admin");
+      // console.log("log out");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleNav = () => {
     setOpenNav(!openNav);
@@ -122,7 +122,7 @@ export default function Header() {
                   <a href="">UVC</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="/admin">
+              <div onClick={logoutHandler}>
                 <li
                   onClick={handleNav}
                   className="flex items-center mt-auto text-error space-x-2 active:text-primary duration-200 hover:text-primary"
@@ -130,7 +130,7 @@ export default function Header() {
                   <TbLogout2 size={24} />
                   <a href="">Sign Out</a>
                 </li>
-              </Link>
+              </div>
             </div>
           </ul>
           {/* <div className="">Logout</div> */}
