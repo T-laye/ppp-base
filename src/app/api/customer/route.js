@@ -15,33 +15,28 @@ export async function POST(req, res) {
   if (!token) return NextResponse.json(handleError, { status: 401 });
   try {
     const payload = verify(token.value, process.env.ACCESS_TOKEN_SECRET);
-    const { id, email } = payload;
+    // const { id, email } = payload;
     const user = await prisma.user.findUnique({
-      where: { id: id, email },
+      where: { id: payload.id, email: payload.email },
       include: {
         Management: true,
         Personel: true,
       },
     });
-    if (!user)
+    if (!user || user.role !== 'ADMIN')
       return NextResponse.json(
-        ApiResponseDto({ message: "oops, user details not found" }),
+        ApiResponseDto({ message: "oops, user details not found | not allowed" }),
         { status: 403 }
       );
     const body = await req.json();
-    const { name, c_email, phone, product, pocId, thirdParty } = body;
-    const addNewVoucher = await prisma.customer.create({
+    const { name, email, phone, product, thirdParty } = body;
+    const addCustomer = await prisma.customer.create({
       data: {
         name,
-        email: c_email,
+        email,
         phoneNumber: phone,
         product,
         thirdParty,
-        poc: {
-          connect: {
-            pocId: pocId,
-          },
-        },
         createdBy: {
           connect: {
             id: user.id,
@@ -51,7 +46,7 @@ export async function POST(req, res) {
     });
     const createResponse = ApiResponseDto({
       message: "successfully",
-      data: addNewVoucher,
+      data: addCustomer,
       statusCode: 201,
     });
     return NextResponse.json(createResponse, {
