@@ -8,13 +8,3 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({}),
 });
 
-// Define a service using a base URL and expected endpoints
-// export const apiSlice = createApi({
-//   reducerPath: "api",
-//   baseQuery: fetchBaseQuery({ baseUrl: "https://pokeapi.co/api/v2/" }),
-//   endpoints: (builder) => ({
-//     getPokemonByName: builder.query({
-//       query: (name) => `pokemon/${name}`,
-//     }),
-//   }),
-// });
