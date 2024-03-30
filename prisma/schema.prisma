@@ -41,7 +41,7 @@ model PointOfConsumption {
   pocId          String      @id @default(uuid())
   personel       Personnel?  @relation(fields: [personelId], references: [personelId])
   management     Management? @relation(fields: [managementId], references: [managementId])
-  admin          Admin?      @relation(fields: [adminAdminId], references: [adminId])
+  admin          Admin?      @relation(fields: [adminId], references: [id])
   address        String
   name           String
   phoneNumber    String
@@ -54,7 +54,7 @@ model PointOfConsumption {
   stockLimit     Int
   stockAvailable Int
   Customer       Customer[]
-  adminAdminId   String?
+  adminId        String
 
   @@index([pocId, name])
 }
@@ -74,7 +74,6 @@ model Personnel {
   userId              String
 
   @@index([personelId])
-  @@map("Personnel")
 }
 
 enum ProductType {
@@ -94,14 +93,31 @@ model Management {
 }
 
 model Admin {
-  adminId         String               @id @default(uuid())
+  id              String               @id @default(uuid())
   createdAt       DateTime             @default(now()) @db.Timestamptz()
   VoucherDispense VoucherDispense[]
   user            User                 @relation(fields: [userId], references: [id])
   userId          String
   poc             PointOfConsumption[]
 
-  @@index([adminId])
+  @@index([id])
+}
+
+model Customer {
+  customerId  String               @id @default(uuid())
+  name        String
+  email       String
+  phoneNumber String
+  createdAt   DateTime             @default(now()) @db.Timestamptz()
+  updatedAt   DateTime             @default(now()) @updatedAt
+  product     ProductType
+  poc         PointOfConsumption[]
+  thirdParty  Boolean
+  createdBy   User                 @relation(fields: [userId], references: [id])
+  userId      String
+  Voucher     Voucher[]
+
+  @@index([customerId, email, phoneNumber])
 }
 
 model Voucher {
@@ -117,29 +133,11 @@ model Voucher {
   @@index([voucherId])
 }
 
-model Customer {
-  customerId  String             @id @default(uuid())
-  name        String
-  email       String
-  phoneNumber String
-  createdAt   DateTime           @default(now()) @db.Timestamptz()
-  updatedAt   DateTime           @default(now()) @updatedAt
-  product     ProductType
-  poc         PointOfConsumption @relation(fields: [pocId], references: [pocId])
-  pocId       String
-  thirdParty  Boolean
-  createdBy   User               @relation(fields: [userId], references: [id])
-  userId      String
-  Voucher     Voucher[]
-
-  @@index([customerId, email, phoneNumber])
-}
-
 model VoucherDispense {
   Id              String   @id @default(uuid())
   voucher         Voucher  @relation(fields: [voucherId], references: [voucherId])
   createdAt       DateTime @default(now()) @db.Timestamptz()
-  approvedByAdmin Admin    @relation(fields: [adminId], references: [adminId])
+  approvedByAdmin Admin    @relation(fields: [adminId], references: [id])
   adminId         String
   dispenseDate    DateTime @default(now()) @db.Timestamptz()
   vehicle         String
