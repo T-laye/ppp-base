@@ -86,6 +86,7 @@ export async function GET(req, res) {
     const pageNumber = parseInt(searchParams.get('pageNumber'));
     const createdDate = searchParams.get("createdDate");
     const createdBy = searchParams.get("createdBy");
+    const name = searchParams.get("name");
     console.log(createdBy)
     const order = searchParams.get("order");
     const take = searchParams.get("take") ? parseInt(searchParams.get("take")) : 10;
@@ -125,6 +126,7 @@ export async function GET(req, res) {
       where: {
         createdAt: createdDate ? formatDateToISO(createdDate) : {},
         createdBy: createdBy ? createdBy : {},
+        name: name ? name: {}
       },
     });
     if (offset > totalCount) {
