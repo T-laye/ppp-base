@@ -34,7 +34,7 @@ export async function POST(req, res) {
     const { name, email, phone } = body;
     const addCustomer = await prisma.customer.create({
       data: {
-        name,
+        name: name.toLowerCase(),
         email,
         phoneNumber: phone,
         user: {
