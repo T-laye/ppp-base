@@ -41,7 +41,7 @@ export default function Layout({ children }) {
         const res = await axios.get(
           `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-        console.log(res);
+        // console.log(res);
         // console.log("res");
 
         dispatch(fetchCustomers([...res.data.data]));
