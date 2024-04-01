@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import visible from "/public/icons/visible_eye.svg";
 import invisible from "/public/icons/invisible_eye.svg";
-import Link from "next/link";
 import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
@@ -18,12 +17,11 @@ export default function NewPersonnel() {
   // const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [register, { isLoading, error }] = useRegisterMutation();
-
+  const router = useRouter();
   const viewPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -59,7 +57,7 @@ export default function NewPersonnel() {
       // console.log(res);
       // console.log(values);
       toast.success(res.message);
-      // router.push();
+      router.refresh();
     } catch (e) {
       toast.error(e.data.message);
       // console.log(e);
