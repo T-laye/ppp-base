@@ -7,15 +7,23 @@ import Header from "../components/Header";
 import { useRouter } from "next/navigation";
 import { ImSpinner9 } from "react-icons/im";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
+// import { useGetCustomersMutation } from "@/redux/slices/takeSlice";
 
 export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { pageNumber, take, search } = useSelector((state) => state.variables);
+  // const { take } = useSelector((state) => state);
+  // const [getCustomers, { isLoading, error }] = useGetCustomersMutation();
 
+  // const [login, { isLoading, error }] = useLoginMutation();
+  // console.log(take, pageNumber);
   useEffect(() => {
     (async () => {
       const { user } = await getUser();
-
       if (!user || user.user.role !== "ADMIN") {
         router.push("/admin");
         setIsAuth(false);
@@ -24,9 +32,24 @@ export default function Layout({ children }) {
         // if no error
         setIsAuth(true);
       }
-      // console.log(user);
     })();
-  }, [router]);
+  }, [dispatch, router]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        const res = await axios.get(
+          `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        );
+        console.log(res);
+        // console.log("res");
+
+        dispatch(fetchCustomers([...res.data.data]));
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, search, take]);
   // console.log(isAuth);
 
   if (!isAuth) {

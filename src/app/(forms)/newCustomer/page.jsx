@@ -20,7 +20,7 @@ export default function NewCustomer() {
       fullName: "",
       email: "",
       phone: "",
-      address: "",
+      // address: "",
     },
     validate: new_customer_validate,
     onSubmit: handleSubmit,
@@ -31,26 +31,24 @@ export default function NewCustomer() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
-   async function handleSubmit(values) {
-     const { fullName, email, phone, address } = values;
-     try {
-       const res = await addCustomer({
-         name: fullName,
-         email,
-         phoneNumber: phone,
-         address,
-       }).unwrap();
-       // dispatch(setCredentials({ ...res.data }));
-       // console.log(res);
-       // console.log(values);
-       toast.success(res.message);
-       // router.push();
-     } catch (e) {
-       toast.error(e.data.message);
-       // console.log(e);
-     }
-   }
-
+  async function handleSubmit(values) {
+    const { fullName, email, phone } = values;
+    try {
+      const res = await addCustomer({
+        name: fullName,
+        email,
+        phone,
+      }).unwrap();
+      // dispatch(setCredentials({ ...res.data }));
+      // console.log(res);
+      // console.log(values);
+      toast.success(res.message);
+      router.refresh();
+    } catch (e) {
+      toast.error(e.data.message);
+      // console.log(e);
+    }
+  }
 
   const getInputClassNames = (fieldName) =>
     `${
@@ -127,8 +125,8 @@ export default function NewCustomer() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col mb-4">
-                <label className="text-sm mb-2" htmlFor="address">
+              {/*<div className="flex flex-col mb-4">
+                 <label className="text-sm mb-2" htmlFor="address">
                   Address
                 </label>
                 <input
@@ -144,7 +142,7 @@ export default function NewCustomer() {
                     {formik.errors.address}
                   </div>
                 )}
-              </div>
+              </div> */}
               <button
                 type="submit"
                 className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
