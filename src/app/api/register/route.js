@@ -85,7 +85,10 @@ export async function POST(req, res) {
         message: "User created successfully",
         data: {
           user: newUser,
-          role: roleUser,
+          role: {
+            ...roleUser,
+            type: newUser.role
+          },
         },
         statusCode: 201,
       });
