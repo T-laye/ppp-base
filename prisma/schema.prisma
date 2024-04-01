@@ -106,7 +106,7 @@ model Admin {
 model Customer {
   customerId  String               @id @default(uuid())
   name        String
-  email       String
+  email       String @unique
   phoneNumber String
   createdAt   DateTime             @default(now()) @db.Timestamptz()
   updatedAt   DateTime             @default(now()) @updatedAt

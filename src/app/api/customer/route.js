@@ -84,10 +84,8 @@ export async function GET(req, res) {
         { status: 403 }
       );
     const pageNumber = parseInt(searchParams.get('pageNumber'));
-    const createdDate = searchParams.get("createdDate");
     const createdBy = searchParams.get("createdBy");
     const name = searchParams.get("name");
-    console.log(createdBy)
     const order = searchParams.get("order");
     const take = searchParams.get("take") ? parseInt(searchParams.get("take")) : 10;
     if (take || pageNumber) {
@@ -103,12 +101,14 @@ export async function GET(req, res) {
         });
       }
     }
-    if (createdDate && !isValidDate(createdDate)) {
-      return NextResponse.json(
-        { message: "Invalid date format for createdDate" },
-        { status: 400 }
-      );
-    }
+    // if (createdDate || createdDate !== null) {
+    //   console.log(createdDate)
+    //   return NextResponse.json(
+    //     { message: "Invalid date format for createdDate" },
+    //     { status: 400 }
+    //   );
+    // }
+    
     const totalCount = await prisma.customer.count();
     const totalPages = Math.ceil(totalCount / take);
     const offset = (pageNumber - 1) * totalPages;
@@ -124,9 +124,8 @@ export async function GET(req, res) {
       take: take,
       skip: offset,
       where: {
-        createdAt: createdDate ? formatDateToISO(createdDate) : {},
         createdBy: createdBy ? createdBy : {},
-        name: name ? name: {}
+        name: name ? { startsWith: name.slice(0, 1) } : {},
       },
     });
     if (offset > totalCount) {
@@ -138,7 +137,6 @@ export async function GET(req, res) {
         { status: 400 }
       );
     }
-
     const resData = ApiResponseDto({
       message: "successful",
       data: getAllCustomer.map((v) => ({
