@@ -125,7 +125,7 @@ export async function GET(req, res) {
       skip: offset,
       where: {
         createdBy: createdBy ? createdBy : {},
-        name: name ? { contains: name.slice(0, 1) } : {},
+        name: name ? { contains: name } : {},
       },
     });
     if (offset > totalCount) {
