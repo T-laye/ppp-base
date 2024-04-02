@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("PPP_BASE")
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -46,7 +46,6 @@ model PointOfConsumption {
   name           String
   phoneNumber    String
   email          String
-  productType    ProductType
   createdAt      DateTime    @default(now()) @db.Timestamptz()
   updatedAt      DateTime    @default(now()) @updatedAt
   personelId     String
@@ -55,6 +54,8 @@ model PointOfConsumption {
   stockAvailable Int
   Customer       Customer[]
   adminId        String
+  product        Product     @relation(fields: [productId], references: [id])
+  productId      String
 
   @@index([pocId, name])
 }
@@ -63,6 +64,17 @@ enum Gender {
   MALE
   FEMALE
   OTHER
+}
+
+model Product {
+  id                 String               @id @default(uuid())
+  productName        String
+  createdAt          DateTime             @default(now()) @db.Timestamptz()
+  updatedAt          DateTime             @default(now()) @updatedAt
+  Voucher            Voucher[]
+  PointOfConsumption PointOfConsumption[]
+
+  @@index([productName, id])
 }
 
 model Personnel {
@@ -76,10 +88,10 @@ model Personnel {
   @@index([personelId])
 }
 
-enum ProductType {
-  PETROL
-  DISEL
-}
+// enum ProductType {
+//   PETROL
+//   DISEL
+// }
 
 model Management {
   managementId          String               @id @default(uuid())
@@ -88,6 +100,7 @@ model Management {
   managementPerformance Performance[]
   poc                   PointOfConsumption[]
   userId                String
+  canEdit Boolean @default(false)
 
   @@index([managementId])
 }
@@ -106,13 +119,13 @@ model Admin {
 model Customer {
   customerId  String               @id @default(uuid())
   name        String
-  email       String @unique
+  email       String               @unique
   phoneNumber String
   createdAt   DateTime             @default(now()) @db.Timestamptz()
   updatedAt   DateTime             @default(now()) @updatedAt
   poc         PointOfConsumption[]
-  user   User                 @relation(fields: [createdBy], references: [id])
-  createdBy      String
+  user        User                 @relation(fields: [createdBy], references: [id])
+  createdBy   String
   Voucher     Voucher[]
 
   @@index([customerId, email, phoneNumber])
@@ -124,11 +137,11 @@ model Voucher {
   createdAt       DateTime          @default(now()) @db.Timestamptz()
   collected       Boolean
   VoucherDispense VoucherDispense[]
-  productType     ProductType
   customer        Customer          @relation(fields: [customerId], references: [customerId])
   customerId      String
-  thirdParty  Boolean
-  product     ProductType
+  thirdParty      Boolean
+  product         Product           @relation(fields: [productId], references: [id])
+  productId       String
 
   @@index([voucherId])
 }
