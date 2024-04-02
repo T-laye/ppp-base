@@ -117,6 +117,15 @@ export async function GET(req, res) {
     const totalCount = await prisma.customer.count();
     const totalPages = Math.ceil(totalCount / take);
     const offset = (pageNumber - 1) * totalPages;
+    if (offset > totalCount) {
+      return NextResponse.json(
+        {
+          message:
+            "the page number you used is not available yet, use a lesser value",
+        },
+        { status: 400 }
+      );
+    }
     const getAllCustomer = await prisma.customer.findMany({
       orderBy: {
         createdAt: "desc",
@@ -133,15 +142,6 @@ export async function GET(req, res) {
         name: name ? { contains: name } : {},
       },
     });
-    if (offset > totalCount) {
-      return NextResponse.json(
-        {
-          message:
-            "the page number you used is not available yet, use a lesser value",
-        },
-        { status: 400 }
-      );
-    }
     const resData = ApiResponseDto({
       message: "successful",
       data: getAllCustomer.map((v) => ({
