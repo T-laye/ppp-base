@@ -1,5 +1,3 @@
-import { verify } from "jsonwebtoken";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../../lib/apiResponseHelper";
@@ -8,7 +6,16 @@ import { getAuthUser } from "../../../../../lib/get-auth-user";
 
 export async function PATCH(req, context) {
   try {
-    getAuthUser(req, prisma, true);
+    const authResponse = getAuthUser(req, prisma, true);
+    if (authResponse.error) {
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: authResponse.status,
+          message: authResponse.error.message,
+        }),
+        { status: authResponse.status }
+      );
+    }
     const searchParams = req.nextUrl.searchParams;
     const { params } = context;
     const getUserId = params.customerId;
@@ -44,7 +51,17 @@ export async function PATCH(req, context) {
 
 export async function GET(req, context) {
   try {
-    getAuthUser(req, prisma, true);
+    const userResponse = await getAuthUser(req, prisma, true);
+
+    if (userResponse.error) {
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: userResponse.status,
+          message: userResponse.error.message,
+        }),
+        { status: userResponse.status }
+      );
+    }
     const { params } = context;
     const getUserId = params.customerId;
     const getCustomer = await prisma.customer.findUnique({
@@ -61,7 +78,7 @@ export async function GET(req, context) {
       return NextResponse.json(
         ApiResponseDto({
           statusCode: 404,
-          message: "customer details not found",
+          message: "Customer details not found",
         }),
         { status: 200 }
       );
@@ -70,7 +87,7 @@ export async function GET(req, context) {
       ApiResponseDto({
         statusCode: 200,
         data: mapCustomer(getCustomer),
-        message: "successful",
+        message: "Successful",
       }),
       { status: 200 }
     );
@@ -117,7 +134,16 @@ function mapCustomer(customer) {
 
 export async function DELETE(req, context) {
   try {
-    getAuthUser(req, prisma, true);
+    const authResponse = getAuthUser(req, prisma, true);
+    if (authResponse.error) {
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: authResponse.status,
+          message: authResponse.error.message,
+        }),
+        { status: authResponse.status }
+      );
+    }
     const { params } = context;
     const getUserId = params.customerId;
     const getCustomer = await prisma.customer.findUnique({
