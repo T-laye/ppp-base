@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../lib/apiResponseHelper";
 import { isValidDate, formatDateToISO } from "../../../../lib/date-helper";
+import { prismaErrorHelper } from "../../../../lib/prisma-error-helper";
 
 export async function POST(req, res) {
   const cookiesStore = cookies();
@@ -44,11 +45,13 @@ export async function POST(req, res) {
         },
       },
     });
+
     const createResponse = ApiResponseDto({
       message: "successfully",
       data: addCustomer,
       statusCode: 201,
     });
+    prismaErrorHelper(res, addCustomer);
     return NextResponse.json(createResponse, {
       status: 201,
     });
@@ -76,18 +79,27 @@ export async function GET(req, res) {
         Personel: true,
       },
     });
-    if (!user || (user.role !== "ADMIN" && user.role !== "MANAGEMENT"))
+    if (!user )
       return NextResponse.json(
         ApiResponseDto({
-          message: "oops, user details not found | not allowed",
+          message: "oops, user details not found",
         }),
         { status: 403 }
       );
-    const pageNumber = parseInt(searchParams.get('pageNumber'));
+    if (user.role !== "ADMIN" && user.role !== "MANAGEMENT")
+      return NextResponse.json(
+      ApiResponseDto({
+        message: "not allowed",
+      }),
+      { status: 404}
+    );
+    const pageNumber = parseInt(searchParams.get("pageNumber"));
     const createdBy = searchParams.get("createdBy");
     const name = searchParams.get("name");
     const order = searchParams.get("order");
-    const take = searchParams.get("take") ? parseInt(searchParams.get("take")) : 10;
+    const take = searchParams.get("take")
+      ? parseInt(searchParams.get("take"))
+      : 10;
     if (take || pageNumber) {
       if (isNaN(take) || isNaN(pageNumber)) {
         return NextResponse.json(
@@ -101,14 +113,7 @@ export async function GET(req, res) {
         });
       }
     }
-    // if (createdDate || createdDate !== null) {
-    //   console.log(createdDate)
-    //   return NextResponse.json(
-    //     { message: "Invalid date format for createdDate" },
-    //     { status: 400 }
-    //   );
-    // }
-    
+
     const totalCount = await prisma.customer.count();
     const totalPages = Math.ceil(totalCount / take);
     const offset = (pageNumber - 1) * totalPages;
