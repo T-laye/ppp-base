@@ -52,7 +52,6 @@ export async function PATCH(req, context) {
 export async function GET(req, context) {
   try {
     const userResponse = await getAuthUser(req, prisma, true);
-
     if (userResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
