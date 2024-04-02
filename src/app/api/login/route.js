@@ -64,6 +64,7 @@ export async function POST(req, res) {
       headers: { "Set-Cookie": atCookie },
     });
   } catch (err) {
+    console.log(err)
     return NextResponse.json(
       { error: err.message, status: 500 },
       { status: 500 }

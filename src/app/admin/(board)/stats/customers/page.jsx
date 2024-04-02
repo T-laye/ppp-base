@@ -4,15 +4,16 @@ import React, { useState } from "react";
 import GoBack from "@/components/GoBack";
 import CustomerList from "@/app/admin/components/CustomerList";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { handleSearch } from "@/redux/slices/variableSlice";
 
 export default function Customers() {
-  const [approved, setApproved] = useState(false);
   const [term, setTerm] = useState("");
   const router = useRouter();
+  const { customers } = useSelector((state) => state.customers);
+  const dispatch = useDispatch();
 
-  const handleProduct = () => {
-    setApproved(!approved);
-  };
+  // console.log(term);
 
   const addCustomer = () => {
     router.push("/newCustomer");
@@ -20,6 +21,16 @@ export default function Customers() {
 
   const handleChange = (e) => {
     setTerm(e.target.value);
+    if (e.target.value.length >= 3 || e.target.value.length === 0) {
+      dispatch(handleSearch(e.target.value.toLowerCase()));
+    }
+  };
+
+  const renderCustomers = () => {
+    if (customers.length === 0) {
+      return <li>No Customer Found</li>;
+    }
+    return customers.map((c) => <CustomerList key={c?.customerId} c={c} />);
   };
 
   return (
@@ -52,28 +63,12 @@ export default function Customers() {
             </div>
           </div>
         </form>
-        <div className="text-end mt-3 text-sm text-gray-500 pr-2">09</div>
+        <div className="text-end mt-3 text-sm text-gray-500 pr-2">
+          {customers?.length}
+        </div>
 
         <div className="bg-gren-400 pt-3 pb-10">
-          <ul>
-            <CustomerList name="John Doe" pending={true} />
-
-            <CustomerList name="Mark Timmy" pending={true} />
-
-            <CustomerList name="Tiebebedigha Tubolayefa" pending={false} />
-
-            <CustomerList name="Mchael Tega" pending={true} />
-
-            <CustomerList name="Susan Bournsmouth" pending={true} />
-
-            <CustomerList name="Onoyake James" pending={false} />
-
-            <CustomerList name="Etuk Obong" pending={true} />
-
-            <CustomerList name="Ogar Jude" pending={false} />
-
-            <CustomerList name="Marvelous Ike" pending={false} />
-          </ul>
+          <ul>{renderCustomers()}</ul>
         </div>
       </div>
     </section>

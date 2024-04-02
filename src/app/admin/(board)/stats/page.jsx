@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import QuantityCards from "../../components/QuantityCards";
 import { product } from "/public/dummy.js";
@@ -8,32 +9,11 @@ import { FaUsers } from "react-icons/fa";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import { IoMdTimer } from "react-icons/io";
 import { MdVerifiedUser } from "react-icons/md";
+import { useSelector } from "react-redux";
 
-export default function Stats() {
-  //  console.log(product);
-
-  // const totalAssigned = poc.reduce((acc, p) => {
-  //   return acc + p.assigned;
-  // }, 0);
-
-  // const totalAvail = poc.reduce((acc, p) => {
-  //   return acc + p.available;
-  // }, 0);
-
-  // const renderProduct = () => {
-  //   return product.map((p, i) => {
-
-  //     return (
-  //       <QuantityCards
-  //         key={i}
-  //         title={p.name}
-  //         available={totalAvail}
-  //         total={totalAssigned}
-  //       />
-  //     );
-  //   });
-  // };
-
+  export default function Stats() {
+    const { customers } = useSelector((state) => state.customers);
+  // console.log(customers);
   return (
     <section className="pt-4 pb-20 bg-red-40 min-h-screen">
       <div>
@@ -45,7 +25,7 @@ export default function Stats() {
           <StatsCard
             link="/admin/stats/customers"
             color="bg-error"
-            number={340}
+            number={customers?.length}
             title="Customers"
             icon={<FaUsers size={26} />}
           />
