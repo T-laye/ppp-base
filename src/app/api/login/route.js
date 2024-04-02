@@ -24,45 +24,45 @@ export async function POST(req, res) {
     const user = await prisma.user.findUnique({
       where: { email: email },
     });
-    const checkRole = user.role === role
-    if (user ) {
-      if(!checkRole){
-        return NextResponse.json(
-          ApiResponseDto({ message: "Unauthorized Access" }),
-          { status: 403 }
-        );
-      }
-      const checkPassword = await bcrypt.compare(password, user.password);
-      if (!checkPassword)
-        return NextResponse.json(
-          ApiResponseDto({ message: "incorrect email or password", statusCode: 401 }),
-          { status: 401 }
-        );
-      const setToken = createAccessToken(user.id, user.email, user.role);
-      const atCookie = serialize("ppp-base", setToken, {
-        httpOnly: false,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "development" ? false : true,
-        maxAge: 60 * 60 * 24 * 7, // expires in 1 week
-        path: "/",
-      });
-      const loginResponse = ApiResponseDto({
-        message: "login successful",
-        data: {
-          user: user
-        },
-        statusCode: 200,
-      });
-      return NextResponse.json(loginResponse, {
-        status: 200,
-        headers: { "Set-Cookie": atCookie },
-      });
-    } else {
+    if (!user) {
       return NextResponse.json(
-        ApiResponseDto({ message: "Invalid user email or passoword" }),
+        ApiResponseDto({ message: "Invalid user email or password" }),
         { status: 403 }
       );
     }
+    if (user.role !== role)
+      return NextResponse.json(
+        { message: "not allowed, incorrect roles", statusCode: 400 },
+        { status: 400 }
+      );
+    const checkPassword = await bcrypt.compare(password, user.password);
+    if (!checkPassword)
+      return NextResponse.json(
+        ApiResponseDto({
+          message: "incorrect email or password",
+          statusCode: 401,
+        }),
+        { status: 401 }
+      );
+    const setToken = createAccessToken(user.id, user.email, user.role);
+    const atCookie = serialize("ppp-base", setToken, {
+      httpOnly: false,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      maxAge: 60 * 60 * 24 * 7, // expires in 1 week
+      path: "/",
+    });
+    const loginResponse = ApiResponseDto({
+      message: "login successful",
+      data: {
+        user: user,
+      },
+      statusCode: 200,
+    });
+    return NextResponse.json(loginResponse, {
+      status: 200,
+      headers: { "Set-Cookie": atCookie },
+    });
   } catch (err) {
     return NextResponse.json(
       { error: err.message, status: 500 },
