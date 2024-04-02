@@ -22,7 +22,6 @@ export default function NewPersonnel() {
     setShowPassword(!showPassword);
   };
 
-
   const formik = useFormik({
     initialValues: {
       fullName: "",
@@ -57,7 +56,7 @@ export default function NewPersonnel() {
       // console.log(res);
       // console.log(values);
       toast.success(res.message);
-      router.refresh();
+      router.back();
     } catch (e) {
       toast.error(e.data.message);
       // console.log(e);

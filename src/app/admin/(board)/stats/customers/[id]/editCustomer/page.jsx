@@ -5,11 +5,17 @@ import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { toast } from "react-toastify";
 import { new_customer_validate } from "../../../../../../../../lib/validate";
+import { useSelector } from "react-redux";
+import { useRouter, useParams } from "next/navigation";
 
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
+  const router = useRouter();
+  const { id } = useParams();
+  const { customers } = useSelector((state) => state.customers);
+  const customer = customers.find((c) => c.customerId === id);
 
   const handleEdit = () => {
     setIsEditable(!isEditable);
@@ -19,10 +25,10 @@ export default function Page() {
 
   const formik = useFormik({
     initialValues: {
-      fullName: "James McClurckin",
-      email: "james@gmail.com",
-      phone: "09020301822",
-      address: "No. oacj olsc ojhioasc oiakcnajokncaokcnhoac",
+      fullName: customer?.name,
+      email: customer?.email,
+      phone: customer?.phoneNumber,
+      // address: "No. oacj olsc ojhioasc oiakcnajokncaokcnhoac",
       // product: "Fuel",
       // third_party: true,
       // preferred_poc: "Total Fueling Station",
@@ -35,51 +41,6 @@ export default function Page() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
-  useEffect(() => {
-    if (!isEditable) {
-      // Create a copy of the existing formik values
-      const updatedValues = { ...formik.values };
-
-      // Update only the values that are not changed by the user
-      // if (!formik.touched.name) {
-      //   updatedValues.name = hustleDetails.name;
-      // }
-      // if (!formik.touched.email) {
-      //   updatedValues.email = hustleDetails.email;
-      // }
-      // if (!formik.touched.address) {
-      //   updatedValues.address = user.address;
-      // }
-      // if (!formik.touched.personnel) {
-      //   updatedValues.personnel = user.personnel;
-      // }
-      // if (!formik.touched.product) {
-      //   updatedValues.product = user.product;
-      // }
-      // if (!formik.touched.linit) {
-      //   updatedValues.linit = hustleDetails.linit;
-      // }
-      // if (!formik.touched.hustle) {
-      //   updatedValues.hustle = hustleDetails.hustle;
-      // }
-      // if (!formik.touched.address) {
-      //   updatedValues.address = user.address;
-      // }
-      // if (!formik.touched.businessPhone) {
-      //   updatedValues.businessPhone = hustleDetails.businessPhone;
-      // }
-      // if (!formik.touched.link) {
-      //   updatedValues.link = hustleDetails.link;
-      // }
-      // if (!formik.touched.hustleDescription) {
-      //   updatedValues.hustleDescription = hustleDetails.hustleDescription;
-      // }
-
-      // Update the formik values with the modified copy
-      // formik.setValues(updatedValues);
-    }
-  }, [formik.values, isEditable]);
-
   async function handleSubmit(values) {
     // const { email, password } = values;
     console.log(values);
@@ -88,6 +49,7 @@ export default function Page() {
       setIsLoading(false);
       setIsEditable(false);
       toast.success("Successful");
+      router.back();
     }, 2000);
   }
 
@@ -164,7 +126,7 @@ export default function Page() {
               <div className="text-error text-sm">{formik.errors.phone}</div>
             )}
           </div>
-          <div className="flex flex-col mb-4">
+          {/* <div className="flex flex-col mb-4">
             <label className="text-sm mb-2" htmlFor="address">
               Address
             </label>
@@ -180,7 +142,7 @@ export default function Page() {
             {formik.touched.address && formik.errors.address && (
               <div className="text-error text-sm">{formik.errors.address}</div>
             )}
-          </div>
+          </div> */}
           {/* <div className="flex flex-col  mb-6">
             <label className="text-sm mb-2" htmlFor="product">
               Select Product
@@ -252,7 +214,7 @@ export default function Page() {
                 ? `${isLoading ? "bg-customGray" : "bg-primary"}`
                 : "bg-customGray cursor-not-allowed"
             } `}
-            // disabled={!isFormValid || isLoading}
+            disabled={!isFormValid || isLoading}
           >
             {isLoading ? <Loader /> : "Save"}
           </button>

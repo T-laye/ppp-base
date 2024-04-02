@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import VoucherList from "../../components/VoucherList";
 import CustomerList from "../../components/CustomerList";
 import { MdOutlineCancel } from "react-icons/md";
+import { handleSearch } from "@/redux/slices/variableSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Vouchers() {
   const [approved, setApproved] = useState(false);
@@ -12,14 +14,16 @@ export default function Vouchers() {
   const [showAddVoucher, setShowAddVoucher] = useState(false);
   const [term, setTerm] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { customers } = useSelector((state) => state.customers);
 
   const handleProduct = () => {
     setApproved(!approved);
   };
 
-
   const handleAddVoucher = () => {
     setShowAddVoucher(!showAddVoucher);
+    dispatch(handleSearch(""));
   };
   const setTab = (tab) => {
     setActiveTab(tab);
@@ -27,6 +31,16 @@ export default function Vouchers() {
 
   const handleChange = (e) => {
     setTerm(e.target.value);
+    if (e.target.value.length >= 3 || e.target.value.length === 0) {
+      dispatch(handleSearch(e.target.value.toLowerCase()));
+    }
+  };
+
+  const renderCustomers = () => {
+    if (customers.length === 0) {
+      return <li>No Customer Found</li>;
+    }
+    return customers.map((c) => <CustomerList key={c?.customerId} c={c} />);
   };
 
   return (
@@ -85,7 +99,7 @@ export default function Vouchers() {
           <div className="relative ">
             <input
               type="text"
-              placeholder="Search by name"
+              placeholder="Search by name "
               className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
               value={term}
               onChange={handleChange}
@@ -158,13 +172,11 @@ export default function Vouchers() {
               </div>
             </form>
 
-            {term !== "" && (
-              <div className="mt-5">
-                <CustomerList name="Marvelous Ike" />
-                <CustomerList name="James Manager" />
-                <CustomerList name="Olorunfemi Adeola" />
-              </div>
-            )}
+            {/* {term !== "" && ( */}
+            <div className="mt-5 overflow-auto max-h-[70vh] ">
+              {renderCustomers()}
+            </div>
+            {/* )} */}
           </div>
         </div>
       )}

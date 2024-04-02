@@ -9,22 +9,26 @@ import visible from "/public/icons/visible_eye.svg";
 import invisible from "/public/icons/invisible_eye.svg";
 import Loader from "@/components/Loader.jsx";
 // import { ToastContainer, toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import {  new_voucher_validate } from "../../../../lib/validate";
+import { useSelector } from "react-redux";
 
 export default function NewVoucher() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { newVoucher } = useParams();
+  const { customers } = useSelector((state) => state.customers);
+  const c = customers.find((c) => c.customerId === newVoucher);
 
   const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
-      fullName: "James McClurckin",
-      email: "james@gmail.com",
-      phone: "09020301822",
-      address: "No. oacj olsc ojhioasc oiakcnajokncaokcnhoac",
+      fullName: c?.name,
+      email: c?.email,
+      phone: c?.phoneNumber,
+      // address: "No. oacj olsc ojhioasc oiakcnajokncaokcnhoac",
       product: "",
       third_party: "",
     },
@@ -130,7 +134,7 @@ export default function NewVoucher() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col mb-4">
+              {/* <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="address">
                   Address
                 </label>
@@ -148,7 +152,7 @@ export default function NewVoucher() {
                     {formik.errors.address}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="flex flex-col  mb-6">
                 <label className="text-sm mb-2" htmlFor="product">
                   Select Product
