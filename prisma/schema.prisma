@@ -4,23 +4,23 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("PPP_BASE")
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id          String       @id @default(uuid())
-  email       String       @unique
-  name        String
-  password    String
-  address     String
-  phoneNumber String
-  role        UserType     @default(PERSONEL)
-  gender      Gender
-  Personel    Personnel[]
-  Management  Management[]
-  Customer    Customer[]
-  Admin       Admin[]
-  Product     Product[]
+  id                 String               @id @default(uuid())
+  email              String               @unique
+  name               String
+  password           String
+  address            String
+  phoneNumber        String
+  role               UserType             @default(PERSONNEL)
+  gender             Gender
+  Personnel           Personnel[]
+  Management         Management[]
+  Customer           Customer[]
+  Admin              Admin[]
+  Product            Product[]
 
   @@index([email, id, phoneNumber])
 }
@@ -29,7 +29,7 @@ enum UserType {
   ADMIN
   MANAGEMENT
   CUSTOMER
-  PERSONEL
+  PERSONNEL
   SUPER_ADMIN
 }
 
@@ -40,7 +40,7 @@ enum Permission {
 
 model PointOfConsumption {
   pocId          String      @id @default(uuid())
-  personel       Personnel?  @relation(fields: [personelId], references: [personelId])
+  personnel       Personnel?  @relation(fields: [personnelId], references: [personnelId])
   management     Management? @relation(fields: [managementId], references: [managementId])
   admin          Admin?      @relation(fields: [adminId], references: [id])
   address        String
@@ -49,7 +49,7 @@ model PointOfConsumption {
   email          String
   createdAt      DateTime    @default(now()) @db.Timestamptz()
   updatedAt      DateTime    @default(now()) @updatedAt
-  personelId     String
+  personnelId     String
   managementId   String
   stockLimit     Int
   stockAvailable Int
@@ -83,14 +83,14 @@ model Product {
 }
 
 model Personnel {
-  personelId          String               @id @default(uuid())
+  personnelId          String               @id @default(uuid())
   user                User                 @relation(fields: [userId], references: [id])
   createdAt           DateTime             @default(now()) @db.Timestamptz()
-  personelPerformance Performance[]
+  personnelPerformance Performance[]
   poc                 PointOfConsumption[]
   userId              String
 
-  @@index([personelId])
+  @@index([personnelId])
 }
 
 // enum ProductType {
@@ -168,8 +168,8 @@ model VoucherDispense {
 
 model Performance {
   id                     String      @id @default(uuid())
-  staff                  Personnel   @relation(fields: [personelId], references: [personelId])
-  personelId             String
+  staff                  Personnel   @relation(fields: [personnelId], references: [personnelId])
+  personnelId             String
   createdAt              DateTime    @default(now()) @db.Timestamptz()
   cusomtomersHandled     Int
   productsDispensed      Int

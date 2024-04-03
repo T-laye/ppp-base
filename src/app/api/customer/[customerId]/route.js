@@ -16,6 +16,11 @@ export async function PATCH(req, context) {
         { status: authResponse.status }
       );
     }
+    if (authResponse.user.role !== "ADMIN") {
+      return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
+        status: 403,
+      });
+    }
     const searchParams = req.nextUrl.searchParams;
     const { params } = context;
     const getUserId = params.customerId;
@@ -60,6 +65,11 @@ export async function GET(req, context) {
         }),
         { status: userResponse.status }
       );
+    }
+    if (authResponse.user.role !== "ADMIN") {
+      return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
+        status: 403,
+      });
     }
     const { params } = context;
     const getUserId = params.customerId;
@@ -142,6 +152,11 @@ export async function DELETE(req, context) {
         }),
         { status: authResponse.status }
       );
+    }
+    if (authResponse.user.role !== "ADMIN") {
+      return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
+        status: 403,
+      });
     }
     const { params } = context;
     const getUserId = params.customerId;
