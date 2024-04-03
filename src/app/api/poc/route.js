@@ -30,7 +30,7 @@ export async function POST(req, res) {
       stockLimit,
       product_unit,
       stockAvailable,
-      voucher_allocation
+      voucher_allocation,
     } = body;
     const createPOC = await prisma.pointOfConsumption.create({
       data: {
@@ -74,7 +74,7 @@ export async function POST(req, res) {
 
 export async function GET() {
   try {
-    const authRes = getAuthUser(req, prisma, false);
+    const authResponse = getAuthUser(req, prisma, false);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -137,12 +137,10 @@ export async function GET() {
       },
     });
     return NextResponse.json(
-      { message: "successful", data: getPoc },
+      { message: "successful", data: getPoc, count: totalCount },
       { status: 200 }
     );
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500 });
   }
 }
-
-

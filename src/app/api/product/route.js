@@ -51,7 +51,7 @@ export async function POST(req, res) {
 
 export async function GET(req, res) {
   try {
-    const authRes = getAuthUser(req, prisma, false);
+    const authResponse = getAuthUser(req, prisma, false);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -122,6 +122,7 @@ export async function GET(req, res) {
         createdByRole: v?.user.role,
       })),
       statusCode: 200,
+      count: totalCount
     });
     return NextResponse.json(resData, { status: 200 });
   } catch (err) {
