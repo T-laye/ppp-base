@@ -1,8 +1,8 @@
 // redux/store.js
-
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
 import fetchCustomersReducer from "./slices/fetchCustomersSlice";
+import getCustomerReducer from "./slices/getCustomerSlice";
 import variableReducer from "./slices/variableSlice";
 import { apiSlice } from "./slices/apiSlice";
 
@@ -10,6 +10,7 @@ const store = configureStore({
   reducer: {
     auth: authReducer,
     customers: fetchCustomersReducer,
+    customer: getCustomerReducer,
     variables: variableReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
 

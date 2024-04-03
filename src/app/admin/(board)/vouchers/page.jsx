@@ -37,10 +37,11 @@ export default function Vouchers() {
   };
 
   const renderCustomers = () => {
-    if (customers.length === 0) {
-      return <li>No Customer Found</li>;
+    if (customers.length === 0 && term) {
+      return <p>No Customer Found</p>;
+    } else if (term.length > 2) {
+      return customers.map((c) => <CustomerList key={c?.customerId} c={c} />);
     }
-    return customers.map((c) => <CustomerList key={c?.customerId} c={c} />);
   };
 
   return (

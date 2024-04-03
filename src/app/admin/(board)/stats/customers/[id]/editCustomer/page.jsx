@@ -1,26 +1,37 @@
 "use client";
 import GoBack from "@/components/GoBack";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { toast } from "react-toastify";
 import { new_customer_validate } from "../../../../../../../../lib/validate";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useParams } from "next/navigation";
+import { getCustomer } from "@/redux/slices/getCustomerSlice";
+import axios from "axios";
 
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
   const router = useRouter();
-  const { id } = useParams();
-  const { customers } = useSelector((state) => state.customers);
-  const customer = customers.find((c) => c.customerId === id);
+  // const { id } = useParams();
+  const { customer } = useSelector((state) => state.customer);
+  // const dispatch = useDispatch();
 
+  // console.log(customer);
   const handleEdit = () => {
     setIsEditable(!isEditable);
   };
+  //  useEffect(() => {
+  //    const getCustomerDetails = async () => {
+  //      const res = await axios.get(`/api/customer/${id}`);
 
+  //      dispatch(getCustomer({ ...res.data.data }));
+  //    };
+
+  //    getCustomerDetails();
+  //  }, [dispatch, id]);
   // console.log(isEditable);
 
   const formik = useFormik({
@@ -62,71 +73,76 @@ export default function Page() {
 
   return (
     <section className="pt-8 pb-20 min-h-screen bg-ed-500">
-      <div className="flex justify-between items-center">
-        <GoBack />
-        {/* <button
+      <Suspense>
+        <div className="flex justify-between items-center">
+          <GoBack />
+          {/* <button
           onClick={handleEdit}
           className={`btn ${!isEditable ? "bg-primary" : "bg-customGray"}`}
         >
           {isEditable ? "Cancel" : "Edit"}
         </button> */}
-      </div>
-      <h3 className="text-center text-lg font-medium mt-3">Customer Details</h3>
+        </div>
+        <h3 className="text-center text-lg font-medium mt-3">
+          Customer Details
+        </h3>
 
-      <div className="mt-8">
-        <form onSubmit={formik.handleSubmit} className="mb-4">
-          <div className="flex flex-col mb-4">
-            <label className="text-sm mb-2" htmlFor="fullName">
-              Full Name
-            </label>
-            <input
-              // disabled={!isEditable}
-              id="fullName"
-              name="fullName"
-              type="text"
-              placeholder="Enter full name"
-              className={getInputClassNames("fullName")}
-              {...formik.getFieldProps("fullName")}
-            />
-            {formik.touched.fullName && formik.errors.fullName && (
-              <div className="text-error text-sm">{formik.errors.fullName}</div>
-            )}
-          </div>
-          <div className="flex flex-col mb-4">
-            <label className="text-sm mb-2" htmlFor="email">
-              Email
-            </label>
-            <input
-              // disabled={!isEditable}
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Enter Email"
-              className={getInputClassNames("email")}
-              {...formik.getFieldProps("email")}
-            />
-            {formik.touched.email && formik.errors.email && (
-              <div className="text-error text-sm">{formik.errors.email}</div>
-            )}
-          </div>
-          <div className="flex flex-col mb-4">
-            <label className="text-sm mb-2" htmlFor="phone">
-              Phone Number
-            </label>
-            <input
-              // disabled={!isEditable}
-              id="phone"
-              name="phone"
-              type="tel"
-              placeholder="Enter phone number"
-              className={getInputClassNames("phone")}
-              {...formik.getFieldProps("phone")}
-            />
-            {formik.touched.phone && formik.errors.phone && (
-              <div className="text-error text-sm">{formik.errors.phone}</div>
-            )}
-          </div>
-          {/* <div className="flex flex-col mb-4">
+        <div className="mt-8">
+          <form onSubmit={formik.handleSubmit} className="mb-4">
+            <div className="flex flex-col mb-4">
+              <label className="text-sm mb-2" htmlFor="fullName">
+                Full Name
+              </label>
+              <input
+                // disabled={!isEditable}
+                id="fullName"
+                name="fullName"
+                type="text"
+                placeholder="Enter full name"
+                className={getInputClassNames("fullName")}
+                {...formik.getFieldProps("fullName")}
+              />
+              {formik.touched.fullName && formik.errors.fullName && (
+                <div className="text-error text-sm">
+                  {formik.errors.fullName}
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label className="text-sm mb-2" htmlFor="email">
+                Email
+              </label>
+              <input
+                // disabled={!isEditable}
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter Email"
+                className={getInputClassNames("email")}
+                {...formik.getFieldProps("email")}
+              />
+              {formik.touched.email && formik.errors.email && (
+                <div className="text-error text-sm">{formik.errors.email}</div>
+              )}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label className="text-sm mb-2" htmlFor="phone">
+                Phone Number
+              </label>
+              <input
+                // disabled={!isEditable}
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="Enter phone number"
+                className={getInputClassNames("phone")}
+                {...formik.getFieldProps("phone")}
+              />
+              {formik.touched.phone && formik.errors.phone && (
+                <div className="text-error text-sm">{formik.errors.phone}</div>
+              )}
+            </div>
+            {/* <div className="flex flex-col mb-4">
             <label className="text-sm mb-2" htmlFor="address">
               Address
             </label>
@@ -143,7 +159,7 @@ export default function Page() {
               <div className="text-error text-sm">{formik.errors.address}</div>
             )}
           </div> */}
-          {/* <div className="flex flex-col  mb-6">
+            {/* <div className="flex flex-col  mb-6">
             <label className="text-sm mb-2" htmlFor="product">
               Select Product
             </label>
@@ -164,7 +180,7 @@ export default function Page() {
               <div className="text-error text-sm">{formik.errors.product}</div>
             )}
           </div> */}
-          {/* <div className="flex flex-col  mb-6">
+            {/* <div className="flex flex-col  mb-6">
             <label className="text-sm mb-2" htmlFor="preferred_poc">
               Preferred POC
             </label>
@@ -188,7 +204,7 @@ export default function Page() {
               </div>
             )}
           </div> */}
-          {/* <div className="flex items-center mt-6 ">
+            {/* <div className="flex items-center mt-6 ">
             <div>
               <input
                 name="third_party"
@@ -207,19 +223,20 @@ export default function Page() {
             </div>
           </div> */}
 
-          <button
-            type="submit"
-            className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
-              isFormValid
-                ? `${isLoading ? "bg-customGray" : "bg-primary"}`
-                : "bg-customGray cursor-not-allowed"
-            } `}
-            disabled={!isFormValid || isLoading}
-          >
-            {isLoading ? <Loader /> : "Save"}
-          </button>
-        </form>
-      </div>
+            <button
+              type="submit"
+              className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
+                isFormValid
+                  ? `${isLoading ? "bg-customGray" : "bg-primary"}`
+                  : "bg-customGray cursor-not-allowed"
+              } `}
+              disabled={!isFormValid || isLoading}
+            >
+              {isLoading ? <Loader /> : "Save"}
+            </button>
+          </form>
+        </div>
+      </Suspense>
     </section>
   );
 }

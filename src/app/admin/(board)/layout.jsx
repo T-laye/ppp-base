@@ -9,6 +9,8 @@ import { ImSpinner9 } from "react-icons/im";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
+import { handleSearch } from "@/redux/slices/variableSlice";
+import { setCredentials } from "@/redux/slices/authSlice";
 // import { useGetCustomersMutation } from "@/redux/slices/takeSlice";
 
 export default function Layout({ children }) {
@@ -16,11 +18,9 @@ export default function Layout({ children }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const { pageNumber, take, search } = useSelector((state) => state.variables);
-  // const { take } = useSelector((state) => state);
-  // const [getCustomers, { isLoading, error }] = useGetCustomersMutation();
 
-  // const [login, { isLoading, error }] = useLoginMutation();
-  // console.log(take, pageNumber);
+  const { userInfo } = useSelector((state) => state.auth);
+  // console.log(userInfo);
   useEffect(() => {
     (async () => {
       const { user } = await getUser();
@@ -29,7 +29,7 @@ export default function Layout({ children }) {
         setIsAuth(false);
         return;
       } else {
-        // if no error
+        dispatch(setCredentials({ ...user.user }));
         setIsAuth(true);
       }
     })();
@@ -43,7 +43,7 @@ export default function Layout({ children }) {
         );
         // console.log(res);
         // console.log("res");
-
+        dispatch(handleSearch(""));
         dispatch(fetchCustomers([...res.data.data]));
       } else {
         return;
