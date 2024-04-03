@@ -47,7 +47,7 @@ export async function POST(req, res) {
     });
 
     const createResponse = ApiResponseDto({
-      message: "successfully",
+      message: "successful",
       data: addCustomer,
       statusCode: 201,
     });
