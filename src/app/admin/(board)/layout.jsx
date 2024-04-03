@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
 import { handleSearch } from "@/redux/slices/variableSlice";
 import { setCredentials } from "@/redux/slices/authSlice";
+import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
 // import { useGetCustomersMutation } from "@/redux/slices/takeSlice";
 
 export default function Layout({ children }) {
@@ -38,13 +39,17 @@ export default function Layout({ children }) {
   useEffect(() => {
     (async () => {
       if (isAuth) {
-        const res = await axios.get(
+        const resCustomers = await axios.get(
           `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-        // console.log(res);
+        const resProducts = await axios.get(
+          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}&createdBy=ADMIN`
+        );
+        console.log(resProducts);
         // console.log("res");
         dispatch(handleSearch(""));
-        dispatch(fetchCustomers([...res.data.data]));
+        dispatch(fetchCustomers([...resCustomers.data.data]));
+        dispatch(fetchProducts([...resProducts.data.data]));
       } else {
         return;
       }

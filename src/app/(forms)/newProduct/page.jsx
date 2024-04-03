@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 export default function NewProduct() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [addProduct, { isLoading, error }] = useAddProductMutation();
-  const { userInfo } = useSelector((state) => state.auth);
+  // const { userInfo } = useSelector((state) => state.auth);
 
   // console.log(userInfo.role);
 
@@ -53,10 +53,10 @@ export default function NewProduct() {
         unit,
       }).unwrap();
       // dispatch(setCredentials({ ...res.data }));
-      console.log(res);
+      // console.log(res);
       // console.log(values);
       toast.success(res.message);
-      // router.back();
+      router.back();
     } catch (e) {
       toast.error(error);
       // console.log(e);

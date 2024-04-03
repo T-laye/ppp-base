@@ -6,7 +6,7 @@ import { getAuthUser } from "../../../../lib/get-auth-user";
 export async function POST(req, res) {
   try {
     const authRes = await getAuthUser(req, prisma, true);
-    if (authRes.user.role !== "ADMIN") {
+    if (authRes?.user?.role !== "ADMIN") {
       return NextResponse.json(
         ApiResponseDto({
           statusCode: 400,
