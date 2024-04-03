@@ -4,7 +4,7 @@ import { getAuthUser } from "../../../../lib/get-auth-user";
 
 export async function GET(req, res) {
   try {
-    const authResponse = getAuthUser(req, prisma, true);
+    const authResponse = await getAuthUser(req, prisma, true);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({

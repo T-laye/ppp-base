@@ -4,7 +4,7 @@ import { getAuthUser } from "../../../../../lib/get-auth-user";
 
 export async function PATCH(req, context) {
   try {
-    const authResponse = getAuthUser(req, prisma, true);
+    const authResponse = await getAuthUser(req, prisma, true);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -64,7 +64,7 @@ export async function PATCH(req, context) {
 
 export async function DELETE(req, context) {
   try {
-    const authResponse = getAuthUser(req, prisma, true);
+    const authResponse = await getAuthUser(req, prisma, true);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -124,7 +124,7 @@ export async function DELETE(req, context) {
 
 export async function GET(req, context) {
   try {
-    const authResponse = getAuthUser(req, prisma, true);
+    const authResponse = await getAuthUser(req, prisma, true);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
