@@ -6,7 +6,7 @@ export default async function _isUserAvailable(email) {
   try {
     const user = await prisma.user.findUnique({
       where: { email },
-      include: { Management: true, Personnel: true },
+      include: { Management: true, personnel: true },
     });
     return !!user; // Returns true if user is found, false otherwise
   } catch (error) {

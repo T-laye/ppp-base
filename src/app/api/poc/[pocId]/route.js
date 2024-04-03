@@ -29,7 +29,7 @@ export async function PATCH(req, context) {
       },
       include: {
         Management: true,
-        Personnel: true,
+        personnel: true,
       },
     });
     if (!findUser) {

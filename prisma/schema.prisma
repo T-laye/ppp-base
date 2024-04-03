@@ -8,21 +8,35 @@ datasource db {
 }
 
 model User {
-  id                 String               @id @default(uuid())
-  email              String               @unique
-  name               String
-  password           String
-  address            String
-  phoneNumber        String
-  role               UserType             @default(PERSONNEL)
-  gender             Gender
-  Personnel           Personnel[]
-  Management         Management[]
-  Customer           Customer[]
-  Admin              Admin[]
-  Product            Product[]
+  id          String       @id @default(uuid())
+  email       String       @unique
+  name        String
+  password    String
+  address     String
+  phoneNumber String
+  role        UserType     @default(PERSONNEL)
+  gender      Gender
+  personnel   Personnel[]  @relation("user")
+  createdBy   Personnel[]  @relation("createdBy")
+  Management  Management[]
+  Customer    Customer[]
+  Admin       Admin[]
+  Product     Product[]
 
   @@index([email, id, phoneNumber])
+}
+
+model Personnel {
+  personnelId          String               @id @default(uuid())
+  user                 User                 @relation(fields: [userId], references: [id], name: "user")
+  createdAt            DateTime             @default(now()) @db.Timestamptz()
+  personnelPerformance Performance[]
+  poc                  PointOfConsumption[]
+  userId               String
+  createdBy            User                 @relation(fields: [createdById], references: [id], name: "createdBy")
+  createdById          String
+
+  @@index([personnelId])
 }
 
 enum UserType {
@@ -40,7 +54,7 @@ enum Permission {
 
 model PointOfConsumption {
   pocId          String      @id @default(uuid())
-  personnel       Personnel?  @relation(fields: [personnelId], references: [personnelId])
+  personnel      Personnel?  @relation(fields: [personnelId], references: [personnelId])
   management     Management? @relation(fields: [managementId], references: [managementId])
   admin          Admin?      @relation(fields: [adminId], references: [id])
   address        String
@@ -49,7 +63,7 @@ model PointOfConsumption {
   email          String
   createdAt      DateTime    @default(now()) @db.Timestamptz()
   updatedAt      DateTime    @default(now()) @updatedAt
-  personnelId     String
+  personnelId    String
   managementId   String
   stockLimit     Int
   stockAvailable Int
@@ -80,17 +94,6 @@ model Product {
   createdBy          String
 
   @@index([productName, id])
-}
-
-model Personnel {
-  personnelId          String               @id @default(uuid())
-  user                User                 @relation(fields: [userId], references: [id])
-  createdAt           DateTime             @default(now()) @db.Timestamptz()
-  personnelPerformance Performance[]
-  poc                 PointOfConsumption[]
-  userId              String
-
-  @@index([personnelId])
 }
 
 // enum ProductType {
@@ -169,7 +172,7 @@ model VoucherDispense {
 model Performance {
   id                     String      @id @default(uuid())
   staff                  Personnel   @relation(fields: [personnelId], references: [personnelId])
-  personnelId             String
+  personnelId            String
   createdAt              DateTime    @default(now()) @db.Timestamptz()
   cusomtomersHandled     Int
   productsDispensed      Int

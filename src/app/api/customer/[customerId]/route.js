@@ -57,6 +57,7 @@ export async function PATCH(req, context) {
 export async function GET(req, context) {
   try {
     const userResponse = await getAuthUser(req, prisma, true);
+
     if (userResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -66,7 +67,7 @@ export async function GET(req, context) {
         { status: userResponse.status }
       );
     }
-    if (authResponse.user.role !== "ADMIN") {
+    if (userResponse.user.role !== "ADMIN") {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
         status: 403,
       });
