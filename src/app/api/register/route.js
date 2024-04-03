@@ -82,7 +82,7 @@ export async function POST(req, res) {
         path: "/",
       });
       const createUserResponse = ApiResponseDto({
-        message: "User created successfully",
+        message: "user created successfully",
         data: {
           user: newUser,
           role: {
