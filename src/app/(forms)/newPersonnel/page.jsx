@@ -204,7 +204,7 @@ export default function NewPersonnel() {
                 >
                   <option>Select role</option>
                   {/* <option value="ADMIN">Male</option> */}
-                  <option value="PERSONEL">Personnel</option>
+                  <option value="PERSONNEL">Personnel</option>
                   <option value="MANAGEMENT">Management</option>
                   {/* {renderJobCategories()} */}
                 </select>

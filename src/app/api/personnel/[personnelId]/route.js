@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../../config/prisma.connect";
-import ApiResponseDto from "../../../../../lib/apiResponseHelper";
-import { prismaErrorHelper } from "../../../../../lib/prisma-error-helper";
 import { getAuthUser } from "../../../../../lib/get-auth-user";
+import ApiResponseDto from "../../../../../lib/apiResponseHelper";
+import hashPassword from "../../../../../lib/hashHelper";
 
 export async function PATCH(req, context) {
   try {
@@ -23,25 +23,57 @@ export async function PATCH(req, context) {
     }
     const searchParams = req.nextUrl.searchParams;
     const { params } = context;
-    const getUserId = params.customerId;
+    const getId = params.personnelId;
     const email = searchParams.get("email");
     const name = searchParams.get("name");
     const phoneNumber = searchParams.get("phoneNumber");
-    const addJ = {
-      email: email ? email : undefined,
-      name: name ? name : undefined,
-      phoneNumber: phoneNumber ? phoneNumber : undefined,
-    };
-    const editCustomerData = await prisma.customer.update({
+    const address = searchParams.get("address");
+    const gender = searchParams.get("gender");
+    const role = searchParams.get("role");
+    const password = searchParams.get("password");
+    const getPersonnel = await prisma.user.update({
       where: {
-        customerId: getUserId,
+        id: getId,
       },
-      data: addJ,
+      data: {
+        address: address ? address : undefined,
+        email: email ? email : undefined,
+        gender: gender ? gender : undefined,
+        name: name ? name.toLowerCase() : undefined,
+        password: password ? await hashPassword(password) : undefined,
+        phoneNumber: phoneNumber ? phoneNumber : undefined,
+        ...(role && role === "MANAGEMENT"
+          ? {
+              Management: {
+                connect: {
+                  user: {
+                    id: getId,
+                  },
+                },
+              },
+            }
+          : {
+              Admin: {
+                connect: {
+                  user: {
+                    id: getId,
+                  },
+                },
+              },
+            }),
+      },
     });
+    if (role) {
+      await prisma.personnel.delete({
+        where: {
+          user: getId,
+        },
+      });
+    }
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
-        data: editCustomerData,
+        data: getPersonnel,
         message: "successful",
       }),
       { status: 200 }
@@ -52,94 +84,6 @@ export async function PATCH(req, context) {
       { status: 500 }
     );
   }
-}
-
-export async function GET(req, context) {
-  try {
-    const userResponse = await getAuthUser(req, prisma, true);
-
-    if (userResponse.error) {
-      return NextResponse.json(
-        ApiResponseDto({
-          statusCode: userResponse.status,
-          message: userResponse.error.message,
-        }),
-        { status: userResponse.status }
-      );
-    }
-    if (userResponse.user.role !== "ADMIN") {
-      return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
-        status: 403,
-      });
-    }
-    const { params } = context;
-    const getUserId = params.customerId;
-    const getCustomer = await prisma.customer.findUnique({
-      where: {
-        customerId: getUserId,
-      },
-      include: {
-        poc: true,
-        user: true,
-        Voucher: true,
-      },
-    });
-    if (!getCustomer) {
-      return NextResponse.json(
-        ApiResponseDto({
-          statusCode: 404,
-          message: "Customer details not found",
-        }),
-        { status: 200 }
-      );
-    }
-    return NextResponse.json(
-      ApiResponseDto({
-        statusCode: 200,
-        data: mapCustomer(getCustomer),
-        message: "Successful",
-      }),
-      { status: 200 }
-    );
-  } catch (err) {
-    return NextResponse.json(
-      { message: err.message, error: err },
-      { status: 500 }
-    );
-  }
-}
-
-function mapCustomer(customer) {
-  return {
-    id: customer.customerId,
-    name: customer.name,
-    email: customer.email,
-    phoneNumber: customer.phoneNumber,
-    createdAt: customer.createdAt,
-    createdBy: customer.user.name,
-    createdById: customer.user.id,
-    createdByEmail: customer.user.email,
-    vouchers: customer.Voucher.map((voucher) => ({
-      voucherId: voucher.voucherId,
-      voucherCode: voucher.voucherCode,
-      collected: voucher.collected,
-      thirdParty: voucher.thirdParty,
-      product: {
-        id: voucher.product.id,
-        productName: voucher.product.productName,
-        createdAt: voucher.product.createdAt,
-        pointOfConsumption: voucher.product.PointOfConsumption.map((poc) => ({
-          pocId: poc.pocId,
-          address: poc.address,
-          name: poc.name,
-          phoneNumber: poc.phoneNumber,
-          email: poc.email,
-          stockLimit: poc.stockLimit,
-          stockAvailable: poc.stockAvailable,
-        })),
-      },
-    })),
-  };
 }
 
 export async function DELETE(req, context) {
@@ -160,15 +104,15 @@ export async function DELETE(req, context) {
       });
     }
     const { params } = context;
-    const getUserId = params.customerId;
-    const getCustomer = await prisma.customer.findUnique({
+    const getId = params.personnelId;
+    const getCustomer = await prisma.personnel.findUnique({
       where: {
-        customerId: getUserId,
+        personnelId: getId,
       },
       include: {
-        poc: true,
         user: true,
-        Voucher: true,
+        personnelPerformance: true,
+        Product: true,
       },
     });
     if (!getCustomer) {
@@ -201,5 +145,59 @@ export async function DELETE(req, context) {
       { message: err.message, error: err },
       { status: 500 }
     );
+  }
+}
+
+export async function GET() {
+  try {
+    const authResponse = getAuthUser(req, prisma, true);
+    if (authResponse.error) {
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: authResponse.status,
+          message: authResponse.error.message,
+        }),
+        { status: authResponse.status }
+      );
+    }
+    if (authResponse.user.role !== "ADMIN") {
+      return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
+        status: 403,
+      });
+    }
+    const { params } = context;
+    const id = params.personnelId;
+    const getPersonnelData = await prisma.personnel.findUnique({
+      where: {
+        personnelId: id,
+      },
+      include: {
+        createdBy: true,
+        user: true,
+        poc: true,
+      },
+    });
+    if (!getPersonnelData) {
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: 404,
+          message: "poc details not found",
+        }),
+        { status: 200 }
+      );
+    }
+    return NextResponse.json(
+      ApiResponseDto({
+        statusCode: 200,
+        data: getPersonnelData,
+        message: "successful",
+      }),
+      { status: 200 }
+    );
+  } catch (err) {
+       return NextResponse.json(
+         { message: err.message, error: err },
+         { status: 500 }
+       );
   }
 }

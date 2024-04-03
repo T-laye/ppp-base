@@ -52,7 +52,7 @@ export default function Home() {
 
   async function handleSubmit(values) {
     const { email, password } = values;
-    const role = userRole ? "MANAGEMENT" : "PERSONEL";
+    const role = userRole ? "MANAGEMENT" : "PERSONNEL";
     const route = userRole ? "/management/stats" : "/personnel/stats";
     // loginUser({ email, password }, dispatch, router);
     try {
