@@ -14,6 +14,7 @@ export async function GET(req, res) {
         { status: authResponse.status }
       );
     }
+    const searchParams = req.nextUrl.searchParams;
     const createdBy = searchParams.get("createdBy");
     const name = searchParams.get("name");
     const email = searchParams.get("email");

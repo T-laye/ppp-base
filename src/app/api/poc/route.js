@@ -90,6 +90,7 @@ export async function GET() {
         { status: authResponse.status }
       );
     }
+    const searchParams = req.nextUrl.searchParams;
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const admin = searchParams.get("admin");
     const name = searchParams.get("name");
