@@ -20,7 +20,7 @@ export default function NewProduct() {
   const [addProduct, { isLoading, error }] = useAddProductMutation();
   const { userInfo } = useSelector((state) => state.auth);
 
-  console.log(userInfo.role);
+  // console.log(userInfo.role);
 
   const viewPassword = () => {
     setShowPassword(!showPassword);
@@ -47,7 +47,7 @@ export default function NewProduct() {
     const { name, allocation_per_voucher, unit } = values;
     try {
       const res = await addProduct({
-        role: userInfo.role,
+        // role: userInfo.role,
         name,
         voucherAllocation: allocation_per_voucher,
         unit,

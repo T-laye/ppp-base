@@ -24,7 +24,7 @@ export default function AdminSignIn() {
   const [login, { isLoading, error }] = useLoginMutation();
   const { userInfo } = useSelector((state) => state.auth);
 
-  console.log(userInfo);
+  // console.log(userInfo);
   const viewPassword = () => {
     setShowPassword(!showPassword);
   };
