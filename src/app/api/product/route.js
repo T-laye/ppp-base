@@ -17,7 +17,7 @@ export async function POST(req, res) {
       );
     }
     const body = await req.json();
-    const { name, unit, voucherAllocation } = body;
+    const { name, unit, voucherAllocation, pocId } = body;
     const createProduct = await prisma.product.create({
       data: {
         productName: name.toLowerCase(),
@@ -28,6 +28,11 @@ export async function POST(req, res) {
             id: authRes.user.id,
           },
         },
+        PointOfConsumption: {
+          connect: {
+           pocId: pocId
+         }
+        }
       },
     });
     const createResponse = ApiResponseDto({
@@ -46,7 +51,7 @@ export async function POST(req, res) {
 
 export async function GET(req, res) {
   try {
-    const authRes = getAuthUser(req, prisma, false);
+    const authResponse = getAuthUser(req, prisma, false);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -117,6 +122,7 @@ export async function GET(req, res) {
         createdByRole: v?.user.role,
       })),
       statusCode: 200,
+      count: totalCount
     });
     return NextResponse.json(resData, { status: 200 });
   } catch (err) {

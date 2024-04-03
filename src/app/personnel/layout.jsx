@@ -15,7 +15,7 @@ export default function Layout({ children }) {
     (async () => {
       const { user } = await getUser();
 
-      if (!user || user.user.role !== "PERSONEL") {
+      if (!user || user.user.role !== "PERSONNEL") {
         router.push("/");
         setIsAuth(false);
         return;

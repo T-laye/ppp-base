@@ -21,7 +21,7 @@ export async function POST(req, res) {
       where: { id: payload.id, email: payload.email },
       include: {
         Management: true,
-        Personel: true,
+        personnel: true,
       },
     });
     if (!user || (user.role !== "ADMIN" && user.role !== "MANAGEMENT"))
@@ -76,7 +76,7 @@ export async function GET(req, res) {
       where: { id: payload.id, email: payload.email },
       include: {
         Management: true,
-        Personel: true,
+        personnel: true,
       },
     });
     if (!user )
@@ -155,6 +155,7 @@ export async function GET(req, res) {
         createdByRole: v?.user.role,
       })),
       statusCode: 200,
+      count: totalCount
     });
     return NextResponse.json(resData, { status: 200 });
   } catch (err) {
