@@ -115,8 +115,8 @@ function mapCustomer(customer) {
     email: customer.email,
     phoneNumber: customer.phoneNumber,
     createdAt: customer.createdAt,
-    createdByAdmin: customer.user.name,
-    createdByAdminId: customer.user.id,
+    createdBy: customer.user.name,
+    createdById: customer.user.id,
     createdByEmail: customer.user.email,
     vouchers: customer.Voucher.map((voucher) => ({
       voucherId: voucher.voucherId,
