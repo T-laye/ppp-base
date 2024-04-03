@@ -68,6 +68,12 @@ export async function POST(req, res) {
       status: 201,
     });
   } catch (err) {
+    if (err.code === "P2002") {
+      return NextResponse.json(
+        { message: "the poc email already exist", status: 409 },
+        { status: 409 }
+      );
+    }
     return NextResponse.json({ message: err.message, status: 500 });
   }
 }

@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../lib/apiResponseHelper";
-import { isValidDate, formatDateToISO } from "../../../../lib/date-helper";
 import { prismaErrorHelper } from "../../../../lib/prisma-error-helper";
 
 export async function POST(req, res) {
@@ -51,11 +50,13 @@ export async function POST(req, res) {
       data: addCustomer,
       statusCode: 201,
     });
-    prismaErrorHelper(res, addCustomer);
     return NextResponse.json(createResponse, {
       status: 201,
     });
   } catch (err) {
+    if (err.code === "P2002") {
+      return NextResponse.json({message: 'the customer email already exist', status: 409}, {status: 409})
+    }
     return NextResponse.json({ message: err.message, status: 500 });
   }
 }
