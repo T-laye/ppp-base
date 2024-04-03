@@ -68,6 +68,12 @@ export async function POST(req, res) {
       status: 201,
     });
   } catch (err) {
+    if (err.code === "P2002") {
+      return NextResponse.json(
+        { message: "the poc email already exist", status: 409 },
+        { status: 409 }
+      );
+    }
     return NextResponse.json({ message: err.message, status: 500 });
   }
 }
@@ -84,6 +90,7 @@ export async function GET() {
         { status: authResponse.status }
       );
     }
+    const searchParams = req.nextUrl.searchParams;
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const admin = searchParams.get("admin");
     const name = searchParams.get("name");

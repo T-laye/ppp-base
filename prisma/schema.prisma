@@ -60,7 +60,7 @@ model PointOfConsumption {
   address        String
   name           String
   phoneNumber    String
-  email          String
+  email          String      @unique
   createdAt      DateTime    @default(now()) @db.Timestamptz()
   updatedAt      DateTime    @default(now()) @updatedAt
   personnelId    String
