@@ -1,57 +1,40 @@
-import { verify } from "jsonwebtoken";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../lib/apiResponseHelper";
-import { isValidDate, formatDateToISO } from "../../../../lib/date-helper";
-import { prismaErrorHelper } from "../../../../lib/prisma-error-helper";
+import { getAuthUser } from "../../../../lib/get-auth-user";
 
 export async function POST(req, res) {
-  const cookiesStore = cookies();
-  const token = cookiesStore.get("ppp-base");
-  const handleError = ApiResponseDto({
-    message: "you are not logged in",
-    data: null,
-    statusCode: 401,
-  });
-  if (!token) return NextResponse.json(handleError, { status: 401 });
   try {
-    const payload = verify(token.value, process.env.ACCESS_TOKEN_SECRET);
-    const user = await prisma.user.findUnique({
-      where: { id: payload.id, email: payload.email },
-      include: {
-        Management: true,
-        Personel: true,
-      },
-    });
-    if (!user || (user.role !== "ADMIN" && user.role !== "MANAGEMENT"))
+    const authRes = getAuthUser(req, prisma, true);
+    if (authRes.user.role !== "ADMIN") {
       return NextResponse.json(
         ApiResponseDto({
-          message: "oops, user details not found | not allowed",
+          statusCode: 400,
+          data: undefined,
+          message: "not allowed, contact admin",
         }),
-        { status: 403 }
+        { status: 400 }
       );
+    }
     const body = await req.json();
-    const { name, email, phone } = body;
-    const addCustomer = await prisma.customer.create({
+    const { name, unit, voucherAllocation } = body;
+    const createProduct = await prisma.product.create({
       data: {
-        name: name.toLowerCase(),
-        email,
-        phoneNumber: phone,
+        productName: name.toLowerCase(),
+        unit,
+        voucherAllocation,
         user: {
           connect: {
-            id: user.id,
+            id: authRes.user.id,
           },
         },
       },
     });
-
     const createResponse = ApiResponseDto({
       message: "successfully",
-      data: addCustomer,
+      data: createProduct,
       statusCode: 201,
     });
-    prismaErrorHelper(res, addCustomer);
     return NextResponse.json(createResponse, {
       status: 201,
     });
@@ -60,39 +43,19 @@ export async function POST(req, res) {
   }
 }
 
+
 export async function GET(req, res) {
-  const searchParams = req.nextUrl.searchParams;
-  const cookiesStore = cookies();
-  const token = cookiesStore.get("ppp-base");
-  const handleError = ApiResponseDto({
-    message: "you are not logged in",
-    data: null,
-    statusCode: 401,
-  });
-  if (!token) return NextResponse.json(handleError, { status: 401 });
   try {
-    const payload = verify(token.value, process.env.ACCESS_TOKEN_SECRET);
-    const user = await prisma.user.findUnique({
-      where: { id: payload.id, email: payload.email },
-      include: {
-        Management: true,
-        Personel: true,
-      },
-    });
-    if (!user )
+    const authRes = getAuthUser(req, prisma, false);
+    if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
-          message: "oops, user details not found",
+          statusCode: authResponse.status,
+          message: authResponse.error.message,
         }),
-        { status: 403 }
+        { status: authResponse.status }
       );
-    if (user.role !== "ADMIN" && user.role !== "MANAGEMENT")
-      return NextResponse.json(
-      ApiResponseDto({
-        message: "not allowed",
-      }),
-      { status: 404}
-    );
+    }
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const createdBy = searchParams.get("createdBy");
     const name = searchParams.get("name");
@@ -113,7 +76,6 @@ export async function GET(req, res) {
         });
       }
     }
-
     const totalCount = await prisma.customer.count();
     const totalPages = Math.ceil(totalCount / take);
     const offset = (pageNumber - 1) * totalPages;
@@ -126,14 +88,14 @@ export async function GET(req, res) {
         { status: 400 }
       );
     }
-    const getAllCustomer = await prisma.customer.findMany({
+    const getAllProducts = await prisma.product.findMany({
       orderBy: {
         createdAt: "desc",
       },
       include: {
         Voucher: true,
-        poc: true,
-        user: true,
+        PointOfConsumption: true,
+        user: true
       },
       take: take,
       skip: offset,
@@ -144,11 +106,11 @@ export async function GET(req, res) {
     });
     const resData = ApiResponseDto({
       message: "successful",
-      data: getAllCustomer.map((v) => ({
-        customerId: v?.customerId,
+      data: getAllProducts.map((v) => ({
+        productId: v?.productId,
         name: v.name,
-        phoneNumber: v?.phoneNumber,
-        email: v?.email,
+        unit: v?.unit,
+        voucherAllocation: v?.voucherAllocation,
         createdAt: v?.createdAt,
         createdById: v?.user.id,
         createdByName: v?.user.name,
