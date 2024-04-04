@@ -1,7 +1,7 @@
 "use client";
 import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { ImDroplet } from "react-icons/im";
 import { MdAssignmentTurnedIn } from "react-icons/md";
 import { TbRulerMeasure } from "react-icons/tb";
@@ -21,13 +21,16 @@ import Link from "next/link";
 import { getCustomer } from "@/redux/slices/getCustomerSlice";
 import axios from "axios";
 import Loading from "@/components/Loading";
+import Loader from "@/components/Loader";
+import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
 
 export default function Page() {
   const router = useRouter();
   const { id } = useParams();
   const { customer } = useSelector((state) => state.customer);
+  const { pageNumber, take, search } = useSelector((state) => state.variables);
   const dispatch = useDispatch();
-  // const customer = customers.find((c) => c.customerId === id);
+  const [isLoading, setIsLoading] = useState(false);
 
   // console.log(customer);
   useEffect(() => {
@@ -41,7 +44,24 @@ export default function Page() {
     getCustomerDetails();
   }, [dispatch, id]);
 
-  // console.log(customer);
+  const handleDeleteCustomer = async () => {
+    setIsLoading(true);
+    const res = await axios.delete(`/api/customer/${id}`);
+    if (res) {
+      const resCustomers = await axios.get(
+        `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
+      );
+      dispatch(fetchCustomers([...resCustomers?.data.data]));
+      setIsLoading(false);
+      toast.success(res.data.message);
+      setTimeout(() => {
+        router.back();
+        // window.location.reload();
+      }, 500);
+    }
+    // console.log(res);
+  };
+  // console.log(id);
 
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
@@ -79,19 +99,10 @@ export default function Page() {
     return;
   }
 
-  // console.log(formattedDateString); // Output: Monday, April 1 2024 AT 12:35
-
-  // console.log(customer);
   const editCustomer = () => {
     router.push(`/admin/stats/customers/${id}/editCustomer`);
   };
-  const deleteCustomer = () => {
-    toast.success("Successfully Deleted");
-    router.back();
-  };
-  // const addVoucher = () => {
-  //   router.push("/newVoucher");
-  // };
+
   return (
     <section className="min-h-screen pt-8 pb-20">
       <div className="mb-3">
@@ -176,11 +187,21 @@ export default function Page() {
             >
               Edit Customer
             </button>
-            <button
-              onClick={deleteCustomer}
+            {/* <button
+              onClick={handleDeleteCustomer}
               className="btn bg-error w-full mt-5"
             >
-              Delete Customer
+              {!isLoading ? <Loader /> : "Delete Customer"}
+            </button> */}
+            <button
+              onClick={handleDeleteCustomer}
+              type="submit"
+              className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
+                isLoading ? "bg-customGray" : "bg-error"
+              } `}
+              disabled={isLoading}
+            >
+              {isLoading ? <Loader /> : "Delete Customer"}
             </button>
           </div>
         ) : (

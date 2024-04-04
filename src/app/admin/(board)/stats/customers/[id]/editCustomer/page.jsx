@@ -10,28 +10,29 @@ import { useRouter, useParams } from "next/navigation";
 import { getCustomer } from "@/redux/slices/getCustomerSlice";
 import axios from "axios";
 import Loading from "@/components/Loading";
+// import { useEditCustomerMutation } from "@/redux/slices/customerApiSlice";
 
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isEditable, setIsEditable] = useState(false);
   const router = useRouter();
   const { id } = useParams();
   const { customer } = useSelector((state) => state.customer);
   const dispatch = useDispatch();
+  // const [editCustomer, { isLoading, error }] = useEditCustomerMutation();
 
-  console.log(customer);
+  // console.log(customer);
 
   useEffect(() => {
     const getCustomerDetails = async () => {
       const res = await axios.get(`/api/customer/${id}`);
-      
-      console.log(res);
-       dispatch(getCustomer({ ...res.data.data }));
-     };
 
-     getCustomerDetails();
-   }, [dispatch, id]);
+      // console.log(res);
+      dispatch(getCustomer({ ...res.data.data }));
+    };
+
+    getCustomerDetails();
+  }, [dispatch, id]);
   // console.log(isEditable);
 
   const formik = useFormik({
@@ -53,17 +54,24 @@ export default function Page() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    // const { email, password } = values;
-    console.log(values);
+    const { fullName, email, phone } = values;
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsEditable(false);
-      toast.success("Successful");
-      router.back();
-    }, 2000);
+    try {
+      const res = await axios.patch(
+        `/api/customer/${id}?email=${email}&name=${fullName}&phoneNumber=${phone}`
+      );
+      // console.log(res);
+      if (res) {
+        setIsLoading(true);
+        toast.success(res.message);
+        router.back();
+      }
+      // console.log(values);
+    } catch (e) {
+      toast.error(e.data.message);
+      // console.log(e);
+    }
   }
-
   const getInputClassNames = (fieldName) =>
     `${
       formik.errors[fieldName] && formik.touched[fieldName]

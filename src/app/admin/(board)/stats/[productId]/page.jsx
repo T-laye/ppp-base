@@ -1,7 +1,7 @@
 "use client";
 import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ImDroplet } from "react-icons/im";
 import { MdAssignmentTurnedIn } from "react-icons/md";
 import { TbRulerMeasure } from "react-icons/tb";
@@ -12,12 +12,16 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { getProduct } from "@/redux/slices/getProductSlice";
 import Loading from "@/components/Loading";
+import Loader from "@/components/Loader";
+import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
 
 export default function Page() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const { productId } = useParams();
   const { product } = useSelector((state) => state.product);
   const dispatch = useDispatch();
+  const { pageNumber, take, search } = useSelector((state) => state.variables);
   // const { products } = useSelector((state) => state.products);
   // console.log(product);
   useEffect(() => {
@@ -30,6 +34,27 @@ export default function Page() {
 
     getProductDetails();
   }, [dispatch, productId]);
+
+  const handleDeleteCustomer = async () => {
+    setIsLoading(true);
+    try{
+
+      const res = await axios.delete(`/api/product/${productId}`);
+      if (res) {
+        const resProducts = await axios.get(
+          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        );
+         dispatch(fetchProducts([...resProducts?.data.data]));
+        setIsLoading(false);
+        toast.success(res.data.message);
+        setTimeout(() => {
+          router.back();
+          // window.location.reload();
+        }, 500);
+      }
+    } catch(err)
+    // console.log(res);
+  };
 
   const editProduct = () => {
     router.push(`/admin/stats/${productId}/editProduct`);
@@ -80,8 +105,15 @@ export default function Page() {
                 Edit Product
               </button>
 
-              <button className="btn bg-error w-full mt-5">
-                Delete Product
+              <button
+                onClick={handleDeleteCustomer}
+                type="submit"
+                className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
+                  isLoading ? "bg-customGray" : "bg-error"
+                } `}
+                disabled={isLoading}
+              >
+                {isLoading ? <Loader /> : "Delete Customer"}
               </button>
             </div>
           </div>

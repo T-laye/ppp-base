@@ -23,13 +23,10 @@ export default function NewProduct() {
   const { productId } = useParams();
   const { product } = useSelector((state) => state.product);
   const dispatch = useDispatch();
-  // const { products } = useSelector((state) => state.products);
-  // console.log(product);
+  console.log(product);
   useEffect(() => {
     const getProductDetails = async () => {
       const res = await axios.get(`/api/product/${productId}`);
-
-      // console.log(res);
       dispatch(getProduct({ ...res.data.data }));
     };
 
@@ -51,13 +48,23 @@ export default function NewProduct() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    // const { email, password } = values;
-    console.log(values);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Successful");
-    }, 2000);
+    const { name, allocation_per_voucher, unit } = values;
+    //  setIsLoading(true);
+    try {
+      // const res = await axios.patch(
+      //   `/api/product/${productId}?productName=${name}&voucherAllocation=${allocation_per_voucher}&unit=${unit}`
+      // );
+      // console.log(res);
+      // if (res) {
+      //  setIsLoading(true);
+      //  toast.success(res.message);
+      //  router.back();
+      // }
+      console.log(values);
+    } catch (e) {
+      //  toast.error(e.data.message);
+      console.log(e);
+    }
   }
 
   const getInputClassNames = (fieldName) =>
