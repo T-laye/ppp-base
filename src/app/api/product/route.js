@@ -43,7 +43,6 @@ export async function POST(req, res) {
   }
 }
 
-
 export async function GET(req, res) {
   try {
     const authResponse = await getAuthUser(req, prisma, false);
@@ -96,7 +95,7 @@ export async function GET(req, res) {
       include: {
         Voucher: true,
         PointOfConsumption: true,
-        user: true
+        user: true,
       },
       take: take,
       skip: offset,
@@ -109,13 +108,29 @@ export async function GET(req, res) {
       message: "successful",
       data: getAllProducts.map((v) => ({
         productId: v?.productId,
-        name: v.name,
+        name: v.productName,
         unit: v?.unit,
         voucherAllocation: v?.voucherAllocation,
         createdAt: v?.createdAt,
         createdById: v?.user.id,
         createdByName: v?.user.name,
         createdByRole: v?.user.role,
+        createdByEmail: v?.user.email,
+        poc: v?.PointOfConsumption.map((v) => ({
+          name: v?.name,
+          address: v?.address,
+          phoneNumber: v?.phoneNumber,
+          stockAvailable: v?.stockAvailable,
+          stockLimit: v?.stockLimit,
+          createdAt: v?.createdAt,
+        })),
+        voucher: v.Voucher.map((v) => ({
+          voucherCode: v?.voucherCode,
+          createdDate: v?.createdAt,
+          collectionStatus: v?.collected,
+          customerId: v?.customerId,
+          id: v?.voucherId
+        }))
       })),
       count: totalCount,
       statusCode: 200,
