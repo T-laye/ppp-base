@@ -45,8 +45,8 @@ export default function Layout({ children }) {
         const resProducts = await axios.get(
           `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-        console.log(resProducts.data);
-        console.log(resCustomers.data);
+        // console.log(resProducts.data);
+        // console.log(resCustomers.data);
         // console.log("res");
         dispatch(handleSearch(""));
         dispatch(fetchCustomers([...resCustomers?.data.data]));

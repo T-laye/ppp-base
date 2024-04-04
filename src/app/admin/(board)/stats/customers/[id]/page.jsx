@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Link from "next/link";
 import { getCustomer } from "@/redux/slices/getCustomerSlice";
 import axios from "axios";
+import Loading from "@/components/Loading";
 
 export default function Page() {
   const router = useRouter();
@@ -99,7 +100,8 @@ export default function Page() {
 
       <div>
         <h3 className="font-semibold">Customer Details</h3>
-        <Suspense>
+
+        {customer?.name ? (
           <div className="mt-4">
             <DetailList
               title="Full Name"
@@ -118,14 +120,14 @@ export default function Page() {
             />
             <DetailList
               title="Created By"
-              value={capitalizeWords(customer?.createdByName)}
+              value={capitalizeWords(customer?.createdBy)}
               icon={<FaUser size={16} />}
             />
-            <DetailList
+            {/* <DetailList
               title="Creator Role"
               value={capitalizeWords(customer?.createdByRole)}
               icon={<FaUser size={16} />}
-            />
+            /> */}
             <DetailList
               title="Created At"
               value={formatDate(customer?.createdAt)}
@@ -161,31 +163,29 @@ export default function Page() {
             value="No. 23. poajikaco okcno;aojvnljbdbv jvabo;bvnj "
             icon={<IoLocationSharp size={16} />}
           /> */}
-            {customer && (
-              <>
-                <Link href="/[newVoucher]" as={`/${customer?.customerId}`}>
-                  <button className="btn bg-primary w-full mt-5">
-                    Create Voucher
-                  </button>
-                </Link>
 
-                <button
-                  onClick={editCustomer}
-                  className="btn bg-yellow-500 w-full mt-5"
-                >
-                  Edit Customer
-                </button>
-                <button
-                  onClick={deleteCustomer}
-                  className="btn bg-error w-full mt-5"
-                >
-                  Delete Customer
-                </button>
-              </>
-            )}
-            {/* <button className="btn bg-error w-full mt-5">Delete Customer</button> */}
+            <Link href="/[newVoucher]" as={`/${customer?.customerId}`}>
+              <button className="btn bg-primary w-full mt-5">
+                Create Voucher
+              </button>
+            </Link>
+
+            <button
+              onClick={editCustomer}
+              className="btn bg-yellow-500 w-full mt-5"
+            >
+              Edit Customer
+            </button>
+            <button
+              onClick={deleteCustomer}
+              className="btn bg-error w-full mt-5"
+            >
+              Delete Customer
+            </button>
           </div>
-        </Suspense>
+        ) : (
+          <Loading />
+        )}
       </div>
     </section>
   );

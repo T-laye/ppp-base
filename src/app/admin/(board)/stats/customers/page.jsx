@@ -6,6 +6,7 @@ import CustomerList from "@/app/admin/components/CustomerList";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { handleSearch } from "@/redux/slices/variableSlice";
+import Loading from "@/components/Loading";
 
 export default function Customers() {
   const [term, setTerm] = useState("");
@@ -27,10 +28,15 @@ export default function Customers() {
   };
 
   const renderCustomers = () => {
-    if (customers.length === 0) {
-      return <li>No Customer Found</li>;
+    if (customers) {
+      if (customers?.length === 0) {
+        return <div>No customers Found</div>;
+      } else {
+        return customers.map((c) => <CustomerList key={c?.customerId} c={c} />);
+      }
+    } else {
+      return <Loading />;
     }
-    return customers.map((c) => <CustomerList key={c?.customerId} c={c} />);
   };
 
   return (
