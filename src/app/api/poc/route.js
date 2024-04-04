@@ -112,7 +112,7 @@ export async function GET() {
         });
       }
     }
-    const totalCount = await prisma.customer.count();
+    const totalCount = await prisma.pointOfConsumption.count();
     const totalPages = Math.ceil(totalCount / take);
     const offset = (pageNumber - 1) * totalPages;
     if (offset > totalCount) {
@@ -144,7 +144,7 @@ export async function GET() {
       },
     });
     return NextResponse.json(
-      { message: "successful", data: getPoc, count: totalCount },
+      { statusCode: 200, message: "successful", data: getPoc, count: totalCount },
       { status: 200 }
     );
   } catch (err) {

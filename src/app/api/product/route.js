@@ -77,7 +77,7 @@ export async function GET(req, res) {
         });
       }
     }
-    const totalCount = await prisma.customer.count();
+    const totalCount = await prisma.product.count();
     const totalPages = Math.ceil(totalCount / take);
     const offset = (pageNumber - 1) * totalPages;
     if (offset > totalCount) {
@@ -102,7 +102,7 @@ export async function GET(req, res) {
       skip: offset,
       where: {
         createdBy: createdBy ? createdBy : {},
-        name: name ? { contains: name } : {},
+        productName: name ? { contains: name } : {},
       },
     });
     const resData = ApiResponseDto({
@@ -117,8 +117,8 @@ export async function GET(req, res) {
         createdByName: v?.user.name,
         createdByRole: v?.user.role,
       })),
+      count: totalCount,
       statusCode: 200,
-      count: totalCount
     });
     return NextResponse.json(resData, { status: 200 });
   } catch (err) {
