@@ -107,7 +107,7 @@ export async function GET(req, res) {
     const resData = ApiResponseDto({
       message: "successful",
       data: getAllProducts.map((v) => ({
-        productId: v?.productId,
+        productId: v?.id,
         name: v.productName,
         unit: v?.unit,
         voucherAllocation: v?.voucherAllocation,
