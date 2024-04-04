@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from "react";
 import QuantityCards from "../../components/QuantityCards";
 import { product } from "/public/dummy.js";
@@ -11,9 +11,27 @@ import { IoMdTimer } from "react-icons/io";
 import { MdVerifiedUser } from "react-icons/md";
 import { useSelector } from "react-redux";
 
-  export default function Stats() {
-    const { customers } = useSelector((state) => state.customers);
+export default function Stats() {
+  const { customers } = useSelector((state) => state.customers);
+  const { products } = useSelector((state) => state.products);
   // console.log(customers);
+
+  const renderProducts = () => {
+    // const renderCustomers = () => {
+    if (products?.length === 0) {
+      return <div>No Products Found</div>;
+    }
+    return products?.map((p) => (
+      <QuantityCards
+        key={p.productId}
+        title={`${p?.name} Level`}
+        available={420}
+        total={600}
+      />
+    ));
+  };
+  // }
+
   return (
     <section className="pt-4 pb-20 bg-red-40 min-h-screen">
       <div>
@@ -65,10 +83,8 @@ import { useSelector } from "react-redux";
         </h4>
         {/* <h4 className="text-sm ">Hello, Admin</h4> */}
         <div>
-          <QuantityCards title="Fuel Level" available={420} total={600} />
-          <QuantityCards title="Desiel Level" available={80} total={400} />
+          {renderProducts()}
           <QuantityCards title="Total Level" available={500} total={1000} />
-          {/* {renderProduct()} */}
         </div>
       </div>
     </section>
