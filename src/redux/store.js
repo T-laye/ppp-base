@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice";
 import fetchCustomersReducer from "./slices/fetchCustomersSlice";
 import fetchProductsReducer from "./slices/fetchProductsSlice";
+import fetchPersonnelsReducer from "./slices/fetchPersonnelsSlice";
 import getCustomerReducer from "./slices/getCustomerSlice";
 import getProductReducer from "./slices/getProductSlice";
 import variableReducer from "./slices/variableSlice";
@@ -15,6 +16,7 @@ const store = configureStore({
     customer: getCustomerReducer,
     products: fetchProductsReducer,
     product: getProductReducer,
+    personnels: fetchPersonnelsReducer,
     variables: variableReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
 

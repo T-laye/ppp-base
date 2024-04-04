@@ -12,6 +12,7 @@ import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
 import { handleSearch } from "@/redux/slices/variableSlice";
 import { setCredentials } from "@/redux/slices/authSlice";
 import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
+import { fetchPersonnels } from "@/redux/slices/fetchPersonnelsSlice";
 // import { useGetCustomersMutation } from "@/redux/slices/takeSlice";
 
 export default function Layout({ children }) {
@@ -45,12 +46,16 @@ export default function Layout({ children }) {
         const resProducts = await axios.get(
           `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
+        // const resPersonnels = await axios.get(
+        //   `/api/personnel?name=${search}`
+        // );
         // console.log(resProducts.data);
-        // console.log(resCustomers.data);
+        // console.log(resPersonnels);
         // console.log("res");
         dispatch(handleSearch(""));
         dispatch(fetchCustomers([...resCustomers?.data.data]));
         dispatch(fetchProducts([...resProducts?.data.data]));
+        // dispatch(fetchPersonnels([...resPersonnels?.data.data]));
       } else {
         return;
       }

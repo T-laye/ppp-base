@@ -3,24 +3,55 @@ import React, { useState } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
 import PocList from "../../components/PocList";
 import { poc } from "/public/dummy.js";
+import { useSelector } from "react-redux";
 
 export default function Poc() {
   const [product, setProduct] = useState(false);
   const [term, setTerm] = useState("");
-const [activeTab, setActiveTab] = useState(1);
-
+  const [activeTab, setActiveTab] = useState(0);
+  const { products } = useSelector((state) => state.products);
 
   const setTab = (tab) => {
     setActiveTab(tab);
   };
 
+  function capitalizeWords(sentence) {
+    // Split the sentence into an array of words
+    let words = sentence?.split(" ");
+
+    // Iterate over each word
+    for (let i = 0; i < words?.length; i++) {
+      // Capitalize the first letter of each word
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+
+    // Join the words back into a sentence
+    return words?.join(" ");
+  }
+
+  const renderProductsTab = () => {
+    return products?.map((p, i) => {
+      return (
+        <div
+          key={i}
+          onClick={() => setTab(i + 1)}
+          className={`${
+            activeTab === i + 1
+              ? "bg-primary text-white"
+              : "border text-gray-400 "
+          }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
+        >
+          {capitalizeWords(p.name)}
+        </div>
+      );
+    });
+  };
 
   const handleProduct = () => {
     setProduct(!product);
   };
   const totalAssigned = poc.reduce((acc, p) => {
     return acc + p.assigned;
-
   }, 0);
 
   const totalAvail = poc.reduce((acc, p) => {
@@ -61,41 +92,16 @@ const [activeTab, setActiveTab] = useState(1);
 
   return (
     <section className="min-h-screen bg-green300 pt-4 pb-20">
-      {/* <div className="mt-3">
+      <div className="flex mt-4 max-[285px]:justify-center space-x-3 items-center mt4 mb-5 text-base">
         <div
-          onClick={handleProduct}
-          className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-52 px-4 py-1.5 rounded-xl mx-auto cursor-pointer"
-        >
-          <div className=" w-1/2 px-2 text-center">Fuel</div>
-          <div className=" w-1/2 text-center">Diesel</div>
-          <div
-            className={`${
-              product
-                ? "translate-x-full left-0.5 duration-200"
-                : "duration-200 translate-x-0 -left-0.5"
-            }  absolute duration-200 text-center text-base w-1/2 bg-primary text-white font-medium  top-0 rounded-xl py-1.5  `}
-          >
-            {product ? "Diesl" : "Fuel"}
-          </div>
-        </div>
-      </div> */}
-      <div className="flex space-x-3 items-center mt-4 text-base">
-        <div
-          onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
+          onClick={() => setTab(0)} // Wrap the setTab function call in an arrow function
           className={`${
-            activeTab === 1 ? "bg-primary text-white" : "border text-gray-400 "
+            activeTab === 0 ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
-          Fuel
+          All
         </div>
-        <div
-          onClick={() => setTab(2)} // Wrap the setTab function call in an arrow function
-          className={`${
-            activeTab === 2 ? "bg-primary text-white" : "border text-gray-400 "
-          }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
-        >
-          Desiel
-        </div>
+        {renderProductsTab()}
       </div>
       <div className="mt-6">
         <form action="" onSubmit={(e) => e.preventDefault()}>

@@ -80,13 +80,7 @@ export default function WorkForce() {
             </div>
           </div>
         </form>
-        {/* <button
-            // onClick={goToNewVoucher}
-            className="btn text-xl max-[285px]:mx-auto bg-primary"
-          >
-            Add New
-          </button> */}
-        {/* </div> */}
+
         <div className="text-end mt-3 text-sm text-gray-500 pr-2">10</div>
 
         <div className="bg-gren-400 pt-3 pb-10">

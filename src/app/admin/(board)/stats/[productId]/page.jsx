@@ -10,6 +10,7 @@ import { PiDropHalfBottomFill } from "react-icons/pi";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { toast } from "react-toastify";
 import { getProduct } from "@/redux/slices/getProductSlice";
 import Loading from "@/components/Loading";
 import Loader from "@/components/Loader";
@@ -37,14 +38,13 @@ export default function Page() {
 
   const handleDeleteCustomer = async () => {
     setIsLoading(true);
-    try{
-
+    try {
       const res = await axios.delete(`/api/product/${productId}`);
       if (res) {
         const resProducts = await axios.get(
           `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-         dispatch(fetchProducts([...resProducts?.data.data]));
+        dispatch(fetchProducts([...resProducts?.data.data]));
         setIsLoading(false);
         toast.success(res.data.message);
         setTimeout(() => {
@@ -52,8 +52,10 @@ export default function Page() {
           // window.location.reload();
         }, 500);
       }
-    } catch(err)
-    // console.log(res);
+    } catch (err) {
+      toast.success(err.data.message);
+      console.log(err);
+    }
   };
 
   const editProduct = () => {

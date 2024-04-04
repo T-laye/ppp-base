@@ -10,16 +10,31 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Vouchers() {
   const [approved, setApproved] = useState(false);
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const [showAddVoucher, setShowAddVoucher] = useState(false);
   const [term, setTerm] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
   const { customers } = useSelector((state) => state.customers);
+  const { products } = useSelector((state) => state.products);
 
   const handleProduct = () => {
     setApproved(!approved);
   };
+
+  function capitalizeWords(sentence) {
+    // Split the sentence into an array of words
+    let words = sentence?.split(" ");
+
+    // Iterate over each word
+    for (let i = 0; i < words?.length; i++) {
+      // Capitalize the first letter of each word
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+
+    // Join the words back into a sentence
+    return words?.join(" ");
+  }
 
   const handleAddVoucher = () => {
     setShowAddVoucher(!showAddVoucher);
@@ -36,6 +51,24 @@ export default function Vouchers() {
     }
   };
 
+  const renderProductsTab = () => {
+    return products?.map((p, i) => {
+      return (
+        <div
+          key={i}
+          onClick={() => setTab(i + 1)}
+          className={`${
+            activeTab === i + 1
+              ? "bg-primary text-white"
+              : "border text-gray-400 "
+          }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
+        >
+          {capitalizeWords(p.name)}
+        </div>
+      );
+    });
+  };
+
   const renderCustomers = () => {
     if (customers.length === 0 && term) {
       return <p>No Customer Found</p>;
@@ -48,7 +81,7 @@ export default function Vouchers() {
     <section className="relative min-h-screen bg-green300 py-4">
       <div className="mt-4 bg-red400">
         <div className="flex max-[285px]:justify-center space-x-3 items-center mt4 mb-5 text-base">
-          <div
+          {/* <div
             onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
             className={`${
               activeTab === 1
@@ -57,17 +90,18 @@ export default function Vouchers() {
             }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
           >
             Fuel
-          </div>
+          </div> */}
           <div
-            onClick={() => setTab(2)} // Wrap the setTab function call in an arrow function
+            onClick={() => setTab(0)} // Wrap the setTab function call in an arrow function
             className={`${
-              activeTab === 2
+              activeTab === 0
                 ? "bg-primary text-white"
                 : "border text-gray-400 "
             }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
           >
-            Desiel
+            All
           </div>
+          {renderProductsTab()}
         </div>
 
         <div className="flex flex-wrap justify-between gap-2 bg-bue-400 mb-8">
