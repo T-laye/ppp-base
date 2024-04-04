@@ -21,6 +21,9 @@ export default function Page() {
   const editPOC = () => {
     router.push("/admin/poc/id/editPOC");
   };
+  const assign = () => {
+    router.push("/admin/poc/id/assign");
+  };
   return (
     <section className="min-h-screen pt-8 pb-20">
       <div className="mb-3">
@@ -92,7 +95,11 @@ export default function Page() {
             icon={<ImDroplet size={16} />}
           />
 
-          <button onClick={editPOC} className="btn bg-primary w-full mt-5">
+          <button onClick={assign} className="btn bg-primary  w-full mt-5">
+            Assign Persons
+          </button>
+
+          <button onClick={editPOC} className="btn bg-yellow-500 w-full mt-5">
             Edit POC
           </button>
 

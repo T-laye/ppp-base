@@ -42,14 +42,14 @@ export default function Layout({ children }) {
         const resCustomers = await axios.get(
           `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-        const resProducts = await axios.get(
-          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}&createdBy=ADMIN`
-        );
-        console.log(resProducts);
+        // const resProducts = await axios.get(
+        //   `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}&createdBy=ADMIN`
+        // );
+        // console.log(resProducts);
         // console.log("res");
         dispatch(handleSearch(""));
-        dispatch(fetchCustomers([...resCustomers.data.data]));
-        dispatch(fetchProducts([...resProducts.data.data]));
+        dispatch(fetchCustomers([...resCustomers?.data.data]));
+        // dispatch(fetchProducts([...resProducts?.data.data]));
       } else {
         return;
       }
