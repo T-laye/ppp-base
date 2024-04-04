@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 export default function Stats() {
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
-  // console.log(customers);
+  console.log(products);
 
   const renderProducts = () => {
     // const renderCustomers = () => {
