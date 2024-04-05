@@ -83,7 +83,7 @@ export async function PATCH(req, context) {
     const addJ = {
       productName: name ? name : undefined,
       unit: unit ? unit : undefined,
-      voucherAllocation: voucherAllocation ? voucherAllocation : undefined,
+      voucherAllocation: voucherAllocation ? Number(voucherAllocation) : undefined,
     };
 
     const updateProduct = await prisma.product.update({
