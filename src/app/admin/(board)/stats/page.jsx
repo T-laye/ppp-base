@@ -1,5 +1,5 @@
-'use client'
-import React from "react";
+"use client";
+import React, { Suspense } from "react";
 import QuantityCards from "../../components/QuantityCards";
 import { product } from "/public/dummy.js";
 import { poc } from "/public/dummy.js";
@@ -10,10 +10,34 @@ import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import { IoMdTimer } from "react-icons/io";
 import { MdVerifiedUser } from "react-icons/md";
 import { useSelector } from "react-redux";
+import Loading from "@/components/Loading";
 
-  export default function Stats() {
-    const { customers } = useSelector((state) => state.customers);
-  // console.log(customers);
+export default function Stats() {
+  const { customers } = useSelector((state) => state.customers);
+  const { products } = useSelector((state) => state.products);
+  // console.log(products);
+
+  const renderProducts = () => {
+    // const renderCustomers = () => {
+    if (products) {
+      if (products?.length === 0) {
+        return <div>No Products Found</div>;
+      } else {
+        return products?.map((p) => (
+          <QuantityCards
+            key={p.productId}
+            info={p}
+            available={420}
+            total={600}
+          />
+        ));
+      }
+    } else {
+      return <Loading />;
+    }
+  };
+  // }
+
   return (
     <section className="pt-4 pb-20 bg-red-40 min-h-screen">
       <div>
@@ -59,16 +83,28 @@ import { useSelector } from "react-redux";
           />
         </div>
       </div>
+
       <div className="mt-10">
         <h4 className="font-medium text-base mt-2 text-center">
           Product Statistics
         </h4>
         {/* <h4 className="text-sm ">Hello, Admin</h4> */}
+        {renderProducts()}
         <div>
-          <QuantityCards title="Fuel Level" available={420} total={600} />
-          <QuantityCards title="Desiel Level" available={80} total={400} />
-          <QuantityCards title="Total Level" available={500} total={1000} />
-          {/* {renderProduct()} */}
+          {product.length !== 0 && (
+            <div className="rounded-xl border px-4 pt-1 pb-4 hover:text-white active:bg-primaryActive cursor-pointer active:border-primaryActive hover:bg-primaryActive duration-200 mt-4">
+              <div className="flex justify-between items-end">
+                <h4 className="text-lg font-medium">Total Level</h4>
+                <div className="text-base">500/1000</div>
+              </div>
+              <div className="h-2 bg-gray-300 rounded-xl mt-4 overflow-hidden">
+                <div
+                  style={{ width: "80%" }}
+                  className={`h-full rounded-xl w-[80%]   bg-yellow-500 `}
+                ></div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

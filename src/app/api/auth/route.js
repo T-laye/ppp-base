@@ -23,6 +23,7 @@ export async function GET() {
     // const v = verify(value, process.env.ACCESS_TOKEN_SECRET);
     const { value } = token;
     const decoded = verify(value, process.env.ACCESS_TOKEN_SECRET);
+    // console.log(decoded);
 
     const response = {
       user: decoded,

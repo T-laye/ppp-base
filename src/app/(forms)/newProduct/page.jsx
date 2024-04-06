@@ -11,11 +11,16 @@ import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { product_validate } from "../../../../lib/validate";
+import { useAddProductMutation } from "@/redux/slices/addProductApiSlice";
+import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 export default function NewProduct() {
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [addProduct, { isLoading, error }] = useAddProductMutation();
+  // const { userInfo } = useSelector((state) => state.auth);
+
+  // console.log(userInfo.role);
 
   const viewPassword = () => {
     setShowPassword(!showPassword);
@@ -39,13 +44,23 @@ export default function NewProduct() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    // const { email, password } = values;
-    console.log(values);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Successful");
-    }, 2000);
+    const { name, allocation_per_voucher, unit } = values;
+    try {
+      const res = await addProduct({
+        // role: userInfo.role,
+        name,
+        voucherAllocation: allocation_per_voucher,
+        unit,
+      }).unwrap();
+      // dispatch(setCredentials({ ...res.data }));
+      // console.log(res);
+      // console.log(values);
+      toast.success(res.message);
+      router.back();
+    } catch (e) {
+      toast.error(error);
+      // console.log(e);
+    }
   }
 
   const getInputClassNames = (fieldName) =>

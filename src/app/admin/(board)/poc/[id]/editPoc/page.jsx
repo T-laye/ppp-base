@@ -116,7 +116,7 @@ export default function Page() {
         <form onSubmit={formik.handleSubmit} className="mb-4">
           <div className="flex flex-col mb-4">
             <label className="text-sm mb-2" htmlFor="name">
-             POC Name
+              POC Name
             </label>
             <input
               id="name"
@@ -182,7 +182,7 @@ export default function Page() {
               <div className="text-error text-sm">{formik.errors.phone}</div>
             )}
           </div>
-          <div className="flex flex-col  mb-6">
+          {/* <div className="flex flex-col  mb-6">
             <label className="text-sm mb-2" htmlFor="personnel">
               Select Personnel
             </label>
@@ -198,15 +198,14 @@ export default function Page() {
               <option value="maxwell">Maxwell Luther</option>
               <option value="matthew">Matthew Chimney</option>
               <option value="james">James Jude</option>
-              {/* {renderJobCategories()} */}
             </select>
             {formik.touched.personnel && formik.errors.personnel && (
               <div className="text-error text-sm">
                 {formik.errors.personnel}
               </div>
             )}
-          </div>
-          <div className="flex flex-col  mb-6">
+          </div> */}
+          {/* <div className="flex flex-col  mb-6">
             <label className="text-sm mb-2" htmlFor="management">
               Select Management
             </label>
@@ -222,14 +221,13 @@ export default function Page() {
               <option value="maxwell">Maxwell Luther</option>
               <option value="matthew">Matthew Chimney</option>
               <option value="john">John mark</option>
-              {/* {renderJobCategories()} */}
             </select>
             {formik.touched.management && formik.errors.management && (
               <div className="text-error text-sm">
                 {formik.errors.management}
               </div>
             )}
-          </div>
+          </div> */}
           <div className="flex flex-col  mb-6">
             <label className="text-sm mb-2" htmlFor="product">
               Select Product
@@ -319,6 +317,12 @@ export default function Page() {
             {isLoading ? <Loader /> : "Save"}
           </button>
         </form>
+      </div>
+      <div>
+        <h2>Assign Personnel</h2>
+      </div>
+      <div>
+        <h2>Assign Management</h2>
       </div>
     </section>
   );

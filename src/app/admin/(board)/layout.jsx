@@ -9,6 +9,10 @@ import { ImSpinner9 } from "react-icons/im";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
+import { handleSearch } from "@/redux/slices/variableSlice";
+import { setCredentials } from "@/redux/slices/authSlice";
+import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
+import { fetchPersonnels } from "@/redux/slices/fetchPersonnelsSlice";
 // import { useGetCustomersMutation } from "@/redux/slices/takeSlice";
 
 export default function Layout({ children }) {
@@ -16,11 +20,9 @@ export default function Layout({ children }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const { pageNumber, take, search } = useSelector((state) => state.variables);
-  // const { take } = useSelector((state) => state);
-  // const [getCustomers, { isLoading, error }] = useGetCustomersMutation();
 
-  // const [login, { isLoading, error }] = useLoginMutation();
-  // console.log(take, pageNumber);
+  const { userInfo } = useSelector((state) => state.auth);
+  // console.log(userInfo);
   useEffect(() => {
     (async () => {
       const { user } = await getUser();
@@ -29,7 +31,7 @@ export default function Layout({ children }) {
         setIsAuth(false);
         return;
       } else {
-        // if no error
+        dispatch(setCredentials({ ...user.user }));
         setIsAuth(true);
       }
     })();
@@ -38,13 +40,22 @@ export default function Layout({ children }) {
   useEffect(() => {
     (async () => {
       if (isAuth) {
-        const res = await axios.get(
+        const resCustomers = await axios.get(
           `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-        // console.log(res);
+        const resProducts = await axios.get(
+          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        );
+        // const resPersonnels = await axios.get(
+        //   `/api/personnel?name=${search}`
+        // );
+        // console.log(resProducts.data);
+        // console.log(resPersonnels);
         // console.log("res");
-
-        dispatch(fetchCustomers([...res.data.data]));
+        dispatch(handleSearch(""));
+        dispatch(fetchCustomers([...resCustomers?.data.data]));
+        dispatch(fetchProducts([...resProducts?.data.data]));
+        // dispatch(fetchPersonnels([...resPersonnels?.data.data]));
       } else {
         return;
       }

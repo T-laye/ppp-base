@@ -9,10 +9,12 @@ import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { poc_validate } from "../../../../lib/validate";
+import { useAddPocMutation } from "@/redux/slices/addPocApiSlice";
 
 export default function NewPoc() {
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const [addPoc, { isLoading, error }] = useAddPocMutation();
 
   const router = useRouter();
 
@@ -38,15 +40,39 @@ export default function NewPoc() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    // const { email, password } = values;
-    console.log(values);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Successful");
-    }, 2000);
+    const {
+      name,
+      email,
+      phone,
+      address,
+      personnel,
+      management,
+      product,
+      limit,
+      available,
+    } = values;
+    try {
+      const res = await addPoc({
+        poc_name:name,
+        phoneNumber:phone,
+        address,
+        email,
+        product_name:product,
+        stockLimit:limit,
+        product_unit:'litres',
+        stockAvailable:available,
+        voucher_allocation: 300,
+      }).unwrap();
+      // dispatch(setCredentials({ ...res.data }));
+      console.log(res);
+      // console.log(values);
+      toast.success(res.message);
+      router.back();
+    } catch (e) {
+      toast.error(e.data.message);
+      // console.log(e);
+    }
   }
-
   const getInputClassNames = (fieldName) =>
     `${
       formik.errors[fieldName] && formik.touched[fieldName]

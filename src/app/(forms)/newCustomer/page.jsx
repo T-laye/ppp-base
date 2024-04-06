@@ -7,7 +7,7 @@ import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { new_customer_validate } from "../../../../lib/validate";
-import { useAddCustomerMutation } from "@/redux/slices/addCustomerApiSlice";
+import { useAddCustomerMutation } from "@/redux/slices/customerApiSlice";
 
 export default function NewCustomer() {
   const [isFormValid, setIsFormValid] = useState(false);
