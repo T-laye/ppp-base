@@ -181,7 +181,7 @@ export async function GET() {
       return NextResponse.json(
         ApiResponseDto({
           statusCode: 404,
-          message: "poc details not found",
+          message: "personnel details not found",
         }),
         { status: 200 }
       );
