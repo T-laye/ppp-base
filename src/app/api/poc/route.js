@@ -20,12 +20,13 @@ export async function POST(req, res) {
         status: 403,
       });
     }
+    // console.log(authResponse);
     const body = await req.json();
     const {
       poc_name,
       phoneNumber,
       address,
-      email,
+      email,  
       product_name,
       stockLimit,
       product_unit,

@@ -10,7 +10,7 @@ export default function Poc() {
   const [term, setTerm] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const { products } = useSelector((state) => state.products);
-
+const {data, count} = products
   const setTab = (tab) => {
     setActiveTab(tab);
   };
@@ -30,7 +30,7 @@ export default function Poc() {
   }
 
   const renderProductsTab = () => {
-    return products?.map((p, i) => {
+    return data?.map((p, i) => {
       return (
         <div
           key={i}
@@ -46,6 +46,7 @@ export default function Poc() {
       );
     });
   };
+
 
   const handleProduct = () => {
     setProduct(!product);

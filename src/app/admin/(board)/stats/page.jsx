@@ -15,15 +15,16 @@ import Loading from "@/components/Loading";
 export default function Stats() {
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
-  // console.log(products);
+  const { count, data } = products;
+  // console.log(customers);
 
   const renderProducts = () => {
     // const renderCustomers = () => {
-    if (products) {
-      if (products?.length === 0) {
+    if (data) {
+      if (count === 0) {
         return <div>No Products Found</div>;
       } else {
-        return products?.map((p) => (
+        return data?.map((p) => (
           <QuantityCards
             key={p.productId}
             info={p}
@@ -49,7 +50,7 @@ export default function Stats() {
           <StatsCard
             link="/admin/stats/customers"
             color="bg-error"
-            number={customers?.length}
+            number={customers?.count ?? 0}
             title="Customers"
             icon={<FaUsers size={26} />}
           />
@@ -91,7 +92,7 @@ export default function Stats() {
         {/* <h4 className="text-sm ">Hello, Admin</h4> */}
         {renderProducts()}
         <div>
-          {product.length !== 0 && (
+          {count && data && (
             <div className="rounded-xl border px-4 pt-1 pb-4 hover:text-white active:bg-primaryActive cursor-pointer active:border-primaryActive hover:bg-primaryActive duration-200 mt-4">
               <div className="flex justify-between items-end">
                 <h4 className="text-lg font-medium">Total Level</h4>
