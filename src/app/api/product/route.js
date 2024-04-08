@@ -5,7 +5,7 @@ import { getAuthUser } from "../../../../lib/get-auth-user";
 
 export async function POST(req, res) {
   try {
-    const authRes = await getAuthUser(req, prisma, true);
+    const authRes = await getAuthUser(req, true);
     if (authRes?.user?.role !== "ADMIN") {
       return NextResponse.json(
         ApiResponseDto({
@@ -45,7 +45,7 @@ export async function POST(req, res) {
 
 export async function GET(req, res) {
   try {
-    const authResponse = await getAuthUser(req, prisma, false);
+    const authResponse = await getAuthUser(req, false);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
