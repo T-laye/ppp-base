@@ -2,7 +2,6 @@ import { prisma } from "../../../../../config/prisma.connect";
 import { NextResponse } from "next/server";
 import { getAuthUser } from "../../../../../lib/get-auth-user";
 import ApiResponseDto from "../../../../../lib/apiResponseHelper";
-import { product } from "../../../../../public/dummy";
 
 export async function GET(req, res) {
   try {
@@ -16,7 +15,6 @@ export async function GET(req, res) {
         { status: authResponse.status }
       );
     }
-
     if (authResponse.user.role !== "ADMIN") {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
         status: 403,
