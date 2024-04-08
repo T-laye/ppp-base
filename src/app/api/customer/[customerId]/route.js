@@ -6,7 +6,7 @@ import { getAuthUser } from "../../../../../lib/get-auth-user";
 
 export async function PATCH(req, context) {
   try {
-    const authResponse = await getAuthUser(req, prisma, true);
+    const authResponse = await getAuthUser(req, true);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -56,7 +56,7 @@ export async function PATCH(req, context) {
 
 export async function GET(req, context) {
   try {
-    const userResponse = await getAuthUser(req, prisma, true);
+    const userResponse = await getAuthUser(req, true);
 
     if (userResponse.error) {
       return NextResponse.json(
@@ -144,7 +144,7 @@ function mapCustomer(customer) {
 
 export async function DELETE(req, context) {
   try {
-    const authResponse = await getAuthUser(req, prisma, true);
+    const authResponse = await getAuthUser(req, true);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({

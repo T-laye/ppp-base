@@ -5,7 +5,7 @@ import { getAuthUser } from "../../../../lib/get-auth-user";
 
 export async function POST(req, res) {
   try {
-    const authResponse = await getAuthUser(req, prisma, true);
+    const authResponse = await getAuthUser(req, true);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -53,9 +53,9 @@ export async function POST(req, res) {
         },
         stockAvailable,
         stockLimit,
-        admin: {
+        user: {
           connect: {
-            adminId: authResponse.user.id,
+            id: authResponse.user.id,
           },
         },
       },
@@ -81,7 +81,7 @@ export async function POST(req, res) {
 
 export async function GET() {
   try {
-    const authResponse = await getAuthUser(req, prisma, false);
+    const authResponse = await getAuthUser(req, false);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({

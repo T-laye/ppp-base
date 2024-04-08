@@ -88,7 +88,7 @@ export async function PATCH(req, context) {
 
 export async function DELETE(req, context) {
   try {
-    const authResponse = await getAuthUser(req, prisma, true);
+    const authResponse = await getAuthUser(req, true);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -150,7 +150,7 @@ export async function DELETE(req, context) {
 
 export async function GET() {
   try {
-    const authResponse = await getAuthUser(req, prisma, true);
+    const authResponse = await getAuthUser(req, true);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
