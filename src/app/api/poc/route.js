@@ -52,9 +52,9 @@ export async function POST(req, res) {
         },
         stockAvailable,
         stockLimit,
-        admin: {
+        user: {
           connect: {
-            adminId: authResponse.user.id,
+            id: authResponse.user.id,
           },
         },
       },

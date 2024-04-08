@@ -4,25 +4,26 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("PPP_BASE")
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id          String       @id @default(uuid())
-  email       String       @unique
+  id          String               @id @default(uuid())
+  email       String               @unique
   name        String
   password    String
   address     String
   phoneNumber String
-  role        UserType     @default(PERSONNEL)
+  role        UserType             @default(PERSONNEL)
   gender      Gender
-  personnel   Personnel[]  @relation("user")
-  createdBy   Personnel[]  @relation("createdBy")
+  personnel   Personnel[]          @relation("user")
+  createdBy   Personnel[]          @relation("createdBy")
   Management  Management[]
   Customer    Customer[]
   Admin       Admin[]
   Product     Product[]
-  createdDate DateTime    @default(now()) @db.Timestamptz()
+  createdDate DateTime             @default(now()) @db.Timestamptz()
+  poc         PointOfConsumption[]
 
   @@index([email, id, phoneNumber])
 }
@@ -64,14 +65,16 @@ model PointOfConsumption {
   email          String      @unique
   createdAt      DateTime    @default(now()) @db.Timestamptz()
   updatedAt      DateTime    @default(now()) @updatedAt
-  personnelId    String
-  managementId   String
+  personnelId    String?
+  managementId   String?
   stockLimit     Int
   stockAvailable Int
   Customer       Customer[]
-  adminId        String
+  adminId        String?
   product        Product     @relation(fields: [productId], references: [id])
   productId      String
+  user           User        @relation(fields: [createdBy], references: [id])
+  createdBy      String
 
   @@index([pocId, name])
 }
