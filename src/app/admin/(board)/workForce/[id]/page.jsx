@@ -1,9 +1,9 @@
 "use client";
 import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
-import React from "react";
+import React, { useEffect } from "react";
 import { MdAssignmentTurnedIn } from "react-icons/md";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
@@ -11,12 +11,30 @@ import { BsFillFuelPumpDieselFill } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
 import { IoLocationSharp } from "react-icons/io5";
 import { BsPersonFillGear } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { getWorker } from "@/redux/slices/getWorkerSlice";
+import axios from "axios";
 
 export default function Page() {
   const router = useRouter();
+  const { id } = useParams();
+  const { worker } = useSelector((state) => state.worker);
+  const dispatch = useDispatch();
+  console.log(worker);
+
+  useEffect(() => {
+    const getWorkerDetails = async () => {
+      const res = await axios.get(`/api/personnel/${id}`);
+
+      // console.log(res);
+      dispatch(getWorker({ ...res.data.data }));
+    };
+
+    getWorkerDetails();
+  }, [dispatch, id]);
 
   const editPerson = () => {
-    router.push("/admin/workForce/id/editPerson");
+    router.push(`/admin/workForce/${id}/editPerson`);
   };
   return (
     <section className="min-h-screen pt-8 pb-20">

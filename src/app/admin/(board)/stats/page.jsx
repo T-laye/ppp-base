@@ -22,7 +22,7 @@ export default function Stats() {
     // const renderCustomers = () => {
     if (data) {
       if (count === 0) {
-        return <div>No Products Found</div>;
+        return <div className="text-lg">No Products Found</div>;
       } else {
         return data?.map((p) => (
           <QuantityCards
@@ -85,14 +85,14 @@ export default function Stats() {
         </div>
       </div>
 
-      {data && <div className="mt-10">
+      <div className="mt-10">
         <h4 className="font-medium text-base mt-2 text-center">
           Product Statistics
         </h4>
         {/* <h4 className="text-sm ">Hello, Admin</h4> */}
         {renderProducts()}
         <div>
-          {count && data && (
+          {data && count !== 0 && (
             <div className="rounded-xl border px-4 pt-1 pb-4 hover:text-white active:bg-primaryActive cursor-pointer active:border-primaryActive hover:bg-primaryActive duration-200 mt-4">
               <div className="flex justify-between items-end">
                 <h4 className="text-lg font-medium">Total Level</h4>
@@ -107,7 +107,7 @@ export default function Stats() {
             </div>
           )}
         </div>
-      </div>}
+      </div>
     </section>
   );
 }

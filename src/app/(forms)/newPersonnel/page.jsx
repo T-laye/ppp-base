@@ -11,17 +11,19 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useRegisterMutation } from "@/redux/slices/registerApiSlice";
 import { personnel_validate } from "../../../../lib/validate";
+import { useSelector } from "react-redux";
 
 export default function NewPersonnel() {
   const [isFormValid, setIsFormValid] = useState(false);
   // const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [register, { isLoading, error }] = useRegisterMutation();
+  const { userInfo } = useSelector((state) => state.auth);
   const router = useRouter();
   const viewPassword = () => {
     setShowPassword(!showPassword);
   };
-
+  console.log(userInfo);
   const formik = useFormik({
     initialValues: {
       fullName: "",
@@ -51,6 +53,7 @@ export default function NewPersonnel() {
         password,
         role,
         gender,
+        createdBy: userInfo?.role,
       }).unwrap();
       // dispatch(setCredentials({ ...res.data }));
       // console.log(res);
