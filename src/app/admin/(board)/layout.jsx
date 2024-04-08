@@ -47,15 +47,15 @@ export default function Layout({ children }) {
           `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
         const resPersonnels = await axios.get(
-          `/api/personnel?take=${take}&pageNumber=${pageNumber}&name=${search}`
+          `/api/admin/staff?name=${search}&email=''&role=''`
         );
         // console.log(resProducts.data);
         // console.log(resCustomers);
         console.log(resPersonnels);
         dispatch(handleSearch(""));
-        dispatch(fetchCustomers({...resCustomers?.data}));
-        dispatch(fetchProducts({...resProducts?.data}));
-        dispatch(fetchPersonnels({...resPersonnels?.data}));
+        dispatch(fetchCustomers({ ...resCustomers?.data }));
+        dispatch(fetchProducts({ ...resProducts?.data }));
+        dispatch(fetchPersonnels({ ...resPersonnels?.data }));
       } else {
         return;
       }

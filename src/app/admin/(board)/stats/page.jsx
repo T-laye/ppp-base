@@ -85,7 +85,7 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="mt-10">
+      {data && <div className="mt-10">
         <h4 className="font-medium text-base mt-2 text-center">
           Product Statistics
         </h4>
@@ -107,7 +107,7 @@ export default function Stats() {
             </div>
           )}
         </div>
-      </div>
+      </div>}
     </section>
   );
 }
