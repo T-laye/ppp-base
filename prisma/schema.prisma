@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("PPP_BASE")
 }
 
 model User {
@@ -35,7 +35,7 @@ model Personnel {
   personnelPerformance Performance[]
   poc                  PointOfConsumption[]
   userId               String
-  createdBy            User                 @relation(fields: [createdById], references: [id], name: "createdBy")
+  createdBy            User?                 @relation(fields: [createdById], references: [id], name: "createdBy")
   createdById          String
 
   @@index([personnelId])
