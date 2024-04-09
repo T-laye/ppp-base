@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { signIn_validate } from "../../../../lib/validate";
+import { personnel_validate, signIn_validate } from "../../../../lib/validate";
 import ApiResponseDto from "../../../../lib/apiResponseHelper";
 import _isUserAvailable from "../../../../repo/check-user-available";
 import { prisma } from "../../../../config/prisma.connect";
@@ -23,7 +23,7 @@ export async function POST(req, res) {
   if (Object.keys(error).length > 0)
     return NextResponse.json(handleError, { status: 400 });
 
-  const { email, password, address, phoneNumber, name, gender, role } = body;
+  const { email, password, address, phoneNumber, name, gender, role, createdBy } = body;
   try {
     const cookiesStore = cookies();
     const token = cookiesStore.get("ppp-base");

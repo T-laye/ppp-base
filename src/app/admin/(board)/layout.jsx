@@ -46,16 +46,16 @@ export default function Layout({ children }) {
         const resProducts = await axios.get(
           `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-        // const resPersonnels = await axios.get(
-        //   `/api/personnel?name=${search}`
-        // );
+        const resPersonnels = await axios.get(
+          `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
+        );
         // console.log(resProducts.data);
-        // console.log(resPersonnels);
-        // console.log("res");
+        // console.log(resCustomers);
+        // console.log(resPersonnels.data);
         dispatch(handleSearch(""));
-        dispatch(fetchCustomers([...resCustomers?.data.data]));
-        dispatch(fetchProducts([...resProducts?.data.data]));
-        // dispatch(fetchPersonnels([...resPersonnels?.data.data]));
+        dispatch(fetchCustomers({ ...resCustomers?.data }));
+        dispatch(fetchProducts({ ...resProducts?.data }));
+        dispatch(fetchPersonnels({ ...resPersonnels?.data }));
       } else {
         return;
       }

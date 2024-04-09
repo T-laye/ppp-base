@@ -12,9 +12,10 @@ export default function Customers() {
   const [term, setTerm] = useState("");
   const router = useRouter();
   const { customers } = useSelector((state) => state.customers);
+  const { data, count } = customers;
   const dispatch = useDispatch();
 
-  // console.log(term);
+  // console.log(customers);
 
   const addCustomer = () => {
     router.push("/newCustomer");
@@ -28,11 +29,11 @@ export default function Customers() {
   };
 
   const renderCustomers = () => {
-    if (customers) {
-      if (customers?.length === 0) {
-        return <div>No customers Found</div>;
+    if (data) {
+      if (count === 0) {
+        return <div>No Customers Found</div>;
       } else {
-        return customers.map((c) => <CustomerList key={c?.customerId} c={c} />);
+        return data?.map((c) => <CustomerList key={c?.customerId} c={c} />);
       }
     } else {
       return <Loading />;
@@ -70,7 +71,7 @@ export default function Customers() {
           </div>
         </form>
         <div className="text-end mt-3 text-sm text-gray-500 pr-2">
-          {customers?.length}
+          {term.length < 3 && count ? count : ""}
         </div>
 
         <div className="bg-gren-400 pt-3 pb-10">

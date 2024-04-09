@@ -1,21 +1,23 @@
 "use client";
 import GoBack from "@/components/GoBack";
-import React from "react";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { poc_validate } from "../../../../lib/validate";
 import { useAddPocMutation } from "@/redux/slices/addPocApiSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getProduct } from "@/redux/slices/getProductSlice";
+import axios from "axios";
 
 export default function NewPoc() {
   const [isFormValid, setIsFormValid] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
-  const [addPoc, { isLoading, error }] = useAddPocMutation();
-
+  const [addPoc, { isLoading }] = useAddPocMutation();
+  const { products } = useSelector((state) => state.products);
+  const { count, data } = products;
+  const { product } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
   const router = useRouter();
 
   const formik = useFormik({
@@ -24,66 +26,84 @@ export default function NewPoc() {
       email: "",
       phone: "",
       address: "",
-      personnel: "",
-      management: "",
-      product: "",
+      product_name: "",
       limit: 0,
       available: 0,
+      allocation: "", // Initialize allocation here
+      unit: "", // Initialize allocation here
     },
     validate: poc_validate,
     onSubmit: handleSubmit,
   });
-  // console.log(formik.isValid);
-
   useEffect(() => {
     setIsFormValid(formik.isValid);
-  }, [formik.values, formik.errors, formik.isValid]);
+  }, [formik.isValid]);
+
+  useEffect(() => {
+    if (product?.voucherAllocation !== undefined) {
+      formik.setFieldValue("allocation", product.voucherAllocation);
+    }
+    if (product?.unit !== undefined) {
+      formik.setFieldValue("unit", product.unit);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
 
   async function handleSubmit(values) {
-    const {
-      name,
-      email,
-      phone,
-      address,
-      personnel,
-      management,
-      product,
-      limit,
-      available,
-    } = values;
+    const { name, email, phone, address, limit, available, unit, allocation } =
+      values;
     try {
       const res = await addPoc({
-        poc_name:name,
-        phoneNumber:phone,
+        poc_name: name,
+        phoneNumber: phone,
         address,
         email,
-        product_name:product,
-        stockLimit:limit,
-        product_unit:'litres',
-        stockAvailable:available,
-        voucher_allocation: 300,
+        product_name: product.productName,
+        stockLimit: limit,
+        product_unit: unit,
+        stockAvailable: available,
+        voucher_allocation: allocation, // Use values.allocation here
       }).unwrap();
-      // dispatch(setCredentials({ ...res.data }));
       console.log(res);
-      // console.log(values);
       toast.success(res.message);
-      router.back();
+      // router.back();
     } catch (e) {
       toast.error(e.data.message);
-      // console.log(e);
     }
   }
+
+  useEffect(() => {
+    const getProductDetails = async () => {
+      if (formik.values.product_name) {
+        try {
+          const res = await axios.get(
+            `/api/product/${formik.values.product_name}`
+          );
+          dispatch(getProduct(res.data.data));
+          // console.log(formik.values.product);
+        } catch (error) {
+          console.error("Error fetching product:", error);
+        }
+      }
+    };
+
+    getProductDetails();
+  }, [dispatch, formik.values.product_name]);
+
+  const renderProducts = () => {
+    return data?.map((p) => (
+      <option key={p.productId} value={p.productId}>
+        {p.name}
+      </option>
+    ));
+  };
+
   const getInputClassNames = (fieldName) =>
     `${
       formik.errors[fieldName] && formik.touched[fieldName]
         ? "border-error text-error"
         : ""
     }`;
-
-  const [showBg, setShowBg] = useState(false);
-  setTimeout(() => {
-    setShowBg(!showBg);
-  }, 5000);
 
   return (
     <section className="bg-green300 min-h-screen">
@@ -169,7 +189,7 @@ export default function NewPoc() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col  mb-6">
+              {/* <div className="flex flex-col  mb-6">
                 <label className="text-sm mb-2" htmlFor="personnel">
                   Select Personnel
                 </label>
@@ -185,7 +205,6 @@ export default function NewPoc() {
                   <option value="maxwell">Maxwell Luther</option>
                   <option value="matthew">Matthew Chimney</option>
                   <option value="james">James Jude</option>
-                  {/* {renderJobCategories()} */}
                 </select>
                 {formik.touched.personnel && formik.errors.personnel && (
                   <div className="text-error text-sm">
@@ -209,34 +228,35 @@ export default function NewPoc() {
                   <option value="maxwell">Maxwell Luther</option>
                   <option value="matthew">Matthew Chimney</option>
                   <option value="john">John mark</option>
-                  {/* {renderJobCategories()} */}
-                </select>
+                  </select>
                 {formik.touched.management && formik.errors.management && (
                   <div className="text-error text-sm">
                     {formik.errors.management}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="flex flex-col  mb-6">
-                <label className="text-sm mb-2" htmlFor="product">
+                <label className="text-sm mb-2" htmlFor="product_name">
                   Select Product
                 </label>
                 <select
-                  // disabled
-                  id="product"
-                  name="product"
-                  placeholder="Select Product"
-                  className={getInputClassNames("product")}
-                  {...formik.getFieldProps("product")}
+                  disabled={!count}
+                  // readOnly
+                  id="product_name"
+                  name="product_name"
+                  // onChange={handleproduct_nameChange}
+                  placeholder="Select product"
+                  className={getInputClassNames("product_name")}
+                  {...formik.getFieldProps("product_name")}
                 >
-                  <option>Select product</option>
-                  <option value="fuel">Fuel</option>
-                  <option value="diesel">Diesel</option>
-                  {/* {renderJobCategories()} */}
+                  <option>Select Product</option>
+                  {/* <option value="fuel">Fuel</option>
+                  <option value="diesel">Diesel</option> */}
+                  {renderProducts()}
                 </select>
-                {formik.touched.product && formik.errors.product && (
+                {formik.touched.product_name && formik.errors.product_name && (
                   <div className="text-error text-sm">
-                    {formik.errors.product}
+                    {formik.errors.product_name}
                   </div>
                 )}
               </div>
@@ -274,6 +294,48 @@ export default function NewPoc() {
                   <div className="text-error text-sm">
                     {formik.errors.available}
                   </div>
+                )}
+              </div>
+              <div className="flex flex-col mb-4">
+                <label className="text-sm mb-2" htmlFor="allocation">
+                  Voucher Allocation
+                </label>
+                <input
+                  disabled
+                  id="allocation"
+                  name="allocation"
+                  type="number"
+                  value={formik.values.allocation}
+                  onChange={formik.handleChange}
+                  // value="0000"
+                  placeholder="Enter allocation"
+                  className={getInputClassNames("allocation")}
+                  {...formik.getFieldProps("allocation")}
+                />
+                {formik.touched.allocation && formik.errors.allocation && (
+                  <div className="text-error text-sm">
+                    {formik.errors.allocation}
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col mb-4">
+                <label className="text-sm mb-2" htmlFor="unit">
+                  Product Unit
+                </label>
+                <input
+                  disabled
+                  id="unit"
+                  name="unit"
+                  type="text"
+                  value={formik.values.unit}
+                  onChange={formik.handleChange}
+                  // value="0000"
+                  placeholder="Enter unit"
+                  className={getInputClassNames("unit")}
+                  {...formik.getFieldProps("unit")}
+                />
+                {formik.touched.unit && formik.errors.unit && (
+                  <div className="text-error text-sm">{formik.errors.unit}</div>
                 )}
               </div>
 

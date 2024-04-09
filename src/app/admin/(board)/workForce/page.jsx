@@ -3,11 +3,17 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import PersonnelList from "../../components/PersonnelList";
+import { useSelector } from "react-redux";
+import Loading from "@/components/Loading";
 
 export default function WorkForce() {
   const [activeTab, setActiveTab] = useState(1);
   const [term, setTerm] = useState("");
   const router = useRouter();
+  const { personnels } = useSelector((state) => state.personnels);
+  const { data, count } = personnels;
+
+  console.log(data);
 
   const goToNewPersonnel = () => {
     router.push("/newPersonnel");
@@ -18,6 +24,44 @@ export default function WorkForce() {
 
   const handleChange = (e) => {
     setTerm(e.target.value);
+  };
+
+  const renderPersons = () => {
+    // const renderCustomers = () => {
+    if (data) {
+      if (count === 0) {
+        return <div className="text-lg">No Personnel Found</div>;
+      } else {
+        const adminPersons = data.filter(
+          (p) => p.role.toLowerCase() === "admin"
+        );
+        const managementPersons = data.filter(
+          (p) => p.role.toLowerCase() === "management"
+        );
+        const personnelPersons = data.filter(
+          (p) => p.role.toLowerCase() === "personnel"
+        );
+
+        return (
+          <>
+            {/* <div className="text-lg">Admins:</div> */}
+            {adminPersons.map((p) => (
+              <PersonnelList key={p.id} info={p} />
+            ))}
+            {/* <div className="text-lg">Management:</div> */}
+            {managementPersons.map((p) => (
+              <PersonnelList key={p.id} info={p} />
+            ))}
+            {/* <div className="text-lg">Personnel:</div> */}
+            {personnelPersons.map((p) => (
+              <PersonnelList key={p.id} info={p} />
+            ))}
+          </>
+        );
+      }
+    } else {
+      return <Loading />;
+    }
   };
 
   return (
@@ -81,38 +125,12 @@ export default function WorkForce() {
           </div>
         </form>
 
-        <div className="text-end mt-3 text-sm text-gray-500 pr-2">10</div>
+        <div className="text-end mt-3 text-sm text-gray-500 pr-2">
+          {count ?? 0}
+        </div>
 
         <div className="bg-gren-400 pt-3 pb-10">
-          <ul>
-            {(activeTab === 1 || activeTab === 4) && (
-              <PersonnelList name="John Doe" role="admin" />
-            )}
-            {(activeTab === 1 || activeTab === 2) && (
-              <PersonnelList name="Mark Timmy" role="personnel" />
-            )}
-            {(activeTab === 1 || activeTab === 4) && (
-              <PersonnelList name="Tiebebedigha Tubolayefa" role="admin" />
-            )}
-            {(activeTab === 1 || activeTab === 2) && (
-              <PersonnelList name="Mchael Tega" role="personnel" />
-            )}
-            {(activeTab === 1 || activeTab === 3) && (
-              <PersonnelList name="Susan Bournsmouth" role="management" />
-            )}
-            {(activeTab === 1 || activeTab === 3) && (
-              <PersonnelList name="Onoyake James" role="management" />
-            )}
-            {(activeTab === 1 || activeTab === 2) && (
-              <PersonnelList name="Etuk Obong" role="personnel" />
-            )}
-            {(activeTab === 1 || activeTab === 2) && (
-              <PersonnelList name="Ogar Jude" role="personnel" />
-            )}
-            {(activeTab === 1 || activeTab === 3) && (
-              <PersonnelList name="Marvelous Ikechi" role="management" />
-            )}
-          </ul>
+          <ul>{renderPersons()}</ul>
         </div>
       </div>
     </section>

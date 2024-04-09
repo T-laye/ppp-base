@@ -9,11 +9,16 @@ import { ImSpinner9 } from "react-icons/im";
 import axios from "axios";
 import { setCredentials } from "@/redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { handleSearch } from "@/redux/slices/variableSlice";
+import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
+import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
 
 export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
+  const { pageNumber, take, search } = useSelector((state) => state.variables);
+
   const { userInfo } = useSelector((state) => state.auth);
 
   // console.log(userInfo);
@@ -36,6 +41,32 @@ export default function Layout({ children }) {
     })();
   }, [dispatch, router]);
   // console.log(isAuth);
+
+  
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        const resCustomers = await axios.get(
+          `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        );
+        const resProducts = await axios.get(
+          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        );
+        // const resPersonnels = await axios.get(
+        //   `/api/personnel?name=${search}`
+        // );
+        // console.log(resProducts.data);
+        // console.log(resCustomers);
+        // console.log("res");
+        dispatch(handleSearch(""));
+        dispatch(fetchCustomers({ ...resCustomers?.data }));
+        dispatch(fetchProducts({ ...resProducts?.data }));
+        // dispatch(fetchPersonnels([...resPersonnels?.data.data]));
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, search, take]);
 
   if (!isAuth) {
     return (
