@@ -61,7 +61,7 @@ export default function Layout({ children }) {
             `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
           );
           dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-        }, 2000);
+        }, 500);
 
         // console.log(resPocs.data);
         // console.log(resCustomers);
