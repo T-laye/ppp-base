@@ -44,7 +44,7 @@ export default function Page() {
       console.log(res)
       if (res) {
         setIsLoading(false);
-        toast.success(res.data.data.message);
+        toast.success(res.data.message);
         const resProducts = await axios.get(
           `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );

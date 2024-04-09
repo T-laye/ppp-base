@@ -3,7 +3,8 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import PersonnelList from "../../components/PersonnelList";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { handleSearch } from "@/redux/slices/variableSlice";
 import Loading from "@/components/Loading";
 
 export default function WorkForce() {
@@ -12,8 +13,8 @@ export default function WorkForce() {
   const router = useRouter();
   const { personnels } = useSelector((state) => state.personnels);
   const { data, count } = personnels;
-
-  console.log(data);
+  const dispatch = useDispatch();
+  // console.log(data);
 
   const goToNewPersonnel = () => {
     router.push("/newPersonnel");
@@ -22,9 +23,13 @@ export default function WorkForce() {
     setActiveTab(tab);
   };
 
-  const handleChange = (e) => {
-    setTerm(e.target.value);
-  };
+ const handleChange = (e) => {
+   setTerm(e.target.value);
+   if (e.target.value.length >= 3 || e.target.value.length === 0) {
+     dispatch(handleSearch(e.target.value.toLowerCase()));
+   }
+ };
+
 
   const renderPersons = () => {
     // const renderCustomers = () => {

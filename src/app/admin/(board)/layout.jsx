@@ -13,6 +13,7 @@ import { handleSearch } from "@/redux/slices/variableSlice";
 import { setCredentials } from "@/redux/slices/authSlice";
 import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
 import { fetchPersonnels } from "@/redux/slices/fetchPersonnelsSlice";
+import { fetchPocs } from "@/redux/slices/fetchPocsSlice";
 // import { useGetCustomersMutation } from "@/redux/slices/takeSlice";
 
 export default function Layout({ children }) {
@@ -49,7 +50,7 @@ export default function Layout({ children }) {
         const resPersonnels = await axios.get(
           `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
         );
-        const resPoc = await axios.get(
+        const resPocs = await axios.get(
           `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}`
         );
         console.log(resPoc.data);
@@ -59,6 +60,7 @@ export default function Layout({ children }) {
         dispatch(fetchCustomers({ ...resCustomers?.data }));
         dispatch(fetchProducts({ ...resProducts?.data }));
         dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+        dispatch(fetchPocs({ ...resPocs?.data }));
       } else {
         return;
       }

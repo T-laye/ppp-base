@@ -17,6 +17,7 @@ export default function Stats() {
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
   const { personnels } = useSelector((state) => state.personnels);
+  const { pocs } = useSelector((state) => state.pocs);
   const { count, data } = products;
   // console.log(customers);
 
@@ -58,7 +59,7 @@ export default function Stats() {
           />
           <StatsCard
             link="/admin/poc"
-            number={324}
+            number={pocs.count ?? 0}
             color="bg-blue-400"
             title="POC"
             icon={<GiGasPump size={24} />}
