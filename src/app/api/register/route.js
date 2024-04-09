@@ -4,10 +4,8 @@ import ApiResponseDto from "../../../../lib/apiResponseHelper";
 import _isUserAvailable from "../../../../repo/check-user-available";
 import { prisma } from "../../../../config/prisma.connect";
 import hashPassword from "../../../../lib/hashHelper";
-import { serialize } from "cookie";
 import { verify } from "jsonwebtoken";
 import { cookies } from "next/headers";
-import createAccessToken from "../../../../lib/sign-jwt";
 
 export async function POST(req, res) {
   
@@ -82,15 +80,6 @@ export async function POST(req, res) {
         }
         return createdUser;
       });
-
-      const setToken = createAccessToken(newUser.id, newUser.email);
-      const atCookie = serialize("ppp-base", setToken, {
-        httpOnly: false,
-        sameSite: "strict",
-        secure: process.env.NODE_ENV === "development" ? false : true,
-        maxAge: 60 * 60 * 24 * 7, // expires in 1 week
-        path: "/",
-      });
       const createUserResponse = ApiResponseDto({
         message: `${newUser.role.toLowerCase()} created successfully`,
         data: {
@@ -104,7 +93,6 @@ export async function POST(req, res) {
       });
       return NextResponse.json(createUserResponse, {
         status: 201,
-        headers: { "Set-Cookie": atCookie },
       });
     } else {
       const userExistsResponse = ApiResponseDto({
