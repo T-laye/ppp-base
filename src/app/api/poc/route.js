@@ -79,7 +79,7 @@ export async function POST(req, res) {
   }
 }
 
-export async function GET() {
+export async function GET(req, res) {
   try {
     const authResponse = await getAuthUser(req, false);
     if (authResponse.error) {
@@ -132,10 +132,9 @@ export async function GET() {
       },
       include: {
         admin: true,
-        product: true,
-        Customer: true,
         management: true,
         personnel: true,
+        product: true
       },
       take: take,
       skip: offset,
