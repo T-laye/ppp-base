@@ -46,26 +46,23 @@ export default function Layout({ children }) {
         );
         dispatch(fetchProducts({ ...resProducts?.data }));
 
-        if (resProducts) {
-          const resCustomers = await axios.get(
-            `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        const resCustomers = await axios.get(
+          `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        );
+        dispatch(fetchCustomers({ ...resCustomers?.data }));
+
+        setTimeout(async () => {
+          const resPocs = await axios.get(
+            `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}`
           );
-          dispatch(fetchCustomers({ ...resCustomers?.data }));
+          dispatch(fetchPocs({ ...resPocs?.data }));
 
-          if (resCustomers) {
-            const resPocs = await axios.get(
-              `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}`
-            );
-            dispatch(fetchPocs({ ...resPocs?.data }));
+          const resPersonnels = await axios.get(
+            `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
+          );
+          dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+        }, 2000);
 
-            if (resPocs) {
-              const resPersonnels = await axios.get(
-                `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
-              );
-              dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-            }
-          }
-        }
         // console.log(resPocs.data);
         // console.log(resCustomers);
         // console.log(resPersonnels.data);
