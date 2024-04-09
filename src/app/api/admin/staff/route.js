@@ -99,7 +99,7 @@ export async function GET(req, res) {
       count: totalCount,
     });
     return NextResponse.json(data, {
-      status: 201,
+      status: 200,
     });
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500 });

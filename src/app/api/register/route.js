@@ -5,6 +5,8 @@ import _isUserAvailable from "../../../../repo/check-user-available";
 import { prisma } from "../../../../config/prisma.connect";
 import hashPassword from "../../../../lib/hashHelper";
 import { serialize } from "cookie";
+import { verify } from "jsonwebtoken";
+import { cookies } from "next/headers";
 import createAccessToken from "../../../../lib/sign-jwt";
 
 export async function POST(req, res) {
@@ -23,6 +25,9 @@ export async function POST(req, res) {
 
   const { email, password, address, phoneNumber, name, gender, role, createdBy } = body;
   try {
+    const cookiesStore = cookies();
+    const token = cookiesStore.get("ppp-base");
+    const payload = verify(token.value, process.env.ACCESS_TOKEN_SECRET);
     const userAvailable = await _isUserAvailable(email);
     let roleUser;
     if (!userAvailable) {
@@ -62,6 +67,11 @@ export async function POST(req, res) {
         } else {
           roleUser = await prisma.personnel.create({
             data: {
+              createdBy: {
+                connect: {
+                  id: payload?.id,
+                },
+              },
               user: {
                 connect: {
                   id: createdUser.id,
@@ -82,7 +92,7 @@ export async function POST(req, res) {
         path: "/",
       });
       const createUserResponse = ApiResponseDto({
-        message: "User created successfully",
+        message: `${newUser.role.toLowerCase()} created successfully`,
         data: {
           user: newUser,
           role: {
