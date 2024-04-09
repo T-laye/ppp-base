@@ -26,7 +26,7 @@ export async function POST(req, res) {
       poc_name,
       phoneNumber,
       address,
-      email,  
+      email,
       product_name,
       stockLimit,
       product_unit,
@@ -95,6 +95,7 @@ export async function GET(req, res) {
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const admin = searchParams.get("admin");
     const name = searchParams.get("name");
+    const productName = searchParams.get("productName");
     const order = searchParams.get("order");
     const take = searchParams.get("take")
       ? parseInt(searchParams.get("take"))
@@ -134,17 +135,25 @@ export async function GET(req, res) {
         admin: true,
         management: true,
         personnel: true,
-        product: true
+        product: true,
       },
       take: take,
       skip: offset,
       where: {
         name: name ? { contains: name } : {},
         adminId: admin ? admin : {},
+        product: {
+          productName: productName ? { contains: productName } : {},
+        },
       },
     });
     return NextResponse.json(
-      { statusCode: 200, message: "successful", data: getPoc, count: totalCount },
+      {
+        statusCode: 200,
+        message: "successful",
+        data: getPoc,
+        count: totalCount,
+      },
       { status: 200 }
     );
   } catch (err) {
