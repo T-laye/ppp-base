@@ -46,7 +46,6 @@ export default function WorkForce() {
         const personnelPersons = data.filter(
           (p) => p.role.toLowerCase() === "personnel"
         );
-
         return (
           <>
             {/* <div className="text-lg">Admins:</div> */}
