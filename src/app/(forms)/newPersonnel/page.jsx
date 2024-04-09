@@ -23,7 +23,7 @@ export default function NewPersonnel() {
   const viewPassword = () => {
     setShowPassword(!showPassword);
   };
-  console.log(userInfo);
+  // console.log(userInfo);
   const formik = useFormik({
     initialValues: {
       fullName: "",
@@ -42,7 +42,7 @@ export default function NewPersonnel() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
-  async function handleSubmit(values) {
+  async function handleSubmit(values, { resetForm }) {
     const { fullName, email, phone, address, password, role, gender } = values;
     try {
       const res = await register({
@@ -53,13 +53,14 @@ export default function NewPersonnel() {
         password,
         role,
         gender,
-        createdBy: userInfo?.role,
+        // createdBy: userInfo?.role,
       }).unwrap();
-      // dispatch(setCredentials({ ...res.data }));
-      // console.log(res);
-      // console.log(values);
+      // Reset form after successful submission
+      resetForm();
+      // Show success message
       toast.success(res.message);
-      router.back();
+      // Refresh router or any other actions you need
+      router.refresh();
     } catch (e) {
       toast.error(e.data.message);
       // console.log(e);
@@ -179,7 +180,7 @@ export default function NewPersonnel() {
                 />
                 <div
                   onClick={viewPassword}
-                  className=" absolute right-4 bottom-4 cursor-pointer"
+                  className=" absolute right-4 bottom-3 cursor-pointer"
                 >
                   {showPassword ? (
                     <Image height={18} src={invisible} alt="show icon" />
@@ -193,6 +194,7 @@ export default function NewPersonnel() {
                   {formik.errors.password}
                 </div>
               )}
+
               <div className="flex flex-col mt-4">
                 <label className="text-sm mb-2" htmlFor="role">
                   Role

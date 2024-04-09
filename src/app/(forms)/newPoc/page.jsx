@@ -49,7 +49,7 @@ export default function NewPoc() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
 
-  async function handleSubmit(values) {
+  async function handleSubmit(values, { resetForm }) {
     const { name, email, phone, address, limit, available, unit, allocation } =
       values;
     try {
@@ -67,6 +67,7 @@ export default function NewPoc() {
       console.log(res);
       toast.success(res.message);
       // router.back();
+      resetForm();
     } catch (e) {
       toast.error(e.data.message);
     }

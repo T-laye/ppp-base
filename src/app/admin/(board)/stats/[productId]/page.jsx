@@ -36,7 +36,7 @@ export default function Page() {
     getProductDetails();
   }, [dispatch, productId]);
 
-  const handleDeleteCustomer = async () => {
+  const handleDeleteProduct = async () => {
     setIsLoading(true);
     try {
       const res = await axios.delete(`/api/product/${productId}`);
@@ -46,14 +46,15 @@ export default function Page() {
         );
         dispatch(fetchProducts([...resProducts?.data.data]));
         setIsLoading(false);
-        toast.success(res.data.message);
+        toast.success(res.data.data.message);
         setTimeout(() => {
           router.back();
           // window.location.reload();
         }, 500);
       }
     } catch (err) {
-      toast.success(err.data.message);
+      setIsLoading(false);
+      // toast.success(err.data.message);
       console.log(err);
     }
   };
@@ -108,14 +109,14 @@ export default function Page() {
               </button>
 
               <button
-                onClick={handleDeleteCustomer}
+                onClick={handleDeleteProduct}
                 type="submit"
                 className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
                   isLoading ? "bg-customGray" : "bg-error"
                 } `}
                 disabled={isLoading}
               >
-                {isLoading ? <Loader /> : "Delete Customer"}
+                {isLoading ? <Loader /> : "Delete Product"}
               </button>
             </div>
           </div>
