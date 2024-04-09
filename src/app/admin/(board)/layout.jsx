@@ -41,26 +41,35 @@ export default function Layout({ children }) {
   useEffect(() => {
     (async () => {
       if (isAuth) {
-        const resCustomers = await axios.get(
-          `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
-        );
         const resProducts = await axios.get(
           `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-        const resPersonnels = await axios.get(
-          `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
-        );
-        const resPocs = await axios.get(
-          `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}`
-        );
-        console.log(resPocs.data);
-        // console.log(resCustomers);
-        console.log(resPersonnels.data);
-        dispatch(handleSearch(""));
-        dispatch(fetchCustomers({ ...resCustomers?.data }));
         dispatch(fetchProducts({ ...resProducts?.data }));
-        dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-        dispatch(fetchPocs({ ...resPocs?.data }));
+
+        if (resProducts) {
+          const resCustomers = await axios.get(
+            `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
+          );
+          dispatch(fetchCustomers({ ...resCustomers?.data }));
+
+          if (resCustomers) {
+            const resPocs = await axios.get(
+              `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}`
+            );
+            dispatch(fetchPocs({ ...resPocs?.data }));
+          }
+
+          if (resPocs) {
+            const resPersonnels = await axios.get(
+              `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
+            );
+            dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+          }
+        }
+        // console.log(resPocs.data);
+        // console.log(resCustomers);
+        // console.log(resPersonnels.data);
+        dispatch(handleSearch(""));
       } else {
         return;
       }
