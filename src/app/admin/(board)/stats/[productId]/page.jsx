@@ -40,13 +40,15 @@ export default function Page() {
     setIsLoading(true);
     try {
       const res = await axios.delete(`/api/product/${productId}`);
+
+      console.log(res)
       if (res) {
+        setIsLoading(false);
+        toast.success(res.data.message);
         const resProducts = await axios.get(
           `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
         dispatch(fetchProducts([...resProducts?.data.data]));
-        setIsLoading(false);
-        toast.success(res.data.data.message);
         setTimeout(() => {
           router.back();
           // window.location.reload();

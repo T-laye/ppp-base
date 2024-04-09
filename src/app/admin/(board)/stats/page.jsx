@@ -11,11 +11,13 @@ import { IoMdTimer } from "react-icons/io";
 import { MdVerifiedUser } from "react-icons/md";
 import { useSelector } from "react-redux";
 import Loading from "@/components/Loading";
+import { BsPersonFillGear } from "react-icons/bs";
 
 export default function Stats() {
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
   const { personnels } = useSelector((state) => state.personnels);
+  const { pocs } = useSelector((state) => state.pocs);
   const { count, data } = products;
   // console.log(customers);
 
@@ -57,8 +59,8 @@ export default function Stats() {
           />
           <StatsCard
             link="/admin/poc"
-            number={324}
-            color="bg-blue-700"
+            number={pocs.count ?? 0}
+            color="bg-blue-400"
             title="POC"
             icon={<GiGasPump size={24} />}
           />
@@ -79,9 +81,9 @@ export default function Stats() {
           <StatsCard
             link="/admin/workForce"
             number={personnels?.count ?? 0}
-            color="bg-primary"
-            title="Approved"
-            icon={<IoCheckmarkDoneCircle size={24} />}
+            color="bg-blue-900"
+            title="Work Force"
+            icon={<BsPersonFillGear size={24} />}
           />
           <StatsCard
             link="/admin/stats/usedVoucher"

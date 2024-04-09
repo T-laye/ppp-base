@@ -60,10 +60,11 @@ export default function NewPersonnel() {
       // Show success message
       toast.success(res.message);
       // Refresh router or any other actions you need
-      router.refresh();
+      // router.refresh();
+      console.log(res);
     } catch (e) {
       toast.error(e.data.message);
-      // console.log(e);
+      console.log(e);
     }
   }
 

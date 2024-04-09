@@ -4,6 +4,7 @@ import authReducer from "./slices/authSlice";
 import fetchCustomersReducer from "./slices/fetchCustomersSlice";
 import fetchProductsReducer from "./slices/fetchProductsSlice";
 import fetchPersonnelsReducer from "./slices/fetchPersonnelsSlice";
+import fetchPocsReducer from "./slices/fetchPocsSlice";
 import getCustomerReducer from "./slices/getCustomerSlice";
 import getProductReducer from "./slices/getProductSlice";
 import getWorkerReducer from "./slices/getWorkerSlice";
@@ -18,6 +19,7 @@ const store = configureStore({
     products: fetchProductsReducer,
     product: getProductReducer,
     personnels: fetchPersonnelsReducer,
+    pocs: fetchPocsReducer,
     worker: getWorkerReducer,
     variables: variableReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
