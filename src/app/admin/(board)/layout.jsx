@@ -53,7 +53,7 @@ export default function Layout({ children }) {
         const resPocs = await axios.get(
           `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}`
         );
-        console.log(resPoc.data);
+        console.log(resPocs.data);
         // console.log(resCustomers);
         console.log(resPersonnels.data);
         dispatch(handleSearch(""));
