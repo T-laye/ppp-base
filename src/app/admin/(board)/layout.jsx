@@ -57,13 +57,13 @@ export default function Layout({ children }) {
               `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}`
             );
             dispatch(fetchPocs({ ...resPocs?.data }));
-          }
 
-          if (resPocs) {
-            const resPersonnels = await axios.get(
-              `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
-            );
-            dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+            if (resPocs) {
+              const resPersonnels = await axios.get(
+                `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
+              );
+              dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+            }
           }
         }
         // console.log(resPocs.data);
