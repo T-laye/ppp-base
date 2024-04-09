@@ -15,6 +15,7 @@ import Loading from "@/components/Loading";
 export default function Stats() {
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
+  const { personnels } = useSelector((state) => state.personnels);
   const { count, data } = products;
   // console.log(customers);
 
@@ -71,6 +72,13 @@ export default function Stats() {
           <StatsCard
             link="/admin/vouchers"
             number={34}
+            color="bg-primary"
+            title="Approved"
+            icon={<IoCheckmarkDoneCircle size={24} />}
+          />
+          <StatsCard
+            link="/admin/workForce"
+            number={personnels?.count ?? 0}
             color="bg-primary"
             title="Approved"
             icon={<IoCheckmarkDoneCircle size={24} />}
