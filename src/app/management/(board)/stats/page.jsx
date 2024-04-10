@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import QuantityCards from "../../components/QuantityCards";
-import { product } from "/public/dummy.js";
-import { poc } from "/public/dummy.js";
 import StatsCard from "../../components/StatsCard";
 import { GiGasPump } from "react-icons/gi";
 import { FaUsers } from "react-icons/fa";
@@ -123,7 +121,7 @@ export default function Stats() {
         </div>
 
         <div className="mt-4">
-          <PocList name="Total Fueling Station" available={420} total={600} />
+          {/* <PocList name="Total Fueling Station" available={420} total={600} />
           <PocList name="Oando Fueling Station" available={80} total={400} />
           <PocList name="Mobil Fueling Station " available={500} total={1200} />
           <PocList name="Odafe Fueling Station " available={500} total={1300} />
@@ -131,7 +129,7 @@ export default function Stats() {
             name="New Bridge Fueling Station "
             available={500}
             total={1500}
-          />
+          /> */}
           {/* {renderProduct()} */}
         </div>
       </div>

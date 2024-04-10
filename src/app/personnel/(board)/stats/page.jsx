@@ -1,7 +1,5 @@
 import React from "react";
 import QuantityCards from "../../components/QuantityCards";
-import { product } from "/public/dummy.js";
-import { poc } from "/public/dummy.js";
 import StatsCard from "../../components/StatsCard";
 import { GiGasPump } from "react-icons/gi";
 import { FaUsers } from "react-icons/fa";

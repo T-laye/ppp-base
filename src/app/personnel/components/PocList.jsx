@@ -32,7 +32,7 @@ export default function PocList({ name, available, total }) {
             {available}/{total}
           </div>
         </div>
-        <div className="h-6 bg-gray-300 rounded-xl mt-4 overflow-hidden">
+        <div className="h-4 bg-gray-300 rounded-xl mt-4 overflow-hidden">
           <div
             style={{ width: barProgress() }}
             className={`h-full rounded-xl w-[${barProgress()}%]   ${barColor()} `}
