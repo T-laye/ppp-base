@@ -20,7 +20,6 @@ export async function POST(req, res) {
         status: 403,
       });
     }
-    // console.log(authResponse);
     const body = await req.json();
     const {
       poc_name,
@@ -37,11 +36,11 @@ export async function POST(req, res) {
       data: {
         address,
         email,
-        name: poc_name,
+        name: poc_name.toLowerCase(),
         phoneNumber,
         product: {
           create: {
-            productName: product_name,
+            productName: product_name.toLowerCase(),
             unit: product_unit,
             voucherAllocation: voucher_allocation,
             user: {
