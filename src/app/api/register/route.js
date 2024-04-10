@@ -35,7 +35,7 @@ export async function POST(req, res) {
             address,
             email: email?.toLowerCase(),
             gender,
-            name,
+            name: name.toLowerCase(),
             password: await hashPassword(password),
             phoneNumber,
             role,

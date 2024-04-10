@@ -35,7 +35,7 @@ model Personnel {
   personnelPerformance Performance[]
   poc                  PointOfConsumption[]
   userId               String
-  createdBy            User?                 @relation(fields: [createdById], references: [id], name: "createdBy")
+  createdBy            User?                @relation(fields: [createdById], references: [id], name: "createdBy")
   createdById          String
 
   @@index([personnelId])
@@ -87,7 +87,7 @@ enum Gender {
 
 model Product {
   id                 String               @id @default(uuid())
-  productName        String
+  productName        String               @unique
   voucherAllocation  Int
   unit               String
   createdAt          DateTime             @default(now()) @db.Timestamptz()
@@ -100,10 +100,6 @@ model Product {
   @@index([productName, id])
 }
 
-// enum ProductType {
-//   PETROL
-//   DISEL
-// }
 
 model Management {
   managementId          String               @id @default(uuid())
