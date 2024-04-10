@@ -140,10 +140,12 @@ export async function GET(req, res) {
       take: take,
       skip: offset,
       where: {
-        name: name ? { contains: name } : {},
+        name: name ? { contains: name.toLowerCase() } : {},
         adminId: admin ? admin : {},
         product: {
-          productName: productName ? { contains: productName } : {},
+          productName: productName
+            ? { contains: productName }
+            : {},
         },
       },
     });

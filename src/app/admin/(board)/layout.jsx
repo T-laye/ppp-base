@@ -20,7 +20,9 @@ export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { pageNumber, take, search } = useSelector((state) => state.variables);
+  const { pageNumber, take, search, productName } = useSelector(
+    (state) => state.variables
+  );
 
   const { userInfo } = useSelector((state) => state.auth);
   // console.log(userInfo);
@@ -53,7 +55,7 @@ export default function Layout({ children }) {
 
         setTimeout(async () => {
           const resPocs = await axios.get(
-            `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}`
+            `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}&productName=${productName}`
           );
           dispatch(fetchPocs({ ...resPocs?.data }));
 
@@ -71,7 +73,7 @@ export default function Layout({ children }) {
         return;
       }
     })();
-  }, [dispatch, isAuth, pageNumber, search, take]);
+  }, [dispatch, isAuth, pageNumber, productName, search, take]);
   // console.log(isAuth);
 
   if (!isAuth) {
