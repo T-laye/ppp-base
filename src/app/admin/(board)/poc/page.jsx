@@ -2,19 +2,27 @@
 import React, { useState } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
 import PocList from "../../components/PocList";
-import { poc } from "/public/dummy.js";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { handlePocName, handleProductName, handleSearch } from "@/redux/slices/variableSlice";
+import Loading from "@/components/Loading";
 
 export default function Poc() {
-  const [product, setProduct] = useState(false);
+  const dispatch = useDispatch();
   const [term, setTerm] = useState("");
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState("");
   const { products } = useSelector((state) => state.products);
-const {data, count} = products
+  const { pocs } = useSelector((state) => state.pocs);
+  const { data, count } = products;
   const setTab = (tab) => {
     setActiveTab(tab);
   };
 
+  const handleProductRender = (product) => {
+    setTab(product);
+    dispatch(handleProductName(product));
+  };
+
+  console.log(pocs);
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
     let words = sentence?.split(" ");
@@ -34,9 +42,9 @@ const {data, count} = products
       return (
         <div
           key={i}
-          onClick={() => setTab(i + 1)}
+          onClick={() => handleProductRender(p.name.toLowerCase())}
           className={`${
-            activeTab === i + 1
+            activeTab === p.name.toLowerCase()
               ? "bg-primary text-white"
               : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
@@ -46,58 +54,50 @@ const {data, count} = products
       );
     });
   };
+  // const totalAssigned = poc.reduce((acc, p) => {
+  //   return acc + p.assigned;
+  // }, 0);
 
-
-  const handleProduct = () => {
-    setProduct(!product);
-  };
-  const totalAssigned = poc.reduce((acc, p) => {
-    return acc + p.assigned;
-  }, 0);
-
-  const totalAvail = poc.reduce((acc, p) => {
-    return acc + p.available;
-  }, 0);
+  // const totalAvail = poc.reduce((acc, p) => {
+  //   return acc + p.available;
+  // }, 0);
 
   // console.log("Total assigned:", totalAssigned);
 
-  // console.log(totalAssigned);
-
-  const renderPoc = () => {
-    return poc.map((p, i) => {
-      if (product === false && p.product === "fuel") {
-        return (
+  const renderPocs = () => {
+    if (pocs.data) {
+      if (pocs?.data?.length === 0) {
+        return <div>No POC Found</div>;
+      } else {
+        return pocs?.data?.map((p) => (
           <PocList
-            key={i}
-            name={p?.name}
-            available={p.available}
-            total={p.assigned}
+            key={p.pocId}
+            name={p.name}
+            available={p.stockLimit}
+            total={p.stockAvailable}
           />
-        );
-      } else if (product === true && p.product === "diesel") {
-        return (
-          <PocList
-            key={i}
-            name={p?.name}
-            available={p.available}
-            total={p.assigned}
-          />
-        );
+        ));
       }
-    });
+    } else {
+      return <Loading />;
+    }
   };
+
 
   const handleChange = (e) => {
     setTerm(e.target.value);
+    if (e.target.value.length >= 3 || e.target.value.length === 0) {
+      dispatch(handlePocName(e.target.value.toLowerCase()));
+    }
   };
 
   return (
     <section className="min-h-screen bg-green300 pt-4 pb-20">
       <div className="flex mt-4 max-[285px]:justify-center space-x-3 items-center mt4 mb-5 text-base">
         <div
-          onClick={() => setTab(0)} // Wrap the setTab function call in an arrow function
+          onClick={() => handleProductRender("")}
           className={`${
-            activeTab === 0 ? "bg-primary text-white" : "border text-gray-400 "
+            activeTab === "" ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
           All
@@ -106,7 +106,7 @@ const {data, count} = products
       </div>
       <div className="mt-6">
         <form action="" onSubmit={(e) => e.preventDefault()}>
-          <div className="relative ">
+          <div className="relative">
             <input
               type="text"
               placeholder="Search by name"
@@ -119,21 +119,13 @@ const {data, count} = products
             </div>
           </div>
         </form>
-        <div className="text-end mt-3 font-semibold text-base text-gray-500 pr-2">
-          {Math.round(totalAvail)}/{Math.round(totalAssigned)}
+        <div className="text-end mt-3 font-medium text-base text-gray-500 pr-2">
+          {/* {Math.round(totalAvail)}/{Math.round(totalAssigned)} */}
+          {pocs.data?.length ?? 0}
         </div>
 
         <div className="bg-gren-400 pb-10">
-          <ul>
-            {/* <PocList name="Orlando" available={150} total={200} />
-            <PocList name="Matrix" available={80} total={100} />
-            <PocList name="Odafe" available={100} total={200} />
-            <PocList name="NNPC" available={50} total={150} />
-            <PocList name="Total" available={20} total={100} />
-            <PocList name="Mobil" available={100} total={200} />
-            <PocList name="NewBridge" available={40} total={50} /> */}
-            {renderPoc()}
-          </ul>
+          <ul>{renderPocs()}</ul>
         </div>
       </div>
     </section>
