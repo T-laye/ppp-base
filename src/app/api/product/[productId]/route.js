@@ -27,8 +27,8 @@ export async function GET(req, context) {
         id: getProductId,
       },
       include: {
-        Voucher: true,
-        PointOfConsumption: true,
+        voucher: true,
+        poc: true,
         user: true,
       },
     });
@@ -132,8 +132,8 @@ export async function DELETE(req, context) {
         id: getProductId,
       },
       include: {
-        Voucher: true,
-        PointOfConsumption: true,
+        voucher: true,
+        poc: true,
         user: true,
       },
     });
@@ -149,10 +149,6 @@ export async function DELETE(req, context) {
     await prisma.product.delete({
       where: {
         id: getProductId,
-      },
-      include: {
-        Voucher: true,
-        PointOfConsumption: true,
       },
     });
     return NextResponse.json(

@@ -34,7 +34,7 @@ export async function PATCH(req, context) {
     };
     const editCustomerData = await prisma.customer.update({
       where: {
-        customerId: getUserId,
+        id: getUserId,
       },
       data: addJ,
     });
@@ -76,12 +76,12 @@ export async function GET(req, context) {
     const getUserId = params.customerId;
     const getCustomer = await prisma.customer.findUnique({
       where: {
-        customerId: getUserId,
+        id: getUserId,
       },
       include: {
         poc: true,
         user: true,
-        Voucher: true,
+        voucher: true,
       },
     });
     if (!getCustomer) {
@@ -119,7 +119,7 @@ function mapCustomer(customer) {
     createdBy: customer.user.name,
     createdById: customer.user.id,
     createdByEmail: customer.user.email,
-    vouchers: customer.Voucher.map((voucher) => ({
+    vouchers: customer.voucher.map((voucher) => ({
       voucherId: voucher.voucherId,
       voucherCode: voucher.voucherCode,
       collected: voucher.collected,
@@ -163,12 +163,12 @@ export async function DELETE(req, context) {
     const getUserId = params.customerId;
     const getCustomer = await prisma.customer.findUnique({
       where: {
-        customerId: getUserId,
+        id: getUserId,
       },
       include: {
         poc: true,
         user: true,
-        Voucher: true,
+        voucher: true,
       },
     });
     if (!getCustomer) {
@@ -182,11 +182,11 @@ export async function DELETE(req, context) {
     }
     await prisma.customer.delete({
       where: {
-        customerId: getUserId,
+        id: getUserId,
       },
       include: {
         poc: true,
-        Voucher: true,
+        voucher: true,
       },
     });
     return NextResponse.json(
