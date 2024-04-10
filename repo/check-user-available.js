@@ -1,14 +1,12 @@
 import { prisma } from "../config/prisma.connect";
 
-// check if the user with email is available or not
-
 export default async function _isUserAvailable(email) {
   try {
     const user = await prisma.user.findUnique({
       where: { email },
-      include: { Management: true, personnel: true },
+      include: { management: true, personnel: true, admin: true },
     });
-    return !!user; // Returns true if user is found, false otherwise
+    return !!user;
   } catch (error) {
     throw new Error(error);
   }

@@ -76,7 +76,7 @@ export async function GET(req, res) {
     const user = await prisma.user.findUnique({
       where: { id: payload.id, email: payload.email },
       include: {
-        Management: true,
+        management: true,
         personnel: true,
       },
     });
@@ -132,7 +132,7 @@ export async function GET(req, res) {
         createdAt: "desc",
       },
       include: {
-        Voucher: true,
+        voucher: true,
         poc: true,
         user: true,
       },

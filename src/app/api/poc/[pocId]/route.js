@@ -29,7 +29,7 @@ export async function PATCH(req, context) {
         email,
       },
       include: {
-        Management: true,
+        management: true,
         personnel: true,
       },
     });
@@ -40,7 +40,7 @@ export async function PATCH(req, context) {
     }
     const updatePoc = await prisma.pointOfConsumption.update({
       where: {
-        pocId: getPocId,
+        id: getPocId,
       },
       data: {
         ...(findUser.role === "MANAGEMENT"
