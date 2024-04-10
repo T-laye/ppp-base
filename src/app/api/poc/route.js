@@ -93,7 +93,6 @@ export async function GET(req, res) {
     }
     const searchParams = req.nextUrl.searchParams;
     const pageNumber = parseInt(searchParams.get("pageNumber"));
-    const admin = searchParams.get("admin");
     const name = searchParams.get("name");
     const productName = searchParams.get("productName");
     const order = searchParams.get("order");
@@ -140,8 +139,7 @@ export async function GET(req, res) {
       take: take,
       skip: offset,
       where: {
-        name: name ? { contains: name.toLowerCase() } : {},
-        adminId: admin ? admin : {},
+        name: name ? { contains: name } : {},
         product: {
           productName: productName ? { contains: productName } : {},
         },
