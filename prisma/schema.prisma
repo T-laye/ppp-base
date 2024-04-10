@@ -20,7 +20,7 @@ model User {
   createdBy   Personnel[]          @relation("createdBy")
   management  Management[]
   customer    Customer[]
-  Admin       Admin[]
+  admin       Admin[]
   Product     Product[]
   createdDate DateTime             @default(now()) @db.Timestamptz()
   poc         PointOfConsumption[]
