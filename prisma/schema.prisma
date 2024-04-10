@@ -18,8 +18,8 @@ model User {
   gender      Gender
   personnel   Personnel[]          @relation("user")
   createdBy   Personnel[]          @relation("createdBy")
-  Management  Management[]
-  Customer    Customer[]
+  management  Management[]
+  customer    Customer[]
   Admin       Admin[]
   Product     Product[]
   createdDate DateTime             @default(now()) @db.Timestamptz()
@@ -29,7 +29,7 @@ model User {
 }
 
 model Personnel {
-  personnelId          String               @id @default(uuid())
+  id                   String               @id @default(uuid())
   user                 User                 @relation(fields: [userId], references: [id], name: "user")
   createdAt            DateTime             @default(now()) @db.Timestamptz()
   personnelPerformance Performance[]
@@ -38,7 +38,7 @@ model Personnel {
   createdBy            User?                @relation(fields: [createdById], references: [id], name: "createdBy")
   createdById          String
 
-  @@index([personnelId])
+  @@index([id])
 }
 
 enum UserType {
@@ -55,9 +55,9 @@ enum Permission {
 }
 
 model PointOfConsumption {
-  pocId          String      @id @default(uuid())
-  personnel      Personnel?  @relation(fields: [personnelId], references: [personnelId])
-  management     Management? @relation(fields: [managementId], references: [managementId])
+  id             String      @id @default(uuid())
+  personnel      Personnel?  @relation(fields: [personnelId], references: [id])
+  management     Management? @relation(fields: [managementId], references: [id])
   admin          Admin?      @relation(fields: [adminId], references: [id])
   address        String
   name           String
@@ -69,14 +69,14 @@ model PointOfConsumption {
   managementId   String?
   stockLimit     Int
   stockAvailable Int
-  Customer       Customer[]
+  customer       Customer[]
   adminId        String?
-  product        Product     @relation(fields: [productId], references: [id])
+  product        Product[]
   productId      String
   user           User        @relation(fields: [createdBy], references: [id])
   createdBy      String
 
-  @@index([pocId, name])
+  @@index([id, name])
 }
 
 enum Gender {
@@ -86,23 +86,23 @@ enum Gender {
 }
 
 model Product {
-  id                 String               @id @default(uuid())
-  productName        String               @unique
-  voucherAllocation  Int
-  unit               String
-  createdAt          DateTime             @default(now()) @db.Timestamptz()
-  updatedAt          DateTime             @default(now()) @updatedAt
-  user               User                 @relation(fields: [createdBy], references: [id])
-  Voucher            Voucher[]
-  PointOfConsumption PointOfConsumption[]
-  createdBy          String
+  id                String              @id @default(uuid())
+  productName       String
+  voucherAllocation Int
+  unit              String
+  createdAt         DateTime            @default(now()) @db.Timestamptz()
+  updatedAt         DateTime            @default(now()) @updatedAt
+  user              User                @relation(fields: [createdBy], references: [id])
+  voucher           Voucher[]
+  poc               PointOfConsumption? @relation(fields: [pocId], references: [id])
+  pocId             String?
+  createdBy         String
 
   @@index([productName, id])
 }
 
-
 model Management {
-  managementId          String               @id @default(uuid())
+  id                    String               @id @default(uuid())
   user                  User                 @relation(fields: [userId], references: [id])
   createdAt             DateTime             @default(now()) @db.Timestamptz()
   managementPerformance Performance[]
@@ -110,7 +110,7 @@ model Management {
   userId                String
   canEdit               Boolean              @default(false)
 
-  @@index([managementId])
+  @@index([id])
 }
 
 model Admin {
@@ -125,7 +125,7 @@ model Admin {
 }
 
 model Customer {
-  customerId  String               @id @default(uuid())
+  id          String               @id @default(uuid())
   name        String
   email       String               @unique
   phoneNumber String
@@ -134,9 +134,9 @@ model Customer {
   poc         PointOfConsumption[]
   user        User                 @relation(fields: [createdBy], references: [id])
   createdBy   String
-  Voucher     Voucher[]
+  voucher     Voucher[]
 
-  @@index([customerId, email, phoneNumber])
+  @@index([id, email, phoneNumber])
 }
 
 model Voucher {
@@ -144,8 +144,8 @@ model Voucher {
   voucherCode     String            @unique
   createdAt       DateTime          @default(now()) @db.Timestamptz()
   collected       Boolean
-  VoucherDispense VoucherDispense[]
-  customer        Customer          @relation(fields: [customerId], references: [customerId])
+  voucherDispense VoucherDispense[]
+  customer        Customer          @relation(fields: [customerId], references: [id])
   customerId      String
   thirdParty      Boolean
   product         Product           @relation(fields: [productId], references: [id])
@@ -170,14 +170,14 @@ model VoucherDispense {
 }
 
 model Performance {
-  id                     String      @id @default(uuid())
-  staff                  Personnel   @relation(fields: [personnelId], references: [personnelId])
-  personnelId            String
-  createdAt              DateTime    @default(now()) @db.Timestamptz()
-  cusomtomersHandled     Int
-  productsDispensed      Int
-  Management             Management? @relation(fields: [managementManagementId], references: [managementId])
-  managementManagementId String?
+  id                 String      @id @default(uuid())
+  staff              Personnel   @relation(fields: [personnelId], references: [id])
+  personnelId        String
+  createdAt          DateTime    @default(now()) @db.Timestamptz()
+  cusomtomersHandled Int
+  productsDispensed  Int
+  Management         Management? @relation(fields: [managementId], references: [id])
+  managementId       String?
 }
 
 // npx prisma migrate dev --name init
