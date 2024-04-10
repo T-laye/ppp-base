@@ -93,8 +93,8 @@ export async function GET(req, res) {
         createdAt: "desc",
       },
       include: {
-        Voucher: true,
-        PointOfConsumption: true,
+        voucher: true,
+        poc: true,
         user: true,
       },
       take: take,
@@ -110,13 +110,7 @@ export async function GET(req, res) {
         productId: v?.id,
         name: v.productName,
         unit: v?.unit,
-        voucherAllocation: v?.voucherAllocation,
-        createdAt: v?.createdAt,
-        createdById: v?.user.id,
-        createdByName: v?.user.name,
-        createdByRole: v?.user.role,
-        createdByEmail: v?.user.email,
-        poc: v?.PointOfConsumption.map((v) => ({
+        poc: v?.poc.map((v) => ({
           name: v?.name,
           address: v?.address,
           phoneNumber: v?.phoneNumber,
@@ -124,7 +118,7 @@ export async function GET(req, res) {
           stockLimit: v?.stockLimit,
           createdAt: v?.createdAt,
         })),
-        voucher: v.Voucher.map((v) => ({
+        voucher: v.voucher.map((v) => ({
           voucherCode: v?.voucherCode,
           createdDate: v?.createdAt,
           collectionStatus: v?.collected,

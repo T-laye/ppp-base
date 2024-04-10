@@ -8,7 +8,6 @@ import { verify } from "jsonwebtoken";
 import { cookies } from "next/headers";
 
 export async function POST(req, res) {
-  
   const body = await req.json();
   const error = signIn_validate(body);
   const handleError = ApiResponseDto({
@@ -21,13 +20,21 @@ export async function POST(req, res) {
   if (Object.keys(error).length > 0)
     return NextResponse.json(handleError, { status: 400 });
 
-  const { email, password, address, phoneNumber, name, gender, role, createdBy } = body;
+  const {
+    email,
+    password,
+    address,
+    phoneNumber,
+    name,
+    gender,
+    role,
+    createdBy,
+  } = body;
   try {
     const cookiesStore = cookies();
-    const token = cookiesStore.get("ppp-base");
-    const payload = verify(token.value, process.env.ACCESS_TOKEN_SECRET);
+
     const userAvailable = await _isUserAvailable(email);
-    let roleUser;
+    let userRole;
     if (!userAvailable) {
       const newUser = await prisma.$transaction(async (prisma) => {
         const createdUser = await prisma.user.create({
@@ -41,19 +48,8 @@ export async function POST(req, res) {
             role,
           },
         });
-        
         if (role === "ADMIN") {
-          roleUser = await prisma.admin.create({
-            data: {
-              user: {
-                connect: {
-                  id: createdUser.id,
-                },
-              },
-            },
-          });
-        } else if (role === "MANAGEMENT") {
-          roleUser = await prisma.management.create({
+          userRole = await prisma.admin.create({
             data: {
               user: {
                 connect: {
@@ -63,20 +59,37 @@ export async function POST(req, res) {
             },
           });
         } else {
-          roleUser = await prisma.personnel.create({
-            data: {
-              createdBy: {
-                connect: {
-                  id: payload?.id,
+          const token = cookiesStore.get("ppp-base");
+          const payload = verify(token.value, process.env.ACCESS_TOKEN_SECRET);
+          switch (role) {
+            case "MANAGEMENT":
+              userRole = await prisma.management.create({
+                data: {
+                  user: {
+                    connect: {
+                      id: createdUser.id,
+                    },
+                  },
                 },
-              },
-              user: {
-                connect: {
-                  id: createdUser.id,
+              });
+              break;
+            default:
+              userRole = await prisma.personnel.create({
+                data: {
+                  createdBy: {
+                    connect: {
+                      id: payload?.id,
+                    },
+                  },
+                  user: {
+                    connect: {
+                      id: createdUser.id,
+                    },
+                  },
                 },
-              },
-            },
-          });
+              });
+              break;
+          }
         }
         return createdUser;
       });
@@ -85,8 +98,8 @@ export async function POST(req, res) {
         data: {
           user: newUser,
           role: {
-            ...roleUser,
-            type: newUser.role
+            ...userRole,
+            type: newUser.role,
           },
         },
         statusCode: 201,
