@@ -5,6 +5,8 @@ const initialState = {
   pageNumber: 1,
   search: "",
   productName: "",
+  pocName: "",
+  staffName: "",
 };
 const variableSlice = createSlice({
   name: "variables",
@@ -22,9 +24,15 @@ const variableSlice = createSlice({
     handleProductName: (state, action) => {
       state.productName = action.payload;
     },
+    handlePocName: (state, action) => {
+      state.pocName = action.payload;
+    },
+    handleStaffName: (state, action) => {
+      state.staffName = action.payload;
+    },
   },
 });
 
-export const { handlePageNumber, handleTake, handleSearch, handleProductName } =
+export const { handlePageNumber, handleTake, handleSearch, handleProductName, handlePocName, handleStaffName } =
   variableSlice.actions;
 export default variableSlice.reducer;

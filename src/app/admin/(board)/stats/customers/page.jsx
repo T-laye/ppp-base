@@ -15,7 +15,7 @@ export default function Customers() {
   const { data, count } = customers;
   const dispatch = useDispatch();
 
-  // console.log(customers);
+  console.log(customers);
 
   const addCustomer = () => {
     router.push("/newCustomer");
@@ -30,10 +30,11 @@ export default function Customers() {
 
   const renderCustomers = () => {
     if (data) {
-      if (count === 0) {
+      if (data.length === 0) {
         return <div>No Customers Found</div>;
       } else {
         return data?.map((c) => <CustomerList key={c?.customerId} c={c} />);
+        
       }
     } else {
       return <Loading />;
@@ -71,7 +72,7 @@ export default function Customers() {
           </div>
         </form>
         <div className="text-end mt-3 text-sm text-gray-500 pr-2">
-          {term.length < 3 && count ? count : ""}
+          {data?.length ?? 0}
         </div>
 
         <div className="bg-gren-400 pt-3 pb-10">

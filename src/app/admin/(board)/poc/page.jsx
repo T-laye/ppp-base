@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
 import PocList from "../../components/PocList";
 import { useSelector, useDispatch } from "react-redux";
-import { handleProductName, handleSearch } from "@/redux/slices/variableSlice";
+import { handlePocName, handleProductName, handleSearch } from "@/redux/slices/variableSlice";
 import Loading from "@/components/Loading";
 
 export default function Poc() {
@@ -87,7 +87,7 @@ export default function Poc() {
   const handleChange = (e) => {
     setTerm(e.target.value);
     if (e.target.value.length >= 3 || e.target.value.length === 0) {
-      dispatch(handleSearch(e.target.value.toLowerCase()));
+      dispatch(handlePocName(e.target.value.toLowerCase()));
     }
   };
 
