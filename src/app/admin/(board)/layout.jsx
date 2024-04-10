@@ -9,7 +9,12 @@ import { ImSpinner9 } from "react-icons/im";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
-import { handleSearch } from "@/redux/slices/variableSlice";
+import {
+  handlePocName,
+  handleProductName,
+  handleSearch,
+  handleStaffName,
+} from "@/redux/slices/variableSlice";
 import { setCredentials } from "@/redux/slices/authSlice";
 import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
 import { fetchPersonnels } from "@/redux/slices/fetchPersonnelsSlice";
@@ -20,7 +25,8 @@ export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { pageNumber, take, search } = useSelector((state) => state.variables);
+  const { pageNumber, take, search, productName, staffName, pocName } =
+    useSelector((state) => state.variables);
 
   const { userInfo } = useSelector((state) => state.auth);
   // console.log(userInfo);
@@ -34,6 +40,10 @@ export default function Layout({ children }) {
       } else {
         dispatch(setCredentials({ ...user.user }));
         setIsAuth(true);
+        dispatch(handleSearch(""));
+        dispatch(handleProductName(""));
+        dispatch(handlePocName(""));
+        dispatch(handleStaffName(""));
       }
     })();
   }, [dispatch, router]);
@@ -41,31 +51,54 @@ export default function Layout({ children }) {
   useEffect(() => {
     (async () => {
       if (isAuth) {
+        const resProducts = await axios.get(
+          `/api/product?take=${take}&pageNumber=${pageNumber}&name`
+        );
+        dispatch(fetchProducts({ ...resProducts?.data }));
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, take]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
         const resCustomers = await axios.get(
           `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-        const resProducts = await axios.get(
-          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
-        );
-        const resPersonnels = await axios.get(
-          `/api/admin/staff?name=${search}&take=${take}&pageNumber=${pageNumber}`
-        );
-        const resPocs = await axios.get(
-          `/api/poc?name=${search}&take=${take}&pageNumber=${pageNumber}`
-        );
-        console.log(resPocs.data);
-        // console.log(resCustomers);
-        console.log(resPersonnels.data);
-        dispatch(handleSearch(""));
         dispatch(fetchCustomers({ ...resCustomers?.data }));
-        dispatch(fetchProducts({ ...resProducts?.data }));
-        dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-        dispatch(fetchPocs({ ...resPocs?.data }));
       } else {
         return;
       }
     })();
   }, [dispatch, isAuth, pageNumber, search, take]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        const resPocs = await axios.get(
+          `/api/poc?name=${pocName}&take=${take}&pageNumber=${pageNumber}&productName=${productName}`
+        );
+        dispatch(fetchPocs({ ...resPocs?.data }));
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, pocName, productName, take]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        const resPersonnels = await axios.get(
+          `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
+        );
+        dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, staffName, take]);
   // console.log(isAuth);
 
   if (!isAuth) {

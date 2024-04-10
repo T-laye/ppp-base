@@ -4,17 +4,18 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import PersonnelList from "../../components/PersonnelList";
 import { useDispatch, useSelector } from "react-redux";
-import { handleSearch } from "@/redux/slices/variableSlice";
+import { handleSearch, handleStaffName } from "@/redux/slices/variableSlice";
 import Loading from "@/components/Loading";
 
 export default function WorkForce() {
   const [activeTab, setActiveTab] = useState(1);
   const [term, setTerm] = useState("");
   const router = useRouter();
+  const { staffName } = useSelector((state) => state.variables);
   const { personnels } = useSelector((state) => state.personnels);
   const { data, count } = personnels;
   const dispatch = useDispatch();
-  // console.log(data);
+  console.log(staffName);
 
   const goToNewPersonnel = () => {
     router.push("/newPersonnel");
@@ -23,18 +24,17 @@ export default function WorkForce() {
     setActiveTab(tab);
   };
 
- const handleChange = (e) => {
-   setTerm(e.target.value);
-   if (e.target.value.length >= 3 || e.target.value.length === 0) {
-     dispatch(handleSearch(e.target.value.toLowerCase()));
-   }
- };
-
+  const handleChange = (e) => {
+    setTerm(e.target.value);
+    if (e.target.value.length >= 3 || e.target.value.length === 0) {
+      dispatch(handleStaffName(e.target.value.toLowerCase()));
+    }
+  };
 
   const renderPersons = () => {
     // const renderCustomers = () => {
     if (data) {
-      if (count === 0) {
+      if (data.length === 0) {
         return <div className="text-lg">No Personnel Found</div>;
       } else {
         const adminPersons = data.filter(
@@ -130,7 +130,7 @@ export default function WorkForce() {
         </form>
 
         <div className="text-end mt-3 text-sm text-gray-500 pr-2">
-          {count ?? 0}
+          {data?.length ?? 0}
         </div>
 
         <div className="bg-gren-400 pt-3 pb-10">

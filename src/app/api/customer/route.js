@@ -144,7 +144,7 @@ export async function GET(req, res) {
       },
     });
     const resData = ApiResponseDto({
-      message: "successful",
+      message: "Successful",
       data: getAllCustomer.map((v) => ({
         customerId: v?.customerId,
         name: v.name,
