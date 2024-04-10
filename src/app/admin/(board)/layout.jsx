@@ -94,6 +94,7 @@ export default function Layout({ children }) {
           `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
         );
         dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+        console.log(resPersonnels.data)
       } else {
         return;
       }
