@@ -1,29 +1,48 @@
 "use client";
 import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
-import React from "react";
+import React, { useEffect } from "react";
 import { ImDroplet } from "react-icons/im";
 import { MdAssignmentTurnedIn } from "react-icons/md";
 import { TbRulerMeasure } from "react-icons/tb";
 import { PiBatteryVerticalFullFill } from "react-icons/pi";
 import { PiDropHalfBottomFill } from "react-icons/pi";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { BsFillFuelPumpDieselFill } from "react-icons/bs";
 import { BsPeopleFill } from "react-icons/bs";
 import { IoLocationSharp } from "react-icons/io5";
+import { getPoc } from "@/redux/slices/getPocSlice";
+import { useSelector, useDispatch } from "react-redux";
+import axios from 'axios'
 
 export default function Page() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const { poc } = useSelector((state) => state.poc);
+  console.log(poc, id);
 
   const editPOC = () => {
-    router.push("/admin/poc/id/editPOC");
+    router.push(`/admin/poc/${id}/editPOC`);
   };
   const assign = () => {
-    router.push("/admin/poc/id/assign");
+    router.push(`/admin/poc/${id}/assign`);
   };
+
+  useEffect(() => {
+    const getPocDetails = async () => {
+      const res = await axios.get(`/api/poc/${id}`);
+      console.log(res);
+
+      dispatch(getPoc({ ...res.data.data }));
+    };
+
+    getPocDetails();
+  }, [dispatch, id]);
+
   return (
     <section className="min-h-screen pt-8 pb-20">
       <div className="mb-3">
