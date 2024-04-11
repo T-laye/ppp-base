@@ -54,6 +54,7 @@ export default function Layout({ children }) {
         const resProducts = await axios.get(
           `/api/product?take=${take}&pageNumber=${pageNumber}&name`
         );
+        console.log(resProducts);
         dispatch(fetchProducts({ ...resProducts?.data }));
       } else {
         return;
@@ -68,6 +69,7 @@ export default function Layout({ children }) {
           `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
         dispatch(fetchCustomers({ ...resCustomers?.data }));
+        console.log(resCustomers);
       } else {
         return;
       }
@@ -80,6 +82,7 @@ export default function Layout({ children }) {
         const resPocs = await axios.get(
           `/api/poc?name=${pocName}&take=${take}&pageNumber=${pageNumber}&productName=${productName}`
         );
+        console.log(resPocs);
         dispatch(fetchPocs({ ...resPocs?.data }));
       } else {
         return;
@@ -94,7 +97,8 @@ export default function Layout({ children }) {
           `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
         );
         dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-        // console.log(resPersonnels.data)
+        console.log(resPersonnels);
+        // console.log(resPocs)
       } else {
         return;
       }
