@@ -72,7 +72,6 @@ model PointOfConsumption {
   customer       Customer[]
   adminId        String?
   product        Product[]
-  productId      String
   user           User        @relation(fields: [createdBy], references: [id])
   createdBy      String
 
@@ -129,6 +128,7 @@ model Customer {
   name        String
   email       String               @unique
   phoneNumber String
+  address String
   createdAt   DateTime             @default(now()) @db.Timestamptz()
   updatedAt   DateTime             @default(now()) @updatedAt
   poc         PointOfConsumption[]

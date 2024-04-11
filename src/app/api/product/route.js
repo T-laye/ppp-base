@@ -17,12 +17,21 @@ export async function POST(req, res) {
       );
     }
     const body = await req.json();
-    const { name, unit, voucherAllocation } = body;
+    const { name, unit, voucherAllocation, pocId } = body;
     const createProduct = await prisma.product.create({
       data: {
         productName: name.toLowerCase(),
         unit,
         voucherAllocation,
+        ...(pocId
+          ? {
+              poc: {
+                connect: {
+                  id: pocId,
+                },
+              },
+            }
+          : undefined),
         user: {
           connect: {
             id: authRes.user.id,
@@ -110,21 +119,20 @@ export async function GET(req, res) {
         productId: v?.id,
         name: v.productName,
         unit: v?.unit,
-        poc: v?.poc.map((v) => ({
-          name: v?.name,
-          address: v?.address,
-          phoneNumber: v?.phoneNumber,
-          stockAvailable: v?.stockAvailable,
-          stockLimit: v?.stockLimit,
-          createdAt: v?.createdAt,
-        })),
+        poc_id: v?.poc?.id,
+        poc_name: v?.poc?.name,
+        poc_address: v?.poc?.address,
+        poc_phoneNumber: v?.poc?.phoneNumber,
+        poc_stockAvailable: v?.poc?.stockAvailable,
+        poc_stockLimit: v?.poc?.stockLimit,
+        poc_createdAt: v?.poc?.createdAt,
         voucher: v.voucher.map((v) => ({
           voucherCode: v?.voucherCode,
           createdDate: v?.createdAt,
           collectionStatus: v?.collected,
           customerId: v?.customerId,
-          id: v?.voucherId
-        }))
+          id: v?.voucherId,
+        })),
       })),
       count: totalCount,
       statusCode: 200,
