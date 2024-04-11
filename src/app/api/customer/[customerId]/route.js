@@ -26,11 +26,13 @@ export async function PATCH(req, context) {
     const getUserId = params.customerId;
     const email = searchParams.get("email");
     const name = searchParams.get("name");
+    const address = searchParams.get("address")
     const phoneNumber = searchParams.get("phoneNumber");
     const addJ = {
       email: email ? email : undefined,
       name: name ? name : undefined,
       phoneNumber: phoneNumber ? phoneNumber : undefined,
+      address: address ? address : undefined,
     };
     const editCustomerData = await prisma.customer.update({
       where: {

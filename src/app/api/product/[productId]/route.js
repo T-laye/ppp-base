@@ -80,17 +80,23 @@ export async function PATCH(req, context) {
     const name = searchParams.get("productName");
     const unit = searchParams.get("unit");
     const voucherAllocation = searchParams.get("voucherAllocation");
+    const pocId = searchParams.get("pocId");
     const addJ = {
       productName: name ? name : undefined,
       unit: unit ? unit : undefined,
-      voucherAllocation: voucherAllocation ? Number(voucherAllocation) : undefined,
+      voucherAllocation: voucherAllocation
+        ? Number(voucherAllocation)
+        : undefined,
     };
 
     const updateProduct = await prisma.product.update({
       where: {
         id: getProductId,
       },
-      data: addJ,
+      data: {
+        ...addJ,
+        ...(pocId ? { poc: { connect: { id: pocId } } } : undefined),
+      },
     });
     return NextResponse.json(
       ApiResponseDto({
