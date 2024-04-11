@@ -113,7 +113,7 @@ export async function GET(req, context) {
 
 function mapCustomer(customer) {
   return {
-    id: customer.customerId,
+    id: customer.id,
     name: customer.name,
     email: customer.email,
     phoneNumber: customer.phoneNumber,

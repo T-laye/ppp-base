@@ -146,7 +146,7 @@ export async function GET(req, res) {
     const resData = ApiResponseDto({
       message: "Successful",
       data: getAllCustomer.map((v) => ({
-        customerId: v?.customerId,
+        customerId: v?.id,
         name: v.name,
         phoneNumber: v?.phoneNumber,
         email: v?.email,
