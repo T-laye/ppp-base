@@ -70,18 +70,18 @@ export async function GET(req, res) {
       skip: offset,
       include: {
         Product: true,
-        Customer: true,
+        customer: true,
         personnel: {
           include: {
             poc: true,
           },
         },
-        Management: {
+        management: {
           include: {
             poc: true,
           },
         },
-        Admin: {
+        admin: {
           include: {
             VoucherDispense: true,
             poc: true,
@@ -95,7 +95,7 @@ export async function GET(req, res) {
     const data = ApiResponseDto({
       message: "successful",
       statusCode: 200,
-      data: mapAllStaff(getAll),
+      data: getAll,
       count: totalCount,
     });
     return NextResponse.json(data, {

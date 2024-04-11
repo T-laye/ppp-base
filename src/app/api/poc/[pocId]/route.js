@@ -23,6 +23,7 @@ export async function PATCH(req, context) {
     const getPocId = params.pocId;
     const searchParams = req.nextUrl.searchParams;
     const email = searchParams.get("email");
+    const productId = searchParams.get("productId")
     const findUser = await prisma.user.findUnique({
       where: {
         email,
@@ -42,10 +43,11 @@ export async function PATCH(req, context) {
         id: getPocId,
       },
       data: {
+        ...(productId ? { product: { connect: { id: productId } } } : undefined),
         ...(findUser.role === "MANAGEMENT"
-          ? { managementId: findUser.id }
+          ? { managementId: findUser.management[0].id }
           : findUser.role === "PERSONNEL"
-          ? { personnelId: findUser.id }
+          ? { personnelId: findUser.personnel[0].id }
           : { adminId: findUser.id }),
       },
     });
@@ -104,7 +106,7 @@ export async function DELETE(req, context) {
     }
     await prisma.pointOfConsumption.delete({
       where: {
-        pocId: getPocId,
+        id: getPocId,
       },
     });
     return NextResponse.json(

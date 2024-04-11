@@ -38,18 +38,22 @@ export async function POST(req, res) {
         email,
         name: poc_name.toLowerCase(),
         phoneNumber,
-        product: {
-          create: {
-            productName: product_name.toLowerCase(),
-            unit: product_unit,
-            voucherAllocation: voucher_allocation,
-            user: {
-              connect: {
-                id: authResponse.user.id,
+        ...(product_name && product_unit
+          ? {
+              product: {
+                create: {
+                  productName: product_name.toLowerCase(),
+                  unit: product_unit,
+                  voucherAllocation: voucher_allocation,
+                  user: {
+                    connect: {
+                      id: authResponse.user.id,
+                    },
+                  },
+                },
               },
-            },
-          },
-        },
+            }
+          : {}),
         stockAvailable,
         stockLimit,
         user: {
@@ -68,10 +72,10 @@ export async function POST(req, res) {
       status: 201,
     });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     if (err.code === "P2002") {
       return NextResponse.json(
-        { message: "the poc email already exist", status: 409 },
+        { message: `the poc ${err.meta.target} already exist`, status: 409 },
         { status: 409 }
       );
     }
@@ -141,7 +145,9 @@ export async function GET(req, res) {
       where: {
         name: name ? { contains: name } : {},
         product: {
-          productName: productName ? { contains: productName } : {},
+          some: {
+            productName: productName ? { contains: productName } : {},
+          },
         },
       },
     });

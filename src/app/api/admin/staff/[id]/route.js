@@ -34,7 +34,7 @@ export async function PATCH(req, context) {
     const gender = searchParams.get("gender");
     const role = searchParams.get("role");
     const password = searchParams.get("password");
-    const getPersonnel = await prisma.user.update({
+    const getUser = await prisma.user.update({
       where: {
         id: getId,
       },
@@ -47,7 +47,7 @@ export async function PATCH(req, context) {
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         ...(role && role === "MANAGEMENT"
           ? {
-              Management: {
+              management: {
                 connect: {
                   user: {
                     id: getId,
@@ -57,7 +57,7 @@ export async function PATCH(req, context) {
             }
           : role === "ADMIN"
           ? {
-              Admin: {
+              admin: {
                 connect: {
                   user: {
                     id: getId,
@@ -76,17 +76,11 @@ export async function PATCH(req, context) {
             }),
       },
     });
-    if (role) {
-      await prisma.personnel.delete({
-        where: {
-          user: getId,
-        },
-      });
-    }
+    
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
-        data: getPersonnel,
+        data: getUser,
         message: "successful",
       }),
       { status: 200 }
@@ -118,17 +112,12 @@ export async function DELETE(req, context) {
     }
     const { params } = context;
     const getId = params.id;
-    const getCustomer = await prisma.personnel.findUnique({
+    const getUser = await prisma.user.findUnique({
       where: {
-        personnelId: getId,
-      },
-      include: {
-        user: true,
-        personnelPerformance: true,
-        Product: true,
+        id: getId,
       },
     });
-    if (!getCustomer) {
+    if (!getUser) {
       return NextResponse.json(
         ApiResponseDto({
           statusCode: 404,
@@ -137,13 +126,9 @@ export async function DELETE(req, context) {
         { status: 404 }
       );
     }
-    await prisma.customer.delete({
+    await prisma.user.delete({
       where: {
-        customerId: getUserId,
-      },
-      include: {
-        poc: true,
-        Voucher: true,
+        id: getId,
       },
     });
     return NextResponse.json(
@@ -188,8 +173,8 @@ export async function GET(req, context) {
         id,
       },
       include: {
-        Management: true,
-        Admin: true,
+        management: true,
+        admin: true,
         personnel: true,
       },
     });

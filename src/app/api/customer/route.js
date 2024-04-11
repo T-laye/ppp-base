@@ -30,12 +30,13 @@ export async function POST(req, res) {
         { status: 403 }
       );
     const body = await req.json();
-    const { name, email, phone } = body;
+    const { name, email, phone, address } = body;
     const addCustomer = await prisma.customer.create({
       data: {
         name: name.toLowerCase(),
-        email,
+        email: email.toLowerCase(),
         phoneNumber: phone,
+        address,
         user: {
           connect: {
             id: user.id,
