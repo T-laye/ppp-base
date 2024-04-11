@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../lib/apiResponseHelper";
-import { prismaErrorHelper } from "../../../../lib/prisma-error-helper";
 
 export async function POST(req, res) {
   const cookiesStore = cookies();
@@ -19,7 +18,7 @@ export async function POST(req, res) {
     const user = await prisma.user.findUnique({
       where: { id: payload.id, email: payload.email },
       include: {
-        Management: true,
+        management: true,
         personnel: true,
       },
     });
