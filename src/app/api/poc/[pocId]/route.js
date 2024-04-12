@@ -149,11 +149,11 @@ export async function GET(req, context) {
         id: getPocId,
       },
       include: {
-        product: true,
         admin: true,
+        customer: true,
         management: true,
         personnel: true,
-        Customer: true,
+        product: true
       },
     });
     if (!getPocById) {
