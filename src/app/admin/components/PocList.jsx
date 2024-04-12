@@ -1,7 +1,10 @@
+'use client'
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
-export default function PocList({ name, available, total }) {
+export default function PocList({ name, available, total , id}) {
+  const router = useRouter()
   const percentage = (available / total) * 100;
 
   const barProgress = () => {
@@ -9,6 +12,9 @@ export default function PocList({ name, available, total }) {
     return `${Math.round(result)}%`;
   };
 
+  const goToPoc = ()=>{
+    router.push(`/admin/poc/${id}`);
+  }
   //   console.log(barProgress());
 
   const barColor = () => {
@@ -24,8 +30,8 @@ export default function PocList({ name, available, total }) {
   //   console.log(barProgress());
 
   return (
-    <Link href="/admin/poc/id">
-      <li className="rounded-xl border px-4 pt-1 pb-4 border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive duration-200 mt-4">
+    // <Link href="/admin/poc/[id]">
+      <li onClick={goToPoc} className="rounded-xl border px-4 pt-1 pb-4 border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive duration-200 mt-4 cursor-pointer">
         <div className="flex justify-between items-end">
           <h4 className="text-lg font-medium">{name}</h4>
           <div className="text-base">
@@ -39,6 +45,6 @@ export default function PocList({ name, available, total }) {
           ></div>
         </div>
       </li>
-    </Link>
+    // </Link>
   );
 }

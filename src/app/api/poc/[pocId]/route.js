@@ -1,6 +1,7 @@
 import { prisma } from "../../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../../lib/apiResponseHelper";
 import { getAuthUser } from "../../../../../lib/get-auth-user";
+import { NextResponse } from "next/server";
 
 export async function PATCH(req, context) {
   try {
@@ -172,7 +173,7 @@ export async function GET(req, context) {
       }),
       { status: 200 }
     );
-  } catch (error) {
+  } catch (err) {
     return NextResponse.json(
       { message: err.message, error: err },
       { status: 500 }

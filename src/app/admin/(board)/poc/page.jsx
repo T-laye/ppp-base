@@ -73,6 +73,7 @@ export default function Poc() {
           <PocList
             key={p.pocId}
             name={p.name}
+            id={p.pocId}
             available={p.stockLimit}
             total={p.stockAvailable}
           />
