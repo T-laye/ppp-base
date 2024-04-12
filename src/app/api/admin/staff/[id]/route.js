@@ -30,11 +30,34 @@ export async function PATCH(req, context) {
     const email = searchParams.get("email");
     const name = searchParams.get("name");
     const phoneNumber = searchParams.get("phoneNumber");
+    const canEdit = searchParams.get("edit");
     const address = searchParams.get("address");
     const gender = searchParams.get("gender");
     const role = searchParams.get("role");
     const password = searchParams.get("password");
-    const getUser = await prisma.user.update({
+
+    const findUser = await prisma.user.findUnique({
+      where: {
+        id: getId,
+      },
+      include: {
+        management: true,
+        admin: true,
+        personnel: true,
+      },
+    });
+
+    if (!findUser) {
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: 404,
+          message: "the userId does not exist",
+        }),
+        { status: 404 }
+      );
+    }
+
+    const updateUser = await prisma.user.update({
       where: {
         id: getId,
       },
@@ -47,7 +70,28 @@ export async function PATCH(req, context) {
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         ...(role && role === "MANAGEMENT"
           ? {
+              role: role,
               management: {
+                connectOrCreate: {
+                  where: {
+                    id: getId,
+                  },
+                  create: {
+                    id: getId,
+                  },
+                },
+                ...(canEdit
+                  ? {
+                      update: {
+                        where: {
+                          id: findUser?.management[0]?.id,
+                        },
+                        data: {
+                          canEdit: canEdit,
+                        },
+                      },
+                    }
+                  : undefined),
                 connect: {
                   user: {
                     id: getId,
@@ -57,18 +101,26 @@ export async function PATCH(req, context) {
             }
           : role === "ADMIN"
           ? {
+              role: role,
               admin: {
-                connect: {
-                  user: {
+                connectOrCreate: {
+                  where: {
+                    id: getId,
+                  },
+                  create: {
                     id: getId,
                   },
                 },
               },
             }
           : {
+              role: role,
               personnel: {
-                connect: {
-                  user: {
+                connectOrCreate: {
+                  where: {
+                    id: getId,
+                  },
+                  create: {
                     id: getId,
                   },
                 },
@@ -76,11 +128,11 @@ export async function PATCH(req, context) {
             }),
       },
     });
-    
+
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
-        data: getUser,
+        data: updateUser,
         message: "successful",
       }),
       { status: 200 }
@@ -130,6 +182,11 @@ export async function DELETE(req, context) {
       where: {
         id: getId,
       },
+      include: {
+        admin: true,
+        management: true,
+        personnel: true
+      }
     });
     return NextResponse.json(
       ApiResponseDto({
@@ -203,4 +260,3 @@ export async function GET(req, context) {
     );
   }
 }
-

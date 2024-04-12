@@ -53,7 +53,7 @@ export async function POST(req, res) {
                 },
               },
             }
-          : {}),
+          : undefined),
         stockAvailable,
         stockLimit,
         user: {
@@ -135,6 +135,7 @@ export async function GET(req, res) {
         createdAt: "desc",
       },
       include: {
+        customer: true,
         admin: true,
         management: true,
         personnel: true,
@@ -144,11 +145,11 @@ export async function GET(req, res) {
       skip: offset,
       where: {
         name: name ? { contains: name } : {},
-        product: {
+        ...(productName ? {product: {
           some: {
             productName: productName ? { contains: productName } : {},
           },
-        },
+        }}: {})
       },
     });
     return NextResponse.json(

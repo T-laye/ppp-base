@@ -18,7 +18,7 @@ model User {
   gender      Gender
   personnel   Personnel[]          @relation("user")
   createdBy   Personnel[]          @relation("createdBy")
-  management  Management[]
+  management  Management[] 
   customer    Customer[]
   admin       Admin[]
   Product     Product[]
@@ -30,7 +30,7 @@ model User {
 
 model Personnel {
   id                   String               @id @default(uuid())
-  user                 User                 @relation(fields: [userId], references: [id], name: "user")
+  user                 User                 @relation(fields: [userId], references: [id], name: "user", onDelete: Cascade)
   createdAt            DateTime             @default(now()) @db.Timestamptz()
   personnelPerformance Performance[]
   poc                  PointOfConsumption[]
@@ -78,11 +78,7 @@ model PointOfConsumption {
   @@index([id, name])
 }
 
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
-}
+
 
 model Product {
   id                String              @id @default(uuid())
@@ -100,9 +96,14 @@ model Product {
   @@index([productName, id])
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
 model Management {
   id                    String               @id @default(uuid())
-  user                  User                 @relation(fields: [userId], references: [id])
+  user                  User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt             DateTime             @default(now()) @db.Timestamptz()
   managementPerformance Performance[]
   poc                   PointOfConsumption[]
@@ -116,7 +117,7 @@ model Admin {
   id              String               @id @default(uuid())
   createdAt       DateTime             @default(now()) @db.Timestamptz()
   VoucherDispense VoucherDispense[]
-  user            User                 @relation(fields: [userId], references: [id])
+  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
   poc             PointOfConsumption[]
 
