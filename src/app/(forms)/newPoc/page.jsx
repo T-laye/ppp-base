@@ -26,11 +26,11 @@ export default function NewPoc() {
       email: "",
       phone: "",
       address: "",
-      product_name: "",
+      // product_name: "",
       limit: 0,
       available: 0,
-      allocation: "", // Initialize allocation here
-      unit: "", // Initialize allocation here
+      // allocation: "", // Initialize allocation here
+      // unit: "", // Initialize allocation here
     },
     validate: poc_validate,
     onSubmit: handleSubmit,
@@ -50,7 +50,7 @@ export default function NewPoc() {
   }, [product]);
 
   async function handleSubmit(values, { resetForm }) {
-    const { name, email, phone, address, limit, available, unit, allocation } =
+    const { name, email, phone, address, limit, available } =
       values;
     try {
       const res = await addPoc({
@@ -58,15 +58,15 @@ export default function NewPoc() {
         phoneNumber: phone,
         address,
         email,
-        product_name: product.productName,
+        // product_name: product.productName,
         stockLimit: limit,
-        product_unit: unit,
+        // product_unit: unit,
         stockAvailable: available,
-        voucher_allocation: allocation, // Use values.allocation here
+        // voucher_allocation: allocation, // Use values.allocation here
       }).unwrap();
-      console.log(res);
+      // console.log(res);
       toast.success(res.message);
-      // router.back();
+      router.back();
       resetForm();
     } catch (e) {
       toast.error(e.data.message);
@@ -236,7 +236,7 @@ export default function NewPoc() {
                   </div>
                 )}
               </div> */}
-              <div className="flex flex-col  mb-6">
+              {/* <div className="flex flex-col  mb-6">
                 <label className="text-sm mb-2" htmlFor="product_name">
                   Select Product
                 </label>
@@ -251,8 +251,6 @@ export default function NewPoc() {
                   {...formik.getFieldProps("product_name")}
                 >
                   <option>Select Product</option>
-                  {/* <option value="fuel">Fuel</option>
-                  <option value="diesel">Diesel</option> */}
                   {renderProducts()}
                 </select>
                 {formik.touched.product_name && formik.errors.product_name && (
@@ -260,7 +258,7 @@ export default function NewPoc() {
                     {formik.errors.product_name}
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="limit">
                   Stock Limit Level
@@ -297,7 +295,7 @@ export default function NewPoc() {
                   </div>
                 )}
               </div>
-              <div className="flex flex-col mb-4">
+              {/* <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="allocation">
                   Voucher Allocation
                 </label>
@@ -338,7 +336,7 @@ export default function NewPoc() {
                 {formik.touched.unit && formik.errors.unit && (
                   <div className="text-error text-sm">{formik.errors.unit}</div>
                 )}
-              </div>
+              </div> */}
 
               <button
                 type="submit"

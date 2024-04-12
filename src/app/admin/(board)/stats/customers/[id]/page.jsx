@@ -51,13 +51,11 @@ export default function Page() {
       const resCustomers = await axios.get(
         `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
       );
-      dispatch(fetchCustomers([...resCustomers?.data.data]));
+      dispatch(fetchCustomers({...resCustomers?.data}));
       setIsLoading(false);
       toast.success(res.data.message);
-      setTimeout(() => {
-        router.back();
-        // window.location.reload();
-      }, 500);
+      router.back();
+     
     }
     // console.log(res);
   };
@@ -144,11 +142,11 @@ export default function Page() {
               value={formatDate(customer?.createdAt)}
               icon={<FaUser size={16} />}
             />
-            {/* <DetailList
-            title="Address"
-            value="No. oajdcbk cjioachno aichaojcnajc ajschnajc ajcg abjcbc icacsc"
-            icon={<FaLocationDot size={16} />}
-          /> */}
+            <DetailList
+              title="Address"
+              value={capitalizeWords(customer?.address)}
+              icon={<FaLocationDot size={16} />}
+            />
             {/* <DetailList
             title="Product"
             value="Fuel"

@@ -150,6 +150,7 @@ export async function GET(req, res) {
         name: v.name,
         phoneNumber: v?.phoneNumber,
         email: v?.email,
+        address: v?.address,
         createdAt: v?.createdAt,
         createdById: v?.user.id,
         createdByName: v?.user.name,

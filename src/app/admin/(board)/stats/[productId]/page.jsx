@@ -48,7 +48,7 @@ export default function Page() {
         const resProducts = await axios.get(
           `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
-        dispatch(fetchProducts([...resProducts?.data.data]));
+        dispatch(fetchProducts({...resProducts?.data}));
         setTimeout(() => {
           router.back();
           // window.location.reload();

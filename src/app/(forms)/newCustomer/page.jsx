@@ -20,7 +20,7 @@ export default function NewCustomer() {
       fullName: "",
       email: "",
       phone: "",
-      // address: "",
+      address: "",
     },
     validate: new_customer_validate,
     onSubmit: handleSubmit,
@@ -32,12 +32,13 @@ export default function NewCustomer() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    const { fullName, email, phone } = values;
+    const { fullName, email, phone, address } = values;
     try {
       const res = await addCustomer({
         name: fullName,
         email,
         phone,
+        address,
       }).unwrap();
       // dispatch(setCredentials({ ...res.data }));
       // console.log(res);
@@ -125,7 +126,7 @@ export default function NewCustomer() {
                   </div>
                 )}
               </div>
-              {/*<div className="flex flex-col mb-4">
+              <div className="flex flex-col mb-4">
                  <label className="text-sm mb-2" htmlFor="address">
                   Address
                 </label>
@@ -142,7 +143,7 @@ export default function NewCustomer() {
                     {formik.errors.address}
                   </div>
                 )}
-              </div> */}
+              </div>
               <button
                 type="submit"
                 className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${

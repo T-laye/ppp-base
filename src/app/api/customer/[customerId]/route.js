@@ -26,7 +26,7 @@ export async function PATCH(req, context) {
     const getUserId = params.customerId;
     const email = searchParams.get("email");
     const name = searchParams.get("name");
-    const address = searchParams.get("address")
+    const address = searchParams.get("address");
     const phoneNumber = searchParams.get("phoneNumber");
     const addJ = {
       email: email ? email : undefined,
@@ -116,6 +116,7 @@ function mapCustomer(customer) {
     id: customer.id,
     name: customer.name,
     email: customer.email,
+    address: customer.address,
     phoneNumber: customer.phoneNumber,
     createdAt: customer.createdAt,
     createdBy: customer.user.name,

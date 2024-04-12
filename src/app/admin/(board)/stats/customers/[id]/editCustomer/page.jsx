@@ -40,7 +40,7 @@ export default function Page() {
       fullName: customer?.name,
       email: customer?.email,
       phone: customer?.phoneNumber,
-      // address: "No. oacj olsc ojhioasc oiakcnajokncaokcnhoac",
+      address: customer?.address,
       // product: "Fuel",
       // third_party: true,
       // preferred_poc: "Total Fueling Station",
@@ -144,7 +144,7 @@ export default function Page() {
                 <div className="text-error text-sm">{formik.errors.phone}</div>
               )}
             </div>
-            {/* <div className="flex flex-col mb-4">
+            <div className="flex flex-col mb-4">
             <label className="text-sm mb-2" htmlFor="address">
               Address
             </label>
@@ -160,7 +160,7 @@ export default function Page() {
             {formik.touched.address && formik.errors.address && (
               <div className="text-error text-sm">{formik.errors.address}</div>
             )}
-          </div> */}
+          </div>
 
             <button
               type="submit"

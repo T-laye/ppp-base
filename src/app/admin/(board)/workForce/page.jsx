@@ -15,7 +15,7 @@ export default function WorkForce() {
   const { personnels } = useSelector((state) => state.personnels);
   const { data, count } = personnels;
   const dispatch = useDispatch();
-  console.log(staffName);
+  // console.log(staffName);
 
   const goToNewPersonnel = () => {
     router.push("/newPersonnel");

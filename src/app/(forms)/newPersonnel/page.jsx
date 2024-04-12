@@ -28,6 +28,7 @@ export default function NewPersonnel() {
     initialValues: {
       fullName: "",
       email: "",
+      password: "",
       phone: "",
       address: "",
       gender: "",
@@ -60,7 +61,7 @@ export default function NewPersonnel() {
       // Show success message
       toast.success(res.message);
       // Refresh router or any other actions you need
-      router.back();
+      // router.push();
       // console.log(res);
     } catch (e) {
       toast.error(e.data.message);

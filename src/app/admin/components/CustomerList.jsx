@@ -25,6 +25,7 @@ export default function CustomerList({ c }) {
       as={`/admin/stats/customers/${c.customerId}`}
     >
       <li
+      
         // onClick={getCustomerDetails}
         className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white  active:text-hite hover:bg-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 "
       >

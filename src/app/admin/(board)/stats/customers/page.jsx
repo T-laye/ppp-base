@@ -15,7 +15,7 @@ export default function Customers() {
   const { data, count } = customers;
   const dispatch = useDispatch();
 
-  console.log(customers);
+  // console.log(customers);
 
   const addCustomer = () => {
     router.push("/newCustomer");

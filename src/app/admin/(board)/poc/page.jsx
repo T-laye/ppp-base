@@ -71,9 +71,9 @@ export default function Poc() {
       } else {
         return pocs?.data?.map((p) => (
           <PocList
-            key={p.pocId}
+            key={p.id}
             name={p.name}
-            id={p.pocId}
+            id={p.id}
             available={p.stockLimit}
             total={p.stockAvailable}
           />
