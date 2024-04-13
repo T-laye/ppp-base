@@ -24,7 +24,7 @@ export async function PATCH(req, context) {
         }
       );
     }
-    const adminId = authResponse?.user?.id
+    const adminId = authResponse?.user?.id;
     const searchParams = req.nextUrl.searchParams;
     const { params } = context;
     const getId = params.id;
@@ -93,11 +93,6 @@ export async function PATCH(req, context) {
                       },
                     }
                   : undefined),
-                connect: {
-                  user: {
-                    id: getId,
-                  },
-                },
               },
             }
           : role === "ADMIN"
@@ -125,9 +120,9 @@ export async function PATCH(req, context) {
                     id: getId,
                     createdBy: {
                       connect: {
-                        id: adminId
-                      }
-                    }
+                        id: adminId,
+                      },
+                    },
                   },
                 },
               },
@@ -191,8 +186,8 @@ export async function DELETE(req, context) {
       include: {
         admin: true,
         management: true,
-        personnel: true
-      }
+        personnel: true,
+      },
     });
     return NextResponse.json(
       ApiResponseDto({

@@ -24,46 +24,69 @@ export async function PATCH(req, context) {
     const getPocId = params.pocId;
     const searchParams = req.nextUrl.searchParams;
     const email = searchParams.get("email");
+    const user_email = searchParams.get("user_email");
     const productId = searchParams.get("productId");
     const poc_name = searchParams.get("name");
     const phoneNumber = searchParams.get("phoneNumber");
     const address = searchParams.get("address");
-    const poc_email = searchParams.get("poc_email");
     const stockLimit = searchParams.get("stockLimit");
     const stockAvailable = searchParams.get("stockAvailable");
-    const findUser = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-      include: {
-        management: true,
-        personnel: true,
-      },
-    });
-    if (!findUser) {
-      return NextResponse.json(ApiResponseDto({ message: "email not found" }), {
-        status: 404,
+
+    if (user_email) {
+      const findUser = await prisma.user.findUnique({
+        where: {
+          email: user_email,
+        },
+        include: {
+          management: true,
+          personnel: true,
+        },
       });
+      if (!findUser) {
+        return NextResponse.json(
+          ApiResponseDto({ message: "email not found" }),
+          {
+            status: 404,
+          }
+        );
+      }
+      const addUserToPoc = await prisma.pointOfConsumption.update({
+        where: {
+          id: getPocId,
+        },
+        data: {
+          ...(findUser.role === "MANAGEMENT"
+            ? { managementId: findUser.management[0].id }
+            : findUser.role === "PERSONNEL"
+            ? { personnelId: findUser.personnel.id }
+            : { adminId: findUser.id }),
+        },
+      });
+
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: 200,
+          data: addUserToPoc,
+          message: "successful",
+        }),
+        { status: 200 }
+      );
     }
+
     const updatePoc = await prisma.pointOfConsumption.update({
       where: {
         id: getPocId,
       },
       data: {
         address: address ? address : undefined,
-        email: poc_email ? poc_email : undefined,
+        email: email ? email : undefined,
         name: poc_name ? poc_name : undefined,
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         stockAvailable: stockAvailable ? stockAvailable : undefined,
         stockLimit: stockLimit ? stockLimit : undefined,
         ...(productId
           ? { product: { connect: { id: productId } } }
-          : undefined),
-        ...(findUser.role === "MANAGEMENT"
-          ? { managementId: findUser.management[0].id }
-          : findUser.role === "PERSONNEL"
-          ? { personnelId: findUser.personnel.id }
-          : { adminId: findUser.id }),
+          : undefined)
       },
     });
     return NextResponse.json(
@@ -102,13 +125,6 @@ export async function DELETE(req, context) {
       where: {
         id: getPocId,
       },
-      include: {
-        product: true,
-        admin: true,
-        management: true,
-        personnel: true,
-        Customer: true,
-      },
     });
     if (!getPocById) {
       return NextResponse.json(
@@ -131,7 +147,7 @@ export async function DELETE(req, context) {
       }),
       { status: 200 }
     );
-  } catch (error) {
+  } catch (err) {
     return NextResponse.json(
       { message: err.message, error: err },
       { status: 500 }
