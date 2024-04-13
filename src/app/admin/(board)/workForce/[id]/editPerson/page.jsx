@@ -66,13 +66,14 @@ export default function Page() {
       );
       console.log(res);
       if (res) {
-        setIsLoading(true);
+        setIsLoading(false);
         // toast.success(res.message);
         // router.back();
       }
       // console.log(values);
     } catch (e) {
       // toast.error(e.data.message);
+      setIsLoading(false);
       console.log(e);
     }
   }
