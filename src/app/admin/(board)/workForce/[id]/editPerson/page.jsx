@@ -9,7 +9,7 @@ import invisible from "/public/icons/invisible_eye.svg";
 import Image from "next/image";
 import { personnel_validate } from "../../../../../../../lib/validate";
 import Loading from "@/components/Loading";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { getWorker } from "@/redux/slices/getWorkerSlice";
 import axios from "axios";
@@ -20,6 +20,7 @@ export default function Page() {
   const { id } = useParams();
   const { worker } = useSelector((state) => state.worker);
   const dispatch = useDispatch();
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false);
   // console.log(worker);
   const viewPassword = () => {
@@ -67,12 +68,12 @@ export default function Page() {
       console.log(res);
       if (res) {
         setIsLoading(false);
-        // toast.success(res.message);
-        // router.back();
+        toast.success(res.data.data.message);
+        router.back();
       }
       // console.log(values);
     } catch (e) {
-      // toast.error(e.data.message);
+      toast.error(e.data.message);
       setIsLoading(false);
       console.log(e);
     }

@@ -19,12 +19,12 @@ export default function Page() {
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
   
-  console.log(poc, id);
+  // console.log(poc, id);
 
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
-      console.log(res);
+      // console.log(res);
 
       dispatch(getPoc({ ...res.data.data }));
     };
@@ -38,12 +38,8 @@ export default function Page() {
       email: poc?.email,
       phone: poc?.phoneNumber,
       address: poc?.address,
-      // personnel: "",
-      // management: "",
-      // product: "Fuel",
       limit: poc?.stockLimit,
       available: poc?.stockAvailable,
-      // dispensed: 30000,
     },
     validate: poc_validate,
     onSubmit: handleSubmit,
@@ -54,20 +50,21 @@ export default function Page() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    const { fullName, email, phone, address, gender, role, password } = values;
+    const { name, email, phone, address, limit, available } = values;
     setIsLoading(true);
     try {
       const res = await axios.patch(
-        `/api/poc/${id}?email=${email}&name=${fullName}&phoneNumber=${phone}&address=${address}&gender=${gender}&role=${role}&password=${password}`
+        `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&stockAvailable=${available}`
       );
       console.log(res);
       if (res) {
-        setIsLoading(true);
-        // toast.success(res.message);
+        setIsLoading(false);
+        toast.success(res.data.data.message);
         // router.back();
       }
       // console.log(values);
     } catch (e) {
+      setIsLoading(false);
       // toast.error(e.data.message);
       console.log(e);
     }
