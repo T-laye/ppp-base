@@ -29,7 +29,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
-  const { pageNumber, take, search } = useSelector((state) => state.variables);
+  const { pageNumber, take, pocName } = useSelector((state) => state.variables);
   console.log(poc, id);
 
   const editPOC = () => {
@@ -93,7 +93,7 @@ export default function Page() {
       console.log(res)
       if (res) {
         const resPocs = await axios.get(
-          `/api/poc?take=${take}&pageNumber=${pageNumber}&name=${search}`
+          `/api/poc?take=${take}&pageNumber=${pageNumber}&name=${pocName}`
         );
         dispatch(fetchPocs({ ...resPocs?.data }));
         setIsLoading(false);

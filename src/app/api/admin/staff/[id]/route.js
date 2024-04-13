@@ -197,7 +197,7 @@ export async function DELETE(req, context) {
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
-        message: "successfully deleted customer",
+        message: "Successfully deleted",
       }),
       { status: 200 }
     );

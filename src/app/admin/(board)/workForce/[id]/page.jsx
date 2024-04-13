@@ -16,20 +16,25 @@ import { getWorker } from "@/redux/slices/getWorkerSlice";
 import axios from "axios";
 import Loading from "@/components/Loading";
 import { fetchPersonnels } from "@/redux/slices/fetchPersonnelsSlice";
+import { toast } from "react-toastify";
+import Loader from "@/components/Loader";
 
 export default function Page() {
   const router = useRouter();
   const { id } = useParams();
   const { worker } = useSelector((state) => state.worker);
-  const dispatch = useDispatch();  const [isLoading, setIsLoading] = useState(false);
-
-  console.log(worker);
+  const { pageNumber, take, staffName } = useSelector(
+    (state) => state.variables
+  );
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const { userInfo } = useSelector((state) => state.auth);
+  // console.log(userInfo);
 
   useEffect(() => {
     const getWorkerDetails = async () => {
       const res = await axios.get(`/api/admin/staff/${id}`);
 
-      // console.log(res);
       dispatch(getWorker({ ...res.data.data }));
     };
 
@@ -41,7 +46,7 @@ export default function Page() {
     const res = await axios.delete(`/api/admin/staff/${id}`);
     if (res) {
       const resPersonnels = await axios.get(
-        `/api/admin/staff?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        `/api/admin/staff?take=${take}&pageNumber=${pageNumber}&name=${staffName}`
       );
       dispatch(fetchPersonnels({ ...resPersonnels?.data }));
       setIsLoading(false);
@@ -138,27 +143,32 @@ export default function Page() {
               icon={<FaUser size={16} />}
             />
 
-            <button onClick={editPerson} className="btn bg-primary w-full mt-5">
-              Edit Person
-            </button>
+            {id !== userInfo?.id && (
+              <div>
+                <button
+                  onClick={editPerson}
+                  className="btn bg-primary w-full mt-5"
+                >
+                  Edit Person
+                </button>
 
-            {/* <button className="btn bg-yellow-500 w-full mt-5">
-              Make Management
-            </button> */}
-            {worker?.role === "MANAGEMENT" && (
-              <button className="btn bg-blue-500 w-full mt-5">
-                Enable Edit
+                {worker?.role === "MANAGEMENT" && (
+                  <button className="btn bg-blue-500 w-full mt-5">
+                    Enable Edit
+                  </button>
+                )}
+                 <button
+                onClick={handleDeletePersonnel}
+                type="submit"
+                className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
+                  isLoading ? "bg-customGray" : "bg-error"
+                } `}
+                disabled={isLoading}
+              >
+                {isLoading ? <Loader /> : "Delete Product"}
               </button>
+              </div>
             )}
-            {/* <button className="btn bg-customGray w-full mt-5">
-              Make Admin
-            </button> */}
-            <button
-              onClick={handleDeletePersonnel}
-              className="btn bg-error w-full mt-5"
-            >
-              Delete Person
-            </button>
           </div>
         ) : (
           <Loading />

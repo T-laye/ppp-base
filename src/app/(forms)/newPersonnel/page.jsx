@@ -61,7 +61,7 @@ export default function NewPersonnel() {
       // Show success message
       toast.success(res.message);
       // Refresh router or any other actions you need
-      // router.push();
+      router.back();
       // console.log(res);
     } catch (e) {
       toast.error(e.data.message);
@@ -210,7 +210,7 @@ export default function NewPersonnel() {
                   {...formik.getFieldProps("role")}
                 >
                   <option>Select role</option>
-                  {/* <option value="ADMIN">Male</option> */}
+                  <option value="ADMIN">Admin</option>
                   <option value="PERSONNEL">Personnel</option>
                   <option value="MANAGEMENT">Management</option>
                   {/* {renderJobCategories()} */}

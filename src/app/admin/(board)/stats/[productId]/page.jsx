@@ -22,7 +22,9 @@ export default function Page() {
   const { productId } = useParams();
   const { product } = useSelector((state) => state.product);
   const dispatch = useDispatch();
-  const { pageNumber, take, search } = useSelector((state) => state.variables);
+  const { pageNumber, take, productName } = useSelector(
+    (state) => state.variables
+  );
   // const { products } = useSelector((state) => state.products);
   // console.log(product);
   useEffect(() => {
@@ -46,7 +48,7 @@ export default function Page() {
         setIsLoading(false);
         toast.success(res.data.message);
         const resProducts = await axios.get(
-          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${search}`
+          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${productName}`
         );
         dispatch(fetchProducts({...resProducts?.data}));
         setTimeout(() => {
