@@ -1,7 +1,7 @@
 "use client";
 import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ImDroplet } from "react-icons/im";
 import { MdAssignmentTurnedIn } from "react-icons/md";
 import { TbRulerMeasure } from "react-icons/tb";
@@ -16,17 +16,24 @@ import { BsPeopleFill } from "react-icons/bs";
 import { IoLocationSharp } from "react-icons/io5";
 import { getPoc } from "@/redux/slices/getPocSlice";
 import { useSelector, useDispatch } from "react-redux";
-import axios from 'axios'
+import axios from "axios";
+import { IoIosTime } from "react-icons/io";
+import Loading from "@/components/Loading";
+import { fetchPocs } from "@/redux/slices/fetchPocsSlice";
+import Loader from "@/components/Loader";
+import { toast } from "react-toastify";
 
 export default function Page() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
+  const { pageNumber, take, search } = useSelector((state) => state.variables);
   console.log(poc, id);
 
   const editPOC = () => {
-    router.push(`/admin/poc/${id}/editPOC`);
+    router.push(`/admin/poc/${id}/editPoc`);
   };
   const assign = () => {
     router.push(`/admin/poc/${id}/assign`);
@@ -43,6 +50,64 @@ export default function Page() {
     getPocDetails();
   }, [dispatch, id]);
 
+  function capitalizeWords(sentence) {
+    // Split the sentence into an array of words
+    let words = sentence?.split(" ");
+
+    // Iterate over each word
+    for (let i = 0; i < words?.length; i++) {
+      // Capitalize the first letter of each word
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+
+    // Join the words back into a sentence
+    return words?.join(" ");
+  }
+
+  function formatDate(dateString) {
+    // Parse the date string
+    const date = new Date(dateString);
+    // console.log(date);
+    if (poc?.createdAt) {
+      const dateOptions = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      const timeOptions = { hour: "numeric", minute: "numeric" };
+
+      // Format the date and time according to options
+      const formattedDate = date.toLocaleDateString("en-US", dateOptions);
+      const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
+
+      return `${formattedDate} at ${formattedTime}`;
+    }
+    return;
+  }
+
+  const handleDeletePoc = async () => {
+    setIsLoading(true);
+    try {
+      const res = await axios.delete(`/api/poc/${id}`);
+      console.log(res)
+      if (res) {
+        const resPocs = await axios.get(
+          `/api/poc?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        );
+        dispatch(fetchPocs({ ...resPocs?.data }));
+        setIsLoading(false);
+        toast.success(res.data.message);
+        router.back();
+      }
+    } catch (e) {
+      // toast.success(res.data.message);
+      setIsLoading(false);
+      console.log(e);
+    }
+    // console.log(res);
+  };
+
   return (
     <section className="min-h-screen pt-8 pb-20">
       <div className="mb-3">
@@ -51,79 +116,95 @@ export default function Page() {
 
       <div>
         <h3 className="font-semibold">POC Details</h3>
-
-        <div className="mt-4">
-          <DetailList
-            title="POC Name"
-            value="Total Fueling Station"
-            icon={<BsFillFuelPumpDieselFill size={16} />}
-          />
-          <DetailList
-            title="Email"
-            value="total@gmail.com"
-            icon={<MdEmail size={16} />}
-          />
-          <DetailList
-            title="Phone Number"
-            value="09083039494"
-            icon={<BsFillTelephoneFill size={16} />}
-          />
-          <DetailList
-            title="Address"
-            value="No. 30 Okumagba Avenue, Warri, Delta State"
-            icon={<IoLocationSharp size={20} />}
-          />
-          <DetailList
-            title="Personnel"
-            value="John Matthew"
-            // icon={<BsFillFuelPumpDieselFill size={24} />}
-            icon={<FaUser size={16} />}
-          />
-          <DetailList
-            title="Management"
-            value="Priscilla Franklin"
-            icon={<FaUser size={16} />}
-            // icon={<BsFillFuelPumpDieselFill size={24} />}
-          />
-          <DetailList
-            title="Product"
-            value="Fuel"
-            icon={<ImDroplet size={16} />}
-          />
-          <DetailList
-            title="Amount Allocated"
-            value={250}
-            icon={<MdAssignmentTurnedIn size={18} />}
-          />
-
-          <div className="flex gap-2 items-end">
+        {poc?.name ? (
+          <div className="mt-4">
             <DetailList
-              title="Available"
-              value={500}
-              icon={<PiDropHalfBottomFill size={18} />}
+              title="POC Name"
+              value={capitalizeWords(poc?.name)}
+              icon={<BsFillFuelPumpDieselFill size={16} />}
             />
             <DetailList
-              title="Limit"
-              value={2000}
+              title="Email"
+              value={poc?.email}
+              icon={<MdEmail size={16} />}
+            />
+            <DetailList
+              title="Phone Number"
+              value={poc?.phoneNumber}
+              icon={<BsFillTelephoneFill size={16} />}
+            />
+            <DetailList
+              title="Address"
+              value={poc?.address}
+              icon={<IoLocationSharp size={20} />}
+            />
+            <DetailList
+              title="Personnel"
+              value=""
+              // icon={<BsFillFuelPumpDieselFill size={24} />}
+              icon={<FaUser size={16} />}
+            />
+            <DetailList
+              title="Management"
+              value=""
+              icon={<FaUser size={16} />}
+              // icon={<BsFillFuelPumpDieselFill size={24} />}
+            />
+            <DetailList
+              title="Product"
+              value=""
               icon={<ImDroplet size={16} />}
             />
+            <DetailList
+              title="Amount Allocated"
+              value={250}
+              icon={<MdAssignmentTurnedIn size={18} />}
+            />
+
+            <div className="flex gap-2 items-end">
+              <DetailList
+                title="Available"
+                value={poc?.stockAvailable}
+                icon={<PiDropHalfBottomFill size={18} />}
+              />
+              <DetailList
+                title="Limit"
+                value={poc?.stockLimit}
+                icon={<ImDroplet size={16} />}
+              />
+            </div>
+            <DetailList
+              title="Total Product Dispensed"
+              value=""
+              icon={<ImDroplet size={16} />}
+            />
+            <DetailList
+              title="Created At"
+              value={formatDate(poc?.createdAt)}
+              icon={<IoIosTime size={16} />}
+            />
+            <button onClick={assign} className="btn bg-primary  w-full mt-5">
+              Assign Persons
+            </button>
+
+            <button onClick={editPOC} className="btn bg-yellow-500 w-full mt-5">
+              Edit POC
+            </button>
+
+            <button
+              onClick={handleDeletePoc}
+              type="submit"
+              className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
+                isLoading ? "bg-customGray" : "bg-error"
+              } `}
+              disabled={isLoading}
+            >
+              {isLoading ? <Loader /> : "Delete Customer"}
+            </button>
           </div>
-          <DetailList
-            title="Total Product Dispensed"
-            value={5000}
-            icon={<ImDroplet size={16} />}
-          />
-
-          <button onClick={assign} className="btn bg-primary  w-full mt-5">
-            Assign Persons
-          </button>
-
-          <button onClick={editPOC} className="btn bg-yellow-500 w-full mt-5">
-            Edit POC
-          </button>
-
-          <button className="btn bg-error w-full mt-5">Delete POC</button>
-        </div>
+        ) : (
+          <Loading />
+        )}
       </div>
     </section>
   );

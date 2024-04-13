@@ -23,6 +23,7 @@ import axios from "axios";
 import Loading from "@/components/Loading";
 import Loader from "@/components/Loader";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
+import { IoIosTime } from "react-icons/io";
 
 export default function Page() {
   const router = useRouter();
@@ -140,7 +141,7 @@ export default function Page() {
             <DetailList
               title="Created At"
               value={formatDate(customer?.createdAt)}
-              icon={<FaUser size={16} />}
+              icon={<IoIosTime size={16} />}
             />
             <DetailList
               title="Address"
