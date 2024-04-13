@@ -18,7 +18,7 @@ model User {
   gender      Gender
   personnel   Personnel[]          @relation("user")
   createdBy   Personnel[]          @relation("createdBy")
-  management  Management[] 
+  management  Management[]
   customer    Customer[]
   admin       Admin[]
   Product     Product[]
@@ -29,13 +29,13 @@ model User {
 }
 
 model Personnel {
-  id                   String               @id @default(uuid())
-  user                 User                 @relation(fields: [userId], references: [id], name: "user", onDelete: Cascade)
-  createdAt            DateTime             @default(now()) @db.Timestamptz()
+  id                   String              @id @default(uuid())
+  user                 User                @relation(fields: [userId], references: [id], name: "user", onDelete: Cascade)
+  createdAt            DateTime            @default(now()) @db.Timestamptz()
   personnelPerformance Performance[]
-  poc                  PointOfConsumption[]
+  poc                  PointOfConsumption?
   userId               String
-  createdBy            User?                @relation(fields: [createdById], references: [id], name: "createdBy")
+  createdBy            User?               @relation(fields: [createdById], references: [id], name: "createdBy")
   createdById          String
 
   @@index([id])
@@ -56,7 +56,7 @@ enum Permission {
 
 model PointOfConsumption {
   id             String      @id @default(uuid())
-  personnel      Personnel?  @relation(fields: [personnelId], references: [id])
+  personnel      Personnel   @relation(fields: [personnelId], references: [id])
   management     Management? @relation(fields: [managementId], references: [id])
   admin          Admin?      @relation(fields: [adminId], references: [id])
   address        String
@@ -65,7 +65,7 @@ model PointOfConsumption {
   email          String      @unique
   createdAt      DateTime    @default(now()) @db.Timestamptz()
   updatedAt      DateTime    @default(now()) @updatedAt
-  personnelId    String?
+  personnelId    String      @unique
   managementId   String?
   stockLimit     Int
   stockAvailable Int
@@ -77,8 +77,6 @@ model PointOfConsumption {
 
   @@index([id, name])
 }
-
-
 
 model Product {
   id                String              @id @default(uuid())
@@ -101,6 +99,7 @@ enum Gender {
   FEMALE
   OTHER
 }
+
 model Management {
   id                    String               @id @default(uuid())
   user                  User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -129,7 +128,7 @@ model Customer {
   name        String
   email       String               @unique
   phoneNumber String
-  address String
+  address     String
   createdAt   DateTime             @default(now()) @db.Timestamptz()
   updatedAt   DateTime             @default(now()) @updatedAt
   poc         PointOfConsumption[]
@@ -177,7 +176,7 @@ model Performance {
   createdAt          DateTime    @default(now()) @db.Timestamptz()
   cusomtomersHandled Int
   productsDispensed  Int
-  Management         Management? @relation(fields: [managementId], references: [id])
+  management         Management? @relation(fields: [managementId], references: [id])
   managementId       String?
 }
 
