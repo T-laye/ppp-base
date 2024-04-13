@@ -38,12 +38,8 @@ export default function Page() {
       email: poc?.email,
       phone: poc?.phoneNumber,
       address: poc?.address,
-      // personnel: "",
-      // management: "",
-      // product: "Fuel",
       limit: poc?.stockLimit,
       available: poc?.stockAvailable,
-      // dispensed: 30000,
     },
     validate: poc_validate,
     onSubmit: handleSubmit,
@@ -54,11 +50,11 @@ export default function Page() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    const { fullName, email, phone, address, gender, role, password } = values;
+    const { name, email, phone, address, limit, available } = values;
     setIsLoading(true);
     try {
       const res = await axios.patch(
-        `/api/poc/${id}?email=${email}&name=${fullName}&phoneNumber=${phone}&address=${address}&gender=${gender}&role=${role}&password=${password}`
+        `/api/poc/${id}?poc_email=${email}&name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&stockAvailable=${available}`
       );
       console.log(res);
       if (res) {
