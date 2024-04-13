@@ -21,7 +21,7 @@ export default function Page() {
   const { worker } = useSelector((state) => state.worker);
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  console.log(worker);
+  // console.log(worker);
   const viewPassword = () => {
     setShowPassword(!showPassword);
   };
