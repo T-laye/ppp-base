@@ -19,12 +19,12 @@ export default function Page() {
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
   
-  console.log(poc, id);
+  // console.log(poc, id);
 
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
-      console.log(res);
+      // console.log(res);
 
       dispatch(getPoc({ ...res.data.data }));
     };
@@ -54,16 +54,17 @@ export default function Page() {
     setIsLoading(true);
     try {
       const res = await axios.patch(
-        `/api/poc/${id}?poc_email=${email}&name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&stockAvailable=${available}`
+        `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&stockAvailable=${available}`
       );
       console.log(res);
       if (res) {
-        setIsLoading(true);
-        // toast.success(res.message);
+        setIsLoading(false);
+        toast.success(res.data.data.message);
         // router.back();
       }
       // console.log(values);
     } catch (e) {
+      setIsLoading(false);
       // toast.error(e.data.message);
       console.log(e);
     }
