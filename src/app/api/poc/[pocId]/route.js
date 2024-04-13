@@ -29,8 +29,8 @@ export async function PATCH(req, context) {
     const poc_name = searchParams.get("name");
     const phoneNumber = searchParams.get("phoneNumber");
     const address = searchParams.get("address");
-    const stockLimit = searchParams.get("stockLimit");
-    const stockAvailable = searchParams.get("stockAvailable");
+    const stockLimit = Number(searchParams.get("stockLimit"));
+    const stockAvailable = Number(searchParams.get("stockAvailable"));
 
     if (user_email) {
       const findUser = await prisma.user.findUnique({
