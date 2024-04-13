@@ -24,7 +24,13 @@ export async function PATCH(req, context) {
     const getPocId = params.pocId;
     const searchParams = req.nextUrl.searchParams;
     const email = searchParams.get("email");
-    const productId = searchParams.get("productId")
+    const productId = searchParams.get("productId");
+    const poc_name = searchParams.get("name");
+    const phoneNumber = searchParams.get("phoneNumber");
+    const address = searchParams.get("address");
+    const poc_email = searchParams.get("poc_email");
+    const stockLimit = searchParams.get("stockLimit");
+    const stockAvailable = searchParams.get("stockAvailable");
     const findUser = await prisma.user.findUnique({
       where: {
         email,
@@ -44,11 +50,19 @@ export async function PATCH(req, context) {
         id: getPocId,
       },
       data: {
-        ...(productId ? { product: { connect: { id: productId } } } : undefined),
+        address: address ? address : undefined,
+        email: poc_email ? poc_email : undefined,
+        name: poc_name ? poc_name : undefined,
+        phoneNumber: phoneNumber ? phoneNumber : undefined,
+        stockAvailable: stockAvailable ? stockAvailable : undefined,
+        stockLimit: stockLimit ? stockLimit : undefined,
+        ...(productId
+          ? { product: { connect: { id: productId } } }
+          : undefined),
         ...(findUser.role === "MANAGEMENT"
           ? { managementId: findUser.management[0].id }
           : findUser.role === "PERSONNEL"
-          ? { personnelId: findUser.personnel[0].id }
+          ? { personnelId: findUser.personnel.id }
           : { adminId: findUser.id }),
       },
     });
@@ -153,7 +167,7 @@ export async function GET(req, context) {
         customer: true,
         management: true,
         personnel: true,
-        product: true
+        product: true,
       },
     });
     if (!getPocById) {
