@@ -24,6 +24,7 @@ export async function PATCH(req, context) {
         }
       );
     }
+    const adminId = authResponse?.user?.id
     const searchParams = req.nextUrl.searchParams;
     const { params } = context;
     const getId = params.id;
@@ -122,6 +123,11 @@ export async function PATCH(req, context) {
                   },
                   create: {
                     id: getId,
+                    createdBy: {
+                      connect: {
+                        id: adminId
+                      }
+                    }
                   },
                 },
               },
