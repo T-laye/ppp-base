@@ -72,7 +72,6 @@ export async function POST(req, res) {
       status: 201,
     });
   } catch (err) {
-    console.log(err);
     if (err.code === "P2002") {
       return NextResponse.json(
         { message: `the poc ${err.meta.target} already exist`, status: 409 },
