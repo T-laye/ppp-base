@@ -65,7 +65,7 @@ export default function Page() {
       const res = await axios.patch(
         `/api/admin/staff/${id}?email=${email}&name=${fullName}&phoneNumber=${phone}&address=${address}&gender=${gender}&role=${role}&password=${password}`
       );
-      console.log(res);
+      // console.log(res);
       if (res) {
         setIsLoading(false);
         toast.success(res.data.data.message);

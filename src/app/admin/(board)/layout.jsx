@@ -98,10 +98,10 @@ export default function Layout({ children }) {
           `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
         );
         dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-        console.log(resPersonnels);
+        // console.log(resPersonnels);
         // console.log(resPocs)
       } catch (e) {
-        console.log(e);
+        // console.log(e);
       }
     } else {
       return;
