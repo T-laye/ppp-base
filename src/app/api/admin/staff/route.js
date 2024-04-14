@@ -1,9 +1,10 @@
 import { prisma } from "../../../../../config/prisma.connect";
 import { NextResponse } from "next/server";
-import { getAuthUser } from "../../../../../lib/get-auth-user";
 import ApiResponseDto from "../../../../../lib/apiResponseHelper";
+import { getAuthUser } from "../../../../../lib/get-auth-user";
 
 export async function GET(req, res) {
+  const searchParams = req.nextUrl.searchParams;
   try {
     const authResponse = await getAuthUser(req, false);
     if (authResponse.error) {
@@ -24,7 +25,6 @@ export async function GET(req, res) {
         status: 403,
       });
     }
-    const searchParams = req.nextUrl.searchParams;
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const order = searchParams.get("order");
     const take = searchParams.get("take")
