@@ -28,23 +28,50 @@ export async function PATCH(req, context) {
     const poc_name = searchParams.get("name");
     const phoneNumber = searchParams.get("phoneNumber");
     const address = searchParams.get("address");
-    const poc_email = searchParams.get("poc_email");
-    const stockLimit = searchParams.get("stockLimit");
-    const stockAvailable = searchParams.get("stockAvailable");
-    const findUser = await prisma.user.findUnique({
-      where: {
-        email,
-      },
-      include: {
-        management: true,
-        personnel: true,
-      },
-    });
-    if (!findUser) {
-      return NextResponse.json(ApiResponseDto({ message: "email not found" }), {
-        status: 404,
+    const stockLimit = Number(searchParams.get("stockLimit"));
+    const stockAvailable = Number(searchParams.get("stockAvailable"));
+
+    if (user_email) {
+      const findUser = await prisma.user.findUnique({
+        where: {
+          email: user_email,
+        },
+        include: {
+          management: true,
+          personnel: true,
+        },
       });
+      if (!findUser) {
+        return NextResponse.json(
+          ApiResponseDto({ message: "email not found" }),
+          {
+            status: 404,
+          }
+        );
+      }
+      const addUserToPoc = await prisma.pointOfConsumption.update({
+        where: {
+          id: getPocId,
+        },
+        data: {
+          ...(findUser.role === "MANAGEMENT"
+            ? { managementId: findUser.management[0].id }
+            : findUser.role === "PERSONNEL"
+            ? { personnelId: findUser.personnel.id }
+            : { adminId: findUser.id }),
+        },
+      });
+
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: 200,
+          data: addUserToPoc,
+          message: "successful",
+        }),
+        { status: 200 }
+      );
     }
+
     const updatePoc = await prisma.pointOfConsumption.update({
       where: {
         id: getPocId,
