@@ -89,24 +89,9 @@ export default function Layout({ children }) {
       }
     })();
   }, [dispatch, isAuth, pageNumber, pocName, productName, take]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     if (isAuth) {
-  //       const resPersonnels = await axios.get(
-  //         `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
-  //       );
-  //       dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-  //       // console.log(resPersonnels);
-  //       // console.log(resPocs)
-  //     } else {
-  //       return;
-  //     }
-  //   })();
-  // }, [dispatch, isAuth, pageNumber, staffName, take]);
-  // console.log(isAuth);
-
-  const fetch = async () => {
+// 
+  useEffect(() => {
+    (async () => {
     if (isAuth) {
       try {
         const resPersonnels = await axios.get(
@@ -121,7 +106,9 @@ export default function Layout({ children }) {
     } else {
       return;
     }
-  };
+    })();
+  }, [dispatch, isAuth, pageNumber, staffName, take]);
+  // console.log(isAuth);
 
   if (!isAuth) {
     return (
@@ -139,10 +126,6 @@ export default function Layout({ children }) {
         <Header />
         <Suspense>
           <main className="pt-12">{children}
-          
-        <button onClick={fetch} className="btn mb-20 bg-primary">
-          Fetch Workers{" "}
-        </button>
           </main>
         </Suspense>
         <footer>
