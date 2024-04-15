@@ -57,8 +57,7 @@ enum Permission {
 model PointOfConsumption {
   id             String      @id @default(uuid())
   personnel      Personnel?   @relation(fields: [personnelId], references: [id])
-  management     Management? @relation(fields: [managementId], references: [id])
-  admin          Admin?      @relation(fields: [adminId], references: [id])
+  management     Management[]
   address        String
   name           String
   phoneNumber    String
@@ -70,7 +69,6 @@ model PointOfConsumption {
   stockLimit     Int
   stockAvailable Int
   customer       Customer[]
-  adminId        String?
   product        Product[]
   user           User        @relation(fields: [createdBy], references: [id])
   createdBy      String
@@ -118,8 +116,6 @@ model Admin {
   VoucherDispense VoucherDispense[]
   user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
-  poc             PointOfConsumption[]
-
   @@index([id])
 }
 
