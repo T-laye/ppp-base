@@ -135,7 +135,6 @@ export async function GET(req, res) {
       },
       include: {
         customer: true,
-        admin: true,
         management: true,
         personnel: true,
         product: true,
