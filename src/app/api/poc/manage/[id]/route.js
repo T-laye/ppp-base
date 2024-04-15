@@ -54,12 +54,16 @@ export async function PATCH(req, context) {
           ...(findUser.role === "MANAGEMENT"
             ? {
                 management: {
-                  update: { where: { id: getM.id }, data: { id: undefined } },
+                  disconnect: {
+                    id: getM.id,
+                  },
                 },
               }
             : {
                 personnel: {
-                  update: { where: { id: getP.id }, data: { id: undefined } },
+                  disconnect: {
+                    id: getP.id,
+                  },
                 },
               }),
         },
@@ -73,25 +77,37 @@ export async function PATCH(req, context) {
         { status: 200 }
       );
     }
-    const updatePoc = await prisma.pointOfConsumption.update({
-      where: {
-        id: getPocId,
-      },
-      data: {
-        ...(productId
-          ? {
-              product: {
-                update: { where: { id: productId }, data: { id: undefined } },
-              },
-            }
-          : undefined),
-      },
-    });
+    if (productId) {
+      const updatePoc = await prisma.pointOfConsumption.update({
+        where: {
+          id: getPocId,
+        },
+        data: {
+          ...(productId
+            ? {
+                product: {
+                  disconnect: {
+                    id: productId,
+                  },
+                },
+              }
+            : undefined),
+        },
+      });
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: 200,
+          data: updatePoc,
+          message: "successful",
+        }),
+        { status: 200 }
+      );
+    }
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
-        data: updatePoc,
-        message: "successful",
+        data: "no update queried",
+        message: "OK",
       }),
       { status: 200 }
     );

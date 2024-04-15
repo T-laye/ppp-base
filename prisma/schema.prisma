@@ -55,22 +55,22 @@ enum Permission {
 }
 
 model PointOfConsumption {
-  id             String      @id @default(uuid())
-  personnel      Personnel?   @relation(fields: [personnelId], references: [id])
+  id             String       @id @default(uuid())
+  personnel      Personnel?   @relation(fields: [personnelId], references: [id], onDelete: SetNull)
   management     Management[]
   address        String
   name           String
   phoneNumber    String
-  email          String      @unique
-  createdAt      DateTime    @default(now()) @db.Timestamptz()
-  updatedAt      DateTime    @default(now()) @updatedAt
+  email          String       @unique
+  createdAt      DateTime     @default(now()) @db.Timestamptz()
+  updatedAt      DateTime     @default(now()) @updatedAt
   personnelId    String?      @unique
   managementId   String?
   stockLimit     Int
   stockAvailable Int
   customer       Customer[]
   product        Product[]
-  user           User        @relation(fields: [createdBy], references: [id])
+  user           User         @relation(fields: [createdBy], references: [id])
   createdBy      String
 
   @@index([id, name])
@@ -85,7 +85,7 @@ model Product {
   updatedAt         DateTime            @default(now()) @updatedAt
   user              User                @relation(fields: [createdBy], references: [id])
   voucher           Voucher[]
-  poc               PointOfConsumption? @relation(fields: [pocId], references: [id])
+  poc               PointOfConsumption? @relation(fields: [pocId], references: [id], onDelete: SetNull)
   pocId             String?
   createdBy         String
 
@@ -111,11 +111,12 @@ model Management {
 }
 
 model Admin {
-  id              String               @id @default(uuid())
-  createdAt       DateTime             @default(now()) @db.Timestamptz()
+  id              String            @id @default(uuid())
+  createdAt       DateTime          @default(now()) @db.Timestamptz()
   VoucherDispense VoucherDispense[]
-  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
+
   @@index([id])
 }
 
