@@ -23,7 +23,7 @@ export async function PATCH(req, context) {
     const { params } = context;
     const getPocId = params.pocId;
     const searchParams = req.nextUrl.searchParams;
-    const email = searchParams.get("email");
+    const user_email = searchParams.get("email");
     const productId = searchParams.get("productId");
     const poc_name = searchParams.get("name");
     const phoneNumber = searchParams.get("phoneNumber");
@@ -78,7 +78,7 @@ export async function PATCH(req, context) {
       },
       data: {
         address: address ? address : undefined,
-        email: poc_email ? poc_email : undefined,
+        email: user_email ? user_email : undefined,
         name: poc_name ? poc_name : undefined,
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         stockAvailable: stockAvailable ? stockAvailable : undefined,

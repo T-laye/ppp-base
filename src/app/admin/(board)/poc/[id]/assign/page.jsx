@@ -8,22 +8,64 @@ import { poc_validate } from "../../../../../../../lib/validate";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { MdOutlineCancel } from "react-icons/md";
 import { FaUser } from "react-icons/fa6";
+import { getPoc } from "@/redux/slices/getPocSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
+import CustomerList from "@/app/admin/components/CustomerList";
 
 export default function Page() {
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [term, setTerm] = useState("");
-  //   const [isLoading, setIsLoading] = useState(false);
-  //   const [isEditable, setIsEditable] = useState(false);
+  const [item, setItem] = useState("");
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const { poc } = useSelector((state) => state.poc);
+  const { products } = useSelector((state) => state.products);
+  const { pageNumber, take, search, productName, staffName, pocName } =
+    useSelector((state) => state.variables);
 
-  const handleAssignModal = () => {
+  console.log(products);
+  useEffect(() => {
+    const getPocDetails = async () => {
+      const res = await axios.get(`/api/poc/${id}`);
+      // console.log(res);
+
+      dispatch(getPoc({ ...res.data.data }));
+    };
+    getPocDetails();
+  }, [dispatch, id]);
+
+  const handleAssignModal = (i) => {
     setShowAssignModal(!showAssignModal);
-    //   dispatch(handleSearch(""));
+    setItem(i);
   };
+
+  const renderProduct = () => {
+    if (products?.data.length === 0) {
+      return <div className="text-lg">No Products Found</div>;
+    } else {
+      return products?.data.map((p) => (
+        <li
+          key={p.id}
+          className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
+        >
+          <div>{p.name}</div>
+          {/* <div>
+            <FaUser size={24} className={``} />
+          </div> */}
+        </li>
+      ));
+    }
+  };
+
   const handleChange = (e) => {
     setTerm(e.target.value);
-    //  if (e.target.value.length >= 3 || e.target.value.length === 0) {
-    //    dispatch(handleSearch(e.target.value.toLowerCase()));
-    //  }
+    if (e.target.value.length >= 3 || e.target.value.length === 0) {
+      dispatch(handleSearch(e.target.value.toLowerCase()));
+    }
   };
 
   return (
@@ -38,7 +80,7 @@ export default function Page() {
         <div>
           <div className="flex justify-end">
             <button
-              onClick={handleAssignModal}
+              onClick={() => handleAssignModal("personnel")}
               className="btn bg-primary my-5 place-self-end"
             >
               Assign Personnel
@@ -52,7 +94,7 @@ export default function Page() {
                   onClick={handleAssignModal}
                   className="btn bg-error place-self-end"
                 >
-                  UnAssign
+                  Remove
                 </button>
               </div>
             </li>
@@ -65,7 +107,7 @@ export default function Page() {
         </h3>
         <div className="flex justify-end">
           <button
-            onClick={handleAssignModal}
+            onClick={() => handleAssignModal("management")}
             className="btn bg-primary my-5 place-self-end"
           >
             Assign Management
@@ -79,7 +121,7 @@ export default function Page() {
                 onClick={handleAssignModal}
                 className="btn bg-error place-self-end"
               >
-                UnAssign
+                Remove
               </button>
             </div>
           </li>
@@ -90,10 +132,37 @@ export default function Page() {
                 onClick={handleAssignModal}
                 className="btn bg-error place-self-end"
               >
-                UnAssign
+                Remove
               </button>
             </div>
           </li>
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <h3 className="text-center text-lg font-medium mt-3">Assign Product</h3>
+        <div>
+          <div className="flex justify-end">
+            <button
+              onClick={() => handleAssignModal("product")}
+              className="btn bg-primary my-5 place-self-end"
+            >
+              Assign Product
+            </button>
+          </div>
+          <div>
+            <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
+              <div>James Goodman</div>
+              <div>
+                <button
+                  onClick={handleAssignModal}
+                  className="btn bg-error place-self-end"
+                >
+                  Remove
+                </button>
+              </div>
+            </li>
+          </div>
         </div>
       </div>
 
@@ -114,7 +183,7 @@ export default function Page() {
               <div className="relative ">
                 <input
                   type="text"
-                  placeholder="Search by customer name"
+                  placeholder="Search by name"
                   className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
                   value={term}
                   onChange={handleChange}

@@ -30,7 +30,7 @@ export default function Page() {
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
   const { pageNumber, take, pocName } = useSelector((state) => state.variables);
-  console.log(poc, id);
+  // console.log(poc, id);
 
   const editPOC = () => {
     router.push(`/admin/poc/${id}/editPoc`);
@@ -90,7 +90,7 @@ export default function Page() {
     setIsLoading(true);
     try {
       const res = await axios.delete(`/api/poc/${id}`);
-      console.log(res)
+      console.log(res);
       if (res) {
         const resPocs = await axios.get(
           `/api/poc?take=${take}&pageNumber=${pageNumber}&name=${pocName}`
@@ -183,12 +183,12 @@ export default function Page() {
               value={formatDate(poc?.createdAt)}
               icon={<IoIosTime size={16} />}
             />
-            <button onClick={assign} className="btn bg-primary  w-full mt-5">
-              Assign Persons
+            <button onClick={editPOC} className="btn bg-primary w-full mt-5">
+              Edit POC
             </button>
 
-            <button onClick={editPOC} className="btn bg-yellow-500 w-full mt-5">
-              Edit POC
+            <button onClick={assign} className="btn bg-yellow-500  w-full mt-5">
+              Assign 
             </button>
 
             <button
