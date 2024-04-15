@@ -29,7 +29,7 @@ export async function PATCH(req, context) {
     if (user_Id) {
       const findUser = await prisma.user.findUnique({
         where: {
-          email: user_Id,
+          id: user_Id
         },
         include: {
           management: true,

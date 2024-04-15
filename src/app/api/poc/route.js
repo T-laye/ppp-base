@@ -98,6 +98,7 @@ export async function GET(req, res) {
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const name = searchParams.get("name");
     const productName = searchParams.get("productName");
+    const productId = searchParams.get("productId")
     const order = searchParams.get("order");
     const take = searchParams.get("take")
       ? parseInt(searchParams.get("take"))
@@ -143,8 +144,10 @@ export async function GET(req, res) {
       skip: offset,
       where: {
         name: name ? { contains: name } : {},
-        ...(productName ? {product: {
-          some: {
+        ...(productName || productId ? {
+          product: {
+            some: {
+            id: productId ? productId : {},
             productName: productName ? { contains: productName } : {},
           },
         }}: {})
