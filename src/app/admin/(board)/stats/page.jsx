@@ -63,6 +63,13 @@ export default function Stats() {
             icon={<GiGasPump size={24} />}
           />
           <StatsCard
+            link="/admin/workForce"
+            number={personnels?.count ?? 0}
+            color="bg-blue-900"
+            title="Work Force"
+            icon={<BsPersonFillGear size={24} />}
+          />
+          <StatsCard
             link="/admin/vouchers"
             color="bg-yellow-500"
             number={334}
@@ -76,13 +83,7 @@ export default function Stats() {
             title="Approved"
             icon={<IoCheckmarkDoneCircle size={24} />}
           />
-          <StatsCard
-            link="/admin/workForce"
-            number={personnels?.count ?? 0}
-            color="bg-blue-900"
-            title="Work Force"
-            icon={<BsPersonFillGear size={24} />}
-          />
+
           <StatsCard
             link="/admin/stats/usedVoucher"
             number={3440}

@@ -79,7 +79,7 @@ export async function PATCH(req, context) {
       },
       data: {
         address: address ? address : undefined,
-        email: poc_email ? poc_email : undefined,
+        email: email ? email : undefined,
         name: poc_name ? poc_name : undefined,
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         stockAvailable: stockAvailable ? stockAvailable : undefined,

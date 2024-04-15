@@ -199,7 +199,7 @@ export default function Page() {
               } `}
               disabled={isLoading}
             >
-              {isLoading ? <Loader /> : "Delete Customer"}
+              {isLoading ? <Loader /> : "Delete POC"}
             </button>
           </div>
         ) : (

@@ -52,7 +52,7 @@ export default function Layout({ children }) {
     (async () => {
       if (isAuth) {
         const resProducts = await axios.get(
-          `/api/product?take=${take}&pageNumber=${pageNumber}&name`
+          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${productName}`
         );
         // console.log(resProducts);
         dispatch(fetchProducts({ ...resProducts?.data }));
@@ -60,7 +60,7 @@ export default function Layout({ children }) {
         return;
       }
     })();
-  }, [dispatch, isAuth, pageNumber, take]);
+  }, [dispatch, isAuth, pageNumber, take, productName]);
 
   useEffect(() => {
     (async () => {
@@ -89,23 +89,23 @@ export default function Layout({ children }) {
       }
     })();
   }, [dispatch, isAuth, pageNumber, pocName, productName, take]);
-// 
+  //
   useEffect(() => {
     (async () => {
-    if (isAuth) {
-      try {
-        const resPersonnels = await axios.get(
-          `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
-        );
-        dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-        // console.log(resPersonnels);
-        // console.log(resPocs)
-      } catch (e) {
-        // console.log(e);
+      if (isAuth) {
+        try {
+          const resPersonnels = await axios.get(
+            `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
+          );
+          dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+          // console.log(resPersonnels);
+          // console.log(resPocs)
+        } catch (e) {
+          // console.log(e);
+        }
+      } else {
+        return;
       }
-    } else {
-      return;
-    }
     })();
   }, [dispatch, isAuth, pageNumber, staffName, take]);
   // console.log(isAuth);
@@ -125,8 +125,7 @@ export default function Layout({ children }) {
       <div className="">
         <Header />
         <Suspense>
-          <main className="pt-12">{children}
-          </main>
+          <main className="pt-12">{children}</main>
         </Suspense>
         <footer>
           <Navbar />
