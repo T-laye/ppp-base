@@ -127,10 +127,8 @@ export async function DELETE(req, context) {
       },
       include: {
         product: true,
-        admin: true,
         management: true,
         personnel: true,
-        Customer: true,
       },
     });
     if (!getPocById) {
@@ -186,8 +184,6 @@ export async function GET(req, context) {
         id: getPocId,
       },
       include: {
-        admin: true,
-        customer: true,
         management: true,
         personnel: true,
         product: true,
