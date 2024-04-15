@@ -23,6 +23,7 @@ export async function PATCH(req, context) {
     const { params } = context;
     const getPocId = params.pocId;
     const searchParams = req.nextUrl.searchParams;
+    const user_email = searchParams.get("user_email");
     const email = searchParams.get("email");
     const productId = searchParams.get("productId");
     const poc_name = searchParams.get("name");
@@ -49,16 +50,16 @@ export async function PATCH(req, context) {
           }
         );
       }
+      const getM = findUser.management.find((m) => m.userId === findUser.id);
+      const getP = findUser.personnel.find((p) => p.userId === findUser.id);
       const addUserToPoc = await prisma.pointOfConsumption.update({
         where: {
           id: getPocId,
         },
         data: {
           ...(findUser.role === "MANAGEMENT"
-            ? { managementId: findUser.management[0].id }
-            : findUser.role === "PERSONNEL"
-            ? { personnelId: findUser.personnel.id }
-            : { adminId: findUser.id }),
+            ? { management: { connect: { id: getM.id } } }
+            : { personnel: { connect: { id: getP.id } } }),
         },
       });
 
@@ -78,7 +79,7 @@ export async function PATCH(req, context) {
       },
       data: {
         address: address ? address : undefined,
-        email: poc_email ? poc_email : undefined,
+        email: email ? email : undefined,
         name: poc_name ? poc_name : undefined,
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         stockAvailable: stockAvailable ? stockAvailable : undefined,
@@ -86,11 +87,6 @@ export async function PATCH(req, context) {
         ...(productId
           ? { product: { connect: { id: productId } } }
           : undefined),
-        ...(findUser.role === "MANAGEMENT"
-          ? { managementId: findUser.management[0].id }
-          : findUser.role === "PERSONNEL"
-          ? { personnelId: findUser.personnel.id }
-          : { adminId: findUser.id }),
       },
     });
     return NextResponse.json(
@@ -131,10 +127,8 @@ export async function DELETE(req, context) {
       },
       include: {
         product: true,
-        admin: true,
         management: true,
         personnel: true,
-        Customer: true,
       },
     });
     if (!getPocById) {
@@ -190,8 +184,6 @@ export async function GET(req, context) {
         id: getPocId,
       },
       include: {
-        admin: true,
-        customer: true,
         management: true,
         personnel: true,
         product: true,
