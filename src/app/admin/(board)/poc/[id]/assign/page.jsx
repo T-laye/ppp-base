@@ -65,9 +65,33 @@ export default function Page() {
       const res = await axios.patch(
         `/api/poc/${id}?user_email=${userEmail}&productId=${productId}`
       );
-      console.log(res);
+      if (res) {
+        toast.success("Successfully Assigned");
+        window.location.reload();
+      }
+      setShowAssignModal(!showAssignModal);
     } catch (err) {
-      console.error(err);
+      // console.error(err);
+      setShowAssignModal(!showAssignModal);
+      toast.error("Unable to Assign");
+    }
+  };
+  const handleRemove = async (userid, productId) => {
+    try {
+      const res = await axios.patch(
+        `/api/poc/manage/${id}?user_Id=${userid}&productId=${productId}`
+      );
+      if (res) {
+        toast.success("Successfully Remove");
+        window.location.reload();
+        // console.log(res)
+      }
+
+      // setShowAssignModal(!showAssignModal);
+    } catch (err) {
+      // console.error(err);
+      // setShowAssignModal(!showAssignModal);
+      toast.error("Unable to Remove");
     }
   };
 
@@ -80,26 +104,38 @@ export default function Page() {
   };
 
   const renderProduct = () => {
+    const assignedProducts = poc?.product?.map((p) => p.id);
+    // console.log(poc.product);
+
     if (products?.data?.length === 0) {
       return <div className="text-lg">No Products Found</div>;
     } else {
-      return products?.data?.map((p) => (
-        <li
-          onClick={() => handleAssign("", p.productId)}
-          key={p.productId}
-          className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
-        >
-          <div>{capitalizeWords(p.name)}</div>
-        </li>
-      ));
+      return products?.data
+        ?.filter((p) => !assignedProducts.includes(p.productId))
+        .map((p) => (
+          <li
+            onClick={() => handleAssign("", p.productId)}
+            key={p.productId}
+            className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
+          >
+            <div>{capitalizeWords(p.name)}</div>
+          </li>
+        ));
     }
   };
   const renderPersonnel = () => {
+    const assignedManagement = poc?.management?.map((m) => m.userId);
+    // console.log(assignedManagement);
+
     if (personnels?.data?.length === 0) {
       return <div className="text-lg">No Products Found</div>;
     } else {
       return personnels?.data
-        ?.filter((p) => p.role.toLowerCase() === item.toLowerCase())
+        ?.filter(
+          (p) =>
+            p.role.toLowerCase() === item.toLowerCase() &&
+            !assignedManagement.includes(p.id)
+        )
         .map((p) => (
           <li
             onClick={() => handleAssign(p.email, "")}
@@ -135,7 +171,7 @@ export default function Page() {
           <div>{capitalizeWords(assignedPersonnel.name)}</div>
           <div>
             <button
-              //  onClick={handleAssignModal}
+              onClick={() => handleRemove(assignedPersonnel.id, "")}
               className="btn bg-error place-self-end"
             >
               Remove
@@ -149,7 +185,7 @@ export default function Page() {
   };
 
   const renderAssignedManagement = () => {
-    const assignedManagement = poc?.management.map((m) => m.userId);
+    const assignedManagement = poc?.management?.map((m) => m.userId);
     if (assignedManagement) {
       return personnels?.data
         ?.filter((p) => assignedManagement?.includes(p.id))
@@ -162,7 +198,7 @@ export default function Page() {
               <div>{capitalizeWords(p.name)}</div>
               <div>
                 <button
-                  //  onClick={handleAssignModal}
+                  onClick={() => handleRemove(p.id, "")}
                   className="btn bg-error place-self-end"
                 >
                   Remove
@@ -175,20 +211,20 @@ export default function Page() {
       return <div>No Management Assigned</div>;
     }
   };
-  console.log(poc.product);
+  // console.log(poc.product);
 
   const renderAssignedProducts = () => {
-    if (poc?.product.length > 0) {
+    if (poc?.product?.length > 0) {
       return poc?.product?.map((p) => {
         return (
           <li
             key={p.id}
             className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
           >
-            <div>{capitalizeWords(p.name)}</div>
+            <div className="text-lg">{capitalizeWords(p.productName)}</div>
             <div>
               <button
-                //  onClick={handleAssignModal}
+                onClick={() => handleRemove("", p.id)}
                 className="btn bg-error place-self-end"
               >
                 Remove
@@ -227,13 +263,15 @@ export default function Page() {
               Assign Personnel
             </h3>
             <div>
-              <div className="flex justify-end">
-                <button
-                  onClick={() => handleAssignModal("personnel")}
-                  className="btn bg-primary my-5 place-self-end"
-                >
-                  Assign Personnel
-                </button>
+              <div className="flex justify-end my-5 ">
+                {!poc?.personnel?.id && (
+                  <button
+                    onClick={() => handleAssignModal("personnel")}
+                    className="btn bg-primary  place-self-end"
+                  >
+                    Assign Personnel
+                  </button>
+                )}
               </div>
               <div>{renderAssignedPersonnel()}</div>
             </div>
@@ -265,9 +303,7 @@ export default function Page() {
                   Assign Product
                 </button>
               </div>
-              <div>
-               {renderAssignedProducts()}
-              </div>
+              <div>{renderAssignedProducts()}</div>
             </div>
           </div>
         </>
@@ -289,18 +325,20 @@ export default function Page() {
               onSubmit={(e) => e.preventDefault()}
               className="mt-4"
             >
-              <div className="relative ">
-                <input
-                  type="text"
-                  placeholder="Search by name"
-                  className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
-                  value={term}
-                  onChange={handleChange}
-                />
-                <div className="absolute top-3 right-2.5 text-gray-400">
-                  <BiSearchAlt2 size={20} />
+              {item !== "product" && (
+                <div className="relative ">
+                  <input
+                    type="text"
+                    placeholder="Search by name"
+                    className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
+                    value={term}
+                    onChange={handleChange}
+                  />
+                  <div className="absolute top-3 right-2.5 text-gray-400">
+                    <BiSearchAlt2 size={20} />
+                  </div>
                 </div>
-              </div>
+              )}
             </form>
 
             <div className="mt-5 overflow-auto max-h-[70vh] ">

@@ -29,6 +29,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
+  const { personnels } = useSelector((state) => state.personnels);
   const { pageNumber, take, pocName } = useSelector((state) => state.variables);
   // console.log(poc, id);
 
@@ -108,6 +109,37 @@ export default function Page() {
     // console.log(res);
   };
 
+  const renderAssignedPersonnel = personnels?.data?.find(
+    (p) => p.id === poc?.personnel?.userId
+  );
+
+  const renderAssignedManagement = () => {
+    const assignedManagement = poc?.management?.map((m) => m.userId);
+    if (assignedManagement) {
+      const assignedPersonnelNames = personnels?.data
+        ?.filter((p) => assignedManagement?.includes(p.id))
+        .map((p) => p.name); // Assuming 'name' is the property containing the person's name
+
+      // Joining the names with commas
+      const formattedNames = assignedPersonnelNames.join(", ");
+
+      return formattedNames;
+    }
+  };
+
+ const renderAssignedProducts = () => {
+  if (poc?.product?.length > 0) {
+    const productNames = poc.product.map((p) => p.productName); // Assuming 'name' is the property containing the product name
+    
+    // Joining the product names with commas
+    const formattedProductNames = productNames.join(', ');
+
+    return formattedProductNames;
+  }     
+};
+
+
+
   return (
     <section className="min-h-screen pt-8 pb-20">
       <div className="mb-3">
@@ -140,19 +172,19 @@ export default function Page() {
             />
             <DetailList
               title="Personnel"
-              value=""
+              value={capitalizeWords(renderAssignedPersonnel?.name)}
               // icon={<BsFillFuelPumpDieselFill size={24} />}
               icon={<FaUser size={16} />}
             />
             <DetailList
               title="Management"
-              value=""
+              value={capitalizeWords(renderAssignedManagement())}
               icon={<FaUser size={16} />}
               // icon={<BsFillFuelPumpDieselFill size={24} />}
             />
             <DetailList
               title="Product"
-              value=""
+              value={capitalizeWords(renderAssignedProducts())}
               icon={<ImDroplet size={16} />}
             />
             <DetailList
@@ -188,7 +220,7 @@ export default function Page() {
             </button>
 
             <button onClick={assign} className="btn bg-yellow-500  w-full mt-5">
-              Assign 
+              Assign
             </button>
 
             <button
