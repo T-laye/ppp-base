@@ -114,14 +114,14 @@ export default function Page() {
       return <div className="text-lg">No Products Found</div>;
     } else {
       return products?.data
-        ?.filter((p) => !assignedProducts.includes(p.productId))
+        ?.filter((p) => !assignedProducts?.includes(p.productId))
         .map((p) => (
           <li
-            onClick={() => handleAssign("", p.productId)}
-            key={p.productId}
+            onClick={() => handleAssign("", p?.productId)}
+            key={p?.productId}
             className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
           >
-            <div>{capitalizeWords(p.name)}</div>
+            <div>{capitalizeWords(p?.name)}</div>
           </li>
         ));
     }
@@ -134,21 +134,21 @@ export default function Page() {
     // console.log(assignedManagement);
 
     if (personnels?.data?.length === 0) {
-      return <div className="text-lg">No Products Found</div>;
+      return <div className="text-lg">No Personnel Found</div>;
     } else {
       return personnels?.data
         ?.filter(
           (p) =>
-            p.role.toLowerCase() === item.toLowerCase() &&
-            !getAllAssignedPersonnelId.includes(p.id)
+            p?.role?.toLowerCase() === item?.toLowerCase() &&
+            !getAllAssignedPersonnelId?.includes(p?.id)
         )
         .map((p) => (
           <li
-            onClick={() => handleAssign(p.email, "")}
-            key={p.id}
+            onClick={() => handleAssign(p?.email, "")}
+            key={p?.id}
             className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
           >
-            <div>{capitalizeWords(p.name)}</div>
+            <div>{capitalizeWords(p?.name)}</div>
           </li>
         ));
     }
@@ -165,19 +165,19 @@ export default function Page() {
 
   const renderAssignedPersonnel = () => {
     const assignedPersonnel = personnels?.data?.find(
-      (p) => p.id === poc?.personnel?.userId
+      (p) => p?.id === poc?.personnel?.userId
     );
 
     if (assignedPersonnel) {
       return (
         <li
-          key={assignedPersonnel.id}
+          key={assignedPersonnel?.id}
           className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
         >
-          <div>{capitalizeWords(assignedPersonnel.name)}</div>
+          <div>{capitalizeWords(assignedPersonnel?.name)}</div>
           <div>
             <button
-              onClick={() => handleRemove(assignedPersonnel.id, "")}
+              onClick={() => handleRemove(assignedPersonnel?.id, "")}
               className="btn bg-error place-self-end"
             >
               Remove
@@ -191,20 +191,20 @@ export default function Page() {
   };
 
   const renderAssignedManagement = () => {
-    const assignedManagement = poc?.management?.map((m) => m.userId);
-    if (assignedManagement.length > 0) {
+    const assignedManagement = poc?.management?.map((m) => m?.userId);
+    if (assignedManagement?.length > 0) {
       return personnels?.data
-        ?.filter((p) => assignedManagement?.includes(p.id))
+        ?.filter((p) => assignedManagement?.includes(p?.id))
         .map((p) => {
           return (
             <li
               key={p.id}
               className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
             >
-              <div>{capitalizeWords(p.name)}</div>
+              <div>{capitalizeWords(p?.name)}</div>
               <div>
                 <button
-                  onClick={() => handleRemove(p.id, "")}
+                  onClick={() => handleRemove(p?.id, "")}
                   className="btn bg-error place-self-end"
                 >
                   Remove
@@ -227,10 +227,10 @@ export default function Page() {
             key={p.id}
             className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
           >
-            <div className="text-lg">{capitalizeWords(p.productName)}</div>
+            <div className="text-lg">{capitalizeWords(p?.productName)}</div>
             <div>
               <button
-                onClick={() => handleRemove("", p.id)}
+                onClick={() => handleRemove("", p?.id)}
                 className="btn bg-error place-self-end"
               >
                 Remove
