@@ -52,7 +52,7 @@ export default function Layout({ children }) {
     (async () => {
       if (isAuth) {
         const resProducts = await axios.get(
-          `/api/product?take=${take}&pageNumber=${pageNumber}&name=${productName}`
+          `/api/product?take=${take}&pageNumber=${pageNumber}&name`
         );
         // console.log(resProducts);
         dispatch(fetchProducts({ ...resProducts?.data }));

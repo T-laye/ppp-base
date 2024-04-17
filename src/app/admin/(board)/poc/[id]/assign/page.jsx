@@ -36,7 +36,7 @@ export default function Page() {
 
   // console.log(products);
   // console.log(personnels);
-  console.log(poc);
+  // console.log(poc);
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
