@@ -29,13 +29,15 @@ export default function Page() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
+  const { pocs } = useSelector((state) => state.pocs);
   const { products } = useSelector((state) => state.products);
   const { personnels } = useSelector((state) => state.personnels);
   const { pageNumber, take, search, productName, staffName, pocName } =
     useSelector((state) => state.variables);
 
-  // console.log(products);
-  // console.log(personnels);
+    // const getAllAssignedPersonnelId = pocs?.data?.map((p) => p?.personnel?.userId);
+    // console.log(getAllAssignedPersonnelId);
+  // console.log(pocs?.data);
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
@@ -105,6 +107,7 @@ export default function Page() {
 
   const renderProduct = () => {
     const assignedProducts = poc?.product?.map((p) => p.id);
+
     // console.log(poc.product);
 
     if (products?.data?.length === 0) {
@@ -124,7 +127,10 @@ export default function Page() {
     }
   };
   const renderPersonnel = () => {
-    const assignedManagement = poc?.management?.map((m) => m.userId);
+    // const assignedManagement = poc?.management?.map((m) => m.userId);
+    const getAllAssignedPersonnelId = pocs?.data?.map(
+      (p) => p?.personnel?.userId
+    );
     // console.log(assignedManagement);
 
     if (personnels?.data?.length === 0) {
@@ -134,7 +140,7 @@ export default function Page() {
         ?.filter(
           (p) =>
             p.role.toLowerCase() === item.toLowerCase() &&
-            !assignedManagement.includes(p.id)
+            !getAllAssignedPersonnelId.includes(p.id)
         )
         .map((p) => (
           <li
@@ -180,13 +186,13 @@ export default function Page() {
         </li>
       );
     } else {
-      return <div>No Personnel Assigned</div>; // or you can render a placeholder indicating no personnel found
+      return <div className="">No Personnel Assigned</div>; // or you can render a placeholder indicating no personnel found
     }
   };
 
   const renderAssignedManagement = () => {
     const assignedManagement = poc?.management?.map((m) => m.userId);
-    if (assignedManagement) {
+    if (assignedManagement.length > 0) {
       return personnels?.data
         ?.filter((p) => assignedManagement?.includes(p.id))
         .map((p) => {
@@ -208,7 +214,7 @@ export default function Page() {
           );
         });
     } else {
-      return <div>No Management Assigned</div>;
+      return <div className="">No Management Assigned</div>;
     }
   };
   // console.log(poc.product);
@@ -234,7 +240,7 @@ export default function Page() {
         );
       });
     } else {
-      return <div>No Product Assigned</div>;
+      return <div className="">No Product Assigned</div>;
     }
   };
 
