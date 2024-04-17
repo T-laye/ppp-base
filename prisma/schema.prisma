@@ -69,7 +69,7 @@ model PointOfConsumption {
   stockLimit     Int
   stockAvailable Int
   customer       Customer[]
-  product        Product[]
+  product        Product[] @relation(name: "POCProducts")
   user           User         @relation(fields: [createdBy], references: [id])
   createdBy      String
 
@@ -85,7 +85,7 @@ model Product {
   updatedAt         DateTime            @default(now()) @updatedAt
   user              User                @relation(fields: [createdBy], references: [id])
   voucher           Voucher[]
-  poc               PointOfConsumption? @relation(fields: [pocId], references: [id], onDelete: SetNull)
+  poc               PointOfConsumption[] @relation(name: "POCProducts")
   pocId             String?
   createdBy         String
 
