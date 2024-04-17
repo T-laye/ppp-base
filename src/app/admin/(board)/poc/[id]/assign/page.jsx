@@ -36,7 +36,6 @@ export default function Page() {
 
   // console.log(products);
   // console.log(personnels);
-  // console.log(poc);
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
@@ -61,11 +60,10 @@ export default function Page() {
     return words?.join(" ");
   }
 
-  const handleAssign = async (userId, productId) => {
-
+  const handleAssign = async (userEmail, productId) => {
     try {
       const res = await axios.patch(
-        `/api/poc/${id}?user_Id=${userId}&productId=${productId}`
+        `/api/poc/${id}?user_email=${userEmail}&productId=${productId}`
       );
       console.log(res);
     } catch (err) {
@@ -87,7 +85,7 @@ export default function Page() {
     } else {
       return products?.data?.map((p) => (
         <li
-          onClick={() => handleAssign('', p.productId)}
+          onClick={() => handleAssign("", p.productId)}
           key={p.productId}
           className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
         >
@@ -104,7 +102,7 @@ export default function Page() {
         ?.filter((p) => p.role.toLowerCase() === item.toLowerCase())
         .map((p) => (
           <li
-            onClick={() => handleAssign(p.id, '')}
+            onClick={() => handleAssign(p.email, "")}
             key={p.id}
             className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
           >
@@ -122,20 +120,87 @@ export default function Page() {
       return renderPersonnel();
     }
   };
-  // const renderManagement = () => {
-  //   if (products?.data.length === 0) {
-  //     return <div className="text-lg">No Products Found</div>;
-  //   } else {
-  //     return products?.data.map((p) => (
-  //       <li
-  //         key={p.id}
-  //         className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
-  //       >
-  //         <div>{p.name}</div>
-  //       </li>
-  //     ));
-  //   }
-  // };
+
+  const renderAssignedPersonnel = () => {
+    const assignedPersonnel = personnels?.data?.find(
+      (p) => p.id === poc?.personnel?.userId
+    );
+
+    if (assignedPersonnel) {
+      return (
+        <li
+          key={assignedPersonnel.id}
+          className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
+        >
+          <div>{capitalizeWords(assignedPersonnel.name)}</div>
+          <div>
+            <button
+              //  onClick={handleAssignModal}
+              className="btn bg-error place-self-end"
+            >
+              Remove
+            </button>
+          </div>
+        </li>
+      );
+    } else {
+      return <div>No Personnel Assigned</div>; // or you can render a placeholder indicating no personnel found
+    }
+  };
+
+  const renderAssignedManagement = () => {
+    const assignedManagement = poc?.management.map((m) => m.userId);
+    if (assignedManagement) {
+      return personnels?.data
+        ?.filter((p) => assignedManagement?.includes(p.id))
+        .map((p) => {
+          return (
+            <li
+              key={p.id}
+              className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
+            >
+              <div>{capitalizeWords(p.name)}</div>
+              <div>
+                <button
+                  //  onClick={handleAssignModal}
+                  className="btn bg-error place-self-end"
+                >
+                  Remove
+                </button>
+              </div>
+            </li>
+          );
+        });
+    } else {
+      return <div>No Management Assigned</div>;
+    }
+  };
+  console.log(poc.product);
+
+  const renderAssignedProducts = () => {
+    if (poc?.product.length > 0) {
+      return poc?.product?.map((p) => {
+        return (
+          <li
+            key={p.id}
+            className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
+          >
+            <div>{capitalizeWords(p.name)}</div>
+            <div>
+              <button
+                //  onClick={handleAssignModal}
+                className="btn bg-error place-self-end"
+              >
+                Remove
+              </button>
+            </div>
+          </li>
+        );
+      });
+    } else {
+      return <div>No Product Assigned</div>;
+    }
+  };
 
   const handleChange = (e) => {
     setTerm(e.target.value);
@@ -170,19 +235,7 @@ export default function Page() {
                   Assign Personnel
                 </button>
               </div>
-              <div>
-                <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
-                  <div>James Goodman</div>
-                  <div>
-                    <button
-                      onClick={handleAssignModal}
-                      className="btn bg-error place-self-end"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </li>
-              </div>
+              <div>{renderAssignedPersonnel()}</div>
             </div>
           </div>
           <div className="mt-6">
@@ -197,30 +250,7 @@ export default function Page() {
                 Assign Management
               </button>
             </div>
-            <div>
-              <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
-                <div>Max Taylor</div>
-                <div>
-                  <button
-                    onClick={handleAssignModal}
-                    className="btn bg-error place-self-end"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </li>
-              <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
-                <div>James Goodman</div>
-                <div>
-                  <button
-                    onClick={handleAssignModal}
-                    className="btn bg-error place-self-end"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </li>
-            </div>
+            <div>{renderAssignedManagement()}</div>
           </div>
           <div className="mt-6">
             <h3 className="text-center text-lg font-medium mt-3">
@@ -236,17 +266,7 @@ export default function Page() {
                 </button>
               </div>
               <div>
-                <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
-                  <div>James Goodman</div>
-                  <div>
-                    <button
-                      onClick={handleAssignModal}
-                      className="btn bg-error place-self-end"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </li>
+               {renderAssignedProducts()}
               </div>
             </div>
           </div>
@@ -284,24 +304,6 @@ export default function Page() {
             </form>
 
             <div className="mt-5 overflow-auto max-h-[70vh] ">
-              {/* <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
-                <div>Alex Johnson</div>
-                <div>
-                  <FaUser size={24} className={``} />
-                </div>
-              </li>
-              <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
-                <div>Max Taylor</div>
-                <div>
-                  <FaUser size={24} className={``} />
-                </div>
-              </li>
-              <li className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer">
-                <div>Dwayne Michael</div>
-                <div>
-                  <FaUser size={24} className={``} />
-                </div>
-              </li> */}
               {renderList()}
             </div>
           </div>
