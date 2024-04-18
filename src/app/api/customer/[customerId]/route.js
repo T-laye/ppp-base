@@ -18,7 +18,7 @@ export async function PATCH(req, context) {
     }
     if (
       authResponse.user.role !== "ADMIN" ||
-      userResponse.user.role !== "MANAGEMENT"
+      authResponse.user.role !== "MANAGEMENT"
     ) {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
         status: 403,
@@ -104,7 +104,7 @@ export async function GET(req, context) {
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
-        data: mapCustomer(getCustomer),
+        data: getCustomer,
         message: "Successful",
       }),
       { status: 200 }

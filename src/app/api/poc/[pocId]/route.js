@@ -172,11 +172,11 @@ export async function GET(req, context) {
         { status: authResponse.status }
       );
     }
-    if (authResponse.user.role !== "ADMIN") {
-      return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
-        status: 403,
-      });
-    }
+    // if (authResponse.user.role !== "ADMIN") { everybody can get poc by Id
+    //   return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
+    //     status: 403,
+    //   });
+    // }
     const { params } = context;
     const getPocId = params.pocId;
     const getPocById = await prisma.pointOfConsumption.findUnique({
@@ -184,8 +184,8 @@ export async function GET(req, context) {
         id: getPocId,
       },
       include: {
-        management: true,
-        personnel: true,
+        // management: true,
+        // personnel: true,
         product: true,
       },
     });
