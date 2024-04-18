@@ -46,6 +46,7 @@ export async function POST(req, res) {
             password: await hashPassword(password),
             phoneNumber,
             role,
+            verificationToken: 'dsbfjsdnfskjnfksdmfsdnfigngisnis'// just sign their email or and name together as the token
           },
         });
         if (role === "ADMIN") {
