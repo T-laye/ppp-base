@@ -98,7 +98,7 @@ export default function Page() {
   }
 
   const editCustomer = () => {
-    router.push(`/admin/stats/customers/${id}/editCustomer`);
+    router.push(`/management/stats/customers/${id}/editCustomer`);
   };
 
   return (
@@ -185,12 +185,6 @@ export default function Page() {
             >
               Edit Customer
             </button>
-            {/* <button
-              onClick={handleDeleteCustomer}
-              className="btn bg-error w-full mt-5"
-            >
-              {!isLoading ? <Loader /> : "Delete Customer"}
-            </button> */}
             <button
               onClick={handleDeleteCustomer}
               type="submit"
