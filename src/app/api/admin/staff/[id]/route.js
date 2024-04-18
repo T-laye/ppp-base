@@ -16,7 +16,10 @@ export async function PATCH(req, context) {
         { status: authResponse.status }
       );
     }
-    if (authResponse.user.role !== "ADMIN") {
+    if (
+      authResponse.user.role !== "ADMIN" &&
+      authResponse.user.management.canEdit !== true
+    ) {
       return NextResponse.json(
         ApiResponseDto({ message: "not allowed to access this route" }),
         {
@@ -206,7 +209,7 @@ export async function DELETE(req, context) {
 
 export async function GET(req, context) {
   try {
-    const authResponse = await getAuthUser(req, true);
+    const authResponse = await getAuthUser(req, false);
     if (authResponse.error) {
       return NextResponse.json(
         ApiResponseDto({
@@ -216,14 +219,6 @@ export async function GET(req, context) {
         { status: authResponse.status }
       );
     }
-    if (authResponse.user.role !== "ADMIN") {
-      return NextResponse.json(
-        ApiResponseDto({ message: "you are not allowed to access this route" }),
-        {
-          status: 403,
-        }
-      );
-    }
     const { params } = context;
     const id = params.id;
     const getUserData = await prisma.user.findUnique({
@@ -231,13 +226,20 @@ export async function GET(req, context) {
         id,
       },
       include: {
-        management: true,
+        management: {
+          include: {
+            poc: true,
+          },
+        },
         admin: true,
-        personnel: true,
-        poc: true
+        personnel: {
+          include: {
+            poc: true,
+          },
+        },
+        poc: true,
       },
     });
-    // todo: map response
     if (!getUserData) {
       return NextResponse.json(
         ApiResponseDto({
