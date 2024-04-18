@@ -98,7 +98,7 @@ export default function Page() {
   }
 
   const editCustomer = () => {
-    router.push(`/management/stats/customers/${id}/editCustomer`);
+    router.push(`/management/customers/${id}/editCustomer`);
   };
 
   return (
@@ -129,7 +129,7 @@ export default function Page() {
             />
             <DetailList
               title="Created By"
-              value={capitalizeWords(customer?.createdBy)}
+              value={capitalizeWords(customer?.user?.name)}
               icon={<FaUser size={16} />}
             />
             {/* <DetailList

@@ -4,12 +4,12 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useFormik } from "formik";
 import Loader from "@/components/Loader.jsx";
 import { toast } from "react-toastify";
-import { new_customer_validate } from "../../../../../../../../lib/validate";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useParams } from "next/navigation";
 import { getCustomer } from "@/redux/slices/getCustomerSlice";
 import axios from "axios";
 import Loading from "@/components/Loading";
+import { new_customer_validate } from "../../../../../../../lib/validate";
 // import { useEditCustomerMutation } from "@/redux/slices/customerApiSlice";
 
 export default function Page() {
@@ -62,14 +62,15 @@ export default function Page() {
       );
       // console.log(res);
       if (res) {
-        setIsLoading(true);
-        toast.success(res.message);
+        toast.success(res);
         router.back();
+        setIsLoading(true);
       }
       // console.log(values);
     } catch (e) {
-      toast.error(e.data.message);
-      // console.log(e);
+      setIsLoading(true);
+      // toast.error(e.data.message);
+      console.log(e);
     }
   }
   const getInputClassNames = (fieldName) =>
@@ -145,22 +146,24 @@ export default function Page() {
               )}
             </div>
             <div className="flex flex-col mb-4">
-            <label className="text-sm mb-2" htmlFor="address">
-              Address
-            </label>
-            <input
-              // disabled={!isEditable}
-              id="address"
-              name="address"
-              type="text"
-              placeholder="Enter Address"
-              className={getInputClassNames("address")}
-              {...formik.getFieldProps("address")}
-            />
-            {formik.touched.address && formik.errors.address && (
-              <div className="text-error text-sm">{formik.errors.address}</div>
-            )}
-          </div>
+              <label className="text-sm mb-2" htmlFor="address">
+                Address
+              </label>
+              <input
+                // disabled={!isEditable}
+                id="address"
+                name="address"
+                type="text"
+                placeholder="Enter Address"
+                className={getInputClassNames("address")}
+                {...formik.getFieldProps("address")}
+              />
+              {formik.touched.address && formik.errors.address && (
+                <div className="text-error text-sm">
+                  {formik.errors.address}
+                </div>
+              )}
+            </div>
 
             <button
               type="submit"
