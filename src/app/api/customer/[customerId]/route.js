@@ -72,8 +72,9 @@ export async function GET(req, context) {
         { status: userResponse.status }
       );
     }
+
     if (
-      userResponse.user.role !== "ADMIN" ||
+      userResponse.user.role !== "ADMIN" &&
       userResponse.user.role !== "MANAGEMENT"
     ) {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
