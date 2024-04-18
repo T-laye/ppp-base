@@ -234,6 +234,7 @@ export async function GET(req, context) {
         management: true,
         admin: true,
         personnel: true,
+        poc: true
       },
     });
     // todo: map response
