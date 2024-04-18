@@ -16,7 +16,10 @@ export async function PATCH(req, context) {
         { status: authResponse.status }
       );
     }
-    if (authResponse.user.role !== "ADMIN") {
+    if (
+      authResponse.user.role !== "ADMIN" ||
+      userResponse.user.role !== "MANAGEMENT"
+    ) {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
         status: 403,
       });
@@ -69,7 +72,10 @@ export async function GET(req, context) {
         { status: userResponse.status }
       );
     }
-    if (userResponse.user.role !== "ADMIN") {
+    if (
+      userResponse.user.role !== "ADMIN" ||
+      userResponse.user.role !== "MANAGEMENT"
+    ) {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
         status: 403,
       });
@@ -157,7 +163,10 @@ export async function DELETE(req, context) {
         { status: authResponse.status }
       );
     }
-    if (authResponse.user.role !== "ADMIN") {
+    if (
+      authResponse.user.role !== "ADMIN" ||
+      userResponse.user.role !== "MANAGEMENT"
+    ) {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
         status: 403,
       });

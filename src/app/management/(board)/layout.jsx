@@ -7,27 +7,88 @@ import Header from "../components/Header";
 import { useRouter } from "next/navigation";
 import { ImSpinner9 } from "react-icons/im";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setCredentials } from "@/redux/slices/authSlice";
+import {
+  handlePocName,
+  handleProductName,
+  handleSearch,
+  handleStaffName,
+} from "@/redux/slices/variableSlice";
+import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
+import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
+import { fetchPocs } from "@/redux/slices/fetchPocsSlice";
 
 export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { pageNumber, take, search, productName, staffName, pocName } =
+    useSelector((state) => state.variables);
+  const { userInfo } = useSelector((state) => state.auth);
+  // console.log(userInfo);
 
   useEffect(() => {
     (async () => {
       const { user } = await getUser();
-
       if (!user || user.user.role !== "MANAGEMENT") {
         router.push("/");
         setIsAuth(false);
         return;
       } else {
-        // if no error
+        // console.log(user);
+        dispatch(setCredentials({ ...user.user }));
         setIsAuth(true);
+        dispatch(handleSearch(""));
+        dispatch(handleProductName(""));
+        dispatch(handlePocName(""));
+        dispatch(handleStaffName(""));
       }
-      // console.log(user.user.role);
     })();
-  }, [router]);
-  // console.log(isAuth);
+  }, [dispatch, router]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        const resProducts = await axios.get(
+          `/api/product?take=${take}&pageNumber=${pageNumber}&name`
+        );
+        // console.log(resProducts);
+        dispatch(fetchProducts({ ...resProducts?.data }));
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, take, productName]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        const resCustomers = await axios.get(
+          `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
+        );
+        dispatch(fetchCustomers({ ...resCustomers?.data }));
+        // console.log(resCustomers);
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, search, take]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        const resPocs = await axios.get(
+          `/api/poc?name=${pocName}&take=${take}&pageNumber=${pageNumber}&productName=${productName}`
+        );
+        // console.log(resPocs);
+        dispatch(fetchPocs({ ...resPocs?.data }));
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, pocName, productName, take]);
+  //
 
   if (!isAuth) {
     return (

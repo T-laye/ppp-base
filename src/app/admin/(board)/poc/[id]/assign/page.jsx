@@ -282,7 +282,7 @@ export default function Page() {
               <div>{renderAssignedPersonnel()}</div>
             </div>
           </div>
-          <div className="mt-6">
+          <div className="mt-10">
             <h3 className="text-center text-lg font-medium mt-3">
               Assign Management
             </h3>
@@ -296,7 +296,7 @@ export default function Page() {
             </div>
             <div>{renderAssignedManagement()}</div>
           </div>
-          <div className="mt-6">
+          <div className="mt-10">
             <h3 className="text-center text-lg font-medium mt-3">
               Assign Product
             </h3>
