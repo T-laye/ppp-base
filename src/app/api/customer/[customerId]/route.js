@@ -61,7 +61,7 @@ export async function PATCH(req, context) {
 
 export async function GET(req, context) {
   try {
-    const userResponse = await getAuthUser(req, true);
+    const userResponse = await getAuthUser(req, false);
 
     if (userResponse.error) {
       return NextResponse.json(
@@ -72,8 +72,9 @@ export async function GET(req, context) {
         { status: userResponse.status }
       );
     }
+
     if (
-      userResponse.user.role !== "ADMIN" ||
+      userResponse.user.role !== "ADMIN" &&
       userResponse.user.role !== "MANAGEMENT"
     ) {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
