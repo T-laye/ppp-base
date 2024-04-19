@@ -228,16 +228,28 @@ export async function GET(req, context) {
       include: {
         management: {
           include: {
-            poc: true,
+            poc: {
+              include: {
+                product: true,
+              },
+            },
           },
         },
         admin: true,
         personnel: {
           include: {
-            poc: true,
+            poc: {
+              include: {
+                product: true,
+              },
+            },
           },
         },
-        poc: true,
+        poc: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
     if (!getUserData) {
@@ -252,7 +264,7 @@ export async function GET(req, context) {
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
-        data: getUserData,
+        data: mapSingleStaff(getUserData),
         message: "successful",
       }),
       { status: 200 }
@@ -262,5 +274,79 @@ export async function GET(req, context) {
       { message: err.message, error: err },
       { status: 500 }
     );
+  }
+}
+
+function mapSingleStaff(data) {
+  const v = data;
+
+  const commonData = {
+    userId: v.id,
+    name: v.name,
+    email: v.email,
+    emailVerification: v.emailVerified,
+    role: v.role,
+    phoneNumber: v.phoneNumber,
+    createdAt: v.createdAt,
+    address: v.address,
+    gender: v.gender,
+  };
+
+  switch (v.role) {
+    case "PERSONNEL":
+      return {
+        ...commonData,
+        personnel_poc_data: v.personnel?.flatMap((p) => ({
+          personnelId: p.id,
+          createdAt: p.createdAt,
+          personnelUserId: p.userId,
+          createdById: p.createdById,
+          poc_id: p.poc.id,
+          poc_name: p.poc.name,
+          poc_address: p.poc.address,
+          poc_phoneNumber: p.poc.phoneNumber,
+          poc_stockAvailable: p.poc.stockAvailable,
+          poc_stockLimit: p.poc.stockLimit,
+          poc_createdAt: p.poc.createdAt,
+          poc_products: p.poc.product.map((v) => ({
+            product_id: v.id,
+            product_name: v.productName,
+            product_voucher_allocation: v.voucherAllocation,
+            product_unit: v.unit,
+            product_createdDate: v.createdAT,
+            product_updatedAt: v.updatedAt,
+            product_createdById: v.createdById,
+          })),
+        })),
+      };
+    case "MANAGEMENT":
+      return {
+        ...commonData,
+        management: v.management?.flatMap((p) => ({
+          management_id: p.id,
+          createdAt: p.createdAt,
+          userId: p.userId,
+          canEdit: p.canEdit,
+          poc: p.poc.flatMap((v) => ({
+            name: v.name,
+            address: v.address,
+            phoneNumber: v.phoneNumber,
+            stockAvailable: v.stockAvailable,
+            stockLimit: v.stockLimit,
+            createdAt: v.createdAt,
+            products: v.product.map((v) => ({
+              product_id: v.id,
+              product_name: v.productName,
+              product_voucher_allocation: v.voucherAllocation,
+              product_unit: v.unit,
+              product_createdDate: v.createdAT,
+              product_updatedAt: v.updatedAt,
+              product_createdById: v.createdById,
+            })),
+          })),
+        })),
+      };
+    default:
+      return null;
   }
 }
