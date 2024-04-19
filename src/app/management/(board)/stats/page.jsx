@@ -9,36 +9,78 @@ import { IoMdTimer } from "react-icons/io";
 import { MdVerifiedUser } from "react-icons/md";
 import { PiDropFill } from "react-icons/pi";
 import PocList from "../../components/PocList";
+import { useSelector } from "react-redux";
 
 export default function Stats() {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState("");
+  const { worker } = useSelector((state) => state.worker);
+  const { products } = useSelector((state) => state.products);
+  const managementPocDetails = worker?.data?.management.map((m) => m.poc);
+  const pocs = managementPocDetails?.map((p) => p);
+  console.log(pocs);
 
   const setTab = (tab) => {
     setActiveTab(tab);
   };
-  //  console.log(product);
+  const renderPoc = () => {
+    return pocs?.map((p) => {
+      return p.map((r) => {
+        if (activeTab !== "" && r.name.toLowerCase() === activeTab) {
+          return (
+            <PocList
+              key={r.id}
+              name={capitalizeWords(r?.name)}
+              available={r?.stockAvailable}
+              total={r?.stockLimit}
+            />
+          );
+        } else if (activeTab === "") {
+          return (
+            <PocList
+              key={r.id}
+              name={capitalizeWords(r?.name)}
+              available={r?.stockAvailable}
+              total={r?.stockLimit}
+            />
+          );
+        }
+      });
+    });
+  };
 
-  // const totalAssigned = poc.reduce((acc, p) => {
-  //   return acc + p.assigned;
-  // }, 0);
+  const renderProductTabs = () => {
+    if (products?.data) {
+      return products?.data?.map((p, i) => {
+        return (
+          <div
+            key={i}
+            onClick={() => setTab(p?.name.toLowerCase())} // Wrap the setTab function call in an arrow function
+            className={`${
+              activeTab === p?.name
+                ? "bg-primary text-white"
+                : "border text-gray-400 "
+            }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
+          >
+            {capitalizeWords(p?.name)}
+          </div>
+        );
+      });
+    } else return <div>No Products Found</div>;
+  };
 
-  // const totalAvail = poc.reduce((acc, p) => {
-  //   return acc + p.available;
-  // }, 0);
+  function capitalizeWords(sentence) {
+    // Split the sentence into an array of words
+    let words = sentence?.split(" ");
 
-  // const renderProduct = () => {
-  //   return product.map((p, i) => {
+    // Iterate over each word
+    for (let i = 0; i < words?.length; i++) {
+      // Capitalize the first letter of each word
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
 
-  //     return (
-  //       <QuantityCards
-  //         key={i}
-  //         title={p.name}
-  //         available={totalAvail}
-  //         total={totalAssigned}
-  //       />
-  //     );
-  //   });
-  // };
+    // Join the words back into a sentence
+    return words?.join(" ");
+  }
 
   return (
     <section className="pt-4 pb-20 bg-red-40 min-h-screen">
@@ -55,7 +97,7 @@ export default function Stats() {
             icon={<FaUsers size={26} />}
           /> */}
           <StatsCard
-            number={324}
+            number={managementPocDetails?.length ?? 0}
             link="#"
             color="bg-blue-700"
             title="POC"
@@ -88,36 +130,19 @@ export default function Stats() {
           Product Level Per POC
         </h4>
         <div className="flex space-x-3 items-center mt-4 text-base">
-          <div
-            onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
-            className={`${
-              activeTab === 1
-                ? "bg-primary text-white"
-                : "border text-gray-400 "
-            }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
-          >
-            All
-          </div>
-          <div
-            onClick={() => setTab(2)} // Wrap the setTab function call in an arrow function
-            className={`${
-              activeTab === 2
-                ? "bg-primary text-white"
-                : "border text-gray-400 "
-            }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
-          >
-            Fuel
-          </div>
-          <div
-            onClick={() => setTab(3)} // Wrap the setTab function call in an arrow function
-            className={`${
-              activeTab === 3
-                ? "bg-primary text-white"
-                : "border text-gray-400 "
-            }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
-          >
-            Desiel
-          </div>
+          {products?.data && (
+            <div
+              onClick={() => setTab("")} // Wrap the setTab function call in an arrow function
+              className={`${
+                activeTab === ""
+                  ? "bg-primary text-white"
+                  : "border text-gray-400 "
+              }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
+            >
+              All
+            </div>
+          )}
+          {renderProductTabs()}
         </div>
 
         <div className="mt-4">
@@ -130,7 +155,7 @@ export default function Stats() {
             available={500}
             total={1500}
           /> */}
-          {/* {renderProduct()} */}
+          {renderPoc()}
         </div>
       </div>
     </section>
