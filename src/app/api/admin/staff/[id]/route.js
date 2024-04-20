@@ -261,7 +261,6 @@ export async function GET(req, context) {
         { status: 404 }
       );
     }
-    console.log(getUserData.management[0].poc)
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
