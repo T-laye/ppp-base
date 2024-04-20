@@ -261,6 +261,7 @@ export async function GET(req, context) {
         { status: 404 }
       );
     }
+    console.log(getUserData.management[0].poc)
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
@@ -328,6 +329,7 @@ function mapSingleStaff(data) {
           userId: p.userId,
           canEdit: p.canEdit,
           poc: p.poc.flatMap((v) => ({
+            poc_id: p.id,
             name: v.name,
             address: v.address,
             phoneNumber: v.phoneNumber,
