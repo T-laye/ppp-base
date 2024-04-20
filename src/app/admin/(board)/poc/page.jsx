@@ -22,7 +22,7 @@ export default function Poc() {
     dispatch(handleProductName(product));
   };
 
-  console.log(pocs);
+  // console.log(pocs);
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
     let words = sentence?.split(" ");

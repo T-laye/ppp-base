@@ -60,7 +60,7 @@ export default function Layout({ children }) {
         return;
       }
     })();
-  }, [dispatch, isAuth, pageNumber, take]);
+  }, [dispatch, isAuth, pageNumber, take, productName]);
 
   useEffect(() => {
     (async () => {
@@ -89,39 +89,26 @@ export default function Layout({ children }) {
       }
     })();
   }, [dispatch, isAuth, pageNumber, pocName, productName, take]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     if (isAuth) {
-  //       const resPersonnels = await axios.get(
-  //         `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
-  //       );
-  //       dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-  //       // console.log(resPersonnels);
-  //       // console.log(resPocs)
-  //     } else {
-  //       return;
-  //     }
-  //   })();
-  // }, [dispatch, isAuth, pageNumber, staffName, take]);
-  // console.log(isAuth);
-
-  const fetch = async () => {
-    if (isAuth) {
-      try {
-        const resPersonnels = await axios.get(
-          `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
-        );
-        dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-        console.log(resPersonnels);
-        // console.log(resPocs)
-      } catch (e) {
-        console.log(e);
+  //
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        try {
+          const resPersonnels = await axios.get(
+            `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
+          );
+          dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+          // console.log(resPersonnels);
+          // console.log(resPocs)
+        } catch (e) {
+          // console.log(e);
+        }
+      } else {
+        return;
       }
-    } else {
-      return;
-    }
-  };
+    })();
+  }, [dispatch, isAuth, pageNumber, staffName, take]);
+  // console.log(isAuth);
 
   if (!isAuth) {
     return (
@@ -138,12 +125,7 @@ export default function Layout({ children }) {
       <div className="">
         <Header />
         <Suspense>
-          <main className="pt-12">{children}
-          
-        <button onClick={fetch} className="btn mb-20 bg-primary">
-          Fetch Workers{" "}
-        </button>
-          </main>
+          <main className="pt-12">{children}</main>
         </Suspense>
         <footer>
           <Navbar />
