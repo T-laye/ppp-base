@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../lib/apiResponseHelper";
+import { sendEmailHelper } from "../../../../lib/email/email-transport";
+import CustomerWelcomeEmail from "../../../../lib/email/templates/customer-welcome";
 
 export async function POST(req, res) {
   const cookiesStore = cookies();
@@ -44,10 +46,18 @@ export async function POST(req, res) {
         },
       },
     });
+    const sendEmail = await sendEmailHelper({
+      email: addCustomer.email,
+      subject: "Customer Welcome",
+      Body: CustomerWelcomeEmail({firstName: name.split(" ")[0]}),
+    });
 
     const createResponse = ApiResponseDto({
       message: "successful",
-      data: addCustomer,
+      data: {
+        customer: addCustomer,
+        email: sendEmail.data ? "email sent successfully" : "error occurred",
+      },
       statusCode: 201,
     });
     return NextResponse.json(createResponse, {
@@ -55,7 +65,10 @@ export async function POST(req, res) {
     });
   } catch (err) {
     if (err.code === "P2002") {
-      return NextResponse.json({message: 'the customer email already exist', status: 409}, {status: 409})
+      return NextResponse.json(
+        { message: "the customer email already exist", status: 409 },
+        { status: 409 }
+      );
     }
     return NextResponse.json({ message: err.message, status: 500 });
   }
@@ -80,7 +93,7 @@ export async function GET(req, res) {
         personnel: true,
       },
     });
-    if (!user )
+    if (!user)
       return NextResponse.json(
         ApiResponseDto({
           message: "oops, user details not found",
@@ -89,11 +102,11 @@ export async function GET(req, res) {
       );
     if (user.role !== "ADMIN" && user.role !== "MANAGEMENT")
       return NextResponse.json(
-      ApiResponseDto({
-        message: "not allowed",
-      }),
-      { status: 404}
-    );
+        ApiResponseDto({
+          message: "not allowed",
+        }),
+        { status: 404 }
+      );
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const createdBy = searchParams.get("createdBy");
     const name = searchParams.get("name");
@@ -157,7 +170,7 @@ export async function GET(req, res) {
         createdByRole: v?.user.role,
       })),
       statusCode: 200,
-      count: totalCount
+      count: totalCount,
     });
     return NextResponse.json(resData, { status: 200 });
   } catch (err) {
