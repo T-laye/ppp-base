@@ -12,7 +12,6 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-
 const CustomerWelcomeEmail = ({ firstName }) => {
   return (
     <Html>
@@ -20,24 +19,24 @@ const CustomerWelcomeEmail = ({ firstName }) => {
       <Preview>Petroleum Personnel Privilege (PPP) Welcome Email</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Img
-            src={`/public/images/logo-removebg.png`}
+          <img
+            src={`logo-removebg.png`}
             width="170"
             height="50"
-            alt="Koala"
+            alt="ppp-base logo"
             style={logo}
           />
           <Text
             style={{
               fontSize: "16px",
               lineHeight: "26px",
-              fontWeight: " 500;",
+              fontWeight: " 500",
             }}
           >
             Congratulations {firstName},
           </Text>
-          <Text style={paragraph} className="text-justify">
-            We sincerely hope this mail meets you well. You pre-enrolment form
+          <Text style={paragraph}>
+            We sincerely hope this mail meets you well. Your pre-enrolment form
             was received, reviewed and you have been recommended for immediate
             enlisting in the Petroleum Personnel Privilege (PPP) system.
             Congratulations, once again. With this mail, we hereby acknowledge
@@ -174,7 +173,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
               >
                 <h2
                   style={{
-                    color: "#333;",
+                    color: "#333",
                     display: "flex",
                     justifyContent: "center",
                   }}
@@ -202,7 +201,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
                 <h5 style={{ color: "#555" }}>ANNUAL SUBSCRIPTION LEVY:</h5>
                 <p
                   style={{
-                    fontWeight: " 500;",
+                    fontWeight: " 500",
                   }}
                 >
                   Thirty Five Thousand Nigerian Naira (35,000 NGN) Only.
@@ -210,7 +209,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
                 <h5 style={{ color: "#555" }}>VOUCHER PAYMENT:</h5>
                 <p
                   style={{
-                    fontWeight: " 500;",
+                    fontWeight: " 500",
                   }}
                 >
                   Fifty Thousand Nigerian Naira (50,000 NGN) only per voucher.
@@ -228,7 +227,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    fontWeight: " 500;",
+                    fontWeight: " 500",
                   }}
                 >
                   ACCOUNT NAME: Myita Farmers Multipurpose Cooperative Society
@@ -237,7 +236,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    fontWeight: " 500;",
+                    fontWeight: " 500",
                   }}
                 >
                   ACCOUNT NUMBER: 4011392669
@@ -246,7 +245,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    fontWeight: " 500;",
+                    fontWeight: " 500",
                   }}
                 >
                   BANK: Fidelity Bank Plc
@@ -302,6 +301,7 @@ const logo = {
 const paragraph = {
   fontSize: "16px",
   lineHeight: "26px",
+  textAlign: "justify",
 };
 
 const btnContainer = {

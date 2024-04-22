@@ -47,9 +47,9 @@ export async function POST(req, res) {
       },
     });
     const sendEmail = await sendEmailHelper({
-      email: "davidhero125@gmail.com",
+      email: addCustomer.email,
       subject: "Customer Welcome",
-      Body: CustomerWelcomeEmail,
+      Body: CustomerWelcomeEmail({firstName: name.split(" ")[0]}),
     });
 
     const createResponse = ApiResponseDto({
