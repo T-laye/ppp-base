@@ -20,9 +20,7 @@ const WelcomeEmail = ({ name }) => {
   return (
     <Html>
       <Head />
-      <Preview>
-        ppp-base.com.ng
-      </Preview>
+      <Preview>ppp-base.com.ng</Preview>
       <Body style={main}>
         <Container style={container}>
           <Img
@@ -44,8 +42,7 @@ const WelcomeEmail = ({ name }) => {
           </Section>
           <Text style={paragraph}>
             Best,
-            <br />
-            The Koala team
+            <br /> The Koala team
           </Text>
           <Hr style={hr} />
           <Text style={footer}>
@@ -56,9 +53,10 @@ const WelcomeEmail = ({ name }) => {
     </Html>
   );
 };
-// KoalaWelcomeEmail.PreviewProps = {
-//   userFirstname: "Alan",
-// };
+
+WelcomeEmail.PreviewProps = {
+  name: "Alan",
+};
 
 export default WelcomeEmail;
 
