@@ -26,6 +26,7 @@ model User {
   poc               PointOfConsumption[]
   emailVerified     Boolean              @default(false)
   verificationToken String?
+  Voucher           Voucher[]
 
   @@index([email, id, phoneNumber])
 }
@@ -57,23 +58,24 @@ enum Permission {
 }
 
 model PointOfConsumption {
-  id             String       @id @default(uuid())
-  personnel      Personnel?   @relation(fields: [personnelId], references: [id], onDelete: SetNull)
-  management     Management[]
-  address        String
-  name           String
-  phoneNumber    String
-  email          String       @unique
-  createdAt      DateTime     @default(now()) @db.Timestamptz()
-  updatedAt      DateTime     @default(now()) @updatedAt
-  personnelId    String?      @unique
-  managementId   String?
-  stockLimit     Int
-  stockAvailable Int
-  customer       Customer[]
-  product        Product[]    @relation(name: "POCProducts")
-  user           User         @relation(fields: [createdBy], references: [id])
-  createdBy      String
+  id              String           @id @default(uuid())
+  personnel       Personnel?       @relation(fields: [personnelId], references: [id], onDelete: SetNull)
+  management      Management[]
+  address         String
+  name            String
+  phoneNumber     String
+  email           String           @unique
+  createdAt       DateTime         @default(now()) @db.Timestamptz()
+  updatedAt       DateTime         @default(now()) @updatedAt
+  personnelId     String?          @unique
+  managementId    String?
+  stockLimit      Int
+  stockAvailable  Int
+  customer        Customer[]
+  product         Product[]        @relation(name: "POCProducts")
+  user            User             @relation(fields: [createdBy], references: [id])
+  createdBy       String
+  VoucherDispense VoucherDispense?
 
   @@index([id, name])
 }
@@ -115,7 +117,6 @@ model Management {
 model Admin {
   id              String            @id @default(uuid())
   createdAt       DateTime          @default(now()) @db.Timestamptz()
-  VoucherDispense VoucherDispense[]
   user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
 
@@ -138,36 +139,41 @@ model Customer {
   verificationToken String?
   acceptTerms       Boolean              @default(false)
   role              UserType             @default(CUSTOMER)
+  profilePicture    Image?
 
   @@index([id, email, phoneNumber])
 }
 
 model Voucher {
-  voucherId       String            @id @default(uuid())
-  voucherCode     String            @unique
-  createdAt       DateTime          @default(now()) @db.Timestamptz()
-  collected       Boolean
-  voucherDispense VoucherDispense[]
-  customer        Customer          @relation(fields: [customerId], references: [id])
+  id              String           @id @default(uuid())
+  voucherCode     String           @unique
+  createdAt       DateTime         @default(now()) @db.Timestamptz()
+  collected       Boolean          @default(false)
+  voucherDispense VoucherDispense?
+  customer        Customer         @relation(fields: [customerId], references: [id])
   customerId      String
-  thirdParty      Boolean
-  product         Product           @relation(fields: [productId], references: [id])
+  product         Product          @relation(fields: [productId], references: [id])
   productId       String
+  hashToken       String?
+  createdBy       User             @relation(fields: [userId], references: [id])
+  userId          String
 
-  @@index([voucherId])
+  @@index([id, voucherCode])
 }
 
 model VoucherDispense {
-  Id              String   @id @default(uuid())
-  voucher         Voucher  @relation(fields: [voucherId], references: [voucherId])
-  createdAt       DateTime @default(now()) @db.Timestamptz()
-  approvedByAdmin Admin    @relation(fields: [adminId], references: [id])
-  adminId         String
-  dispenseDate    DateTime @default(now()) @db.Timestamptz()
-  vehicle         String
+  Id              String              @id @default(uuid())
+  voucher         Voucher             @relation(fields: [voucherId], references: [id])
+  createdAt       DateTime            @default(now()) @db.Timestamptz()
+  poc             PointOfConsumption? @relation(fields: [pocId], references: [id])
+  vehicleType     String
+  thirdParty      Boolean?
+  thirdPartyName  String?
+  thirdPartyPhone String?
   vehicleNUmber   String
-  dateUsed        DateTime @default(now()) @db.Timestamptz()
-  voucherId       String
+  dateUsed        String
+  voucherId       String              @unique
+  pocId           String?             @unique
 
   @@index([Id])
 }
@@ -181,6 +187,30 @@ model Performance {
   productsDispensed  Int
   management         Management? @relation(fields: [managementId], references: [id])
   managementId       String?
+}
+
+model Email {
+  id          String    @id @default(uuid())
+  type        EmailType
+  createdDate DateTime  @default(now()) @db.Timestamptz()
+  updatedDate DateTime  @default(now()) @updatedAt
+  body        String    @db.Text()
+  title       String
+  subject     String
+}
+
+enum EmailType {
+  CUSTOMER_ENROLMENT
+  VOUCHER_CREATION
+  VOUCHER_DISPENSE
+}
+
+model Image {
+  id         String   @id @default(uuid())
+  image      Bytes
+  createdAt  DateTime @default(now()) @db.Timestamptz()
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String   @unique
 }
 
 // npx prisma migrate dev --name init

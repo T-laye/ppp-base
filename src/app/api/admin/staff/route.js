@@ -17,9 +17,8 @@ export async function GET(req, res) {
       );
     }
     if (
-      authResponse.user.role !== "ADMIN" ||
-      (authResponse.user.role === "MANAGEMENT" &&
-        authResponse.user.management[0].canEdit === false)
+      userResponse.user.role !== "ADMIN" &&
+      userResponse.user.management.canEdit === true
     ) {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
         status: 403,
@@ -69,8 +68,16 @@ export async function GET(req, res) {
       take: take,
       skip: offset,
       include: {
-        personnel: true,
-        management: true,
+        personnel: {
+          include: {
+            poc: true
+          },
+        },
+        management: {
+          include: {
+            poc: true
+          },
+        },
         admin: true,
       },
       orderBy: {
