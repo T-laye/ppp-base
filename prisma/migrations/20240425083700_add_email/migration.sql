@@ -1,0 +1,15 @@
+-- CreateEnum
+CREATE TYPE "EmailType" AS ENUM ('CUSTOMER_ENROLMENT', 'VOUCHER_CREATION', 'VOUCHER_DISPENSE');
+
+-- CreateTable
+CREATE TABLE "Email" (
+    "id" TEXT NOT NULL,
+    "type" "EmailType" NOT NULL,
+    "createdDate" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "body" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "subject" TEXT NOT NULL,
+
+    CONSTRAINT "Email_pkey" PRIMARY KEY ("id")
+);
