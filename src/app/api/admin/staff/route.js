@@ -68,8 +68,16 @@ export async function GET(req, res) {
       take: take,
       skip: offset,
       include: {
-        personnel: true,
-        management: true,
+        personnel: {
+          include: {
+            poc: true
+          },
+        },
+        management: {
+          include: {
+            poc: true
+          },
+        },
         admin: true,
       },
       orderBy: {
