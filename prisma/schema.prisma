@@ -119,7 +119,6 @@ model Admin {
   createdAt DateTime  @default(now()) @db.Timestamptz()
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  voucher   Voucher[]
 
   @@index([id])
 }
@@ -161,8 +160,6 @@ model Voucher {
   is4FirstTime         Boolean          @default(true)
   userId               String
   availableForDispense Boolean          @default(false)
-  approvedByAdmin      Admin?           @relation(fields: [adminId], references: [id])
-  approved             Boolean          @default(false)
   adminId              String
 
   @@index([id, voucherCode, is3FirstTime, is4FirstTime])
