@@ -19,6 +19,7 @@ import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
 import { fetchPocs } from "@/redux/slices/fetchPocsSlice";
 import { getWorker } from "@/redux/slices/getWorkerSlice";
+import { fetchPersonnels } from "@/redux/slices/fetchPersonnelsSlice";
 
 export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
@@ -27,7 +28,7 @@ export default function Layout({ children }) {
   const { pageNumber, take, search, productName, staffName, pocName } =
     useSelector((state) => state.variables);
   const { userInfo } = useSelector((state) => state.auth);
-  console.log(userInfo.email);
+  // console.log(userInfo.email);
 
   useEffect(() => {
     (async () => {
@@ -62,6 +63,25 @@ export default function Layout({ children }) {
     })();
   }, [dispatch, isAuth, pageNumber, take, productName]);
 
+    useEffect(() => {
+      (async () => {
+        if (isAuth) {
+          try {
+            const resPersonnels = await axios.get(
+              `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
+            );
+            dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+            // console.log(resPersonnels);
+            // console.log(resPocs)
+          } catch (e) {
+            // console.log(e);
+          }
+        } else {
+          return;
+        }
+      })();
+    }, [dispatch, isAuth, pageNumber, staffName, take]);
+
   useEffect(() => {
     (async () => {
       if (isAuth) {
@@ -69,7 +89,7 @@ export default function Layout({ children }) {
           `/api/admin/staff/${userInfo?.id}?email=${userInfo?.email}`
         );
         // console.log(resProducts);
-        dispatch(getWorker({ ...resWorker?.data }));
+        dispatch(getWorker({ ...resWorker?.data.data }));
       } else {
         return;
       }

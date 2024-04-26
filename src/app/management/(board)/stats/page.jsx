@@ -15,36 +15,44 @@ export default function Stats() {
   const [activeTab, setActiveTab] = useState("");
   const { worker } = useSelector((state) => state.worker);
   const { products } = useSelector((state) => state.products);
-  const managementPocDetails = worker?.data?.management.map((m) => m.poc);
-  const pocs = managementPocDetails?.map((p) => p);
-  console.log(pocs);
+  const managementDetails = worker?.management?.map((p) => p.poc);
+  const pocs = managementDetails?.map((p) => p).flat();
+  const pocProducts = pocs?.map((p) => p.products).flat();
+
+  // console.log(pocs);
 
   const setTab = (tab) => {
     setActiveTab(tab);
+    console.log(tab);
   };
   const renderPoc = () => {
-    return pocs?.map((p) => {
-      return p.map((r) => {
-        if (activeTab !== "" && r.name.toLowerCase() === activeTab) {
-          return (
-            <PocList
-              key={r.id}
-              name={capitalizeWords(r?.name)}
-              available={r?.stockAvailable}
-              total={r?.stockLimit}
-            />
-          );
-        } else if (activeTab === "") {
-          return (
-            <PocList
-              key={r.id}
-              name={capitalizeWords(r?.name)}
-              available={r?.stockAvailable}
-              total={r?.stockLimit}
-            />
-          );
-        }
-      });
+    return pocs?.map((p, i) => {
+      const productsInPoc = p?.products.map((p) => p).flat();
+      const productNames = productsInPoc.map((p) =>
+        p.product_name.toLowerCase()
+      );
+      // console.log(productNames);
+      if (activeTab !== "" && productNames.includes(activeTab)) {
+        return (
+          <PocList
+            id={p.poc_id}
+            key={i}
+            name={capitalizeWords(p?.name)}
+            available={p?.stockAvailable}
+            total={p?.stockLimit}
+          />
+        );
+      } else if (activeTab === "") {
+        return (
+          <PocList
+            key={i}
+            id={p.poc_id}
+            name={capitalizeWords(p?.name)}
+            available={p?.stockAvailable}
+            total={p?.stockLimit}
+          />
+        );
+      }
     });
   };
 
@@ -97,7 +105,7 @@ export default function Stats() {
             icon={<FaUsers size={26} />}
           /> */}
           <StatsCard
-            number={managementPocDetails?.length ?? 0}
+            number={pocs?.length ?? 0}
             link="#"
             color="bg-blue-700"
             title="POC"
@@ -145,18 +153,7 @@ export default function Stats() {
           {renderProductTabs()}
         </div>
 
-        <div className="mt-4">
-          {/* <PocList name="Total Fueling Station" available={420} total={600} />
-          <PocList name="Oando Fueling Station" available={80} total={400} />
-          <PocList name="Mobil Fueling Station " available={500} total={1200} />
-          <PocList name="Odafe Fueling Station " available={500} total={1300} />
-          <PocList
-            name="New Bridge Fueling Station "
-            available={500}
-            total={1500}
-          /> */}
-          {renderPoc()}
-        </div>
+        <div className="mt-6">{renderPoc()}</div>
       </div>
     </section>
   );

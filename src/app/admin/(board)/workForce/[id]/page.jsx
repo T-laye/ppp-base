@@ -139,7 +139,7 @@ export default function Page() {
 
             <DetailList
               title="Created At"
-              value={formatDate(worker?.createdDate)}
+              value={formatDate(worker?.createdAt)}
               icon={<FaUser size={16} />}
             />
 

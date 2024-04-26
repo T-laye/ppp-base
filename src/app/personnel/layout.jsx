@@ -6,10 +6,19 @@ import Header from "./components/Header";
 import { useRouter } from "next/navigation";
 import { ImSpinner9 } from "react-icons/im";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getWorker } from "@/redux/slices/getWorkerSlice";
+import { setCredentials } from "@/redux/slices/authSlice";
 
 export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { pageNumber, take, search, productName, staffName, pocName } =
+    useSelector((state) => state.variables);
+
+  const { userInfo } = useSelector((state) => state.auth);
+  // console.log(userInfo);
 
   useEffect(() => {
     (async () => {
@@ -21,11 +30,26 @@ export default function Layout({ children }) {
         return;
       } else {
         // if no error
+        dispatch(setCredentials({ ...user.user }));
         setIsAuth(true);
       }
       // console.log(user);
     })();
-  }, [router]);
+  }, [dispatch, router]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        const resWorker = await axios.get(
+          `/api/admin/staff/${userInfo?.id}?email=${userInfo?.email}`
+        );
+        // console.log(resProducts);
+        dispatch(getWorker({ ...resWorker?.data.data }));
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, userInfo?.email, userInfo?.id]);
   // console.log(isAuth);
 
   if (!isAuth) {
