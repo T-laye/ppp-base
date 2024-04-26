@@ -160,7 +160,6 @@ model Voucher {
   is4FirstTime         Boolean          @default(true)
   userId               String
   availableForDispense Boolean          @default(false)
-  adminId              String
 
   @@index([id, voucherCode, is3FirstTime, is4FirstTime])
 }

@@ -189,7 +189,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
                 <p>They are:</p>
                 <ul>
                   <li>Payment for the annual membership subscription levy</li>
-                  <li>Making deposits for one's voucher</li>
+                  <li>Making deposits for one&apos;s voucher</li>
                 </ul>
                 <p>
                   Any other payment is 100% illegal and must be disregarded.
