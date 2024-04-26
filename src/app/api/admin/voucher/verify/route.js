@@ -1,4 +1,3 @@
-// this assumes the voucher generated is now going to be dispense with product
 import { prisma } from "../../../../../../config/prisma.connect";
 import { NextResponse } from "next/server";
 import ApiResponseDto from "../../../../../../lib/apiResponseHelper";
@@ -27,7 +26,7 @@ export async function POST(req, res) {
       thirdPartyName,
       thirdPartyPhoneNumber,
     } = body;
-    const verifyVoucher = await isVoucherValidHelper(voucherCode);
+    
     const createVDispenseData = await prisma.voucherDispense.create({
       data: {
         dateUsed: new Date().toISOString(),
@@ -47,7 +46,7 @@ export async function POST(req, res) {
           : undefined),
         voucher: {
           connect: {
-            id: verifyVoucher.data.id,
+            voucherCode: voucherCode,
           },
         },
       },
@@ -87,8 +86,6 @@ export async function GET(req, res) {
         error: verifyVoucher.error,
       });
     }
-    // if the code is verified
-    // return the details with the code (product, customer)
     if (verifyVoucher.data) {
       return NextResponse.json(
         ApiResponseDto({

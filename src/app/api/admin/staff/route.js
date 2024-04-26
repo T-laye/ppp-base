@@ -17,8 +17,8 @@ export async function GET(req, res) {
       );
     }
     if (
-      userResponse.user.role !== "ADMIN" &&
-      userResponse.user.management.canEdit === true
+      authResponse.user.role !== "ADMIN" &&
+      authResponse.user.management.canEdit === true
     ) {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
         status: 403,
