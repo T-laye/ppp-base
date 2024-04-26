@@ -19,6 +19,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
       <Preview>Petroleum Personnel Privilege (PPP) Welcome Email</Preview>
       <Body style={main}>
         <Container style={container}>
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={`logo-removebg.png`}
             width="170"
@@ -189,7 +190,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
                 <p>They are:</p>
                 <ul>
                   <li>Payment for the annual membership subscription levy</li>
-                  <li>Making deposits for one's voucher</li>
+                  <li>Making deposits for one&apos;s voucher</li>
                 </ul>
                 <p>
                   Any other payment is 100% illegal and must be disregarded.
