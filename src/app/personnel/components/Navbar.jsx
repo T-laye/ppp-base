@@ -24,7 +24,9 @@ export default function Navbar() {
         <Link href="/personnel/stats" legacyBehavior>
           <li
             className={`${
-              pathname === "/personnel/stats" ? "text-primary" : "text-gray-500"
+              pathname.startsWith("/personnel/stats")
+                ? "text-primary"
+                : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
           >
             <ImStatsBars size={20} />
@@ -52,7 +54,7 @@ export default function Navbar() {
         <Link href="/personnel/usedVoucher" legacyBehavior>
           <li
             className={`${
-              pathname === "/personnel/usedVoucher"
+              pathname.startsWith("/personnel/usedVoucher")
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}

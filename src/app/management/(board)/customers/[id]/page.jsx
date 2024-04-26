@@ -32,6 +32,9 @@ export default function Page() {
   const { pageNumber, take, search } = useSelector((state) => state.variables);
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const { worker } = useSelector((state) => state.worker);
+  const managementDetails = worker?.management?.map((p) => p.canEdit).flat();
+  // console.log(managementDetails);
 
   // console.log(customer);
   useEffect(() => {
@@ -173,19 +176,23 @@ export default function Page() {
             icon={<IoLocationSharp size={16} />}
           /> */}
 
-            <Link href="/[newVoucher]" as={`/${customer?.customerId}`}>
-              <button className="btn bg-primary w-full mt-5">
-                Create Voucher
-              </button>
-            </Link>
-
-            <button
-              onClick={editCustomer}
-              className="btn bg-yellow-500 w-full mt-5"
-            >
-              Edit Customer
-            </button>
-            <button
+            {managementDetails?.includes(true) && (
+              <>
+                {" "}
+                <Link href="/[newVoucher]" as={`/${id}`}>
+                  <button className="btn bg-primary w-full mt-5">
+                    Create Voucher
+                  </button>
+                </Link>
+                <button
+                  onClick={editCustomer}
+                  className="btn bg-yellow-500 w-full mt-5"
+                >
+                  Edit Customer
+                </button>
+              </>
+            )}
+            {/* <button
               onClick={handleDeleteCustomer}
               type="submit"
               className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
@@ -194,7 +201,7 @@ export default function Page() {
               disabled={isLoading}
             >
               {isLoading ? <Loader /> : "Delete Customer"}
-            </button>
+            </button> */}
           </div>
         ) : (
           <Loading />

@@ -15,6 +15,7 @@ export default function Vouchers() {
   const [term, setTerm] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
+  const { customer } = useSelector((state) => state.customer);
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
 
@@ -52,15 +53,13 @@ export default function Vouchers() {
   };
 
   const renderProductsTab = () => {
-    return products?.map((p, i) => {
+    return products?.data?.map((p, i) => {
       return (
         <div
           key={i}
-          onClick={() => setTab(i + 1)}
+          onClick={() => setTab(i)}
           className={`${
-            activeTab === i + 1
-              ? "bg-primary text-white"
-              : "border text-gray-400 "
+            activeTab === i ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
         >
           {capitalizeWords(p.name)}
@@ -73,9 +72,16 @@ export default function Vouchers() {
     if (customers.length === 0 && term) {
       return <p>No Customer Found</p>;
     } else if (term.length > 2) {
-      return customers.map((c) => <CustomerList key={c?.customerId} c={c} />);
+      return customers?.data?.map((c) => (
+        <CustomerList key={c?.customerId} c={c} />
+      ));
+    } else {
+      return customers?.data?.map((c) => (
+        <CustomerList key={c?.customerId} c={c} />
+      ));
     }
   };
+  console.log(customers);
 
   return (
     <section className="relative min-h-screen bg-green300 py-4">
@@ -91,7 +97,7 @@ export default function Vouchers() {
           >
             Fuel
           </div> */}
-          <div
+          {/* <div
             onClick={() => setTab(0)} // Wrap the setTab function call in an arrow function
             className={`${
               activeTab === 0
@@ -100,7 +106,7 @@ export default function Vouchers() {
             }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
           >
             All
-          </div>
+          </div> */}
           {renderProductsTab()}
         </div>
 

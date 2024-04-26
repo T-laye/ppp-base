@@ -5,35 +5,96 @@ import { useRouter } from "next/navigation";
 import VoucherList from "../../components/VoucherList";
 import CustomerList from "../../components/CustomerList";
 import { MdOutlineCancel } from "react-icons/md";
+import { handleSearch } from "@/redux/slices/variableSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function Page() {
+export default function Vouchers() {
   const [approved, setApproved] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
   const [showAddVoucher, setShowAddVoucher] = useState(false);
-  const [activeTab, setActiveTab] = useState(1);
   const [term, setTerm] = useState("");
+  const [customerTerm, setCustomerTerm] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { customer } = useSelector((state) => state.customer);
+  const { customers } = useSelector((state) => state.customers);
+  const { products } = useSelector((state) => state.products);
+
+  const handleProduct = () => {
+    setApproved(!approved);
+  };
+
+  function capitalizeWords(sentence) {
+    // Split the sentence into an array of words
+    let words = sentence?.split(" ");
+
+    // Iterate over each word
+    for (let i = 0; i < words?.length; i++) {
+      // Capitalize the first letter of each word
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+
+    // Join the words back into a sentence
+    return words?.join(" ");
+  }
 
   const handleAddVoucher = () => {
     setShowAddVoucher(!showAddVoucher);
+    dispatch(handleSearch(""));
   };
-
-  const goToCustomers = () => {
-    router.push("/management/customers");
-  };
-
   const setTab = (tab) => {
     setActiveTab(tab);
   };
 
   const handleChange = (e) => {
     setTerm(e.target.value);
+    if (e.target.value.length >= 3 || e.target.value.length === 0) {
+      dispatch(handleSearch(e.target.value.toLowerCase()));
+    }
   };
+  const handleCustomerChange = (e) => {
+    setTerm(e.target.value);
+    if (e.target.value.length >= 3 || e.target.value.length === 0) {
+      dispatch(handleSearch(e.target.value.toLowerCase()));
+    }
+  };
+
+  const renderProductsTab = () => {
+    return products?.data?.map((p, i) => {
+      return (
+        <div
+          key={i}
+          onClick={() => setTab(i)}
+          className={`${
+            activeTab === i ? "bg-primary text-white" : "border text-gray-400 "
+          }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
+        >
+          {capitalizeWords(p.name)}
+        </div>
+      );
+    });
+  };
+
+  const renderCustomers = () => {
+    if (customers.length === 0 && customerTerm) {
+      return <p>No Customer Found</p>;
+    } else if (customerTerm.length > 2) {
+      return customers?.data?.map((c) => (
+        <CustomerList key={c?.customerId} c={c} />
+      ));
+    } else {
+      return customers?.data?.map((c) => (
+        <CustomerList key={c?.customerId} c={c} />
+      ));
+    }
+  };
+  console.log(customers);
 
   return (
     <section className="relative min-h-screen bg-green300 py-4">
       <div className="mt-4 bg-red400">
         <div className="flex max-[285px]:justify-center space-x-3 items-center mt4 mb-5 text-base">
-          <div
+          {/* <div
             onClick={() => setTab(1)} // Wrap the setTab function call in an arrow function
             className={`${
               activeTab === 1
@@ -42,21 +103,22 @@ export default function Page() {
             }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
           >
             Fuel
-          </div>
-          <div
-            onClick={() => setTab(2)} // Wrap the setTab function call in an arrow function
+          </div> */}
+          {/* <div
+            onClick={() => setTab(0)} // Wrap the setTab function call in an arrow function
             className={`${
-              activeTab === 2
+              activeTab === 0
                 ? "bg-primary text-white"
                 : "border text-gray-400 "
             }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
           >
-            Desiel
-          </div>
+            All
+          </div> */}
+          {renderProductsTab()}
         </div>
 
         <div className="flex flex-wrap justify-between gap-2 bg-bue-400 mb-8">
-          {/* <div
+          <div
             onClick={handleProduct}
             className="relative text-base fontmedium text-white flex justify-between borde bg-customGray border-primary w-44 max-[300px]:w-40 px-2 py-1.5 rounded-xl  cursor-pointer max-[285px]:mx-auto"
           >
@@ -71,9 +133,12 @@ export default function Page() {
             >
               {approved ? "Approved" : "Queue"}
             </div>
-          </div> */}
-          <button onClick={handleAddVoucher} className="btn w-full bg-primary">
-            Add Voucher
+          </div>
+          <button
+            onClick={handleAddVoucher}
+            className="btn max-[285px]:mx-auto bg-primary"
+          >
+            + Add
           </button>
         </div>
       </div>
@@ -82,7 +147,7 @@ export default function Page() {
           <div className="relative ">
             <input
               type="text"
-              placeholder="Search by name"
+              placeholder="Search by name "
               className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
               value={term}
               onChange={handleChange}
@@ -146,8 +211,8 @@ export default function Page() {
                   type="text"
                   placeholder="Search by customer name"
                   className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
-                  value={term}
-                  onChange={handleChange}
+                  value={customerTerm}
+                  onChange={handleCustomerChange}
                 />
                 <div className="absolute top-3 right-2.5 text-gray-400">
                   <BiSearchAlt2 size={20} />
@@ -155,11 +220,11 @@ export default function Page() {
               </div>
             </form>
 
-           { term !== '' && <div className="mt-5">
-              <CustomerList name="Marvelous Ike" />
-              <CustomerList name="James Manager" />
-              <CustomerList name="Olorunfemi Adeola" />
-            </div>}
+            {/* {term !== "" && ( */}
+            <div className="mt-5 overflow-auto max-h-[70vh] ">
+              {renderCustomers()}
+            </div>
+            {/* )} */}
           </div>
         </div>
       )}

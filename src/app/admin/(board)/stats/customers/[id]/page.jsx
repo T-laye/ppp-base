@@ -130,7 +130,7 @@ export default function Page() {
             />
             <DetailList
               title="Created By"
-              value={capitalizeWords(customer?.createdBy)}
+              value={capitalizeWords(customer?.user?.name)}
               icon={<FaUser size={16} />}
             />
             {/* <DetailList
@@ -174,7 +174,7 @@ export default function Page() {
             icon={<IoLocationSharp size={16} />}
           /> */}
 
-            <Link href="/[newVoucher]" as={`/${customer?.customerId}`}>
+            <Link href="/[newVoucher]" as={`/${id}`}>
               <button className="btn bg-primary w-full mt-5">
                 Create Voucher
               </button>

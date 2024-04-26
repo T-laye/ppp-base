@@ -10,7 +10,7 @@ import { IoIosMenu } from "react-icons/io";
 import { TbLogout2 } from "react-icons/tb";
 import { FaHistory } from "react-icons/fa";
 import { PiDropFill } from "react-icons/pi";
-import { MdVerifiedUser } from "react-icons/md";
+import { MdAttachEmail, MdVerifiedUser } from "react-icons/md";
 import { FaUser } from "react-icons/fa6";
 import { useLogoutMutation } from "@/redux/slices/usersApiSlice";
 import { logout } from "../../../redux/slices/authSlice";
@@ -104,15 +104,15 @@ export default function Header() {
                   <a href="">New Product</a>
                 </li>
               </Link>
-              {/* <Link legacyBehavior href="/verification">
+              <Link legacyBehavior href="/admin/editEmails">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
                 >
-                  <MdVerifiedUser size={20} />
-                  <a href="">Verify Voucher</a>
+                  <MdAttachEmail  size={20} />
+                  <a href="">Edit Emails</a>
                 </li>
-              </Link> */}
+              </Link>
               <Link legacyBehavior href="/admin/stats/usedVoucher">
                 <li
                   onClick={handleNav}
@@ -139,59 +139,3 @@ export default function Header() {
     </header>
   );
 }
-
-//  <ul className="h-full flex justify-evenly ">
-//         <Link href="/admin/product" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/product" ? "text-primary" : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             {/* <div className="h-2 bg-blue-600"> */}
-//             {/* </div> */}
-
-//             <a className="text-xs max-[300px]:text-[10px] block ">Product</a>
-//           </li>
-//         </Link>
-//         <Link href="/admin/customers" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/customers" ? "text-primary" : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             <FaUsers size={26} />
-//             <a className="text-xs max-[300px]:text-[10px]">Customers</a>
-//           </li>
-//         </Link>
-//         <Link href="/admin/poc" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/poc" ? "text-primary" : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             <a className="text-xs max-[300px]:text-[10px]">POC</a>
-//           </li>
-//         </Link>
-//         <Link href="/admin/personnels" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/personnels"
-//                 ? "text-primary"
-//                 : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             <BsPersonFillGear size={28} />
-//             <a className="text-xs max-[300px]:text-[10px]">Personnels</a>
-//           </li>
-//         </Link>
-//         <Link href="/admin/account" legacyBehavior>
-//           <li
-//             className={`${
-//               pathname === "/admin/account" ? "text-primary" : "text-gray-500"
-//             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
-//           >
-//             <RiAccountCircleFill size={26} />
-//             <a className="text-xs max-[300px]:text-[10px]">Account</a>
-//           </li>
-//         </Link>
-//       </ul>
