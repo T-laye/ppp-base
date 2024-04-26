@@ -30,6 +30,7 @@ async function checkVoucherListAction() {
           data: {
             availableForDispense: true,
             is3FirstTime: false,
+            approvedByAdmin: true,
           },
           include: {
             customer: true,
@@ -66,7 +67,7 @@ async function checkVoucherListAction() {
           product: true,
         },
       });
-      
+
       if (last4Vouchers.length === 4) {
         const oldestVoucher = last4Vouchers.reduce(
           (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
@@ -79,10 +80,11 @@ async function checkVoucherListAction() {
           data: {
             availableForDispense: true,
             is4FirstTime: false,
+            approvedByAdmin: true,
           },
           include: {
-            customer: true
-          }
+            customer: true,
+          },
         });
         return {
           data: { customer: updateV, count: vCount },
@@ -233,7 +235,7 @@ export async function GET(req, res) {
         });
       }
     }
-    const boolCheck = av4D === "true" ? true : false
+    const boolCheck = av4D === "true" ? true : false;
     const boolCheck2 = collected === "true" ? true : false;
     const totalPages = Math.ceil(totalCount / take);
     const offset = (pageNumber - 1) * totalPages;
@@ -255,7 +257,7 @@ export async function GET(req, res) {
           name: customer ? { contains: customer } : {},
         },
         collected: collected ? boolCheck2 : {},
-        availableForDispense: av4D? boolCheck : {},
+        availableForDispense: av4D ? boolCheck : {},
       },
       include: {
         customer: true,
@@ -281,7 +283,7 @@ export async function GET(req, res) {
   }
 }
 
-async function sendVoucherEmailNotification({
+export async function sendVoucherEmailNotification({
   customerName,
   voucherCode,
   email,

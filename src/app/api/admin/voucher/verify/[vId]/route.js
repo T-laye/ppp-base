@@ -2,6 +2,7 @@ import { getAuthUser } from "../../../../../../../lib/get-auth-user";
 import { NextResponse } from "next/server";
 import ApiResponseDto from "../../../../../../../lib/apiResponseHelper";
 import { prisma } from "../../../../../../../config/prisma.connect";
+import { sendVoucherEmailNotification } from "../../route";
 
 export async function PATCH(req, context) {
   try {
@@ -26,6 +27,9 @@ export async function PATCH(req, context) {
       where: {
         id: getVoucherId,
       },
+      include: {
+        customer: true,
+      },
     });
 
     if (findV) {
@@ -35,7 +39,16 @@ export async function PATCH(req, context) {
         },
         data: {
           approvedByAdmin: true,
+          availableForDispense: true,
+          is3FirstTime: false,
+          is4FirstTime: false,
         },
+      });
+      // send the email for voucher notification
+      await sendVoucherEmailNotification({
+        customerName: findV.customer.name,
+        email: findV.customer.email,
+        voucherCode: findV.voucherCode,
       });
     }
   } catch (err) {
