@@ -115,10 +115,11 @@ model Management {
 }
 
 model Admin {
-  id              String            @id @default(uuid())
-  createdAt       DateTime          @default(now()) @db.Timestamptz()
-  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now()) @db.Timestamptz()
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  voucher   Voucher[]
 
   @@index([id])
 }
@@ -145,20 +146,26 @@ model Customer {
 }
 
 model Voucher {
-  id              String           @id @default(uuid())
-  voucherCode     String           @unique
-  createdAt       DateTime         @default(now()) @db.Timestamptz()
-  collected       Boolean          @default(false)
-  voucherDispense VoucherDispense?
-  customer        Customer         @relation(fields: [customerId], references: [id])
-  customerId      String
-  product         Product          @relation(fields: [productId], references: [id])
-  productId       String
-  hashToken       String?
-  createdBy       User             @relation(fields: [userId], references: [id])
-  userId          String
+  id                   String           @id @default(uuid())
+  voucherCode          String           @unique
+  createdAt            DateTime         @default(now()) @db.Timestamptz()
+  collected            Boolean          @default(false)
+  voucherDispense      VoucherDispense?
+  customer             Customer         @relation(fields: [customerId], references: [id])
+  customerId           String
+  product              Product          @relation(fields: [productId], references: [id])
+  productId            String
+  hashToken            String?
+  createdBy            User             @relation(fields: [userId], references: [id])
+  is3FirstTime         Boolean          @default(true)
+  is4FirstTime         Boolean          @default(true)
+  userId               String
+  availableForDispense Boolean          @default(false)
+  approvedByAdmin      Admin?           @relation(fields: [adminId], references: [id])
+  approved             Boolean          @default(false)
+  adminId              String
 
-  @@index([id, voucherCode])
+  @@index([id, voucherCode, is3FirstTime, is4FirstTime])
 }
 
 model VoucherDispense {
