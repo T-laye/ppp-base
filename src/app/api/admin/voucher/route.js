@@ -6,6 +6,110 @@ import { generateVoucherCode } from "../../../../../lib/hashHelper";
 import { sendEmailHelper } from "../../../../../lib/email/email-transport";
 import VoucherApprovalNotification from "../../../../../lib/email/templates/voucher-creation";
 
+
+async function checkVoucherListAction() {
+  try {
+    const vCount = await prisma.voucher.count();
+    if (vCount < 2 || vCount === 0) {
+      return {
+        data: {},
+        message: `the voucher queue is not yet complete, current count: ${vCount}`,
+      };
+    }
+
+    if (vCount === 3) {
+      const oldestCustomer = await prisma.voucher.findFirst({
+        orderBy: { createdAt: "asc" },
+        include: {
+          customer: true,
+        },
+      });
+      console.log(oldestCustomer)
+      if (oldestCustomer.is3FirstTime === true) {
+        await prisma.voucher.update({
+          where: {
+            id: oldestCustomer.id,
+          },
+          data: {
+            availableForDispense: true,
+            is3FirstTime: false,
+          },
+        });
+        await sendEmailHelper({
+          email: oldestCustomer.customer.email,
+          subject: "VOUCHER APPROVAL NOTIFICATION",
+          Body: VoucherApprovalNotification({
+            firstName: oldestCustomer.customer.name.split(" ")[0],
+            voucherCode: oldestCustomer.voucherCode,
+          }),
+        });
+        await prisma.voucher.updateMany({
+          where: {
+            is3FirstTime: true,
+          },
+          data: {
+            is3FirstTime: false,
+          },
+        });
+        return {
+          data: oldestCustomer,
+          message: "customer voucher ready for approval",
+        };
+      }
+    }
+    if (vCount >=4) {
+      const last4Vouchers = await prisma.voucher.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          availableForDispense: false,
+        },
+        take: 4,
+        include: {
+          customer: true,
+          product: true,
+        },
+      });
+      if (last4Vouchers.length === 4) {
+        const oldestVoucher = last4Vouchers.reduce(
+          (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
+          last4Vouchers[0]
+        );
+        await prisma.voucher.update({
+          where: {
+            id: oldestVoucher.id,
+          },
+          data: {
+            availableForDispense: true,
+            is4FirstTime: false,
+          },
+        });
+
+        await sendEmailHelper({
+          email: oldestVoucher.customer.email,
+          subject: "VOUCHER APPROVAL NOTIFICATION",
+          Body: VoucherApprovalNotification({
+            firstName: oldestCustomer.customer.name.split(" ")[0],
+            voucherCode: oldestCustomer.voucherCode,
+          }),
+        });
+        return {
+          data: oldestVoucher,
+          message: "customer voucher ready for approval",
+        };
+      }
+    } else {
+      return {
+        data: {},
+        message: `the voucher queue is not yet complete, current count: ${vCount}`,
+      };
+    }
+  } catch (err) {
+    return { error: err, errMessage: err.message };
+  }
+}
+
 export async function POST(req, res) {
   try {
     const authResponse = await getAuthUser(req, false);
@@ -185,104 +289,3 @@ export async function GET(req, res) {
   }
 }
 
-async function checkVoucherListAction() {
-  try {
-    const vCount = await prisma.voucher.count();
-    if (vCount < 2 || vCount === 0) {
-      return {
-        data: null,
-        message: `the voucher queue is not yet complete, current count: ${vCount}`,
-      };
-    }
-
-    if (vCount === 3) {
-      const oldestCustomer = await prisma.voucher.findFirst({
-        orderBy: { createdAt: "asc" },
-        include: {
-          customer: true,
-        },
-      });
-      if (oldestCustomer.is3FirstTime === true) {
-        await prisma.voucher.update({
-          where: {
-            id: oldestCustomer.id,
-          },
-          data: {
-            availableForDispense: true,
-            is3FirstTime: false,
-          },
-        });
-        await sendEmailHelper({
-          email: oldestCustomer.customer.email,
-          subject: "VOUCHER APPROVAL NOTIFICATION",
-          Body: VoucherApprovalNotification({
-            firstName: oldestCustomer.customer.name.split(" ")[0],
-            voucherCode: oldestCustomer.voucherCode,
-          }),
-        });
-        await prisma.voucher.updateMany({
-          where: {
-            is3FirstTime: true,
-          },
-          data: {
-            is3FirstTime: false,
-          },
-        });
-        return {
-          data: oldestCustomer,
-          message: "customer voucher ready for approval",
-        };
-      }
-    }
-    if (vCount > 3) {
-      const last4Vouchers = await prisma.voucher.findMany({
-        orderBy: {
-          createdAt: "desc",
-        },
-        where: {
-          availableForDispense: false,
-        },
-        take: 4,
-        include: {
-          customer: true,
-          product: true,
-        },
-      });
-      if (last4Vouchers.length === 4) {
-        const oldestVoucher = last4Vouchers.reduce(
-          (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
-          last4Vouchers[0]
-        );
-        await prisma.voucher.update({
-          where: {
-            id: oldestVoucher.id,
-          },
-          data: {
-            availableForDispense: true,
-            is4FirstTime: false,
-          },
-        });
-
-        await sendEmailHelper({
-          email: oldestVoucher.customer.email,
-          subject: "VOUCHER APPROVAL NOTIFICATION",
-          Body: VoucherApprovalNotification({
-            firstName: oldestCustomer.customer.name.split(" ")[0],
-            voucherCode: oldestCustomer.voucherCode,
-          }),
-        });
-        return {
-          data: oldestVoucher,
-          message: "customer voucher ready for approval",
-        };
-      }
-    } else {
-      return {
-        data: null,
-        message: `the voucher queue is not yet complete, current count: ${vCount}`,
-      };
-    }
-  } catch (err) {
-    return { error: err, errMessage: err.message };
-  }
-}
