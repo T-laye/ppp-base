@@ -6,17 +6,15 @@ import { generateVoucherCode } from "../../../../../lib/hashHelper";
 import { sendEmailHelper } from "../../../../../lib/email/email-transport";
 import VoucherApprovalNotification from "../../../../../lib/email/templates/voucher-creation";
 
-
 async function checkVoucherListAction() {
   try {
     const vCount = await prisma.voucher.count();
     if (vCount < 2 || vCount === 0) {
       return {
-        data: {},
+        data: { count: vCount },
         message: `the voucher queue is not yet complete, current count: ${vCount}`,
       };
     }
-
     if (vCount === 3) {
       const oldestCustomer = await prisma.voucher.findFirst({
         orderBy: { createdAt: "asc" },
@@ -24,9 +22,8 @@ async function checkVoucherListAction() {
           customer: true,
         },
       });
-      console.log(oldestCustomer)
       if (oldestCustomer.is3FirstTime === true) {
-        await prisma.voucher.update({
+        const updateCustomer = await prisma.voucher.update({
           where: {
             id: oldestCustomer.id,
           },
@@ -34,30 +31,28 @@ async function checkVoucherListAction() {
             availableForDispense: true,
             is3FirstTime: false,
           },
-        });
-        await sendEmailHelper({
-          email: oldestCustomer.customer.email,
-          subject: "VOUCHER APPROVAL NOTIFICATION",
-          Body: VoucherApprovalNotification({
-            firstName: oldestCustomer.customer.name.split(" ")[0],
-            voucherCode: oldestCustomer.voucherCode,
-          }),
-        });
-        await prisma.voucher.updateMany({
-          where: {
-            is3FirstTime: true,
-          },
-          data: {
-            is3FirstTime: false,
+          include: {
+            customer: true,
           },
         });
+        const voucherTransaction = await prisma.$transaction(async (prisma) => {
+          await prisma.voucher.updateMany({
+            where: {
+              is3FirstTime: true,
+            },
+            data: {
+              is3FirstTime: false,
+            },
+          });
+        });
+
         return {
-          data: oldestCustomer,
+          data: { customer: updateCustomer, count: vCount },
           message: "customer voucher ready for approval",
         };
       }
     }
-    if (vCount >=4) {
+    if (vCount > 4) {
       const last4Vouchers = await prisma.voucher.findMany({
         orderBy: {
           createdAt: "desc",
@@ -71,12 +66,13 @@ async function checkVoucherListAction() {
           product: true,
         },
       });
+      
       if (last4Vouchers.length === 4) {
         const oldestVoucher = last4Vouchers.reduce(
           (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
           last4Vouchers[0]
         );
-        await prisma.voucher.update({
+        const updateV = await prisma.voucher.update({
           where: {
             id: oldestVoucher.id,
           },
@@ -84,24 +80,18 @@ async function checkVoucherListAction() {
             availableForDispense: true,
             is4FirstTime: false,
           },
-        });
-
-        await sendEmailHelper({
-          email: oldestVoucher.customer.email,
-          subject: "VOUCHER APPROVAL NOTIFICATION",
-          Body: VoucherApprovalNotification({
-            firstName: oldestCustomer.customer.name.split(" ")[0],
-            voucherCode: oldestCustomer.voucherCode,
-          }),
+          include: {
+            customer: true
+          }
         });
         return {
-          data: oldestVoucher,
+          data: { customer: updateV, count: vCount },
           message: "customer voucher ready for approval",
         };
       }
     } else {
       return {
-        data: {},
+        data: { count: vCount },
         message: `the voucher queue is not yet complete, current count: ${vCount}`,
       };
     }
@@ -155,7 +145,7 @@ export async function POST(req, res) {
             id: productId,
           },
         },
-        voucherCode: vToken.hash,
+        voucherCode: vToken.hash.toUpperCase(),
         hashToken: vToken.token,
         createdBy: {
           connect: {
@@ -166,29 +156,27 @@ export async function POST(req, res) {
     });
     const vQueue = await checkVoucherListAction();
     if (vQueue.data) {
+      if (vQueue.data.customer) {
+        const {
+          customer: {
+            voucherCode,
+            customer: { name, email },
+          },
+        } = vQueue.data;
+        // await sendVoucherEmailNotification({
+        //   customerName: name,
+        //   email: email,
+        //   voucherCode: voucherCode,
+        // });
+      }
       return NextResponse.json(
         {
           message: "successful",
           statusCode: 200,
           data: {
-            voucher: v,
+            // voucher: v,
             queueData: vQueue.data,
             queueMessage: vQueue.message,
-          },
-        },
-        {
-          status: 200,
-        }
-      );
-    } else {
-      return NextResponse.json(
-        {
-          message: "successful",
-          statusCode: 200,
-          data: {
-            voucher: v,
-            queueData: vQueue.error,
-            queueMessage: vQueue.errMessage,
           },
         },
         {
@@ -215,8 +203,8 @@ export async function GET(req, res) {
       );
     }
     if (
-      userResponse.user.role !== "ADMIN" &&
-      userResponse.user.management.canEdit === true
+      authResponse.user.role !== "ADMIN" &&
+      authResponse.user.management.canEdit === true
     ) {
       return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
         status: 403,
@@ -228,8 +216,9 @@ export async function GET(req, res) {
       ? parseInt(searchParams.get("take"))
       : 10;
     const product = searchParams.get("product_name");
-    const collected = searchParams.get("collected");
+    const collected = Boolean(searchParams.get("collected"));
     const customer = searchParams.get("customer");
+    const av4D = searchParams.get("av4D");
     const totalCount = await prisma.voucher.count();
     if (take || pageNumber) {
       if (isNaN(take) || isNaN(pageNumber)) {
@@ -244,6 +233,8 @@ export async function GET(req, res) {
         });
       }
     }
+    const boolCheck = av4D === "true" ? true : false
+    const boolCheck2 = collected === "true" ? true : false;
     const totalPages = Math.ceil(totalCount / take);
     const offset = (pageNumber - 1) * totalPages;
     if (offset > totalCount) {
@@ -263,7 +254,8 @@ export async function GET(req, res) {
         customer: {
           name: customer ? { contains: customer } : {},
         },
-        collected: collected ? collected : {},
+        collected: collected ? boolCheck2 : {},
+        availableForDispense: av4D? boolCheck : {},
       },
       include: {
         customer: true,
@@ -289,3 +281,17 @@ export async function GET(req, res) {
   }
 }
 
+async function sendVoucherEmailNotification({
+  customerName,
+  voucherCode,
+  email,
+}) {
+  await sendEmailHelper({
+    email: email,
+    subject: "VOUCHER APPROVAL NOTIFICATION",
+    Body: VoucherApprovalNotification({
+      firstName: customerName.split(" ")[0],
+      voucherCode: voucherCode,
+    }),
+  });
+}
