@@ -115,9 +115,9 @@ model Management {
 }
 
 model Admin {
-  id        String    @id @default(uuid())
-  createdAt DateTime  @default(now()) @db.Timestamptz()
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @db.Timestamptz()
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 
   @@index([id])
@@ -139,9 +139,9 @@ model Customer {
   verificationToken String?
   acceptTerms       Boolean              @default(false)
   role              UserType             @default(CUSTOMER)
-  profilePicture    Image?
+  profilePicture    Bytes?
 
-  @@index([id, email, phoneNumber])
+  @@index([id, email, phoneNumber, verificationToken])
 }
 
 model Voucher {
@@ -160,6 +160,7 @@ model Voucher {
   is4FirstTime         Boolean          @default(true)
   userId               String
   availableForDispense Boolean          @default(false)
+  approvedByAdmin      Boolean          @default(false)
 
   @@index([id, voucherCode, is3FirstTime, is4FirstTime])
 }
@@ -206,14 +207,6 @@ enum EmailType {
   CUSTOMER_ENROLMENT
   VOUCHER_CREATION
   VOUCHER_DISPENSE
-}
-
-model Image {
-  id         String   @id @default(uuid())
-  image      Bytes
-  createdAt  DateTime @default(now()) @db.Timestamptz()
-  customer   Customer @relation(fields: [customerId], references: [id])
-  customerId String   @unique
 }
 
 // npx prisma migrate dev --name init

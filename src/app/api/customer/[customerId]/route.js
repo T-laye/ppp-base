@@ -3,6 +3,7 @@ import { prisma } from "../../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../../lib/apiResponseHelper";
 import { prismaErrorHelper } from "../../../../../lib/prisma-error-helper";
 import { getAuthUser } from "../../../../../lib/get-auth-user";
+import { CompressImageHelper } from "../../../../../lib/compress-image-helper";
 
 export async function PATCH(req, context) {
   try {
@@ -25,9 +26,12 @@ export async function PATCH(req, context) {
       });
     }
     const searchParams = req.nextUrl.searchParams;
+    const formData = await req.formData();
     const { params } = context;
     const getUserId = params.customerId;
     const email = searchParams.get("email");
+    const pfp = formData.get("profilePicture");
+    const compressedImage = pfp ? await CompressImageHelper(pfp) : undefined;
     const name = searchParams.get("name");
     const address = searchParams.get("address");
     const phoneNumber = searchParams.get("phoneNumber");
@@ -41,7 +45,7 @@ export async function PATCH(req, context) {
       where: {
         id: getUserId,
       },
-      data: addJ,
+      data: { ...addJ, profilePicture: pfp ? compressedImage : undefined },
     });
     return NextResponse.json(
       ApiResponseDto({
@@ -102,10 +106,15 @@ export async function GET(req, context) {
         { status: 200 }
       );
     }
+    const newCustomer = {
+      ...getCustomer,
+      image: getCustomer.profilePicture.toString("base64"),
+    };
+    delete newCustomer.profilePicture;
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
-        data: getCustomer,
+        data: newCustomer,
         message: "Successful",
       }),
       { status: 200 }
