@@ -12,7 +12,7 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-const CustomerWelcomeEmail = ({ firstName }) => {
+const CustomerWelcomeEmail = ({ firstName, token }) => {
   return (
     <Html>
       <Head />
@@ -147,7 +147,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
             </ol>
           </Text>
           <Section style={btnContainer}>
-            <Button style={button} href="https://ppp-base.com.ng">
+            <Button style={button} href={`https://ppp-base.com.ng/${token}`}>
               Agree To Terms and Conditions
             </Button>
           </Section>
