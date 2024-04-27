@@ -5,8 +5,13 @@ import { prisma } from "../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../lib/apiResponseHelper";
 import { sendEmailHelper } from "../../../../lib/email/email-transport";
 import CustomerWelcomeEmail from "../../../../lib/email/templates/customer-welcome";
+import { generateVoucherCode } from "../../../../lib/hashHelper";
+import { CompressImageHelper } from "../../../../lib/compress-image-helper";
+
+
 
 export async function POST(req, res) {
+  
   const cookiesStore = cookies();
   const token = cookiesStore.get("ppp-base");
   const handleError = ApiResponseDto({
@@ -15,6 +20,9 @@ export async function POST(req, res) {
     statusCode: 401,
   });
   if (!token) return NextResponse.json(handleError, { status: 401 });
+  const formaData = await req.formaData();
+  const pfp = formaData.get("profilePicture");
+
   try {
     const payload = verify(token.value, process.env.ACCESS_TOKEN_SECRET);
     const user = await prisma.user.findUnique({
@@ -44,18 +52,29 @@ export async function POST(req, res) {
             id: user.id,
           },
         },
+        acceptTerms: false,
+        emailVerified: false,
+        profilePicture: await CompressImageHelper(pfp),
+        verificationToken: await generateVoucherCode({customerId: name, product: email}),
       },
     });
     const sendEmail = await sendEmailHelper({
       email: addCustomer.email,
       subject: "Customer Welcome",
-      Body: CustomerWelcomeEmail({firstName: name.split(" ")[0]}),
+      Body: CustomerWelcomeEmail({
+        firstName: name.split(" ")[0],
+        token: addCustomer.verificationToken,
+      }),
     });
-
+    const newCustomer = {
+      ...addCustomer,
+      image: addCustomer.profilePicture.toString('base64')
+    }
+    delete newCustomer.profilePicture
     const createResponse = ApiResponseDto({
       message: "successful",
       data: {
-        customer: addCustomer,
+        customer: newCustomer,
         email: sendEmail.data ? "email sent successfully" : "error occurred",
       },
       statusCode: 201,
@@ -70,7 +89,10 @@ export async function POST(req, res) {
         { status: 409 }
       );
     }
-    return NextResponse.json({ message: err.message, status: 500 });
+    return NextResponse.json(
+      { message: err.message, status: 500 },
+      { status: 500 }
+    );
   }
 }
 
@@ -168,6 +190,9 @@ export async function GET(req, res) {
         createdById: v?.user.id,
         createdByName: v?.user.name,
         createdByRole: v?.user.role,
+        verified: v?.emailVerified,
+        image: v?.profilePicture.toString('base64'),
+        acceptedTerms: v?.acceptTerms,
       })),
       statusCode: 200,
       count: totalCount,
