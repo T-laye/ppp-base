@@ -4,7 +4,8 @@ import ApiResponseDto from "../../../../../lib/apiResponseHelper";
 import { getAuthUser } from "../../../../../lib/get-auth-user";
 import { generateVoucherCode } from "../../../../../lib/hashHelper";
 import { sendEmailHelper } from "../../../../../lib/email/email-transport";
-import VoucherApprovalNotification from "../../../../../lib/email/templates/voucher-creation";
+import VoucherApprovalNotification from "../../../../../lib/email/templates/voucher-approval";
+import VoucherCreationEmail from "../../../../../lib/email/templates/voucher-creation";
 
 async function checkVoucherListAction() {
   try {
@@ -155,7 +156,17 @@ export async function POST(req, res) {
           },
         },
       },
+      include: {
+        customer: true,
+      },
     });
+    if (v) {
+      // send email
+      await sendVoucherCreationEmail({
+        email: v.customer.email,
+        firstName: v.customer.name.split(" ")[0],
+      });
+    }
     const vQueue = await checkVoucherListAction();
     if (vQueue.data) {
       if (vQueue.data.customer) {
@@ -165,11 +176,11 @@ export async function POST(req, res) {
             customer: { name, email },
           },
         } = vQueue.data;
-        // await sendVoucherEmailNotification({
-        //   customerName: name,
-        //   email: email,
-        //   voucherCode: voucherCode,
-        // });
+        await sendVoucherEmailNotification({
+          customerName: name.split(" ")[0],
+          email: email,
+          voucherCode: voucherCode,
+        });
       }
       return NextResponse.json(
         {
@@ -295,5 +306,15 @@ export async function sendVoucherEmailNotification({
       firstName: customerName.split(" ")[0],
       voucherCode: voucherCode,
     }),
+  });
+}
+
+export async function sendVoucherCreationEmail({ email, firstName }) {
+  await sendEmailHelper({
+    Body: VoucherCreationEmail({
+      firstName: firstName,
+    }),
+    email: email,
+    subject: "VOUCHER CREATION NOTIFICATION",
   });
 }

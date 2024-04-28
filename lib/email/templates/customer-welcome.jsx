@@ -33,7 +33,7 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
               fontWeight: " 500",
             }}
           >
-            Congratulations {firstName},
+            Congratulations {firstName[0].toUpperCase() + firstName.slice(1)},
           </Text>
           <Text style={paragraph}>
             We sincerely hope this mail meets you well. Your pre-enrolment form
