@@ -40,7 +40,7 @@ const VoucherDispenseNotification = ({
               fontWeight: " 500",
             }}
           >
-            Dear {firstName},
+            Dear {firstName[0].toUpperCase() + firstName.slice(1)},
           </Text>
           <Text style={paragraph}>
             Your voucher has been used and product collected at our {pocName}{" "}

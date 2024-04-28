@@ -12,7 +12,7 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-const CustomerWelcomeEmail = ({ firstName }) => {
+const CustomerWelcomeEmail = ({ firstName, token }) => {
   return (
     <Html>
       <Head />
@@ -34,7 +34,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
               fontWeight: " 500",
             }}
           >
-            Congratulations {firstName},
+            Congratulations {firstName[0].toUpperCase() + firstName.slice(1)},
           </Text>
           <Text style={paragraph}>
             We sincerely hope this mail meets you well. Your pre-enrolment form
@@ -148,7 +148,7 @@ const CustomerWelcomeEmail = ({ firstName }) => {
             </ol>
           </Text>
           <Section style={btnContainer}>
-            <Button style={button} href="https://ppp-base.com.ng">
+            <Button style={button} href={`https://ppp-base.com.ng/${token}`}>
               Agree To Terms and Conditions
             </Button>
           </Section>
