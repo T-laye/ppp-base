@@ -68,7 +68,7 @@ export async function POST(req, res) {
     });
     const newCustomer = {
       ...addCustomer,
-      image: addCustomer.profilePicture.toString('base64')
+      image: addCustomer?.profilePicture?.toString('base64')
     }
     delete newCustomer.profilePicture
     const createResponse = ApiResponseDto({
@@ -191,7 +191,7 @@ export async function GET(req, res) {
         createdByName: v?.user.name,
         createdByRole: v?.user.role,
         verified: v?.emailVerified,
-        image: v?.profilePicture.toString('base64'),
+        image: v?.profilePicture?.toString('base64'),
         acceptedTerms: v?.acceptTerms,
       })),
       statusCode: 200,
