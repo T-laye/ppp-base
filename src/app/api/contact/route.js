@@ -14,6 +14,7 @@ export async function GET(req, res) {
     if (emailRes.data) {
       return NextResponse.json({ message: "successful" });
     }
+    return NextResponse.json({ message: "ok" });
   } catch (err) {
     return NextResponse.json({ message: err });
   }
