@@ -8,10 +8,48 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { new_customer_validate } from "../../../../lib/validate";
 import { useAddCustomerMutation } from "@/redux/slices/customerApiSlice";
+import * as Yup from "yup";
+import Image from "next/image";
+import axios from "axios";
+
+const validationSchema = Yup.object().shape({
+  image: Yup.mixed()
+    .required("Please select an image")
+    .test(
+      "fileSize",
+      "Must be less than 3mb",
+      (value) => value && value.size < 3072 * 3072
+    )
+    .test(
+      "fileType",
+      "Invalid file type",
+      (value) => value && ["image/jpeg", "image/jpg"].includes(value.type)
+    ),
+});
 
 export default function NewCustomer() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [addCustomer, { isLoading, error }] = useAddCustomerMutation();
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const handleRemovePreview = () => {
+    setPreviewImage(null);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setFieldValue("image", file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(null);
+    }
+  };
 
   const router = useRouter();
 
@@ -21,33 +59,38 @@ export default function NewCustomer() {
       email: "",
       phone: "",
       address: "",
+      image: null,
     },
     validate: new_customer_validate,
+    validationSchema,
     onSubmit: handleSubmit,
   });
   // console.log(formik.isValid);
+  const { errors, touched, isSubmitting, setFieldValue } = formik;
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    const { fullName, email, phone, address } = values;
+    const { fullName, email, phone, address, image } = values;
+    const formData = new FormData();
     try {
-      const res = await addCustomer({
+      formData.append("profilePicture", image);
+
+      const res = await axios.post("/api/customer", formData, {
         name: fullName,
         email,
         phone,
         address,
-      }).unwrap();
-      // dispatch(setCredentials({ ...res.data }));
-      // console.log(res);
-      // console.log(values);
-      toast.success(res.message);
-      router.back();
+      });
+
+      console.log(res);
+      toast.success(res.data.message); // Assuming the message is in the data property of the response
+      // router.back();
     } catch (e) {
-      toast.error(e.data.message);
-      // console.log(e);
+      toast.error(e.response.data.message); // Assuming the error message is in the data property of the response
+      console.log(e);
     }
   }
 
@@ -72,6 +115,47 @@ export default function NewCustomer() {
 
           <div className="mt-10">
             <form onSubmit={formik.handleSubmit} className="mb-4">
+              <div className=" h-32 w-40 mx-auto mb-5 relative overflow-hidden ">
+                <label
+                  className={`${
+                    previewImage ? "opacity-25" : ""
+                  } border border-gray-400 border-dashed   h-full w-full  absolute inline-block rounded-lg`}
+                  htmlFor="image"
+                >
+                  <div>
+                    <span className="bg-gray-400  text-xs m-1 px-2 py-1 rounded-lg block w-fit">
+                      Choose File
+                    </span>
+                    <div className="flex flex-col w-full mt-8 items-center text-upload px-2 py-1 rounded-lg ">
+                      {/* <AiOutlineCloudUpload size={20} fill="#7164C0" /> */}
+                      <span className="text-xs">Upload image</span>
+                    </div>
+                  </div>
+                </label>
+                <input
+                  className="mx-2 hidden"
+                  id="image"
+                  name="image"
+                  type="file"
+                  onChange={handleImageChange}
+                />
+
+                <div className="h-full  top-0 right-0 left-0 bottom-0 bg-white">
+                  {previewImage && (
+                    <Image
+                      src={previewImage}
+                      alt="Preview"
+                      className="h-full w-full object-center object-cover rounded-md"
+                      width={500}
+                      height={500}
+                      priority
+                    />
+                  )}
+                </div>
+              </div>
+              {<div className="text-sm text-error">{errors.image}</div>}
+              {previewImage && !errors.image}
+
               <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="fullName">
                   Full Name
@@ -127,7 +211,7 @@ export default function NewCustomer() {
                 )}
               </div>
               <div className="flex flex-col mb-4">
-                 <label className="text-sm mb-2" htmlFor="address">
+                <label className="text-sm mb-2" htmlFor="address">
                   Address
                 </label>
                 <input

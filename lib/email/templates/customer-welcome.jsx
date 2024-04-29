@@ -19,6 +19,7 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
       <Preview>Petroleum Personnel Privilege (PPP) Welcome Email</Preview>
       <Body style={main}>
         <Container style={container}>
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={`logo-removebg.png`}
             width="170"

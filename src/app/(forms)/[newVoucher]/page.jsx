@@ -67,6 +67,7 @@ export default function NewVoucher() {
         console.log(res);
         setIsLoading(false);
         toast.success("Successful");
+        router.push('/admin/vouchers')
       }
     } catch (err) {
       setIsLoading(false);
