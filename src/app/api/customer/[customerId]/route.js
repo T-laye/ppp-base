@@ -108,7 +108,9 @@ export async function GET(req, context) {
     }
     const newCustomer = {
       ...getCustomer,
-      image: getCustomer?.profilePicture?.toString("base64"),
+      image: `data:image/jpeg;base64,${getCustomer?.profilePicture?.toString(
+        "base64"
+      )}`,
     };
     delete newCustomer.profilePicture;
     return NextResponse.json(
