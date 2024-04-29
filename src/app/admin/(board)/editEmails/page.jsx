@@ -31,13 +31,27 @@ export default function Page() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    // const { email, password } = values;
-    console.log(values);
     setIsLoading(true);
-    setTimeout(() => {
+    const { title, subject, body, email_template } = values;
+    try {
+      const res = await axios.patch(
+        `/api/admin/email?type=${email_template}&body=${body}&title=${title}&subject=${subject}`
+      );
+      // const res = await axios.post("/api/admin/email", {
+      //   title,
+      //   subject,
+      //   body,
+      //   type: email_template,
+      // });
+      console.log(values);
+      if (res) {
+        console.log(res);
+        setIsLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
       setIsLoading(false);
-      toast.success("Successful");
-    }, 2000);
+    }
   }
 
   const getInputClassNames = (fieldName) =>
@@ -65,16 +79,16 @@ export default function Page() {
               </label>
               <select
                 required
-                id="product"
+                id="email_template"
                 name="email_template"
                 placeholder="Select Email Template"
-                className={getInputClassNames("product")}
-                {...formik.getFieldProps("product")}
+                className={getInputClassNames("email_template")}
+                {...formik.getFieldProps("email_template")}
               >
                 <option>Choose Template</option>
-                <option value="enrollment">Customer Enrollment</option>
-                <option value="voucher creation">Voucher Creation</option>
-                <option value="voucher dispense">Voucher Dispense</option>
+                <option value="CUSTOMER_ENROLMENT">Customer Enrollment</option>
+                <option value="VOUCHER_CREATION">Voucher Creation</option>
+                <option value="VOUCHER_DISPENSE">Voucher Dispense</option>
                 {/* {renderProducts()} */}
               </select>
             </div>

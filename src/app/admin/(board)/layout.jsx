@@ -19,6 +19,7 @@ import { setCredentials } from "@/redux/slices/authSlice";
 import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
 import { fetchPersonnels } from "@/redux/slices/fetchPersonnelsSlice";
 import { fetchPocs } from "@/redux/slices/fetchPocsSlice";
+import { fetchVouchers } from "@/redux/slices/fetchVouchersSlice";
 // import { useGetCustomersMutation } from "@/redux/slices/takeSlice";
 
 export default function Layout({ children }) {
@@ -108,6 +109,26 @@ export default function Layout({ children }) {
       }
     })();
   }, [dispatch, isAuth, pageNumber, staffName, take]);
+  // console.log(isAuth);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        try {
+          const resVouchers = await axios.get(
+            `/api/admin/voucher?product_name=${productName}&collected&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+          );
+          dispatch(fetchVouchers({ ...resVouchers?.data }));
+          // console.log(resVouchers);
+          // console.log(resPocs)
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, productName, search, take]);
   // console.log(isAuth);
 
   if (!isAuth) {

@@ -1,23 +1,34 @@
 "use client";
 import { BiSearchAlt2 } from "react-icons/bi";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import VoucherList from "../../components/VoucherList";
 import CustomerList from "../../components/CustomerList";
 import { MdOutlineCancel } from "react-icons/md";
 import { handleSearch } from "@/redux/slices/variableSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Loading from "@/components/Loading";
 
 export default function Vouchers() {
   const [approved, setApproved] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
+  const [activeTabProduct, setActiveTabProduct] = useState("");
   const [showAddVoucher, setShowAddVoucher] = useState(false);
   const [term, setTerm] = useState("");
+  const [customerTerm, setCustomerTerm] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
-  const { customer } = useSelector((state) => state.customer);
+  const { vouchers } = useSelector((state) => state.vouchers);
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
+
+  console.log(customers);
+
+  useEffect(() => {
+    const activeProduct = products?.data?.find((p, i) => i === activeTab);
+    setActiveTabProduct(activeProduct?.name?.toLowerCase());
+    // console.log(activeProduct);
+  }, [activeTab, products]);
 
   const handleProduct = () => {
     setApproved(!approved);
@@ -51,6 +62,12 @@ export default function Vouchers() {
       dispatch(handleSearch(e.target.value.toLowerCase()));
     }
   };
+  const handleCustomerChange = (e) => {
+    setCustomerTerm(e.target.value);
+    if (e.target.value.length >= 3 || e.target.value.length === 0) {
+      dispatch(handleSearch(e.target.value.toLowerCase()));
+    }
+  };
 
   const renderProductsTab = () => {
     return products?.data?.map((p, i) => {
@@ -69,9 +86,9 @@ export default function Vouchers() {
   };
 
   const renderCustomers = () => {
-    if (customers.length === 0 && term) {
+    if (customers.length === 0 && customerTerm) {
       return <p>No Customer Found</p>;
-    } else if (term.length > 2) {
+    } else if (customerTerm.length > 2) {
       return customers?.data?.map((c) => (
         <CustomerList key={c?.customerId} c={c} />
       ));
@@ -81,7 +98,27 @@ export default function Vouchers() {
       ));
     }
   };
-  console.log(customers);
+
+  const renderVouchers = () => {
+    if (vouchers?.data) {
+      if (vouchers?.data?.length === 0) {
+        return <p>No Voucher Found</p>;
+      } else {
+        return vouchers?.data
+          ?.filter((v) => v?.product?.productName?.toLowerCase() === activeTabProduct)
+          .map((c, i) => (
+            <VoucherList
+              key={i}
+              name={capitalizeWords(c.customer?.name)}
+              index={i}
+            />
+          ));
+      }
+    } else {
+      return <Loading />;
+    }
+  };
+  // console.log(vouchers);
 
   return (
     <section className="relative min-h-screen bg-green300 py-4">
@@ -150,38 +187,12 @@ export default function Vouchers() {
             </div>
           </div>
         </form>
-        <div className="text-end mt-3 text-sm text-gray-500 pr-2">09</div>
+        <div className="text-end mt-3 text-sm text-gray-500 pr-2">
+          {vouchers.count ?? 0}
+        </div>
 
         <div className="bg-gren-400 pt-3 pb-10">
-          <ul>
-            {(activeTab === 1 || activeTab === 2) && (
-              <VoucherList name="John Doe" pending={true} />
-            )}
-            {(activeTab === 1 || activeTab === 2) && (
-              <VoucherList name="Mark Timmy" pending={true} />
-            )}
-            {(activeTab === 1 || activeTab === 3) && (
-              <VoucherList name="Tiebebedigha Tubolayefa" pending={false} />
-            )}
-            {(activeTab === 1 || activeTab === 2) && (
-              <VoucherList name="Mchael Tega" pending={true} />
-            )}
-            {(activeTab === 1 || activeTab === 4) && (
-              <VoucherList name="Susan Bournsmouth" pending={true} />
-            )}
-            {(activeTab === 1 || activeTab === 3) && (
-              <VoucherList name="Onoyake James" pending={false} />
-            )}
-            {(activeTab === 1 || activeTab === 2) && (
-              <VoucherList name="Etuk Obong" pending={true} />
-            )}
-            {(activeTab === 1 || activeTab === 3) && (
-              <VoucherList name="Ogar Jude" pending={false} />
-            )}
-            {(activeTab === 1 || activeTab === 3) && (
-              <VoucherList name="Marvelous Ike" pending={false} />
-            )}
-          </ul>
+          <ul>{renderVouchers()}</ul>
         </div>
       </div>
       {/* New Voucher modal */}
@@ -204,8 +215,8 @@ export default function Vouchers() {
                   type="text"
                   placeholder="Search by customer name"
                   className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
-                  value={term}
-                  onChange={handleChange}
+                  value={customerTerm}
+                  onChange={handleCustomerChange}
                 />
                 <div className="absolute top-3 right-2.5 text-gray-400">
                   <BiSearchAlt2 size={20} />

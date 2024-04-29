@@ -4,17 +4,21 @@ import authReducer from "./slices/authSlice";
 import fetchCustomersReducer from "./slices/fetchCustomersSlice";
 import fetchProductsReducer from "./slices/fetchProductsSlice";
 import fetchPersonnelsReducer from "./slices/fetchPersonnelsSlice";
+import fetchVouchersReducer from "./slices/fetchVouchersSlice";
 import fetchPocsReducer from "./slices/fetchPocsSlice";
+import getVoucherReducer from "./slices/getVoucherSlice";
 import getCustomerReducer from "./slices/getCustomerSlice";
 import getProductReducer from "./slices/getProductSlice";
 import getWorkerReducer from "./slices/getWorkerSlice";
 import getPocReducer from "./slices/getPocSlice";
 import variableReducer from "./slices/variableSlice";
 import { apiSlice } from "./slices/apiSlice";
-  
+
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    voucher: getVoucherReducer,
+    vouchers: fetchVouchersReducer,
     customers: fetchCustomersReducer,
     customer: getCustomerReducer,
     products: fetchProductsReducer,
