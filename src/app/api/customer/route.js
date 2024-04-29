@@ -8,10 +8,7 @@ import CustomerWelcomeEmail from "../../../../lib/email/templates/customer-welco
 import { generateVoucherCode } from "../../../../lib/hashHelper";
 import { CompressImageHelper } from "../../../../lib/compress-image-helper";
 
-
-
 export async function POST(req, res) {
-  
   const cookiesStore = cookies();
   const token = cookiesStore.get("ppp-base");
   const handleError = ApiResponseDto({
@@ -20,8 +17,12 @@ export async function POST(req, res) {
     statusCode: 401,
   });
   if (!token) return NextResponse.json(handleError, { status: 401 });
-  const formaData = await req.formaData();
-  const pfp = formaData.get("profilePicture");
+  const formData = await req.formData();
+  const pfp = formData.get("profilePicture");
+  const name = formData.get("name");
+  const email = formData.get("email");
+  const phone = formData.get("phone");
+  const address = formData.get("address");
 
   try {
     const payload = verify(token.value, process.env.ACCESS_TOKEN_SECRET);
@@ -39,8 +40,10 @@ export async function POST(req, res) {
         }),
         { status: 403 }
       );
-    const body = await req.json();
-    const { name, email, phone, address } = body;
+    const getVToken = await generateVoucherCode({
+      customerId: name,
+      product: email,
+    });
     const addCustomer = await prisma.customer.create({
       data: {
         name: name.toLowerCase(),
@@ -55,27 +58,29 @@ export async function POST(req, res) {
         acceptTerms: false,
         emailVerified: false,
         profilePicture: await CompressImageHelper(pfp),
-        verificationToken: await generateVoucherCode({customerId: name, product: email}),
+        verificationToken: getVToken.hash,
       },
     });
-    const sendEmail = await sendEmailHelper({
-      email: addCustomer.email,
-      subject: "Customer Welcome",
-      Body: CustomerWelcomeEmail({
-        firstName: name.split(" ")[0],
-        token: addCustomer.verificationToken,
-      }),
-    });
+    // const sendEmail = await sendEmailHelper({
+    //   email: addCustomer.email,
+    //   subject: "Customer Welcome",
+    //   Body: CustomerWelcomeEmail({
+    //     firstName: name.split(" ")[0],
+    //     token: addCustomer.verificationToken,
+    //   }),
+    // });
     const newCustomer = {
       ...addCustomer,
-      image: addCustomer?.profilePicture?.toString('base64')
-    }
-    delete newCustomer.profilePicture
+      image: `data:image/jpeg;base64,${addCustomer?.profilePicture?.toString(
+        "base64"
+      )}`,
+    };
+    delete newCustomer.profilePicture;
     const createResponse = ApiResponseDto({
       message: "successful",
       data: {
         customer: newCustomer,
-        email: sendEmail.data ? "email sent successfully" : "error occurred",
+        // email: sendEmail.data ? "email sent successfully" : "error occurred",
       },
       statusCode: 201,
     });
@@ -191,7 +196,9 @@ export async function GET(req, res) {
         createdByName: v?.user.name,
         createdByRole: v?.user.role,
         verified: v?.emailVerified,
-        image: v?.profilePicture?.toString('base64'),
+        image: `data:image/jpeg;base64,${v?.profilePicture?.toString(
+          "base64"
+        )}`,
         acceptedTerms: v?.acceptTerms,
       })),
       statusCode: 200,
