@@ -68,7 +68,7 @@ export async function POST(req, res) {
     });
     const newCustomer = {
       ...addCustomer,
-      image: addCustomer.profilePicture.toString('base64')
+      image: addCustomer?.profilePicture?.toString('base64')
     }
     delete newCustomer.profilePicture
     const createResponse = ApiResponseDto({
