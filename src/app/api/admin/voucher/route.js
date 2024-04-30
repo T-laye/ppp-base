@@ -16,6 +16,7 @@ async function checkVoucherListAction({ productId }) {
         },
       },
     });
+
     if (vCount === 3) {
       const oldestCustomer = await prisma.voucher.findFirst({
         orderBy: { createdAt: "asc" },
@@ -70,12 +71,13 @@ async function checkVoucherListAction({ productId }) {
       const checkProductMatch = last5Vouchers?.every(
         (v) => v?.product?.id === getInit
       );
+
       if (last5Vouchers.length === 4 && checkProductMatch === true) {
         const oldestVoucher = last5Vouchers.reduce(
           (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
           last5Vouchers[0]
         );
-        
+
         const updateV = await prisma.voucher.update({
           where: {
             id: oldestVoucher.id,
@@ -105,7 +107,10 @@ async function checkVoucherListAction({ productId }) {
       const getAll = await prisma.voucher.findMany({
         where: {
           approvedByAdmin: false,
-          availableForDispense: false
+          availableForDispense: false,
+          product: {
+            id: productId
+          }
         },
         take: 4,
         include: {
@@ -145,7 +150,7 @@ async function checkVoucherListAction({ productId }) {
         message: `customer with Id ${updateNow.customer.id} voucher, is ready for approval`,
       };
     }
-    
+    return { data: { status: 200 }, message: "successful" };
   } catch (err) {
     return { error: err, errMessage: err.message };
   }
@@ -209,7 +214,7 @@ export async function POST(req, res) {
             },
           },
           is4FirstTime: check ? false : true,
-          is3FirstTime: check ? false : true
+          is3FirstTime: check ? false : true,
         },
         include: {
           customer: true,
