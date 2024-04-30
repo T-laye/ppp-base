@@ -7,30 +7,22 @@ import { sendEmailHelper } from "../../../../../lib/email/email-transport";
 import VoucherApprovalNotification from "../../../../../lib/email/templates/voucher-approval";
 import VoucherCreationEmail from "../../../../../lib/email/templates/voucher-creation";
 
-async function checkVoucherListAction({ productId}) {
+async function checkVoucherListAction({ productId }) {
   try {
-    const vCount = await prisma.voucher.count(
-      {
-        where: {
-          product: {
-            id: productId
-          }
-        }
-      }
-    );
-    if (vCount < 2 || vCount === 0) {
-      return {
-        data: { count: vCount },
-        message: `the voucher queue is not yet complete, current count: ${vCount}`,
-      };
-    }
+    const vCount = await prisma.voucher.count({
+      where: {
+        product: {
+          id: productId,
+        },
+      },
+    });
     if (vCount === 3) {
       const oldestCustomer = await prisma.voucher.findFirst({
         orderBy: { createdAt: "asc" },
         where: {
           product: {
-            id: productId
-          }
+            id: productId,
+          },
         },
         include: {
           customer: true,
@@ -50,36 +42,23 @@ async function checkVoucherListAction({ productId}) {
             customer: true,
           },
         });
-        const voucherTransaction = await prisma.$transaction(async (prisma) => {
-          await prisma.voucher.updateMany({
-            where: {
-              is3FirstTime: true,
-              product: {
-                id: productId
-              }
-            },
-            data: {
-              is3FirstTime: false,
-            },
-          });
-        });
-
         return {
           data: { customer: updateCustomer, count: vCount },
           message: `customer with Id ${updateCustomer?.customer?.id} voucher, is ready for approval`,
         };
       }
     }
-    if (vCount >= 4) {
-      const last4Vouchers = await prisma.voucher.findMany({
+    if (vCount === 5) {
+      const last5Vouchers = await prisma.voucher.findMany({
         orderBy: {
-          createdAt: "desc",
+          createdAt: "asc",
         },
         where: {
           availableForDispense: false,
+          approvedByAdmin: false,
           product: {
-            id: productId
-          }
+            id: productId,
+          },
         },
         take: 4,
         include: {
@@ -87,23 +66,23 @@ async function checkVoucherListAction({ productId}) {
           product: true,
         },
       });
-
-      const getInit = last4Vouchers[0]?.product?.id;
-      const checkProductMatch = last4Vouchers?.every(
+      const getInit = last5Vouchers[0]?.product?.id;
+      const checkProductMatch = last5Vouchers?.every(
         (v) => v?.product?.id === getInit
       );
-      if (last4Vouchers.length === 4 && checkProductMatch === true) {
-        
-        const oldestVoucher = last4Vouchers.reduce(
+      if (last5Vouchers.length === 4 && checkProductMatch === true) {
+        const oldestVoucher = last5Vouchers.reduce(
           (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
-          last4Vouchers[0]
+          last5Vouchers[0]
         );
+        
         const updateV = await prisma.voucher.update({
           where: {
             id: oldestVoucher.id,
           },
           data: {
             availableForDispense: true,
+            is3FirstTime: false,
             is4FirstTime: false,
             approvedByAdmin: true,
           },
@@ -112,21 +91,61 @@ async function checkVoucherListAction({ productId}) {
           },
         });
         return {
-          data: { customer: updateV, count: last4Vouchers.length },
+          data: { customer: updateV, count: last5Vouchers.length },
           message: `customer with Id ${updateV.customer.id} voucher, is ready for approval`,
         };
       } else {
         return {
-          data: { count: last4Vouchers.length },
+          data: { count: last5Vouchers.length },
           message: `the voucher queue is not yet complete for product ${getInit}, current count: ${last4Vouchers.length}`,
         };
       }
-    } else {
+    }
+    if (vCount  > 5 && vCount % 2 !== 0) {
+      const getAll = await prisma.voucher.findMany({
+        where: {
+          approvedByAdmin: false,
+          availableForDispense: false
+        },
+        take: 4,
+        include: {
+          customer: true,
+          product: true,
+        },
+        orderBy: {
+          createdAt: 'asc'
+        }
+      })
+
+      const getInit = getAll[0]?.product?.id;
+      const checkProductMatch = getAll?.every(
+        (v) => v?.product?.id === getInit
+      );
+      const getOld = checkProductMatch ? getAll.reduce(
+          (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
+          getAll[0]
+      ) : null
+      const updateNow = await prisma.voucher.update({
+        where: {
+          id: getOld.id,
+        },
+        data: {
+          availableForDispense: true,
+          approvedByAdmin: true,
+          is3FirstTime: false,
+          is4FirstTime: false,
+        },
+        include: {
+          customer: true,
+          product: true
+        }
+      });
       return {
-        data: { count: vCount },
-        message: `the voucher queue is not yet complete, current count: ${vCount}`,
+        data: { customer: updateNow },
+        message: `customer with Id ${updateNow.customer.id} voucher, is ready for approval`,
       };
     }
+    
   } catch (err) {
     return { error: err, errMessage: err.message };
   }
@@ -164,38 +183,47 @@ export async function POST(req, res) {
         { status: 500 }
       );
     }
-    const v = await prisma.voucher.create({
-      data: {
-        collected: false,
-        customer: {
-          connect: {
-            id: customerId,
-          },
-        },
-        product: {
-          connect: {
-            id: productId,
-          },
-        },
-        voucherCode: vToken.hash.toUpperCase(),
-        hashToken: vToken.token,
-        createdBy: {
-          connect: {
-            id: authResponse.user.id,
-          },
-        },
-      },
-      include: {
-        customer: true,
-      },
+
+    const check = await prisma.voucher.findFirst({
+      where: { is4FirstTime: false, is3FirstTime: false },
     });
-    // if (v) {
-    //   await sendVoucherCreationEmail({
-    //     email: v.customer.email,
-    //     firstName: v.customer.name.split(" ")[0],
-    //   });
-    // }
-    const vQueue = await checkVoucherListAction({productId: productId});
+    await prisma.$transaction(async (p) => {
+      const v = await prisma.voucher.create({
+        data: {
+          collected: false,
+          customer: {
+            connect: {
+              id: customerId,
+            },
+          },
+          product: {
+            connect: {
+              id: productId,
+            },
+          },
+          voucherCode: vToken.hash,
+          hashToken: vToken.token,
+          createdBy: {
+            connect: {
+              id: authResponse.user.id,
+            },
+          },
+          is4FirstTime: check ? false : true,
+          is3FirstTime: check ? false : true
+        },
+        include: {
+          customer: true,
+        },
+      });
+
+      // if (v) {
+      //   await sendVoucherCreationEmail({
+      //     email: v.customer.email,
+      //     firstName: v.customer.name.split(" ")[0],
+      //   });
+      // }
+    });
+    const vQueue = await checkVoucherListAction({ productId: productId });
     if (vQueue?.data) {
       // if (vQueue.data.customer) {
       //   const {
@@ -225,7 +253,7 @@ export async function POST(req, res) {
         }
       );
     }
-    return NextResponse.json({statusCode: 200}, {status: 200})
+    return NextResponse.json({ statusCode: 200 }, { status: 200 });
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500, error: err });
   }
