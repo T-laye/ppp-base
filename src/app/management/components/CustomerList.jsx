@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
 
@@ -23,8 +24,17 @@ export default function CustomerList({ c }) {
     >
       <li
         // onClick={getCustomerDetails}
-        className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white  active:text-hite hover:bg-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 "
+        className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white  active:text-white hover:bg-primaryActive rounded-xl py-2 text-base px-2 items-center gap-3 duration-200 "
       >
+        <div className="h-12 w-12 rounded-lg overflow-hidden ">
+          <Image
+            className="h-full w-full object-cover"
+            src={c?.image}
+            alt={c?.name}
+            height={500}
+            width={500}
+          />
+        </div>
         <div>{capitalizeWords(c?.name)}</div>
         {/* {!approved && <button className="btn bg-primary">Add Voucher</button>} */}
       </li>

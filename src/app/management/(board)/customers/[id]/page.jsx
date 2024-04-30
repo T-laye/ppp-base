@@ -24,6 +24,7 @@ import Loading from "@/components/Loading";
 import Loader from "@/components/Loader";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
 import { IoIosTime } from "react-icons/io";
+import Image from "next/image";
 
 export default function Page() {
   const router = useRouter();
@@ -114,95 +115,96 @@ export default function Page() {
         <h3 className="font-semibold">Customer Details</h3>
 
         {customer?.name ? (
-          <div className="mt-4">
-            <DetailList
-              title="Full Name"
-              value={capitalizeWords(customer?.name)}
-              icon={<FaUser size={16} />}
-            />
-            <DetailList
-              title="Email"
-              value={customer?.email}
-              icon={<MdEmail size={16} />}
-            />
-            <DetailList
-              title="Phone Number"
-              value={customer?.phoneNumber}
-              icon={<BsFillTelephoneFill size={16} />}
-            />
-            <DetailList
-              title="Created By"
-              value={capitalizeWords(customer?.user?.name)}
-              icon={<FaUser size={16} />}
-            />
-            {/* <DetailList
-              title="Creator Role"
-              value={capitalizeWords(customer?.createdByRole)}
-              icon={<FaUser size={16} />}
-            /> */}
-            <DetailList
-              title="Created At"
-              value={formatDate(customer?.createdAt)}
-              icon={<IoIosTime size={16} />}
-            />
-            <DetailList
-              title="Address"
-              value={capitalizeWords(customer?.address)}
-              icon={<FaLocationDot size={16} />}
-            />
-            {/* <DetailList
-            title="Product"
-            value="Fuel"
-            icon={<ImDroplet size={16} />}
-          /> */}
-            {/* <DetailList
-            title="Amount Allocated"
-            value={25}
-            icon={<MdAssignmentTurnedIn size={16} />}
-          /> */}
-            {/* <DetailList
-            title="Preferred Point of Collection"
-            value="Total Fueling Station"
-            icon={<BsFillFuelPumpDieselFill size={16} />}
-          /> */}
-            {/* <DetailList
-            title="Third Party"
-            value="Yes"
-            icon={<BsPeopleFill size={16} />}
-          /> */}
-            {/* <DetailList
-            title="Address"
-            value="No. 23. poajikaco okcno;aojvnljbdbv jvabo;bvnj "
-            icon={<IoLocationSharp size={16} />}
-          /> */}
+          <><div className="h-48 w-48 mt-5 rounded-lg overflow-hidden mx-auto">
+            <Image
+              className="h-full w-full object-cover"
+              src={customer?.image}
+              alt={customer?.name}
+              height={500}
+              width={500} />
+          </div><div className="mt-4">
+              <DetailList
+                title="Full Name"
+                value={capitalizeWords(customer?.name)}
+                icon={<FaUser size={16} />} />
+              <DetailList
+                title="Email"
+                value={customer?.email}
+                icon={<MdEmail size={16} />} />
+              <DetailList
+                title="Phone Number"
+                value={customer?.phoneNumber}
+                icon={<BsFillTelephoneFill size={16} />} />
+              <DetailList
+                title="Created By"
+                value={capitalizeWords(customer?.user?.name)}
+                icon={<FaUser size={16} />} />
+              {/* <DetailList
+      title="Creator Role"
+      value={capitalizeWords(customer?.createdByRole)}
+      icon={<FaUser size={16} />}
+    /> */}
+              <DetailList
+                title="Created At"
+                value={formatDate(customer?.createdAt)}
+                icon={<IoIosTime size={16} />} />
+              <DetailList
+                title="Address"
+                value={capitalizeWords(customer?.address)}
+                icon={<FaLocationDot size={16} />} />
+              {/* <DetailList
+    title="Product"
+    value="Fuel"
+    icon={<ImDroplet size={16} />}
+  /> */}
+              {/* <DetailList
+    title="Amount Allocated"
+    value={25}
+    icon={<MdAssignmentTurnedIn size={16} />}
+  /> */}
+              {/* <DetailList
+    title="Preferred Point of Collection"
+    value="Total Fueling Station"
+    icon={<BsFillFuelPumpDieselFill size={16} />}
+  /> */}
+              {/* <DetailList
+    title="Third Party"
+    value="Yes"
+    icon={<BsPeopleFill size={16} />}
+  /> */}
+              {/* <DetailList
+    title="Address"
+    value="No. 23. poajikaco okcno;aojvnljbdbv jvabo;bvnj "
+    icon={<IoLocationSharp size={16} />}
+  /> */}
 
-            {managementDetails?.includes(true) && (
-              <>
-                {" "}
-                <Link href="/[newVoucher]" as={`/${id}`}>
-                  <button className="btn bg-primary w-full mt-5">
-                    Create Voucher
+              {managementDetails?.includes(true) && (
+                <>
+                  {" "}
+                  <Link href="/[newVoucher]" as={`/${id}`}>
+                    <button className="btn bg-primary w-full mt-5">
+                      Create Voucher
+                    </button>
+                  </Link>
+                  <button
+                    onClick={editCustomer}
+                    className="btn bg-yellow-500 w-full mt-5"
+                  >
+                    Edit Customer
                   </button>
-                </Link>
-                <button
-                  onClick={editCustomer}
-                  className="btn bg-yellow-500 w-full mt-5"
-                >
-                  Edit Customer
-                </button>
-              </>
-            )}
-            {/* <button
-              onClick={handleDeleteCustomer}
-              type="submit"
-              className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
-                isLoading ? "bg-customGray" : "bg-error"
-              } `}
-              disabled={isLoading}
-            >
-              {isLoading ? <Loader /> : "Delete Customer"}
-            </button> */}
-          </div>
+                </>
+              )}
+              {/* <button
+      onClick={handleDeleteCustomer}
+      type="submit"
+      className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
+        isLoading ? "bg-customGray" : "bg-error"
+      } `}
+      disabled={isLoading}
+    >
+      {isLoading ? <Loader /> : "Delete Customer"}
+    </button> */}
+            </div></>
         ) : (
           <Loading />
         )}
