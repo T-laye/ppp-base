@@ -89,10 +89,21 @@ export async function GET(req, res) {
       });
     }
     if (verifyVoucher.data) {
+      const voucherDetail = {
+        voucher: verifyVoucher.data,
+        customer: {
+          ...verifyVoucher.data.customer,
+          image: `data:image/jpeg;base64,${verifyVoucher.data.customer?.profilePicture?.toString(
+            "base64"
+          )}`,
+        },
+        product: verifyVoucher.data.product
+      };
+      delete verifyVoucher.data.customer.profilePicture;
       return NextResponse.json(
         ApiResponseDto({
           message: "successful",
-          data: verifyVoucher.data,
+          data: voucherDetail,
           statusCode: 200,
         }),
         { status: 200 }
