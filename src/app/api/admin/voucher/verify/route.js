@@ -79,7 +79,7 @@ export async function GET(req, res) {
     }
     const code = searchParams.get("code");
     // verify the code
-    const verifyVoucher = await isVoucherValidHelper(code.toLowerCase());
+    const verifyVoucher = await isVoucherValidHelper(code);
     if (verifyVoucher.error) {
       return NextResponse.json({
         message: verifyVoucher.message,
