@@ -7,9 +7,17 @@ import { sendEmailHelper } from "../../../../../lib/email/email-transport";
 import VoucherApprovalNotification from "../../../../../lib/email/templates/voucher-approval";
 import VoucherCreationEmail from "../../../../../lib/email/templates/voucher-creation";
 
-async function checkVoucherListAction() {
+async function checkVoucherListAction({ productId}) {
   try {
-    const vCount = await prisma.voucher.count();
+    const vCount = await prisma.voucher.count(
+      {
+        where: {
+          product: {
+            id: productId
+          }
+        }
+      }
+    );
     if (vCount < 2 || vCount === 0) {
       return {
         data: { count: vCount },
@@ -19,6 +27,11 @@ async function checkVoucherListAction() {
     if (vCount === 3) {
       const oldestCustomer = await prisma.voucher.findFirst({
         orderBy: { createdAt: "asc" },
+        where: {
+          product: {
+            id: productId
+          }
+        },
         include: {
           customer: true,
         },
@@ -41,6 +54,9 @@ async function checkVoucherListAction() {
           await prisma.voucher.updateMany({
             where: {
               is3FirstTime: true,
+              product: {
+                id: productId
+              }
             },
             data: {
               is3FirstTime: false,
@@ -50,17 +66,20 @@ async function checkVoucherListAction() {
 
         return {
           data: { customer: updateCustomer, count: vCount },
-          message: "customer voucher ready for approval",
+          message: `customer with Id ${updateCustomer?.customer?.id} voucher, is ready for approval`,
         };
       }
     }
-    if (vCount > 4) {
+    if (vCount >= 4) {
       const last4Vouchers = await prisma.voucher.findMany({
         orderBy: {
           createdAt: "desc",
         },
         where: {
           availableForDispense: false,
+          product: {
+            id: productId
+          }
         },
         take: 4,
         include: {
@@ -69,7 +88,12 @@ async function checkVoucherListAction() {
         },
       });
 
-      if (last4Vouchers.length === 4) {
+      const getInit = last4Vouchers[0]?.product?.id;
+      const checkProductMatch = last4Vouchers?.every(
+        (v) => v?.product?.id === getInit
+      );
+      if (last4Vouchers.length === 4 && checkProductMatch === true) {
+        
         const oldestVoucher = last4Vouchers.reduce(
           (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
           last4Vouchers[0]
@@ -88,8 +112,13 @@ async function checkVoucherListAction() {
           },
         });
         return {
-          data: { customer: updateV, count: vCount },
-          message: "customer voucher ready for approval",
+          data: { customer: updateV, count: last4Vouchers.length },
+          message: `customer with Id ${updateV.customer.id} voucher, is ready for approval`,
+        };
+      } else {
+        return {
+          data: { count: last4Vouchers.length },
+          message: `the voucher queue is not yet complete for product ${getInit}, current count: ${last4Vouchers.length}`,
         };
       }
     } else {
@@ -161,14 +190,13 @@ export async function POST(req, res) {
       },
     });
     // if (v) {
-    //   // send email
     //   await sendVoucherCreationEmail({
     //     email: v.customer.email,
     //     firstName: v.customer.name.split(" ")[0],
     //   });
     // }
-    const vQueue = await checkVoucherListAction();
-    if (vQueue.data) {
+    const vQueue = await checkVoucherListAction({productId: productId});
+    if (vQueue?.data) {
       // if (vQueue.data.customer) {
       //   const {
       //     customer: {
@@ -188,7 +216,7 @@ export async function POST(req, res) {
           statusCode: 200,
           data: {
             // voucher: v,
-            queueData: vQueue.data,
+            queueData: vQueue?.data,
             queueMessage: vQueue.message,
           },
         },
@@ -197,6 +225,7 @@ export async function POST(req, res) {
         }
       );
     }
+    return NextResponse.json({statusCode: 200}, {status: 200})
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500, error: err });
   }
