@@ -22,7 +22,7 @@ export default function Vouchers() {
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
 
-  console.log(customers);
+  // console.log(customers);
 
   useEffect(() => {
     const activeProduct = products?.data?.find((p, i) => i === activeTab);
@@ -103,11 +103,33 @@ export default function Vouchers() {
     if (vouchers?.data) {
       if (vouchers?.data?.length === 0) {
         return <p>No Voucher Found</p>;
-      } else {
+      } else if (approved) {
         return vouchers?.data
-          ?.filter((v) => v?.product?.productName?.toLowerCase() === activeTabProduct)
+          ?.filter(
+            (v) =>
+              v?.product?.productName?.toLowerCase() === activeTabProduct &&
+              v.availableForDispense
+          )
+          .reverse()
           .map((c, i) => (
             <VoucherList
+              key={i}
+              name={capitalizeWords(c.customer?.name)}
+              index={i}
+              approved={approved}
+            />
+          ));
+      } else {
+        return vouchers?.data
+          ?.filter(
+            (v) =>
+              v?.product?.productName?.toLowerCase() === activeTabProduct &&
+              !v.availableForDispense
+          )
+          .reverse()
+          .map((c, i) => (
+            <VoucherList
+            approved={approved}
               key={i}
               name={capitalizeWords(c.customer?.name)}
               index={i}
@@ -118,7 +140,7 @@ export default function Vouchers() {
       return <Loading />;
     }
   };
-  // console.log(vouchers);
+  console.log(vouchers);
 
   return (
     <section className="relative min-h-screen bg-green300 py-4">

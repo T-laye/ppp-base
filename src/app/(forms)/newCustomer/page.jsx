@@ -29,26 +29,12 @@ const validationSchema = Yup.object().shape({
 
 export default function NewCustomer() {
   const [isFormValid, setIsFormValid] = useState(false);
-  const [addCustomer, { isLoading, error }] = useAddCustomerMutation();
+  // const [addCustomer, { isLoading, error }] = useAddCustomerMutation();
   const [previewImage, setPreviewImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
 
   const handleRemovePreview = () => {
     setPreviewImage(null);
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setFieldValue("image", file);
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setPreviewImage(null);
-    }
   };
 
   const router = useRouter();
@@ -66,6 +52,20 @@ export default function NewCustomer() {
     onSubmit: handleSubmit,
   });
   // console.log(formik.isValid);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setFieldValue("image", file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(null);
+    }
+  };
   const { errors, touched, isSubmitting, setFieldValue } = formik;
 
   useEffect(() => {
@@ -74,22 +74,37 @@ export default function NewCustomer() {
 
   async function handleSubmit(values) {
     const { fullName, email, phone, address, image } = values;
+    setIsLoading(true);
+    // Create FormData object
     const formData = new FormData();
-    try {
+
+    // Append all form data fields
+    formData.append("name", fullName);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("address", address);
+    if (image) {
       formData.append("profilePicture", image);
+    }
 
-      const res = await axios.post("/api/customer", formData, {
-        name: fullName,
-        email,
-        phone,
-        address,
-      });
+    try {
+      // Debugging: Log FormData to ensure all data is appended
+      console.log("FormData:", formData);
 
-      console.log(res);
-      toast.success(res.data.message); // Assuming the message is in the data property of the response
-      // router.back();
+      // Make Axios request
+      const res = await axios.post("/api/customer", formData);
+
+      if (res) {
+        setIsLoading(false);
+        console.log(res);
+        toast.success(res.data.message);
+        router.back();
+      }
+      // Handle response
     } catch (e) {
-      toast.error(e.response.data.message); // Assuming the error message is in the data property of the response
+      setIsLoading(false);
+      // Handle errors
+      toast.error(e.response.data.message);
       console.log(e);
     }
   }
@@ -153,7 +168,11 @@ export default function NewCustomer() {
                   )}
                 </div>
               </div>
-              {<div className="text-sm text-error">{errors.image}</div>}
+              {
+                <div className="text-sm text-error text-center -mt-3">
+                  {errors.image}
+                </div>
+              }
               {previewImage && !errors.image}
 
               <div className="flex flex-col mb-4">

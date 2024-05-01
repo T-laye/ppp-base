@@ -70,7 +70,7 @@ export default function Layout({ children }) {
           `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
         dispatch(fetchCustomers({ ...resCustomers?.data }));
-        // console.log(resCustomers);
+        console.log(resCustomers);
       } else {
         return;
       }

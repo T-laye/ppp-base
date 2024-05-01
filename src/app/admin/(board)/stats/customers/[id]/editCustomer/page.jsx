@@ -10,7 +10,24 @@ import { useRouter, useParams } from "next/navigation";
 import { getCustomer } from "@/redux/slices/getCustomerSlice";
 import axios from "axios";
 import Loading from "@/components/Loading";
-// import { useEditCustomerMutation } from "@/redux/slices/customerApiSlice";
+import Image from "next/image";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  image: Yup.mixed()
+    .required("Please select an image")
+    .test(
+      "fileSize",
+      "Must be less than 3mb",
+      (value) => value && value.size < 3072 * 3072
+    )
+    .test(
+      "fileType",
+      "Invalid file type",
+      (value) => value && ["image/jpeg", "image/jpg"].includes(value.type)
+    ),
+});
+
 
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -19,6 +36,7 @@ export default function Page() {
   const { id } = useParams();
   const { customer } = useSelector((state) => state.customer);
   const dispatch = useDispatch();
+  const [previewImage, setPreviewImage] = useState(null);
   // const [editCustomer, { isLoading, error }] = useEditCustomerMutation();
 
   // console.log(customer);
@@ -41,13 +59,35 @@ export default function Page() {
       email: customer?.email,
       phone: customer?.phoneNumber,
       address: customer?.address,
-      // product: "Fuel",
-      // third_party: true,
-      // preferred_poc: "Total Fueling Station",
+      image: customer?.image,
     },
     validate: new_customer_validate,
+    validationSchema,
     onSubmit: handleSubmit,
   });
+
+  
+  const handleRemovePreview = () => {
+    setPreviewImage(null);
+  };
+
+
+  
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setFieldValue("image", file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage(null);
+    }
+  };
+  const { errors, touched, isSubmitting, setFieldValue } = formik;
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
@@ -91,6 +131,44 @@ export default function Page() {
           <Loading />
         ) : (
           <form onSubmit={formik.handleSubmit} className="mb-4">
+            <div className=" h-32 w-40 mx-auto mb-5 relative overflow-hidden ">
+              <label
+                className={`${
+                  previewImage ? "opacity-25" : ""
+                } border border-gray-400 border-dashed   h-full w-full  absolute inline-block rounded-lg`}
+                htmlFor="image"
+              >
+                <div>
+                  <span className="bg-gray-400  text-xs m-1 px-2 py-1 rounded-lg block w-fit">
+                    Choose File
+                  </span>
+                  <div className="flex flex-col w-full mt-8 items-center text-upload px-2 py-1 rounded-lg ">
+                    {/* <AiOutlineCloudUpload size={20} fill="#7164C0" /> */}
+                    <span className="text-xs">Upload image</span>
+                  </div>
+                </div>
+              </label>
+              <input
+                className="mx-2 hidden"
+                id="image"
+                name="image"
+                type="file"
+                onChange={handleImageChange}
+              />
+
+              <div className="h-full  top-0 right-0 left-0 bottom-0 bg-white">
+                {previewImage && (
+                  <Image
+                    src={previewImage || customer?.image}
+                    alt="Preview"
+                    className="h-full w-full object-center object-cover rounded-md"
+                    width={500}
+                    height={500}
+                    priority
+                  />
+                )}
+              </div>
+            </div>
             <div className="flex flex-col mb-4">
               <label className="text-sm mb-2" htmlFor="fullName">
                 Full Name
@@ -145,22 +223,24 @@ export default function Page() {
               )}
             </div>
             <div className="flex flex-col mb-4">
-            <label className="text-sm mb-2" htmlFor="address">
-              Address
-            </label>
-            <input
-              // disabled={!isEditable}
-              id="address"
-              name="address"
-              type="text"
-              placeholder="Enter Address"
-              className={getInputClassNames("address")}
-              {...formik.getFieldProps("address")}
-            />
-            {formik.touched.address && formik.errors.address && (
-              <div className="text-error text-sm">{formik.errors.address}</div>
-            )}
-          </div>
+              <label className="text-sm mb-2" htmlFor="address">
+                Address
+              </label>
+              <input
+                // disabled={!isEditable}
+                id="address"
+                name="address"
+                type="text"
+                placeholder="Enter Address"
+                className={getInputClassNames("address")}
+                {...formik.getFieldProps("address")}
+              />
+              {formik.touched.address && formik.errors.address && (
+                <div className="text-error text-sm">
+                  {formik.errors.address}
+                </div>
+              )}
+            </div>
 
             <button
               type="submit"

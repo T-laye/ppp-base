@@ -80,7 +80,9 @@ export async function GET(req, res) {
     const code = searchParams.get("code");
     // verify the code
     const verifyVoucher = await isVoucherValidHelper(code);
+
     if (verifyVoucher.error) {
+      console.log(verifyVoucher.error);
       return NextResponse.json({
         message: verifyVoucher.message,
         error: verifyVoucher.error,

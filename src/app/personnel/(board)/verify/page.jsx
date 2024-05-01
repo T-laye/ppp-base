@@ -5,6 +5,14 @@ import Loader from "@/components/Loader.jsx";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { new_voucher_validate } from "../../../../../lib/validate";
+import axios from "axios";
+import DetailList from "@/components/DetailList";
+import Image from "next/image";
+import { FaLocationDot, FaUser } from "react-icons/fa6";
+import { MdEmail } from "react-icons/md";
+import { BsFillFuelPumpDieselFill, BsFillTelephoneFill } from "react-icons/bs";
+import { ImDroplet } from "react-icons/im";
+import { useSelector } from "react-redux";
 
 export default function Verify() {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -12,39 +20,54 @@ export default function Verify() {
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [valid, setValid] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [data, setData] = useState({});
   const router = useRouter();
+  const { worker } = useSelector((state) => state.worker);
+  const personnelPocData = worker?.personnel_poc_data
+    ?.map((p) => p.poc_name)
+    .flat();
 
-  const formik = useFormik({
-    initialValues: {
-      fullName: "Mr. Matthew Paul",
-      email: "matt@gmail.com",
-      phone: "090847384399",
-      address: "No. 23 oacnj oskcol sjonoNCOJKCONC ACNOkcn",
-      poc: "Exxon Mobil Fueling Station",
-      product: "Fuel",
-      pick_up_person: "",
-      vehicle_type: "",
-      vehicle_plate_number: "",
-      phone_of_pick_up_person: "",
-      third_party: true,
-    },
-    validate: new_voucher_validate,
-    onSubmit: handleSubmit,
-  });
+  console.log(checked);
+  const voucherLength = 11;
+
+ const formik = useFormik({
+   initialValues: {
+     pick_up_person: checked ? data?.customer?.name : "", // Update pick_up_person based on checked state
+     vehicle_type: "",
+     vehicle_plate_number: "",
+     phone_of_pick_up_person: "",
+     third_party: checked,
+   },
+   validate: new_voucher_validate,
+   onSubmit: handleSubmit,
+ });
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    // const { email, password } = values;
-    console.log(values);
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
       toast.success("Successful");
       router.push("/personnel/verify/success");
     }, 2000);
+  }
+
+  function capitalizeWords(sentence) {
+    // Split the sentence into an array of words
+    let words = sentence?.split(" ");
+
+    // Iterate over each word
+    for (let i = 0; i < words?.length; i++) {
+      // Capitalize the first letter of each word
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+
+    // Join the words back into a sentence
+    return words?.join(" ");
   }
 
   const getInputClassNames = (fieldName) =>
@@ -65,31 +88,59 @@ export default function Verify() {
       };
     }
   }, [loading]);
+  // 2760731FB80
+  function handleVerifyVoucher(voucher) {
+    const verifyVoucher = async () => {
+      setLoading(true);
+      try {
+        const res = await axios.get(
+          `/api/admin/voucher/verify?code=${voucher}`
+        );
+        if (res.data.data) {
+          setLoading(false);
+          setData(res.data.data);
+          setValid(true);
+          toast.success(res.data.message);
+          console.log(res.data);
+        }
+      } catch (err) {
+        setLoading(false);
+        setValid(false);
+        toast.error("Something went wrong");
+        console.error(err);
+      }
+    };
+
+    verifyVoucher();
+  }
 
   const handleChange = (e) => {
-    const voucher = e.target.value.trim(); // Remove leading and trailing whitespace
+    const voucher = e.target.value.trim();
 
     setTerm(voucher);
 
-    if (voucher.length === 0 || voucher.length === 10) {
-      setLoading(false); // Set loading to false when input field is empty or has 10 characters
+    if (voucher.length === 0 || voucher.length === voucherLength) {
+      setLoading(false);
     } else {
-      setLoading(true); // Set loading to true when input field has content but is not 10 characters
+      setLoading(true);
     }
 
-    if (voucher.length === 10 && !voucher.includes(" ")) {
-      // Assuming the correct voucher number is "1234567890"
-      if (voucher === "1234567890") {
-        setLoading(false);
-        toast.success("Verification Successful");
-        setValid(true);
-      } else {
-        setLoading(false);
-        setValid(false);
-        toast.error("Invalid Voucher");
-      }
+    if (voucher.length === voucherLength && !voucher.includes(" ")) {
+      handleVerifyVoucher(voucher);
     }
   };
+
+  const handleCheckboxChange = (e) => {
+    setChecked(e.target.value);
+console.log(e.target)
+    formik.setFieldValue("third_party", e.target.checked);
+    // Update pick_up_person based on checked state
+    formik.setFieldValue(
+      "pick_up_person",
+      e.target.checked ? data?.customer?.name : ""
+    );
+  };
+  // 3B8BDE6A9EF
 
   return (
     <section className="pt-5 pb-20">
@@ -98,18 +149,17 @@ export default function Verify() {
           Voucher Verification
         </h4>
         <div className="mt-4">
-          {/* <form action="" onSubmit={(e) => e.preventDefault()}> */}
-          <div className="relative ">
+          <div className="relative">
             <input
-              maxLength={10}
+              maxLength={voucherLength}
               type="text"
               placeholder="Enter Voucher Number"
-              className="w-full  p-2 outline-none rounded-xl   text-base  placeholder:text-sm placeholder:font-normal "
+              className="w-full p-2 outline-none rounded-xl text-base placeholder:text-sm placeholder:font-normal"
               value={term}
               onChange={handleChange}
             />
             <div className="absolute top-3 right-2.5 text-gray-400">
-              {/* <BiSearchAlt2 size={20} /> */}
+              {/* Icon component */}
             </div>
           </div>
           {loading && (
@@ -117,7 +167,6 @@ export default function Verify() {
               Not less than 10 digits !!!
             </div>
           )}
-          {/* </form> */}
         </div>
 
         <Suspense>
@@ -129,247 +178,168 @@ export default function Verify() {
                 </h4>
               </div>
               <div className="mt-4">
-                <form onSubmit={formik.handleSubmit} className="mb-4">
-                  <div className="flex flex-col mb-4">
-                    <label className="text-sm mb-2" htmlFor="fullName">
-                      Full Name
-                    </label>
-                    <input
-                      readOnly
-                      id="fullName"
-                      name="fullName"
-                      type="text"
-                      placeholder="Enter full name"
-                      className={getInputClassNames("fullName")}
-                      {...formik.getFieldProps("fullName")}
-                    />
-                    {formik.touched.fullName && formik.errors.fullName && (
-                      <div className="text-error text-sm">
-                        {formik.errors.fullName}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-col mb-4">
-                    <label className="text-sm mb-2" htmlFor="email">
-                      Email
-                    </label>
-                    <input
-                      readOnly
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="Enter Email"
-                      className={getInputClassNames("email")}
-                      {...formik.getFieldProps("email")}
-                    />
-                    {formik.touched.email && formik.errors.email && (
-                      <div className="text-error text-sm">
-                        {formik.errors.email}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-col mb-4">
-                    <label className="text-sm mb-2" htmlFor="phone">
-                      Phone Number
-                    </label>
-                    <input
-                      readOnly
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder="Enter phone number"
-                      className={getInputClassNames("phone")}
-                      {...formik.getFieldProps("phone")}
-                    />
-                    {formik.touched.phone && formik.errors.phone && (
-                      <div className="text-error text-sm">
-                        {formik.errors.phone}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-col mb-4">
-                    <label className="text-sm mb-2" htmlFor="address">
-                      Address
-                    </label>
-                    <input
-                      readOnly
-                      id="address"
-                      name="address"
-                      type="text"
-                      placeholder="Enter address"
-                      className={getInputClassNames("address")}
-                      {...formik.getFieldProps("address")}
-                    />
-                    {formik.touched.address && formik.errors.address && (
-                      <div className="text-error text-sm">
-                        {formik.errors.address}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-col  mb-6">
-                    <label className="text-sm mb-2" htmlFor="poc">
-                      Point of Collection
-                    </label>
-                    <select
-                      disabled
-                      id="poc"
-                      name="poc"
-                      placeholder="Select Preffered POC"
-                      className={getInputClassNames("poc")}
-                      {...formik.getFieldProps("poc")}
-                    >
-                      <option value={formik.values.poc}>
-                        {formik.values.poc}
-                      </option>
-                    </select>
-                    {formik.touched.poc && formik.errors.poc && (
-                      <div className="text-error text-sm">
-                        {formik.errors.poc}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col  mb-6">
-                    <label className="text-sm mb-2" htmlFor="product">
-                      Select Product
-                    </label>
-                    <select
-                      disabled
-                      id="product"
-                      name="product"
-                      placeholder="Select Product"
-                      className={getInputClassNames("product")}
-                      {...formik.getFieldProps("product")}
-                    >
-                      <option value={formik.values.product}>
-                        {formik.values.product}
-                      </option>
-                    </select>
-                    {formik.touched.product && formik.errors.product && (
-                      <div className="text-error text-sm">
-                        {formik.errors.product}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex items-center mt-6 mb-4 ">
-                    <div>
-                      <input
-                        checked={formik.values.third_party}
-                        disabled
-                        name="checkbox"
-                        id="checkbox"
-                        type="checkbox"
-                        className={`h-[14px] w-[14px] rounded-md ${getInputClassNames(
-                          "third_party"
-                        )}`}
-                        {...formik.getFieldProps("third_party")}
-                      />
-                    </div>
-                    <div className="text-sm ml-2">
-                      <label htmlFor="checkbox">Allow Third Party</label>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col mb-4">
-                    <label className="text-sm mb-2" htmlFor="pick_up_person">
-                      Pick Up Person Name
-                    </label>
-                    <input
-                      id="pick_up_person"
-                      name="pick_up_person"
-                      type="text"
-                      placeholder="Enter full name"
-                      className={getInputClassNames("pick_up_person")}
-                      {...formik.getFieldProps("pick_up_person")}
-                    />
-                    {formik.touched.pick_up_person &&
-                      formik.errors.pick_up_person && (
-                        <div className="text-error text-sm">
-                          {formik.errors.pick_up_person}
-                        </div>
-                      )}
-                  </div>
-
-                  <div className="flex flex-col mt-4 mb-4">
-                    <label className="text-sm mb-2" htmlFor="vehicle_type">
-                      Vehicle Type
-                    </label>
-                    <input
-                      id="vehicle_type"
-                      name="vehicle_type"
-                      type="text"
-                      placeholder="Enter Vehicle Type"
-                      className={getInputClassNames("vehicle_type")}
-                      {...formik.getFieldProps("vehicle_type")}
-                    />
-                    {formik.touched.vehicle_type &&
-                      formik.errors.vehicle_type && (
-                        <div className="text-error text-sm">
-                          {formik.errors.vehicle_type}
-                        </div>
-                      )}
-                  </div>
-
-                  <div className="flex flex-col mt-4 mb-4">
-                    <label
-                      className="text-sm mb-2"
-                      htmlFor="vehicle_plate_number"
-                    >
-                      Vehicle Plate Number
-                    </label>
-                    <input
-                      id="vehicle_plate_number"
-                      name="vehicle_plate_number"
-                      type="text"
-                      placeholder="Enter Vehicle Plate Number"
-                      className={getInputClassNames("vehicle_plate_number")}
-                      {...formik.getFieldProps("vehicle_plate_number")}
-                    />
-                    {formik.touched.vehicle_plate_number &&
-                      formik.errors.vehicle_plate_number && (
-                        <div className="text-error text-sm">
-                          {formik.errors.vehicle_plate_number}
-                        </div>
-                      )}
-                  </div>
-
-                  <div className="flex flex-col mt-4 mb-4">
-                    <label
-                      className="text-sm mb-2"
-                      htmlFor="phone_of_pick_up_person"
-                    >
-                      Phone Number of Pick Up Person
-                    </label>
-                    <input
-                      id="phone_of_pick_up_person"
-                      name="phone_of_pick_up_person"
-                      type="tel"
-                      placeholder="Enter Phone Number"
-                      className={getInputClassNames("phone_of_pick_up_person")}
-                      {...formik.getFieldProps("phone_of_pick_up_person")}
-                    />
-                    {formik.touched.phone_of_pick_up_person &&
-                      formik.errors.phone_of_pick_up_person && (
-                        <div className="text-error text-sm">
-                          {formik.errors.phone_of_pick_up_person}
-                        </div>
-                      )}
-                  </div>
-
-                  <button
-                    type="submit"
-                    className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
-                      isFormValid
-                        ? `${isLoading ? "bg-customGray" : "bg-primary"}`
-                        : "bg-customGray cursor-not-allowed"
-                    } `}
-                    disabled={!isFormValid || isLoading}
-                  >
-                    {isLoading ? <Loader /> : "Process Voucher"}
-                  </button>
-                </form>
+                <div className="h-48 w-48 mt-5 rounded-lg overflow-hidden mx-auto">
+                  <Image
+                    className="h-full w-full object-cover"
+                    src={data?.customer?.image} // Assuming customer image is in the data object
+                    alt={data?.customer?.name} // Assuming customer name is in the data object
+                    height={500}
+                    width={500}
+                  />
+                </div>
+                <div className="mt-4">
+                  <DetailList
+                    title="Full Name"
+                    value={capitalizeWords(data?.customer?.name)}
+                    icon={<FaUser size={16} />}
+                  />
+                  <DetailList
+                    title="Email"
+                    value={data?.customer?.email}
+                    icon={<MdEmail size={16} />}
+                  />
+                  <DetailList
+                    title="Phone Number"
+                    value={data?.customer?.phoneNumber}
+                    icon={<BsFillTelephoneFill size={16} />}
+                  />
+                  <DetailList
+                    title="Address"
+                    value={capitalizeWords(data?.customer?.address)}
+                    icon={<FaLocationDot size={16} />}
+                  />
+                  <DetailList
+                    title="POC Name"
+                    value={capitalizeWords(personnelPocData[0])}
+                    // value={personnelPocData)}
+                    icon={<BsFillFuelPumpDieselFill size={16} />}
+                  />
+                  <DetailList
+                    title="Product"
+                    value={capitalizeWords(data?.product?.productName)}
+                    icon={<ImDroplet size={16} />}
+                  />
+                </div>
               </div>
+
+              <form onSubmit={formik.handleSubmit} className="mb-4">
+                <div className="flex items-center mt-6 mb-4 ">
+                  <div>
+                    <input
+                      // checked={checked} // Controlled component
+                      onChange={handleCheckboxChange} // Handle checkbox change
+                      name="checkbox"
+                      id="checkbox"
+                      type="checkbox"
+                      className={`h-[14px] w-[14px] rounded-md ${getInputClassNames(
+                        "third_party"
+                      )}`}
+                      {...formik.getFieldProps("third_party")}
+                    />
+                  </div>
+                  <div className="text-sm ml-2">
+                    <label htmlFor="checkbox">Allow Third Party</label>
+                  </div>
+                </div>
+
+                <div className="flex flex-col mb-4">
+                  <label className="text-sm mb-2" htmlFor="pick_up_person">
+                    Pick Up Person Name
+                  </label>
+                  <input
+                    id="pick_up_person"
+                    name="pick_up_person"
+                    type="text"
+                    placeholder="Enter full name"
+                    className={getInputClassNames("pick_up_person")}
+                    {...formik.getFieldProps("pick_up_person")}
+                  />
+                  {formik.touched.pick_up_person &&
+                    formik.errors.pick_up_person && (
+                      <div className="text-error text-sm">
+                        {formik.errors.pick_up_person}
+                      </div>
+                    )}
+                </div>
+
+                <div className="flex flex-col mt-4 mb-4">
+                  <label className="text-sm mb-2" htmlFor="vehicle_type">
+                    Vehicle Type
+                  </label>
+                  <input
+                    id="vehicle_type"
+                    name="vehicle_type"
+                    type="text"
+                    placeholder="Enter Vehicle Type"
+                    className={getInputClassNames("vehicle_type")}
+                    {...formik.getFieldProps("vehicle_type")}
+                  />
+                  {formik.touched.vehicle_type &&
+                    formik.errors.vehicle_type && (
+                      <div className="text-error text-sm">
+                        {formik.errors.vehicle_type}
+                      </div>
+                    )}
+                </div>
+
+                <div className="flex flex-col mt-4 mb-4">
+                  <label
+                    className="text-sm mb-2"
+                    htmlFor="vehicle_plate_number"
+                  >
+                    Vehicle Plate Number
+                  </label>
+                  <input
+                    id="vehicle_plate_number"
+                    name="vehicle_plate_number"
+                    type="text"
+                    placeholder="Enter Vehicle Plate Number"
+                    className={getInputClassNames("vehicle_plate_number")}
+                    {...formik.getFieldProps("vehicle_plate_number")}
+                  />
+                  {formik.touched.vehicle_plate_number &&
+                    formik.errors.vehicle_plate_number && (
+                      <div className="text-error text-sm">
+                        {formik.errors.vehicle_plate_number}
+                      </div>
+                    )}
+                </div>
+
+                <div className="flex flex-col mt-4 mb-4">
+                  <label
+                    className="text-sm mb-2"
+                    htmlFor="phone_of_pick_up_person"
+                  >
+                    Phone Number of Pick Up Person
+                  </label>
+                  <input
+                    id="phone_of_pick_up_person"
+                    name="phone_of_pick_up_person"
+                    type="tel"
+                    placeholder="Enter Phone Number"
+                    className={getInputClassNames("phone_of_pick_up_person")}
+                    {...formik.getFieldProps("phone_of_pick_up_person")}
+                  />
+                  {formik.touched.phone_of_pick_up_person &&
+                    formik.errors.phone_of_pick_up_person && (
+                      <div className="text-error text-sm">
+                        {formik.errors.phone_of_pick_up_person}
+                      </div>
+                    )}
+                </div>
+
+                <button
+                  type="submit"
+                  className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
+                    isFormValid
+                      ? `${isLoading ? "bg-customGray" : "bg-primary"}`
+                      : "bg-customGray cursor-not-allowed"
+                  } `}
+                  disabled={!isFormValid || isLoading}
+                >
+                  {isLoading ? <Loader /> : "Process Voucher"}
+                </button>
+              </form>
             </>
           )}
         </Suspense>
