@@ -27,34 +27,68 @@ export default function Verify() {
   const personnelPocData = worker?.personnel_poc_data
     ?.map((p) => p.poc_name)
     .flat();
+  const personnelPocId = worker?.personnel_poc_data
+    ?.map((p) => p.poc_id)
+    .flat();
 
-  console.log(checked);
+  console.log(personnelPocId?.[0]);
   const voucherLength = 11;
 
- const formik = useFormik({
-   initialValues: {
-     pick_up_person: checked ? data?.customer?.name : "", // Update pick_up_person based on checked state
-     vehicle_type: "",
-     vehicle_plate_number: "",
-     phone_of_pick_up_person: "",
-     third_party: checked,
-   },
-   validate: new_voucher_validate,
-   onSubmit: handleSubmit,
- });
+  const formik = useFormik({
+    initialValues: {
+      pick_up_person: "", // Update pick_up_person based on checked state
+      vehicle_type: "",
+      vehicle_plate_number: "",
+      phone_of_pick_up_person: "",
+      third_party: false,
+    },
+    // validate: new_voucher_validate,
+    onSubmit: handleSubmit,
+  });
+
+  // console.log(formik.values.third_party);
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
+    // formik.setFieldValue('pick_up_person', data?.customer?.name);
   }, [formik.values, formik.errors, formik.isValid]);
+  
+  useEffect(() => {
+    if (formik.values.third_party === true) {
+      formik.setFieldValue('pick_up_person', "");
+      formik.setFieldValue('phone_of_pick_up_person', "");
+    } else if (formik.values.third_party === false) {
+      formik.setFieldValue('pick_up_person', data?.customer?.name);
+      formik.setFieldValue('phone_of_pick_up_person', data?.customer?.phoneNumber);
+    }
+  }, [formik.values.third_party, data]);
 
   async function handleSubmit(values) {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Successful");
-      router.push("/personnel/verify/success");
-    }, 2000);
+try{
+  const res = await axios.post("/api/admin/voucher/verify", {
+    pocId: personnelPocId?.[0],
+    voucherCode: data?.voucher?.voucherCode,
+    vehicleType:values.vehicle_type,
+    vehicleNumber:values.vehicle_plate_number,
+    thirdParty:values.third_party,
+    thirdPartyName:values.pick_up_person,
+    thirdPartyPhoneNumber:values.phone_of_pick_up_person,
+  });
+
+  console.log(res)
+  if( res.data){
+    setIsLoading(false);
+  toast.success("Successful");
+  router.push("/personnel/verify/success");
   }
+  
+}catch(err){
+  setIsLoading(false);
+  console.error(err)
+}
+
+  } 
 
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
@@ -129,18 +163,15 @@ export default function Verify() {
       handleVerifyVoucher(voucher);
     }
   };
-
   const handleCheckboxChange = (e) => {
-    setChecked(e.target.value);
-console.log(e.target)
-    formik.setFieldValue("third_party", e.target.checked);
-    // Update pick_up_person based on checked state
-    formik.setFieldValue(
-      "pick_up_person",
-      e.target.checked ? data?.customer?.name : ""
-    );
+    const isChecked = e.target.checked;
+    setChecked(isChecked);
+    formik.setFieldValue("third_party", isChecked);
+    // formik.setFieldValue(
+    //   "pick_up_person",
+    //   isChecked ? data?.customer?.name || "" : ""
+    // );
   };
-  // 3B8BDE6A9EF
 
   return (
     <section className="pt-5 pb-20">
@@ -226,10 +257,10 @@ console.log(e.target)
                 <div className="flex items-center mt-6 mb-4 ">
                   <div>
                     <input
-                      // checked={checked} // Controlled component
+                      checked={formik.values.third_party} // Controlled component
                       onChange={handleCheckboxChange} // Handle checkbox change
-                      name="checkbox"
-                      id="checkbox"
+                      name="third_party"
+                      id="third_party"
                       type="checkbox"
                       className={`h-[14px] w-[14px] rounded-md ${getInputClassNames(
                         "third_party"
@@ -238,7 +269,7 @@ console.log(e.target)
                     />
                   </div>
                   <div className="text-sm ml-2">
-                    <label htmlFor="checkbox">Allow Third Party</label>
+                    <label htmlFor="third_party">Allow Third Party</label>
                   </div>
                 </div>
 
@@ -250,6 +281,7 @@ console.log(e.target)
                     id="pick_up_person"
                     name="pick_up_person"
                     type="text"
+                    required
                     placeholder="Enter full name"
                     className={getInputClassNames("pick_up_person")}
                     {...formik.getFieldProps("pick_up_person")}
@@ -267,8 +299,9 @@ console.log(e.target)
                     Vehicle Type
                   </label>
                   <input
-                    id="vehicle_type"
-                    name="vehicle_type"
+                  required
+                  id="vehicle_type"
+                  name="vehicle_type"
                     type="text"
                     placeholder="Enter Vehicle Type"
                     className={getInputClassNames("vehicle_type")}
@@ -291,6 +324,7 @@ console.log(e.target)
                   </label>
                   <input
                     id="vehicle_plate_number"
+                  required
                     name="vehicle_plate_number"
                     type="text"
                     placeholder="Enter Vehicle Plate Number"
@@ -314,6 +348,7 @@ console.log(e.target)
                   </label>
                   <input
                     id="phone_of_pick_up_person"
+                  required
                     name="phone_of_pick_up_person"
                     type="tel"
                     placeholder="Enter Phone Number"
@@ -328,6 +363,7 @@ console.log(e.target)
                     )}
                 </div>
 
+                  
                 <button
                   type="submit"
                   className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
