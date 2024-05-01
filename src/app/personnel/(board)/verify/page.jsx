@@ -10,7 +10,9 @@ import DetailList from "@/components/DetailList";
 import Image from "next/image";
 import { FaLocationDot, FaUser } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
-import { BsFillTelephoneFill } from "react-icons/bs";
+import { BsFillFuelPumpDieselFill, BsFillTelephoneFill } from "react-icons/bs";
+import { ImDroplet } from "react-icons/im";
+import { useSelector } from "react-redux";
 
 export default function Verify() {
   const [isFormValid, setIsFormValid] = useState(false);
@@ -18,21 +20,28 @@ export default function Verify() {
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [valid, setValid] = useState(false);
+  const [checked, setChecked] = useState(false);
   const [data, setData] = useState({});
   const router = useRouter();
+  const { worker } = useSelector((state) => state.worker);
+  const personnelPocData = worker?.personnel_poc_data
+    ?.map((p) => p.poc_name)
+    .flat();
+
+  console.log(checked);
   const voucherLength = 11;
 
-  const formik = useFormik({
-    initialValues: {
-      pick_up_person: "",
-      vehicle_type: "",
-      vehicle_plate_number: "",
-      phone_of_pick_up_person: "",
-      third_party: true,
-    },
-    validate: new_voucher_validate,
-    onSubmit: handleSubmit,
-  });
+ const formik = useFormik({
+   initialValues: {
+     pick_up_person: checked ? data?.customer?.name : "", // Update pick_up_person based on checked state
+     vehicle_type: "",
+     vehicle_plate_number: "",
+     phone_of_pick_up_person: "",
+     third_party: checked,
+   },
+   validate: new_voucher_validate,
+   onSubmit: handleSubmit,
+ });
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
@@ -79,7 +88,7 @@ export default function Verify() {
       };
     }
   }, [loading]);
-// 2760731FB80
+  // 2760731FB80
   function handleVerifyVoucher(voucher) {
     const verifyVoucher = async () => {
       setLoading(true);
@@ -87,7 +96,7 @@ export default function Verify() {
         const res = await axios.get(
           `/api/admin/voucher/verify?code=${voucher}`
         );
-        if (res.data) {
+        if (res.data.data) {
           setLoading(false);
           setData(res.data.data);
           setValid(true);
@@ -120,6 +129,18 @@ export default function Verify() {
       handleVerifyVoucher(voucher);
     }
   };
+
+  const handleCheckboxChange = (e) => {
+    setChecked(e.target.value);
+console.log(e.target)
+    formik.setFieldValue("third_party", e.target.checked);
+    // Update pick_up_person based on checked state
+    formik.setFieldValue(
+      "pick_up_person",
+      e.target.checked ? data?.customer?.name : ""
+    );
+  };
+  // 3B8BDE6A9EF
 
   return (
     <section className="pt-5 pb-20">
@@ -160,7 +181,7 @@ export default function Verify() {
                 <div className="h-48 w-48 mt-5 rounded-lg overflow-hidden mx-auto">
                   <Image
                     className="h-full w-full object-cover"
-                    src={data?.customer?.profilePicture} // Assuming customer image is in the data object
+                    src={data?.customer?.image} // Assuming customer image is in the data object
                     alt={data?.customer?.name} // Assuming customer name is in the data object
                     height={500}
                     width={500}
@@ -187,6 +208,17 @@ export default function Verify() {
                     value={capitalizeWords(data?.customer?.address)}
                     icon={<FaLocationDot size={16} />}
                   />
+                  <DetailList
+                    title="POC Name"
+                    value={capitalizeWords(personnelPocData[0])}
+                    // value={personnelPocData)}
+                    icon={<BsFillFuelPumpDieselFill size={16} />}
+                  />
+                  <DetailList
+                    title="Product"
+                    value={capitalizeWords(data?.product?.productName)}
+                    icon={<ImDroplet size={16} />}
+                  />
                 </div>
               </div>
 
@@ -194,8 +226,8 @@ export default function Verify() {
                 <div className="flex items-center mt-6 mb-4 ">
                   <div>
                     <input
-                      checked={formik.values.third_party}
-                      disabled
+                      // checked={checked} // Controlled component
+                      onChange={handleCheckboxChange} // Handle checkbox change
                       name="checkbox"
                       id="checkbox"
                       type="checkbox"
