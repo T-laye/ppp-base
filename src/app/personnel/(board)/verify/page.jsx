@@ -13,10 +13,12 @@ import { MdEmail } from "react-icons/md";
 import { BsFillFuelPumpDieselFill, BsFillTelephoneFill } from "react-icons/bs";
 import { ImDroplet } from "react-icons/im";
 import { useSelector } from "react-redux";
+import DispenseSuccess from "../../components/DispenseSucces";
 
 export default function Verify() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [term, setTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [valid, setValid] = useState(false);
@@ -46,49 +48,52 @@ export default function Verify() {
     onSubmit: handleSubmit,
   });
 
-  // console.log(formik.values.third_party);
+  console.log(data);
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
     // formik.setFieldValue('pick_up_person', data?.customer?.name);
   }, [formik.values, formik.errors, formik.isValid]);
-  
+
   useEffect(() => {
     if (formik.values.third_party === true) {
-      formik.setFieldValue('pick_up_person', "");
-      formik.setFieldValue('phone_of_pick_up_person', "");
+      formik.setFieldValue("pick_up_person", "");
+      formik.setFieldValue("phone_of_pick_up_person", "");
     } else if (formik.values.third_party === false) {
-      formik.setFieldValue('pick_up_person', data?.customer?.name);
-      formik.setFieldValue('phone_of_pick_up_person', data?.customer?.phoneNumber);
+      formik.setFieldValue("pick_up_person", data?.customer?.name);
+      formik.setFieldValue(
+        "phone_of_pick_up_person",
+        data?.customer?.phoneNumber
+      );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.third_party, data]);
 
   async function handleSubmit(values) {
     setIsLoading(true);
-try{
-  const res = await axios.post("/api/admin/voucher/verify", {
-    pocId: personnelPocId?.[0],
-    voucherCode: data?.voucher?.voucherCode,
-    vehicleType:values.vehicle_type,
-    vehicleNumber:values.vehicle_plate_number,
-    thirdParty:values.third_party,
-    thirdPartyName:values.pick_up_person,
-    thirdPartyPhoneNumber:values.phone_of_pick_up_person,
-  });
+    try {
+      // const res = await axios.post("/api/admin/voucher/verify", {
+      //   pocId: personnelPocId?.[0],
+      //   voucherCode: data?.voucher?.voucherCode,
+      //   vehicleType: values.vehicle_type,
+      //   vehicleNumber: values.vehicle_plate_number,
+      //   thirdParty: values.third_party,
+      //   thirdPartyName: values.pick_up_person,
+      //   thirdPartyPhoneNumber: values.phone_of_pick_up_person,
+      // });
 
-  console.log(res)
-  if( res.data){
-    setIsLoading(false);
-  toast.success("Successful");
-  router.push("/personnel/verify/success");
+      // console.log(res);
+      // if (res.data) {
+      //   setIsLoading(false);
+      //   toast.success("Successful");
+      //   // router.push("/personnel/verify/success");
+      // }
+      setOpenModal(true);
+    } catch (err) {
+      setIsLoading(false);
+      console.error(err);
+    }
   }
-  
-}catch(err){
-  setIsLoading(false);
-  console.error(err)
-}
-
-  } 
 
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
@@ -134,6 +139,7 @@ try{
           setLoading(false);
           setData(res.data.data);
           setValid(true);
+
           toast.success(res.data.message);
           console.log(res.data);
         }
@@ -174,8 +180,8 @@ try{
   };
 
   return (
-    <section className="pt-5 pb-20">
-      <div>
+    <section className="pt-5 pb-20 ">
+      <div className="">
         <h4 className="font-medium text-base mt-2 text-center">
           Voucher Verification
         </h4>
@@ -299,9 +305,9 @@ try{
                     Vehicle Type
                   </label>
                   <input
-                  required
-                  id="vehicle_type"
-                  name="vehicle_type"
+                    required
+                    id="vehicle_type"
+                    name="vehicle_type"
                     type="text"
                     placeholder="Enter Vehicle Type"
                     className={getInputClassNames("vehicle_type")}
@@ -324,7 +330,7 @@ try{
                   </label>
                   <input
                     id="vehicle_plate_number"
-                  required
+                    required
                     name="vehicle_plate_number"
                     type="text"
                     placeholder="Enter Vehicle Plate Number"
@@ -348,7 +354,7 @@ try{
                   </label>
                   <input
                     id="phone_of_pick_up_person"
-                  required
+                    required
                     name="phone_of_pick_up_person"
                     type="tel"
                     placeholder="Enter Phone Number"
@@ -363,7 +369,6 @@ try{
                     )}
                 </div>
 
-                  
                 <button
                   type="submit"
                   className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${
@@ -380,6 +385,13 @@ try{
           )}
         </Suspense>
       </div>
+      {openModal && (
+        <DispenseSuccess
+          amountAllocated={data?.product?.voucherAllocation}
+          productName={data?.product?.productName}
+          unit={data?.product?.unit}
+        />
+      )}
     </section>
   );
 }
