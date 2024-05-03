@@ -98,7 +98,6 @@ export async function GET(req, res) {
     const verifyVoucher = await isVoucherValidHelper(code);
 
     if (verifyVoucher.error) {
-      console.log(verifyVoucher.error);
       return NextResponse.json({
         message: verifyVoucher.message,
         error: verifyVoucher.error,

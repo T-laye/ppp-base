@@ -348,7 +348,11 @@ export async function GET(req, res) {
       },
       include: {
         customer: true,
-        product: true,
+        product: {
+          include: {
+            poc: true
+          }
+        },
       },
       take: take,
       skip: offset,
@@ -359,7 +363,10 @@ export async function GET(req, res) {
     const data = ApiResponseDto({
       message: "successful",
       statusCode: 200,
-      data: getAllVouchers,
+      data: {
+        ...getAllVouchers,
+        voucherCount: getAllVouchers.length
+      },
       count: totalCount,
     });
     return NextResponse.json(data, {
