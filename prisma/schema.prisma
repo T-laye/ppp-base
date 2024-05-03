@@ -40,6 +40,7 @@ model Personnel {
   userId               String
   createdBy            User?               @relation(fields: [createdById], references: [id], name: "createdBy")
   createdById          String
+  VoucherDispense      VoucherDispense[]
 
   @@index([id])
 }
@@ -178,6 +179,8 @@ model VoucherDispense {
   dateUsed        String
   voucherId       String              @unique
   pocId           String?             @unique
+  verifiedBy      Personnel           @relation(fields: [personnelId], references: [id])
+  personnelId     String
 
   @@index([Id])
 }
