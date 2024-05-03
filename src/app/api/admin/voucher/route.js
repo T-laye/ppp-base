@@ -103,14 +103,14 @@ async function checkVoucherListAction({ productId }) {
         };
       }
     }
-    if (vCount  > 5 && vCount % 2 !== 0) {
+    if (vCount > 5 && vCount % 2 !== 0) {
       const getAll = await prisma.voucher.findMany({
         where: {
           approvedByAdmin: false,
           availableForDispense: false,
           product: {
-            id: productId
-          }
+            id: productId,
+          },
         },
         take: 4,
         include: {
@@ -118,18 +118,20 @@ async function checkVoucherListAction({ productId }) {
           product: true,
         },
         orderBy: {
-          createdAt: 'asc'
-        }
-      })
+          createdAt: "asc",
+        },
+      });
 
       const getInit = getAll[0]?.product?.id;
       const checkProductMatch = getAll?.every(
         (v) => v?.product?.id === getInit
       );
-      const getOld = checkProductMatch ? getAll.reduce(
-          (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
-          getAll[0]
-      ) : null
+      const getOld = checkProductMatch
+        ? getAll.reduce(
+            (old, curr) => (curr.createdAt < old.createdAt ? curr : old),
+            getAll[0]
+          )
+        : null;
       const updateNow = await prisma.voucher.update({
         where: {
           id: getOld.id,
@@ -142,8 +144,8 @@ async function checkVoucherListAction({ productId }) {
         },
         include: {
           customer: true,
-          product: true
-        }
+          product: true,
+        },
       });
       return {
         data: { customer: updateNow },
@@ -290,6 +292,7 @@ export async function GET(req, res) {
     const take = searchParams.get("take")
       ? parseInt(searchParams.get("take"))
       : 10;
+    const verifiedBy = searchParams.get("verifiedBy");
     const product = searchParams.get("product_name");
     const collected = Boolean(searchParams.get("collected"));
     const customer = searchParams.get("customer");
@@ -331,6 +334,17 @@ export async function GET(req, res) {
         },
         collected: collected ? boolCheck2 : {},
         availableForDispense: av4D ? boolCheck : {},
+        ...(verifiedBy
+          ? {
+              voucherDispense: {
+                verifiedBy: {
+                  user: {
+                    id: verifiedBy,
+                  },
+                },
+              },
+            }
+          : undefined),
       },
       include: {
         customer: true,

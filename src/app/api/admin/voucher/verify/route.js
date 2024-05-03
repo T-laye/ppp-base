@@ -25,6 +25,7 @@ export async function POST(req, res) {
       thirdParty,
       thirdPartyName,
       thirdPartyPhoneNumber,
+      personnelId
     } = body;
 
     const createVDispenseData = await prisma.voucherDispense.create({
@@ -44,6 +45,13 @@ export async function POST(req, res) {
               thirdPartyPhone: thirdPartyPhoneNumber,
             }
           : undefined),
+        verifiedBy: {
+          connect: {
+            user: {
+              id: personnelId
+            }
+          }
+        },
         voucher: {
           connect: {
             voucherCode: voucherCode,
@@ -51,6 +59,14 @@ export async function POST(req, res) {
         },
       },
     });
+    await prisma.voucher.update({
+      where: {
+        voucherCode: voucherCode,
+      },
+      data: {
+        collected: true,
+      }
+    })
     const data = ApiResponseDto({
       message: "successful",
       statusCode: 200,
