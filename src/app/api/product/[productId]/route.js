@@ -81,12 +81,16 @@ export async function PATCH(req, context) {
     const unit = searchParams.get("unit");
     const voucherAllocation = searchParams.get("voucherAllocation");
     const pocId = searchParams.get("pocId");
+    const stockAvailable = Number(searchParams.get("stockAvailable"));
+    const stockLimit = Number(searchParams.get("stockLimit"));
     const addJ = {
       productName: name ? name : undefined,
       unit: unit ? unit : undefined,
       voucherAllocation: voucherAllocation
         ? Number(voucherAllocation)
         : undefined,
+      stockAvailable: stockAvailable ? stockAvailable : undefined,
+      stockLimit: stockLimit ? stockLimit : undefined,
     };
 
     const updateProduct = await prisma.product.update({
@@ -136,11 +140,6 @@ export async function DELETE(req, context) {
     const getProductById = await prisma.product.findUnique({
       where: {
         id: getProductId,
-      },
-      include: {
-        voucher: true,
-        poc: true,
-        user: true,
       },
     });
     if (!getProductById) {

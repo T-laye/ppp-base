@@ -363,11 +363,8 @@ export async function GET(req, res) {
     const data = ApiResponseDto({
       message: "successful",
       statusCode: 200,
-      data: {
-        ...getAllVouchers,
-        voucherCount: getAllVouchers.length
-      },
-      count: totalCount,
+      data:getAllVouchers,
+      count: getAllVouchers.length,
     });
     return NextResponse.json(data, {
       status: 200,

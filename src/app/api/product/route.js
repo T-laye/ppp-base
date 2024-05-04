@@ -17,7 +17,8 @@ export async function POST(req, res) {
       );
     }
     const body = await req.json();
-    const { name, unit, voucherAllocation, pocId } = body;
+    const { name, unit, voucherAllocation, stockAvailable, stockLimit, pocId } =
+      body;
     const createProduct = await prisma.product.create({
       data: {
         productName: name.toLowerCase(),
@@ -37,6 +38,8 @@ export async function POST(req, res) {
             id: authRes.user.id,
           },
         },
+        stockAvailable: stockAvailable,
+        stockLimit: stockLimit,
       },
     });
     const createResponse = ApiResponseDto({
@@ -119,6 +122,8 @@ export async function GET(req, res) {
         productId: v?.id,
         name: v.productName,
         unit: v?.unit,
+        stockLimit: v?.stockLimit,
+        stockAvailable: v?.stockAvailable,
         poc_id: v?.poc?.id,
         poc_name: v?.poc?.name,
         poc_address: v?.poc?.address,

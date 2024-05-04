@@ -25,7 +25,7 @@ export async function POST(req, res) {
       thirdParty,
       thirdPartyName,
       thirdPartyPhoneNumber,
-      personnelId
+      personnelId,
     } = body;
 
     const createVDispenseData = await prisma.voucherDispense.create({
@@ -48,9 +48,9 @@ export async function POST(req, res) {
         verifiedBy: {
           connect: {
             user: {
-              id: personnelId
-            }
-          }
+              id: personnelId,
+            },
+          },
         },
         voucher: {
           connect: {
@@ -59,14 +59,33 @@ export async function POST(req, res) {
         },
       },
     });
+    const getP = await prisma.voucher.findUnique({
+      where: {
+        voucherCode: voucherCode,
+      },
+      include: {
+        product: true,
+      },
+    });
+    if (getP.product.stockLimit <= getP.product.stockAvailable) {
+      // send email
+    }
     await prisma.voucher.update({
       where: {
         voucherCode: voucherCode,
       },
       data: {
         collected: true,
-      }
-    })
+        product: {
+          update: {
+            stockAvailable:
+              getP.product.voucherAllocation - getP.product.stockAvailable,
+          },
+        },
+      },
+    });
+    
+
     const data = ApiResponseDto({
       message: "successful",
       statusCode: 200,
@@ -112,7 +131,7 @@ export async function GET(req, res) {
             "base64"
           )}`,
         },
-        product: verifyVoucher.data.product
+        product: verifyVoucher.data.product,
       };
       delete verifyVoucher.data.customer.profilePicture;
       return NextResponse.json(
