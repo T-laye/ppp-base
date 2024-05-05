@@ -292,9 +292,9 @@ export async function GET(req, res) {
     }
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const order = searchParams.get("order");
-    const take = searchParams.get("take")
-      ? parseInt(searchParams.get("take"))
-      : 10;
+    // const take = searchParams.get("take")
+    //   ? parseInt(searchParams.get("take"))
+    //   : 10;
     const verifiedBy = searchParams.get("verifiedBy");
     const product = searchParams.get("product_name");
     const collected = searchParams.get("collected");
@@ -361,7 +361,7 @@ export async function GET(req, res) {
           },
         },
       },
-      take: take,
+      // take: take,
       skip: offset,
       orderBy: {
         createdAt: "desc",
