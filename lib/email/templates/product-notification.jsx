@@ -12,7 +12,14 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-export const KoalaWelcomeEmail = ({ name }) => (
+export const ProductNotificationEmail = ({
+  name,
+  stockLimit,
+  productAvailable,
+  product,
+  poc,
+  address
+}) => (
   <Html>
     <Head />
     <Preview>Product Notification Updates</Preview>
@@ -20,29 +27,29 @@ export const KoalaWelcomeEmail = ({ name }) => (
       <Container style={container}>
         <Text style={paragraph}>Hi {name},</Text>
         <Text style={paragraph}>
-          The product {product} has reached it's stock limit{stockLimit}, the
-          product availability is {productAvailability} for this following poc:{" "}
-          {poc}.
+          The {product} product at has reached it's stock limit{stockLimit}, the
+          product availability is {productAvailable} for this following poc:{" "}
+          {poc} located at {address}.
         </Text>
         <Text style={paragraph}>
           Best,
           <br />
-          PPP Support Team
+          PPP Team
         </Text>
         <Hr style={hr} />
         <Text style={footer}>
-          470 Noor Ave STE B #1148, South San Francisco, CA 94080
+          courtesy, petroleum personal privilege support team
         </Text>
       </Container>
     </Body>
   </Html>
 );
 
-KoalaWelcomeEmail.PreviewProps = {
+ProductNotificationEmail.PreviewProps = {
   name: "Alan",
 };
 
-export default KoalaWelcomeEmail;
+export default ProductNotificationEmail;
 
 const main = {
   backgroundColor: "#ffffff",
@@ -62,6 +69,7 @@ const logo = {
 const paragraph = {
   fontSize: "16px",
   lineHeight: "26px",
+  textTransform: "capitalize",
 };
 
 const btnContainer = {
