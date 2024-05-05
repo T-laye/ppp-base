@@ -33,7 +33,7 @@ export default function Verify() {
     ?.map((p) => p.poc_id)
     .flat();
 
-  console.log(personnelPocId?.[0]);
+  // console.log(personnelPocId?.[0]);
   const voucherLength = 11;
 
   const formik = useFormik({
@@ -48,7 +48,7 @@ export default function Verify() {
     onSubmit: handleSubmit,
   });
 
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
@@ -72,23 +72,23 @@ export default function Verify() {
   async function handleSubmit(values) {
     setIsLoading(true);
     try {
-      // const res = await axios.post("/api/admin/voucher/verify", {
-      //   pocId: personnelPocId?.[0],
-      //   voucherCode: data?.voucher?.voucherCode,
-      //   vehicleType: values.vehicle_type,
-      //   vehicleNumber: values.vehicle_plate_number,
-      //   thirdParty: values.third_party,
-      //   thirdPartyName: values.pick_up_person,
-      //   thirdPartyPhoneNumber: values.phone_of_pick_up_person,
-      // });
+      const res = await axios.post("/api/admin/voucher/verify", {
+        pocId: personnelPocId?.[0],
+        voucherCode: data?.voucher?.voucherCode,
+        vehicleType: values.vehicle_type,
+        vehicleNumber: values.vehicle_plate_number,
+        thirdParty: values.third_party,
+        thirdPartyName: values.pick_up_person,
+        thirdPartyPhoneNumber: values.phone_of_pick_up_person,
+      });
 
-      // console.log(res);
-      // if (res.data) {
-      //   setIsLoading(false);
-      //   toast.success("Successful");
-      //   // router.push("/personnel/verify/success");
-      // }
-      setOpenModal(true);
+      console.log(res);
+      if (res.data) {
+        setIsLoading(false);
+        toast.success("Successful");
+        setOpenModal(true);
+        // router.push("/personnel/verify/success");
+      }
     } catch (err) {
       setIsLoading(false);
       console.error(err);

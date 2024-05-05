@@ -9,6 +9,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getWorker } from "@/redux/slices/getWorkerSlice";
 import { setCredentials } from "@/redux/slices/authSlice";
+import { fetchVouchers } from "@/redux/slices/fetchVouchersSlice";
 
 export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
@@ -51,6 +52,26 @@ export default function Layout({ children }) {
     })();
   }, [dispatch, isAuth, userInfo?.email, userInfo?.id]);
   // console.log(isAuth);
+
+  
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        try {
+          const resVouchers = await axios.get(
+            `/api/admin/voucher?product_name=${productName}&collected&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+          );
+          dispatch(fetchVouchers({ ...resVouchers?.data }));
+          console.log(resVouchers);
+          // console.log(resPocs)
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, productName, search, take]);
 
   if (!isAuth) {
     return (

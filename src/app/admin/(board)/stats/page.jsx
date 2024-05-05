@@ -16,8 +16,18 @@ export default function Stats() {
   const { products } = useSelector((state) => state.products);
   const { personnels } = useSelector((state) => state.personnels);
   const { pocs } = useSelector((state) => state.pocs);
+  const { queuedVouchers, approvedVouchers, collectedVouchers } = useSelector(
+    (state) => state.vouchers
+  );
   const { count, data } = products;
-  // console.log(customers);
+  console.log(
+    "queue:",
+    queuedVouchers,
+    "approved:",
+    approvedVouchers,
+    "collected:",
+    collectedVouchers
+  );
 
   const renderProducts = () => {
     // const renderCustomers = () => {
