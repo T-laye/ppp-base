@@ -2,11 +2,17 @@
 import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useEffect, useState } from "react";
 import UvcList from "@/components/UvcList";
+import GoBack from "@/components/GoBack";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function UsedVoucher() {
   const [term, setTerm] = useState("");
   const [product, setProduct] = useState("");
   const [date, setDate] = useState("");
+  const dispatch = useDispatch();
+  const { collectedVouchers } = useSelector((state) => state.vouchers);
+
+  // console.log(vouchers);
 
   const handleChange = (e) => {
     setTerm(e.target.value);
@@ -18,12 +24,24 @@ export default function UsedVoucher() {
     setDate(e.target.value);
   };
 
-  // console.log(product);
-  // console.log(term);
-  // console.log(date);
+  const renderUsedVouchers = () => {
+    return collectedVouchers?.data?.map((v, i) => {
+      return (
+        <UvcList
+          key={i}
+          name={v?.customer?.name}
+          id={v?.id}
+          product={v?.product?.productName}
+        />
+      );
+    });
+  };
 
   return (
     <section className="pt-5 pb-20">
+      <div className="mt-4">
+        <GoBack />
+      </div>
       <h4 className="font-medium text-base mt-2 text-center">Used Vouchers</h4>
 
       <div className="mt-4">
@@ -60,17 +78,10 @@ export default function UsedVoucher() {
           />
         </div>
       </div>
-      <div className="text-end text-sm text-gray-600 font-medium mt-4">09</div>
-      <div className="mt-2">
-        <UvcList />
-        <UvcList />
-        <UvcList />
-        <UvcList />
-        <UvcList />
-        <UvcList />
-        <UvcList />
-        <UvcList />
+      <div className="text-end text-sm text-gray-600 font-medium mt-4">
+        {collectedVouchers?.count || 0}
       </div>
+      <div className="mt-2">{renderUsedVouchers()}</div>
     </section>
   );
 }

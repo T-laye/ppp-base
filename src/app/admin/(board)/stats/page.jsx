@@ -82,13 +82,13 @@ export default function Stats() {
           <StatsCard
             link="/admin/vouchers"
             color="bg-yellow-500"
-            number={334}
+            number={queuedVouchers?.count ?? 0}
             title="Queue"
             icon={<IoMdTimer size={24} />}
           />
           <StatsCard
             link="/admin/vouchers"
-            number={34}
+            number={approvedVouchers?.count ?? 0}
             color="bg-primary"
             title="Approved"
             icon={<IoCheckmarkDoneCircle size={24} />}
@@ -96,7 +96,7 @@ export default function Stats() {
 
           <StatsCard
             link="/admin/stats/usedVoucher"
-            number={3440}
+            number={collectedVouchers?.count ?? 0}
             color="bg-customGray"
             title="Used Vouchers"
             icon={<MdVerifiedUser size={24} />}

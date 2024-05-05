@@ -140,7 +140,7 @@ export default function Layout({ children }) {
       if (isAuth) {
         try {
           const resQueueVouchers = await axios.get(
-            `/api/admin/voucher?product_name=${productName}&collected=false&av4D=false&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+            `/api/admin/voucher?product_name=${productName}&collected&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
           );
           dispatch(fetchQueuedVouchers({ ...resQueueVouchers?.data }));
           // console.log(resQueueVouchers);
@@ -159,7 +159,7 @@ export default function Layout({ children }) {
       if (isAuth) {
         try {
           const resApprovedVouchers = await axios.get(
-            `/api/admin/voucher?product_name=${productName}&collected=false&av4D=true&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+            `/api/admin/voucher?product_name=${productName}&collected&av4D=true&customer=${search}&take=${take}&pageNumber=${pageNumber}`
           );
           dispatch(fetchApprovedVouchers({ ...resApprovedVouchers?.data }));
           // console.log(resApprovedVouchers);
@@ -178,7 +178,7 @@ export default function Layout({ children }) {
       if (isAuth) {
         try {
           const resCollectedVouchers = await axios.get(
-            `/api/admin/voucher?product_name=${productName}&collected=true&av4D=true&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+            `/api/admin/voucher?product_name=${productName}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
           );
           dispatch(fetchCollectedVouchers({ ...resCollectedVouchers?.data }));
           // console.log(resCollectedVouchers);
