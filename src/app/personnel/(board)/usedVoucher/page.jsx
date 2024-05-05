@@ -10,9 +10,9 @@ export default function UsedVoucher() {
   const [product, setProduct] = useState("");
   const [date, setDate] = useState("");
   const dispatch = useDispatch();
-  const { vouchers } = useSelector((state) => state.vouchers);
+  const { collectedVouchers } = useSelector((state) => state.vouchers);
 
-  console.log(vouchers);
+  // console.log(vouchers);
 
   const handleChange = (e) => {
     setTerm(e.target.value);
@@ -25,7 +25,7 @@ export default function UsedVoucher() {
   };
 
   const renderUsedVouchers = () => {
-    return vouchers?.data?.map((v, i) => {
+    return collectedVouchers?.data?.map((v, i) => {
       return (
         <UvcList
           key={i}
@@ -79,7 +79,7 @@ export default function UsedVoucher() {
         </div>
       </div>
       <div className="text-end text-sm text-gray-600 font-medium mt-4">
-        {vouchers?.count || 0}
+        {collectedVouchers?.count || 0}
       </div>
       <div className="mt-2">{renderUsedVouchers()}</div>
     </section>

@@ -26,6 +26,7 @@ export default function Verify() {
   const [data, setData] = useState({});
   const router = useRouter();
   const { worker } = useSelector((state) => state.worker);
+  const { userInfo } = useSelector((state) => state.auth);
   const personnelPocData = worker?.personnel_poc_data
     ?.map((p) => p.poc_name)
     .flat();
@@ -80,6 +81,7 @@ export default function Verify() {
         thirdParty: values.third_party,
         thirdPartyName: values.pick_up_person,
         thirdPartyPhoneNumber: values.phone_of_pick_up_person,
+        personnelId: userInfo?.id,
       });
 
       console.log(res);

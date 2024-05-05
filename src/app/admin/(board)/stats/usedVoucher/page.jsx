@@ -10,9 +10,9 @@ export default function UsedVoucher() {
   const [product, setProduct] = useState("");
   const [date, setDate] = useState("");
   const dispatch = useDispatch();
-  const { collectedVouchers } = useSelector((state) => state.vouchers);
+  const { collectedVouchers, vouchers } = useSelector((state) => state.vouchers);
 
-  // console.log(vouchers);
+  console.log(vouchers);
 
   const handleChange = (e) => {
     setTerm(e.target.value);
