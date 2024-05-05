@@ -32,8 +32,6 @@ export async function PATCH(req, context) {
     const poc_name = searchParams.get("name");
     const phoneNumber = searchParams.get("phoneNumber");
     const address = searchParams.get("address");
-    const stockLimit = Number(searchParams.get("stockLimit"));
-    const stockAvailable = Number(searchParams.get("stockAvailable"));
 
     if (user_email) {
       const findUser = await prisma.user.findUnique({
@@ -85,8 +83,6 @@ export async function PATCH(req, context) {
         email: email ? email : undefined,
         name: poc_name ? poc_name : undefined,
         phoneNumber: phoneNumber ? phoneNumber : undefined,
-        stockAvailable: stockAvailable ? stockAvailable : undefined,
-        stockLimit: stockLimit ? stockLimit : undefined,
         ...(productId
           ? { product: { connect: { id: productId } } }
           : undefined),
@@ -130,11 +126,6 @@ export async function DELETE(req, context) {
     const getPocById = await prisma.pointOfConsumption.findUnique({
       where: {
         id: getPocId,
-      },
-      include: {
-        product: true,
-        management: true,
-        personnel: true,
       },
     });
     if (!getPocById) {

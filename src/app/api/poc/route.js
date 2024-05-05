@@ -27,9 +27,7 @@ export async function POST(req, res) {
       address,
       email,
       product_name,
-      stockLimit,
       product_unit,
-      stockAvailable,
       voucher_allocation,
     } = body;
     const createPOC = await prisma.pointOfConsumption.create({
@@ -54,8 +52,6 @@ export async function POST(req, res) {
               },
             }
           : undefined),
-        stockAvailable,
-        stockLimit,
         user: {
           connect: {
             id: authResponse.user.id,
