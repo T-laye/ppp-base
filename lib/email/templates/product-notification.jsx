@@ -18,7 +18,7 @@ export const ProductNotificationEmail = ({
   productAvailable,
   product,
   poc,
-  address
+  address,
 }) => (
   <Html>
     <Head />
@@ -27,9 +27,9 @@ export const ProductNotificationEmail = ({
       <Container style={container}>
         <Text style={paragraph}>Hi {name},</Text>
         <Text style={paragraph}>
-          The {product} product at has reached it's stock limit{stockLimit}, the
-          product availability is {productAvailable} for this following poc:{" "}
-          {poc} located at {address}.
+          The {product} product has reached it&apos;s stock limit{stockLimit},
+          the product currently available is {productAvailable} for {poc} POC
+          located at {address}.
         </Text>
         <Text style={paragraph}>
           Best,

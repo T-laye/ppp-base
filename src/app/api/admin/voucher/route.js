@@ -10,7 +10,6 @@ import VoucherCreationEmail from "../../../../../lib/email/templates/voucher-cre
 
 async function checkVoucherListAction({ productId }) {
   try {
-    const voucherMap = new Map()
     const vCount = await prisma.voucher.count({
       where: {
         product: {
