@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import ApiResponseDto from "../../../../../../lib/apiResponseHelper";
 import { getAuthUser } from "../../../../../../lib/get-auth-user";
 import { isVoucherValidHelper } from "../../../../../../lib/hashHelper";
+import { sendEmailHelper } from "../../../../../../lib/email/email-transport";
+import ProductNotificationEmail from "../../../../../../lib/email/templates/product-notification";
 
 export async function POST(req, res) {
   try {
@@ -28,6 +30,67 @@ export async function POST(req, res) {
       personnelId,
     } = body;
 
+    const checkAvailability = await prisma.voucher.findUnique({
+      where: {
+        voucherCode: voucherCode,
+      },
+      include: {
+        product: {
+          include: {
+            poc: {
+              include: {
+                user: true,
+                personnel: {
+                  include: {
+                    user: true,
+                  },
+                },
+                management: {
+                  include: {
+                    user: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+    if (
+      checkAvailability.product.stockAvailable <=
+      checkAvailability.product.stockLimit
+    ) {
+      const emailArr = [];
+      switch (true) {
+        case checkAvailability?.product?.poc[0]?.user:
+          emailArr.push(checkAvailability?.product?.poc[0]?.user);
+          break;
+        case checkAvailability?.product?.poc[0]?.management:
+          for (const m of checkAvailability?.product?.poc[0]?.management) {
+            if (m?.user) {
+              emailArr.push(m?.user);
+            }
+          }
+          break;
+        case checkAvailability?.product?.poc[0]?.personnel:
+          emailArr.push(checkAvailability?.product?.poc[0]?.personnel?.user);
+        default:
+          break;
+      }
+      // for (const e of emailArr) {
+      //   await sendEmailHelper({
+      //     email: e.email,
+      //     Body: ProductNotificationEmail({
+      //       name: e.name?.split(" ")[0],
+      //       poc: checkAvailability.product?.poc[0]?.name,
+      //       address: checkAvailability?.product?.poc[0]?.address,
+      //       product: checkAvailability?.product?.productName,
+      //       productAvailable: checkAvailability?.product?.stockAvailable,
+      //       stockLimit: checkAvailability?.product?.stockLimit,
+      //     }),
+      //   });
+      // }
+    }
     const createVDispenseData = await prisma.voucherDispense.create({
       data: {
         dateUsed: new Date().toISOString(),
@@ -54,38 +117,26 @@ export async function POST(req, res) {
         },
         voucher: {
           connect: {
-            voucherCode: voucherCode,
+            id: checkAvailability.id,
           },
         },
       },
     });
-    const getP = await prisma.voucher.findUnique({
-      where: {
-        voucherCode: voucherCode,
-      },
-      include: {
-        product: true,
-      },
-    });
-    if (getP.product.stockLimit <= getP.product.stockAvailable) {
-      // send email
-    }
+
     await prisma.voucher.update({
       where: {
-        voucherCode: voucherCode,
+        id: checkAvailability.id,
       },
       data: {
-        collected: true,
         product: {
           update: {
             stockAvailable:
-              getP.product.voucherAllocation - getP.product.stockAvailable,
+              checkAvailability.product.stockAvailable -
+              checkAvailability.product.voucherAllocation,
           },
         },
       },
     });
-    
-
     const data = ApiResponseDto({
       message: "successful",
       statusCode: 200,
@@ -113,9 +164,7 @@ export async function GET(req, res) {
       );
     }
     const code = searchParams.get("code");
-    // verify the code
     const verifyVoucher = await isVoucherValidHelper(code);
-
     if (verifyVoucher.error) {
       return NextResponse.json({
         message: verifyVoucher.message,

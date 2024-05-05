@@ -31,15 +31,17 @@ const VoucherCreationEmail = ({ firstName }) => {
               fontSize: "16px",
               lineHeight: "26px",
               fontWeight: " 500",
+              textTransform: "capitalize",
             }}
           >
-            Dear {firstName[0].toUpperCase() + firstName.slice(1)},
+            Dear {firstName},
           </Text>
           <Text style={paragraph}>
             This mail is to notify you that the deposit for your voucher was
             received and processed successfully.
             <br />
-            Going forward, a <span style={{fontWeight: "bold"}}>
+            Going forward, a{" "}
+            <span style={{ fontWeight: "bold" }}>
               REQUEST FOR DISCOUNT APPROVAL (RFDA)
             </span>{" "}
             has been raised on your behalf and you will be notified once your

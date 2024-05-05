@@ -294,7 +294,7 @@ export async function GET(req, res) {
       : 10;
     const verifiedBy = searchParams.get("verifiedBy");
     const product = searchParams.get("product_name");
-    const collected = Boolean(searchParams.get("collected"));
+    const collected = searchParams.get("collected");
     const customer = searchParams.get("customer");
     const av4D = searchParams.get("av4D");
     const totalCount = await prisma.voucher.count();
