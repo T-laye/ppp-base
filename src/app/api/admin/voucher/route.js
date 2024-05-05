@@ -7,6 +7,7 @@ import { sendEmailHelper } from "../../../../../lib/email/email-transport";
 import VoucherApprovalNotification from "../../../../../lib/email/templates/voucher-approval";
 import VoucherCreationEmail from "../../../../../lib/email/templates/voucher-creation";
 
+
 async function checkVoucherListAction({ productId }) {
   try {
     const vCount = await prisma.voucher.count({
@@ -24,12 +25,14 @@ async function checkVoucherListAction({ productId }) {
           product: {
             id: productId,
           },
+          availableForDispense: false,
+          approvedByAdmin: false
         },
         include: {
           customer: true,
         },
       });
-      if (oldestCustomer.is3FirstTime === true) {
+      if (oldestCustomer) {
         const updateCustomer = await prisma.voucher.update({
           where: {
             id: oldestCustomer.id,
@@ -338,9 +341,7 @@ export async function GET(req, res) {
           ? {
               voucherDispense: {
                 verifiedBy: {
-                  user: {
-                    id: verifiedBy,
-                  },
+                  id: verifiedBy,
                 },
               },
             }
@@ -348,10 +349,16 @@ export async function GET(req, res) {
       },
       include: {
         customer: true,
-        product: {
+        product: true,
+        voucherDispense: {
           include: {
-            poc: true
-          }
+            poc: true,
+            verifiedBy: {
+              include: {
+                user: true,
+              },
+            },
+          },
         },
       },
       take: take,
@@ -363,7 +370,7 @@ export async function GET(req, res) {
     const data = ApiResponseDto({
       message: "successful",
       statusCode: 200,
-      data:getAllVouchers,
+      data: getAllVouchers,
       count: getAllVouchers.length,
     });
     return NextResponse.json(data, {
