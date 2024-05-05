@@ -31,9 +31,10 @@ const VoucherApprovalNotification = ({ firstName, voucherCode }) => {
               fontSize: "16px",
               lineHeight: "26px",
               fontWeight: " 500",
+              textTransform: "capitalize",
             }}
           >
-            Dear {firstName[0].toUpperCase() + firstName.slice(1)},
+            Dear {firstName},
           </Text>
           <Text style={paragraph}>
             Your voucher has been approved and you can proceed to pick up your
