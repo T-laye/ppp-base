@@ -70,8 +70,6 @@ model PointOfConsumption {
   updatedAt       DateTime         @default(now()) @updatedAt
   personnelId     String?          @unique
   managementId    String?
-  stockLimit      Int
-  stockAvailable  Int
   customer        Customer[]
   product         Product[]        @relation(name: "POCProducts")
   user            User             @relation(fields: [createdBy], references: [id])
@@ -93,6 +91,8 @@ model Product {
   poc               PointOfConsumption[] @relation(name: "POCProducts")
   pocId             String?
   createdBy         String
+  stockAvailable  Int?
+  stockLimit      Int?
 
   @@index([productName, id])
 }
