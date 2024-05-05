@@ -128,6 +128,7 @@ export async function POST(req, res) {
         id: checkAvailability.id,
       },
       data: {
+        collected: true,
         product: {
           update: {
             stockAvailable:
