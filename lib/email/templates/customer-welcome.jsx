@@ -148,7 +148,10 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
             </ol>
           </Text>
           <Section style={btnContainer}>
-            <Button style={button} href={`https://ppp-base.com.ng/${token}`}>
+            <Button
+              style={button}
+              href={`https://ppp-base.com.ng/verification/${token}`}
+            >
               Agree To Terms and Conditions
             </Button>
           </Section>

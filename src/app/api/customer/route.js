@@ -61,14 +61,14 @@ export async function POST(req, res) {
         verificationToken: getVToken.hash,
       },
     });
-    // const sendEmail = await sendEmailHelper({
-    //   email: addCustomer.email,
-    //   subject: "Customer Welcome",
-    //   Body: CustomerWelcomeEmail({
-    //     firstName: name.split(" ")[0],
-    //     token: addCustomer.verificationToken,
-    //   }),
-    // });
+    const sendEmail = await sendEmailHelper({
+      email: addCustomer.email,
+      subject: "Customer Welcome",
+      Body: CustomerWelcomeEmail({
+        firstName: name.split(" ")[0],
+        token: addCustomer.verificationToken,
+      }),
+    });
     const newCustomer = {
       ...addCustomer,
       image: `data:image/jpeg;base64,${addCustomer?.profilePicture?.toString(

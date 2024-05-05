@@ -19,7 +19,12 @@ import { setCredentials } from "@/redux/slices/authSlice";
 import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
 import { fetchPersonnels } from "@/redux/slices/fetchPersonnelsSlice";
 import { fetchPocs } from "@/redux/slices/fetchPocsSlice";
-import { fetchVouchers } from "@/redux/slices/fetchVouchersSlice";
+import {
+  fetchApprovedVouchers,
+  fetchCollectedVouchers,
+  fetchQueuedVouchers,
+  fetchVouchers,
+} from "@/redux/slices/fetchVouchersSlice";
 // import { useGetCustomersMutation } from "@/redux/slices/takeSlice";
 
 export default function Layout({ children }) {
@@ -70,7 +75,7 @@ export default function Layout({ children }) {
           `/api/customer?take=${take}&pageNumber=${pageNumber}&name=${search}`
         );
         dispatch(fetchCustomers({ ...resCustomers?.data }));
-        console.log(resCustomers);
+        // console.log(resCustomers);
       } else {
         return;
       }
@@ -120,6 +125,63 @@ export default function Layout({ children }) {
           );
           dispatch(fetchVouchers({ ...resVouchers?.data }));
           // console.log(resVouchers);
+          // console.log(resPocs)
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, productName, search, take]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        try {
+          const resQueueVouchers = await axios.get(
+            `/api/admin/voucher?product_name=${productName}&collected&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+          );
+          dispatch(fetchQueuedVouchers({ ...resQueueVouchers?.data }));
+          // console.log(resQueueVouchers);
+          // console.log(resPocs)
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, productName, search, take]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        try {
+          const resApprovedVouchers = await axios.get(
+            `/api/admin/voucher?product_name=${productName}&collected&av4D=true&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+          );
+          dispatch(fetchApprovedVouchers({ ...resApprovedVouchers?.data }));
+          // console.log(resApprovedVouchers);
+          // console.log(resPocs)
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, productName, search, take]);
+
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        try {
+          const resCollectedVouchers = await axios.get(
+            `/api/admin/voucher?product_name=${productName}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+          );
+          dispatch(fetchCollectedVouchers({ ...resCollectedVouchers?.data }));
+          // console.log(resCollectedVouchers);
           // console.log(resPocs)
         } catch (e) {
           console.log(e);

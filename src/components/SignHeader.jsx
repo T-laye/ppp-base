@@ -12,7 +12,7 @@ export default function SignHeader({ signInPage }) {
   };
 
   return (
-    <header className="bg-white h-[7vh] shadow-sm px-4 flex justify-between items-center">
+    <header className=" lg:max-w-2xl mx-auto bg-white h-14 fixed top-0 left-0 right-0 shadow-sm  z-10">
       <Logo />
       <div>
         {/* <button onClick={goToSignUp} className="btn bg-primary">

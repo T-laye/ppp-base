@@ -16,8 +16,18 @@ export default function Stats() {
   const { products } = useSelector((state) => state.products);
   const { personnels } = useSelector((state) => state.personnels);
   const { pocs } = useSelector((state) => state.pocs);
+  const { queuedVouchers, approvedVouchers, collectedVouchers } = useSelector(
+    (state) => state.vouchers
+  );
   const { count, data } = products;
-  // console.log(customers);
+  console.log(
+    "queue:",
+    queuedVouchers,
+    "approved:",
+    approvedVouchers,
+    "collected:",
+    collectedVouchers
+  );
 
   const renderProducts = () => {
     // const renderCustomers = () => {
@@ -72,13 +82,13 @@ export default function Stats() {
           <StatsCard
             link="/admin/vouchers"
             color="bg-yellow-500"
-            number={334}
+            number={queuedVouchers?.count ?? 0}
             title="Queue"
             icon={<IoMdTimer size={24} />}
           />
           <StatsCard
             link="/admin/vouchers"
-            number={34}
+            number={approvedVouchers?.count ?? 0}
             color="bg-primary"
             title="Approved"
             icon={<IoCheckmarkDoneCircle size={24} />}
@@ -86,7 +96,7 @@ export default function Stats() {
 
           <StatsCard
             link="/admin/stats/usedVoucher"
-            number={3440}
+            number={collectedVouchers?.count ?? 0}
             color="bg-customGray"
             title="Used Vouchers"
             icon={<MdVerifiedUser size={24} />}
