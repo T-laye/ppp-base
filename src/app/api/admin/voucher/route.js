@@ -342,9 +342,7 @@ export async function GET(req, res) {
           ? {
               voucherDispense: {
                 verifiedBy: {
-                  user: {
-                    id: verifiedBy,
-                  },
+                  id: verifiedBy,
                 },
               },
             }
@@ -352,9 +350,15 @@ export async function GET(req, res) {
       },
       include: {
         customer: true,
-        product: {
+        product: true,
+        voucherDispense: {
           include: {
             poc: true,
+            verifiedBy: {
+              include: {
+                user: true,
+              },
+            },
           },
         },
       },

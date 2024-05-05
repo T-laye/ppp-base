@@ -110,9 +110,7 @@ export async function POST(req, res) {
           : undefined),
         verifiedBy: {
           connect: {
-            user: {
-              id: personnelId,
-            },
+            id: personnelId
           },
         },
         voucher: {
