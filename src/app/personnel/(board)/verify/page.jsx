@@ -30,11 +30,17 @@ export default function Verify() {
   const personnelPocData = worker?.personnel_poc_data
     ?.map((p) => p.poc_name)
     .flat();
+  const personnel = worker?.personnel_poc_data
+    ?.map((p) => p.personnelId)
+    .flat();
   const personnelPocId = worker?.personnel_poc_data
     ?.map((p) => p.poc_id)
     .flat();
 
-  // console.log(personnelPocId?.[0]);
+  const personnelId = personnel?.[0];
+
+  console.log(personnelId);
+  // console.log(worker);
   const voucherLength = 11;
 
   const formik = useFormik({
@@ -81,7 +87,7 @@ export default function Verify() {
         thirdParty: values.third_party,
         thirdPartyName: values.pick_up_person,
         thirdPartyPhoneNumber: values.phone_of_pick_up_person,
-        personnelId: userInfo?.id,
+        personnelId,
       });
 
       console.log(res);

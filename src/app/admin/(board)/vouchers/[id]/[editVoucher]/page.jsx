@@ -34,52 +34,6 @@ export default function Page() {
   useEffect(() => {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
-
-  useEffect(() => {
-    if (!isEditable) {
-      // Create a copy of the existing formik values
-      const updatedValues = { ...formik.values };
-
-      // Update only the values that are not changed by the user
-      // if (!formik.touched.name) {
-      //   updatedValues.name = hustleDetails.name;
-      // }
-      // if (!formik.touched.email) {
-      //   updatedValues.email = hustleDetails.email;
-      // }
-      // if (!formik.touched.address) {
-      //   updatedValues.address = user.address;
-      // }
-      // if (!formik.touched.personnel) {
-      //   updatedValues.personnel = user.personnel;
-      // }
-      // if (!formik.touched.product) {
-      //   updatedValues.product = user.product;
-      // }
-      // if (!formik.touched.linit) {
-      //   updatedValues.linit = hustleDetails.linit;
-      // }
-      // if (!formik.touched.hustle) {
-      //   updatedValues.hustle = hustleDetails.hustle;
-      // }
-      // if (!formik.touched.address) {
-      //   updatedValues.address = user.address;
-      // }
-      // if (!formik.touched.businessPhone) {
-      //   updatedValues.businessPhone = hustleDetails.businessPhone;
-      // }
-      // if (!formik.touched.link) {
-      //   updatedValues.link = hustleDetails.link;
-      // }
-      // if (!formik.touched.hustleDescription) {
-      //   updatedValues.hustleDescription = hustleDetails.hustleDescription;
-      // }
-
-      // Update the formik values with the modified copy
-      // formik.setValues(updatedValues);
-    }
-  }, [formik.values, isEditable]);
-
   async function handleSubmit(values) {
     // const { email, password } = values;
     console.log(values);
