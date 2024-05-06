@@ -29,8 +29,9 @@ export default function Vouchers() {
   useEffect(() => {
     const activeProduct = products?.data?.find((p, i) => i === activeTab);
     setActiveTabProduct(activeProduct?.name?.toLowerCase());
+    dispatch(handleProductName(activeProduct?.name?.toLowerCase()));
     // console.log(activeProduct);
-  }, [activeTab, products]);
+  }, [activeTab, dispatch, products]);
 
   const handleProduct = () => {
     setApproved(!approved);
@@ -104,6 +105,7 @@ export default function Vouchers() {
     }
   };
 
+
   const renderVouchers = () => {
     if (voucherList?.data) {
       if (voucherList?.data?.length === 0) {
@@ -120,6 +122,7 @@ export default function Vouchers() {
             <VoucherList
               key={i}
               name={capitalizeWords(c.customer?.name)}
+              id={c?.id}
               index={i}
               approved={approved}
             />
@@ -138,6 +141,7 @@ export default function Vouchers() {
               key={i}
               name={capitalizeWords(c.customer?.name)}
               index={i}
+              id={c?.id}
             />
           ));
       }
@@ -145,7 +149,7 @@ export default function Vouchers() {
       return <Loading />;
     }
   };
-  console.log(voucherList);
+  // console.log(voucherList);
 
   return (
     <section className="relative min-h-screen bg-green300 py-4">
