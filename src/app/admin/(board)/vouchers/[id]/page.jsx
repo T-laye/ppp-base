@@ -27,7 +27,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const { voucher } = useSelector((state) => state.voucher);
 
-  console.log(voucher.createdAt);
+  console.log(voucher);
 
   const editVoucher = () => {
     router.push(`/admin/vouchers/${id}/editVoucher`);
@@ -40,6 +40,7 @@ export default function Page() {
         //   `/api/admin/voucher?product_name=${productName}&verifiedBy=${personnelId}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
         // );
         const res = await axios.get(`/api/admin/voucher/verify/${id}`);
+        console.log(res);
         if (res.data.data) {
           console.log(res.data);
           dispatch(getVoucher({ ...res.data.data }));
@@ -150,9 +151,9 @@ export default function Page() {
                 Edit Voucher
               </button> */}
 
-              <button className="btn bg-primary w-full mt-5">
+              {/* <button className="btn bg-primary w-full mt-5">
                 Approve Voucher
-              </button>
+              </button> */}
               <button className="btn bg-error w-full mt-5">
                 Delete Voucher
               </button>
