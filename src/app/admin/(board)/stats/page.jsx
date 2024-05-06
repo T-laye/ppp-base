@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import QuantityCards from "../../components/QuantityCards";
 import StatsCard from "../../components/StatsCard";
 import { GiGasPump } from "react-icons/gi";
@@ -7,11 +7,13 @@ import { FaUsers } from "react-icons/fa";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import { IoMdTimer } from "react-icons/io";
 import { MdVerifiedUser } from "react-icons/md";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loading from "@/components/Loading";
 import { BsPersonFillGear } from "react-icons/bs";
+import { handleProductName } from "@/redux/slices/variableSlice";
 
 export default function Stats() {
+  const dispatch = useDispatch();
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
   const { personnels } = useSelector((state) => state.personnels);
@@ -20,14 +22,18 @@ export default function Stats() {
     (state) => state.vouchers
   );
   const { count, data } = products;
-  console.log(
-    "queue:",
-    queuedVouchers,
-    "approved:",
-    approvedVouchers,
-    "collected:",
-    collectedVouchers
-  );
+  // console.log(
+  //   "queue:",
+  //   queuedVouchers,
+  //   "approved:",
+  //   approvedVouchers,
+  //   "collected:",
+  //   collectedVouchers
+  // );
+
+  useEffect(() => {
+    dispatch(handleProductName(""));
+  }, [dispatch]);
 
   const renderProducts = () => {
     // const renderCustomers = () => {

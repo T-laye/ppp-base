@@ -32,7 +32,7 @@ export default function UsedVoucher() {
           name={v?.customer?.name}
           id={v?.id}
           product={v?.product?.productName}
-          date={v?.createdAt}
+          date={v?.voucherDispense?.dateUsed}
         />
       );
     });

@@ -65,7 +65,7 @@ export default function Page() {
     // Parse the date string
     const date = new Date(dateString);
     // console.log(date);
-    if (name) {
+    if (voucher.voucherDispense) {
       const dateOptions = {
         weekday: "long",
         year: "numeric",
@@ -97,7 +97,7 @@ export default function Page() {
             <div className="h-48 w-48 mt-5 rounded-lg overflow-hidden mx-auto">
               <Image
                 className="h-full w-full object-cover"
-                src=""
+                src={voucher?.customer?.profilePicture}
                 alt={voucher?.customer?.name}
                 height={500}
                 width={500}
@@ -131,42 +131,69 @@ export default function Page() {
               />
               <DetailList
                 title="Product"
-                value={capitalizeWords(voucher?.product?.productName)}
+                value={capitalizeWords(voucher?.product?.name)}
                 icon={<ImDroplet size={16} />}
               />
               <DetailList
                 title="Amount Allocated"
-                value={voucher?.product?.voucherAllocation}
+                value={voucher?.product?.voucherAllocated}
                 icon={<MdAssignmentTurnedIn size={16} />}
               />
               <DetailList
                 title="Point of Collection"
-                value="Matrix Fueling Station"
+                value={capitalizeWords(voucher?.voucherDispense?.poc?.name)}
                 icon={<BsFillFuelPumpDieselFill size={16} />}
               />
               <DetailList
+                title="Verified By"
+                value={capitalizeWords(
+                  voucher?.voucherDispense?.verifiedBy?.user?.name
+                )}
+                icon={<FaUser size={16} />}
+              />
+              <DetailList
+                title="Phone of Verified By"
+                value={capitalizeWords(
+                  voucher?.voucherDispense?.verifiedBy?.user?.phoneNumber
+                )}
+                icon={<BsFillTelephoneFill size={16} />}
+              />
+              <DetailList
+                title="Dispensed On"
+                value={formatDate(voucher?.voucherDispense?.dateUsed)}
+                icon={<BsFillTelephoneFill size={16} />}
+              />
+              <DetailList
                 title="Third Party"
-                value="Yes"
+                value={voucher?.voucherDispense?.thirdParty ? "Yes" : "No"}
                 icon={<BsPeopleFill size={16} />}
               />
               <DetailList
                 title="Name of Pick up Person"
-                value="Jonathan James"
+                value={
+                  voucher?.voucherDispense?.thirdParty
+                    ? capitalizeWords(voucher?.voucherDispense?.thirdPartyName)
+                    : capitalizeWords(voucher?.customer?.name)
+                }
                 icon={<FaUser size={16} />}
               />
               <DetailList
                 title="Vehicle Type"
-                value="Rolls Royce"
+                value={voucher?.voucherDispense?.vehicleType}
                 icon={<FaCarSide size={16} />}
               />
               <DetailList
                 title="Vehicle Plate Number"
-                value="DV-677"
+                value={voucher?.voucherDispense?.vehicleNumber}
                 icon={<FaBarcode size={16} />}
               />
               <DetailList
                 title="Phone Number of Pick Up Person"
-                value="09070292748"
+                value={
+                  voucher?.voucherDispense?.thirdParty
+                    ? voucher?.voucherDispense?.thirdPartyPhone
+                    : voucher?.customer?.phoneNumber
+                }
                 icon={<BsFillTelephoneFill size={16} />}
               />
             </div>

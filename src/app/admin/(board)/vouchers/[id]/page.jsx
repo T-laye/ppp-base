@@ -1,7 +1,7 @@
 "use client";
 import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ImDroplet } from "react-icons/im";
 import { MdAssignmentTurnedIn } from "react-icons/md";
 import { TbRulerMeasure } from "react-icons/tb";
@@ -20,17 +20,33 @@ import { getVoucher } from "@/redux/slices/getVoucherSlice";
 import Image from "next/image";
 import Loading from "@/components/Loading";
 import { IoIosTime } from "react-icons/io";
+import Loader from "@/components/Loader";
+import { toast } from "react-toastify";
 
 export default function Page() {
+  const [loading, setLoading] = useState();
   const router = useRouter();
   const { id } = useParams();
   const dispatch = useDispatch();
   const { voucher } = useSelector((state) => state.voucher);
 
-  console.log(voucher);
+  // console.log(voucher);
 
-  const editVoucher = () => {
-    router.push(`/admin/vouchers/${id}/editVoucher`);
+  const deleteVoucher = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.delete(`/api/admin/voucher/verify/${id}`);
+      console.log(res);
+      if (res.data) {
+        setLoading(false);
+        console.log(res.data);
+        dispatch(getVoucher({ ...res.data.data }));
+        router.back();
+        toast.success(res.data.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -71,7 +87,7 @@ export default function Page() {
     // Parse the date string
     const date = new Date(dateString);
     // console.log(date);
-    if (voucher?.createdAt) {
+    if (voucher?.createdDate) {
       const dateOptions = {
         weekday: "long",
         year: "numeric",
@@ -103,7 +119,7 @@ export default function Page() {
             <div className="h-48 w-48 mt-5 rounded-lg overflow-hidden mx-auto">
               <Image
                 className="h-full w-full object-cover"
-                src=""
+                src={voucher?.customer?.profilePicture}
                 alt={voucher?.customer?.name}
                 height={500}
                 width={500}
@@ -132,12 +148,12 @@ export default function Page() {
               />
               <DetailList
                 title="Product"
-                value={capitalizeWords(voucher?.product?.productName)}
+                value={capitalizeWords(voucher?.product?.name)}
                 icon={<ImDroplet size={16} />}
               />
               <DetailList
                 title="Created At"
-                value={formatDate(voucher?.createdAt)}
+                value={formatDate(voucher?.createdDate)}
                 // value={voucher?.createdAt}
                 icon={<IoIosTime size={16} />}
               />
@@ -154,8 +170,16 @@ export default function Page() {
               {/* <button className="btn bg-primary w-full mt-5">
                 Approve Voucher
               </button> */}
-              <button className="btn bg-error w-full mt-5">
-                Delete Voucher
+              
+              <button
+                onClick={deleteVoucher}
+                className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
+                  loading ? "bg-customGray" : "bg-error"
+                } `}
+                disabled={loading}
+              >
+                
+                {loading ? <Loader /> : "Delete Voucher"}
               </button>
             </div>
           </>
