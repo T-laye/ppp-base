@@ -89,6 +89,7 @@ export async function GET(req, res) {
       statusCode: 200,
       data: getAll,
       count: totalCount,
+      totalPages: totalPages
     });
     return NextResponse.json(data, {
       status: 200,
