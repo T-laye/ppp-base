@@ -37,21 +37,16 @@ export default function Page() {
   const { customer } = useSelector((state) => state.customer);
   const dispatch = useDispatch();
   const [previewImage, setPreviewImage] = useState(null);
-  // const [editCustomer, { isLoading, error }] = useEditCustomerMutation();
-
-  // console.log(customer);
 
   useEffect(() => {
     const getCustomerDetails = async () => {
       const res = await axios.get(`/api/customer/${id}`);
 
-      // console.log(res);
       dispatch(getCustomer({ ...res.data.data }));
     };
 
     getCustomerDetails();
   }, [dispatch, id]);
-  // console.log(isEditable);
 
   const formik = useFormik({
     initialValues: {
