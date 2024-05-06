@@ -27,30 +27,38 @@ export async function PATCH(req, context) {
       where: {
         id: getVoucherId,
       },
-      include: {
-        customer: true,
-      },
     });
 
-    if (findV) {
-      await prisma.voucher.update({
-        where: {
-          id: findV.id,
-        },
-        data: {
-          approvedByAdmin: true,
-          availableForDispense: true,
-          is3FirstTime: false,
-          is4FirstTime: false,
-        },
-      });
-      // send the email for voucher notification
-      await sendVoucherEmailNotification({
-        customerName: findV.customer.name,
-        email: findV.customer.email,
-        voucherCode: findV.voucherCode,
-      });
+    if (!findV) {
+      return NextResponse.json(
+        { message: "the voucher sent does not exist" },
+        { status: 404 }
+      );
     }
+    const updateV = await prisma.voucher.update({
+      where: {
+        id: findV.id,
+      },
+      data: {
+        approvedByAdmin: true,
+        availableForDispense: true,
+        is3FirstTime: false,
+        is4FirstTime: false,
+      },
+      include: {
+        customer: true,
+        product: true,
+      },
+    });
+    // await sendVoucherEmailNotification({
+    //   customerName: updateV.customer.name,
+    //   email: updateV.customer.email,
+    //   voucherCode: updateV.voucherCode,
+    // });
+    return NextResponse.json(
+      { message: "voucher update was successful" },
+      { status: 200 }
+    );
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500 });
   }
@@ -218,10 +226,13 @@ export async function DELETE(req, context) {
     }
     await prisma.voucher.delete({
       where: {
-        id: getVoucherId
+        id: getVoucherId,
       },
-    })
-    return NextResponse.json({ message: "successfully deleted voucher" }, { status: 200});
+    });
+    return NextResponse.json(
+      { message: "successfully deleted voucher" },
+      { status: 200 }
+    );
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500 });
   }
