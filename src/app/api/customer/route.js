@@ -203,6 +203,7 @@ export async function GET(req, res) {
       })),
       statusCode: 200,
       count: totalCount,
+      totalPages: totalPages
     });
     return NextResponse.json(resData, { status: 200 });
   } catch (err) {
