@@ -155,6 +155,7 @@ export async function GET(req, res) {
         message: "successful",
         data: getPoc,
         count: totalCount,
+        totalPages: totalPages
       },
       { status: 200 }
     );

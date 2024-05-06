@@ -140,6 +140,7 @@ export async function GET(req, res) {
         })),
       })),
       count: totalCount,
+      totalPages: totalPages,
       statusCode: 200,
     });
     return NextResponse.json(resData, { status: 200 });
