@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "react-toastify";
 
 export default function VoucherList({ id, name, index, approved }) {
   const router = useRouter();
@@ -14,8 +15,10 @@ export default function VoucherList({ id, name, index, approved }) {
   const approveVoucherManually = async () => {
     try {
       const res = await axios.patch(`/api/admin/voucher/verify/${id}`);
-      if (res){
-      console.log(res)
+      if (res) {
+        console.log(res);
+        toast.success(res.data.message);
+        window.location.reload();
       }
     } catch (err) {
       console.error(err);

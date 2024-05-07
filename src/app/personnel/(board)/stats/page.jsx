@@ -13,9 +13,10 @@ import { useSelector } from "react-redux";
 
 export default function Stats() {
   const { worker } = useSelector((state) => state.worker);
+  const { collectedVouchers } = useSelector((state) => state.vouchers);
   const personnelPocData = worker?.personnel_poc_data?.map((p) => p).flat();
-  console.log(personnelPocData);
 
+  console.log(personnelPocData);
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
     let words = sentence?.split(" ");
@@ -60,7 +61,7 @@ export default function Stats() {
             icon={<PiDropFill size={24} />}
           />
           <StatsCard
-            number={3440}
+            number={collectedVouchers?.count ?? 0}
             color="bg-customGray"
             title="Used Vouchers"
             icon={<MdVerifiedUser size={24} />}

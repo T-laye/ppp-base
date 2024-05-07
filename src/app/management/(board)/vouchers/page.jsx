@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import VoucherList from "../../components/VoucherList";
 import CustomerList from "../../components/CustomerList";
 import { MdOutlineCancel } from "react-icons/md";
-import { handleSearch } from "@/redux/slices/variableSlice";
+import { handleProductName, handleSearch } from "@/redux/slices/variableSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "@/components/Loading";
 
@@ -18,17 +18,20 @@ export default function Vouchers() {
   const [customerTerm, setCustomerTerm] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
-  const { vouchers } = useSelector((state) => state.vouchers);
+  const { queuedVouchers, approvedVouchers, vouchers } = useSelector(
+    (state) => state.vouchers
+  );
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
 
-  // console.log(customers);
+  const voucherList = approved ? approvedVouchers : queuedVouchers;
 
   useEffect(() => {
     const activeProduct = products?.data?.find((p, i) => i === activeTab);
     setActiveTabProduct(activeProduct?.name?.toLowerCase());
+    dispatch(handleProductName(activeProduct?.name?.toLowerCase()));
     // console.log(activeProduct);
-  }, [activeTab, products]);
+  }, [activeTab, dispatch, products]);
 
   const handleProduct = () => {
     setApproved(!approved);
@@ -74,7 +77,10 @@ export default function Vouchers() {
       return (
         <div
           key={i}
-          onClick={() => setTab(i)}
+          onClick={() => {
+            setTab(i);
+            dispatch(handleProductName(p.name));
+          }}
           className={`${
             activeTab === i ? "bg-primary text-white" : "border text-gray-400 "
           }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
@@ -100,11 +106,11 @@ export default function Vouchers() {
   };
 
   const renderVouchers = () => {
-    if (vouchers?.data) {
-      if (vouchers?.data?.length === 0) {
+    if (voucherList?.data) {
+      if (voucherList?.data?.length === 0) {
         return <p>No Voucher Found</p>;
       } else if (approved) {
-        return vouchers?.data
+        return voucherList?.data
           ?.filter(
             (v) =>
               v?.product?.productName?.toLowerCase() === activeTabProduct &&
@@ -115,12 +121,13 @@ export default function Vouchers() {
             <VoucherList
               key={i}
               name={capitalizeWords(c.customer?.name)}
+              id={c?.id}
               index={i}
               approved={approved}
             />
           ));
       } else {
-        return vouchers?.data
+        return voucherList?.data
           ?.filter(
             (v) =>
               v?.product?.productName?.toLowerCase() === activeTabProduct &&
@@ -129,10 +136,11 @@ export default function Vouchers() {
           .reverse()
           .map((c, i) => (
             <VoucherList
-            approved={approved}
+              approved={approved}
               key={i}
               name={capitalizeWords(c.customer?.name)}
               index={i}
+              id={c?.id}
             />
           ));
       }
@@ -140,7 +148,7 @@ export default function Vouchers() {
       return <Loading />;
     }
   };
-  console.log(vouchers);
+  // console.log(voucherList);
 
   return (
     <section className="relative min-h-screen bg-green300 py-4">
@@ -210,7 +218,7 @@ export default function Vouchers() {
           </div>
         </form>
         <div className="text-end mt-3 text-sm text-gray-500 pr-2">
-          {vouchers.count ?? 0}
+          {voucherList.count ?? 0}
         </div>
 
         <div className="bg-gren-400 pt-3 pb-10">
