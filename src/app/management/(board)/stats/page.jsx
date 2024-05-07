@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import QuantityCards from "../../components/QuantityCards";
 import StatsCard from "../../components/StatsCard";
 import { GiGasPump } from "react-icons/gi";
@@ -9,23 +9,30 @@ import { IoMdTimer } from "react-icons/io";
 import { MdVerifiedUser } from "react-icons/md";
 import { PiDropFill } from "react-icons/pi";
 import PocList from "../../components/PocList";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { handleProductName } from "@/redux/slices/variableSlice";
 
 export default function Stats() {
   const [activeTab, setActiveTab] = useState("");
+  const dispatch = useDispatch();
   const { worker } = useSelector((state) => state.worker);
   const { products } = useSelector((state) => state.products);
+  const { collectedVouchers } = useSelector((state) => state.vouchers);
   const managementDetails = worker?.management?.map((p) => p.poc);
   const pocs = managementDetails?.map((p) => p).flat();
   const pocProducts = pocs?.map((p) => p.products).flat();
 
-  // console.log(pocs);
+  useEffect(() => {
+    dispatch(handleProductName(""));
+  }, [dispatch]);
+  console.log(pocs);
 
   const setTab = (tab) => {
     setActiveTab(tab);
-    console.log(tab);
+    // console.log(tab);
   };
   const renderPoc = () => {
+   
     return pocs?.map((p, i) => {
       const productsInPoc = p?.products.map((p) => p).flat();
       const productNames = productsInPoc.map((p) =>
@@ -126,7 +133,7 @@ export default function Stats() {
           />
           <StatsCard
             link="/management/stats/usedVoucher"
-            number={3440}
+            number={collectedVouchers?.count ?? 0}
             color="bg-customGray"
             title="Used Voucher"
             icon={<MdVerifiedUser size={24} />}
