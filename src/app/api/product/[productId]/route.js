@@ -81,16 +81,15 @@ export async function PATCH(req, context) {
     const unit = searchParams.get("unit");
     const voucherAllocation = searchParams.get("voucherAllocation");
     const pocId = searchParams.get("pocId");
-    const stockAvailable = Number(searchParams.get("stockAvailable"));
-    const stockLimit = Number(searchParams.get("stockLimit"));
+
     const addJ = {
       productName: name ? name : undefined,
       unit: unit ? unit : undefined,
       voucherAllocation: voucherAllocation
         ? Number(voucherAllocation)
         : undefined,
-      stockAvailable: stockAvailable ? stockAvailable : undefined,
-      stockLimit: stockLimit ? stockLimit : undefined,
+      stockAvailable: stockAvailable ? Number(stockAvailable) : undefined,
+      stockLimit: stockLimit ? Number(stockLimit) : undefined,
     };
 
     const updateProduct = await prisma.product.update({
