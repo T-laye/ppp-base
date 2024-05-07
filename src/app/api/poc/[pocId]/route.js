@@ -108,8 +108,8 @@ export async function PATCH(req, context) {
                           stockAvailable:
                             getProduct.stockAvailable === null
                               ? Number(productValue)
-                              : getProduct.stockAvailable +
-                                Number(productValue),
+                              : Number(productValue) +
+                                getProduct.stockAvailable,
                           stockLimit: stockLimit
                             ? Number(stockLimit)
                             : undefined,
