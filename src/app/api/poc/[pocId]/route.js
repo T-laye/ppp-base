@@ -32,6 +32,9 @@ export async function PATCH(req, context) {
     const poc_name = searchParams.get("name");
     const phoneNumber = searchParams.get("phoneNumber");
     const address = searchParams.get("address");
+    const voucher_allocation = searchParams.get("voucher_allocation");
+    const productValue = searchParams.get("product_value");
+    const stockLimit = searchParams.get("stockLimit");
 
     if (user_email) {
       const findUser = await prisma.user.findUnique({
@@ -73,6 +76,11 @@ export async function PATCH(req, context) {
         { status: 200 }
       );
     }
+    const getProduct = await prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
 
     const updatePoc = await prisma.pointOfConsumption.update({
       where: {
@@ -84,7 +92,33 @@ export async function PATCH(req, context) {
         name: poc_name ? poc_name : undefined,
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         ...(productId
-          ? { product: { connect: { id: productId } } }
+          ? {
+              product: {
+                connect: { id: productId },
+                ...(productValue || stockLimit || voucher_allocation
+                  ? {
+                      update: {
+                        where: {
+                          id: productId,
+                        },
+                        data: {
+                          voucherAllocation: voucher_allocation
+                            ? Number(voucher_allocation)
+                            : undefined,
+                          stockAvailable:
+                            getProduct.stockAvailable === null
+                              ? Number(productValue)
+                              : getProduct.stockAvailable +
+                                Number(productValue),
+                          stockLimit: stockLimit
+                            ? Number(stockLimit)
+                            : undefined,
+                        },
+                      },
+                    }
+                  : undefined),
+              },
+            }
           : undefined),
       },
     });

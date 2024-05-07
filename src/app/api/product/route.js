@@ -17,13 +17,13 @@ export async function POST(req, res) {
       );
     }
     const body = await req.json();
-    const { name, unit, voucherAllocation, stockAvailable, stockLimit, pocId } =
+    const { name, unit, voucherAllocation, pocId } =
       body;
     const createProduct = await prisma.product.create({
       data: {
         productName: name.toLowerCase(),
         unit,
-        voucherAllocation,
+        voucherAllocation: Number(voucherAllocation),
         ...(pocId
           ? {
               poc: {
@@ -38,8 +38,6 @@ export async function POST(req, res) {
             id: authRes.user.id,
           },
         },
-        stockAvailable: stockAvailable,
-        stockLimit: stockLimit,
       },
     });
     const createResponse = ApiResponseDto({

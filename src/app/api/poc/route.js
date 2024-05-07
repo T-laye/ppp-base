@@ -42,7 +42,7 @@ export async function POST(req, res) {
                 create: {
                   productName: product_name.toLowerCase(),
                   unit: product_unit,
-                  voucherAllocation: voucher_allocation,
+                  voucherAllocation: Number(voucher_allocation),
                   user: {
                     connect: {
                       id: authResponse.user.id,
