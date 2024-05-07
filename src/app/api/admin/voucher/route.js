@@ -6,7 +6,7 @@ import { generateVoucherCode } from "../../../../../lib/hashHelper";
 import { sendEmailHelper } from "../../../../../lib/email/email-transport";
 import VoucherApprovalNotification from "../../../../../lib/email/templates/voucher-approval";
 import VoucherCreationEmail from "../../../../../lib/email/templates/voucher-creation";
-
+import { endOfDay, isValid } from "date-fns";
 
 async function checkVoucherListAction({ productId }) {
   try {
@@ -26,7 +26,7 @@ async function checkVoucherListAction({ productId }) {
             id: productId,
           },
           availableForDispense: false,
-          approvedByAdmin: false
+          approvedByAdmin: false,
         },
         include: {
           customer: true,
@@ -299,6 +299,7 @@ export async function GET(req, res) {
     const product = searchParams.get("product_name");
     const collected = searchParams.get("collected");
     const customer = searchParams.get("customer");
+    const date = searchParams.get("date");
     const av4D = searchParams.get("av4D");
     const totalCount = await prisma.voucher.count();
     if (take || pageNumber) {
@@ -327,8 +328,27 @@ export async function GET(req, res) {
         { status: 400 }
       );
     }
+
+    if (!isValid(new Date(date))) {
+      return NextResponse.json(
+        {
+          message:
+            "the date format is not correct, date is supposed to be of type YYYY-MM-DD",
+          error: "invalid date format",
+        },
+        { status: 400 }
+      );
+    }
     const getAllVouchers = await prisma.voucher.findMany({
       where: {
+        ...(date
+          ? {
+              createdAt: {
+                gte: new Date(date).toISOString(),
+                lt: endOfDay(new Date(date)),
+              },
+            }
+          : undefined),
         product: {
           productName: product ? { contains: product } : {},
         },
@@ -348,7 +368,15 @@ export async function GET(req, res) {
           : undefined),
       },
       include: {
-        customer: true,
+        customer: {
+          select: {
+            name: true,
+            id: true,
+            phoneNumber: true,
+            email: true,
+            address: true,
+          },
+        },
         product: true,
         voucherDispense: {
           include: {
