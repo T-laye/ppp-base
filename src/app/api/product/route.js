@@ -124,6 +124,7 @@ export async function GET(req, res) {
         stockAvailable: v?.stockAvailable,
         poc_id: v?.poc?.id,
         poc_name: v?.poc?.name,
+        product_capacity: v?.capacity,
         poc_address: v?.poc?.address,
         poc_phoneNumber: v?.poc?.phoneNumber,
         poc_stockAvailable: v?.poc?.stockAvailable,

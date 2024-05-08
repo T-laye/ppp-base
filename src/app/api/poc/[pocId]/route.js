@@ -32,6 +32,7 @@ export async function PATCH(req, context) {
     const poc_name = searchParams.get("name");
     const phoneNumber = searchParams.get("phoneNumber");
     const address = searchParams.get("address");
+    const capacity = searchParams.get("capacity");
     const voucher_allocation = searchParams.get("voucher_allocation");
     const productValue = searchParams.get("product_value");
     const stockLimit = searchParams.get("stockLimit");
@@ -76,11 +77,6 @@ export async function PATCH(req, context) {
         { status: 200 }
       );
     }
-    const getProduct = await prisma.product.findUnique({
-      where: {
-        id: productId,
-      },
-    });
 
     const updatePoc = await prisma.pointOfConsumption.update({
       where: {
@@ -105,14 +101,13 @@ export async function PATCH(req, context) {
                           voucherAllocation: voucher_allocation
                             ? Number(voucher_allocation)
                             : undefined,
-                          stockAvailable:
-                            getProduct.stockAvailable === null
-                              ? Number(productValue)
-                              : Number(productValue) +
-                                getProduct.stockAvailable,
+                          stockAvailable: productValue
+                            ? Number(productValue)
+                            : undefined,
                           stockLimit: stockLimit
                             ? Number(stockLimit)
                             : undefined,
+                          capacity: capacity ? Number(capacity) : undefined,
                         },
                       },
                     }
