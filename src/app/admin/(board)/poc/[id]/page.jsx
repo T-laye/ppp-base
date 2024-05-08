@@ -31,7 +31,7 @@ export default function Page() {
   const { poc } = useSelector((state) => state.poc);
   const { personnels } = useSelector((state) => state.personnels);
   const { pageNumber, take, pocName } = useSelector((state) => state.variables);
-  // console.log(poc, id);
+  console.log(poc);
 
   const editPOC = () => {
     router.push(`/admin/poc/${id}/editPoc`);
@@ -121,24 +121,22 @@ export default function Page() {
         .map((p) => p.name); // Assuming 'name' is the property containing the person's name
 
       // Joining the names with commas
-      const formattedNames = assignedPersonnelNames.join(", ");
+      const formattedNames = assignedPersonnelNames?.join(", ");
 
       return formattedNames;
     }
   };
 
- const renderAssignedProducts = () => {
-  if (poc?.product?.length > 0) {
-    const productNames = poc.product.map((p) => p.productName); // Assuming 'name' is the property containing the product name
-    
-    // Joining the product names with commas
-    const formattedProductNames = productNames.join(', ');
+  const renderAssignedProducts = () => {
+    if (poc?.product?.length > 0) {
+      const productNames = poc?.product?.map((p) => p.productName); // Assuming 'name' is the property containing the product name
 
-    return formattedProductNames;
-  }     
-};
+      // Joining the product names with commas
+      const formattedProductNames = productNames?.join(", ");
 
-
+      return formattedProductNames;
+    }
+  };
 
   return (
     <section className="min-h-screen pt-8 pb-20">
@@ -187,13 +185,13 @@ export default function Page() {
               value={capitalizeWords(renderAssignedProducts())}
               icon={<ImDroplet size={16} />}
             />
-            <DetailList
+            {/* <DetailList
               title="Amount Allocated"
               value={250}
               icon={<MdAssignmentTurnedIn size={18} />}
-            />
+            /> */}
 
-            <div className="flex gap-2 items-end">
+            {/* <div className="flex gap-2 items-end">
               <DetailList
                 title="Available"
                 value={poc?.stockAvailable}
@@ -204,7 +202,7 @@ export default function Page() {
                 value={poc?.stockLimit}
                 icon={<ImDroplet size={16} />}
               />
-            </div>
+            </div> */}
             <DetailList
               title="Total Product Dispensed"
               value=""

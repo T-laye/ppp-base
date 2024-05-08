@@ -3,7 +3,11 @@ import React, { useState } from "react";
 import { BiSearchAlt2 } from "react-icons/bi";
 import PocList from "../../components/PocList";
 import { useSelector, useDispatch } from "react-redux";
-import { handlePocName, handleProductName, handleSearch } from "@/redux/slices/variableSlice";
+import {
+  handlePocName,
+  handleProductName,
+  handleSearch,
+} from "@/redux/slices/variableSlice";
 import Loading from "@/components/Loading";
 
 export default function Poc() {
@@ -13,6 +17,9 @@ export default function Poc() {
   const { products } = useSelector((state) => state.products);
   const { pocs } = useSelector((state) => state.pocs);
   const { data, count } = products;
+
+  console.log(pocs);
+
   const setTab = (tab) => {
     setActiveTab(tab);
   };
@@ -83,7 +90,6 @@ export default function Poc() {
       return <Loading />;
     }
   };
-
 
   const handleChange = (e) => {
     setTerm(e.target.value);

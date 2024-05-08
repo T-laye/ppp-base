@@ -27,8 +27,8 @@ export default function NewPoc() {
       phone: "",
       address: "",
       // product_name: "",
-      limit: 0,
-      available: 0,
+      // limit: 0,
+      // available: 0,
       // allocation: "", // Initialize allocation here
       // unit: "", // Initialize allocation here
     },
@@ -50,7 +50,7 @@ export default function NewPoc() {
   }, [product]);
 
   async function handleSubmit(values, { resetForm }) {
-    const { name, email, phone, address, limit, available } =
+    const { name, email, phone, address } =
       values;
     try {
       const res = await addPoc({
@@ -59,9 +59,9 @@ export default function NewPoc() {
         address,
         email,
         // product_name: product.productName,
-        stockLimit: limit,
+        // stockLimit: limit,
         // product_unit: unit,
-        stockAvailable: available,
+        // stockAvailable: available,
         // voucher_allocation: allocation, // Use values.allocation here
       }).unwrap();
       // console.log(res);
@@ -259,7 +259,7 @@ export default function NewPoc() {
                   </div>
                 )}
               </div> */}
-              <div className="flex flex-col mb-4">
+              {/* <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="limit">
                   Stock Limit Level
                 </label>
@@ -294,7 +294,7 @@ export default function NewPoc() {
                     {formik.errors.available}
                   </div>
                 )}
-              </div>
+              </div> */}
               {/* <div className="flex flex-col mb-4">
                 <label className="text-sm mb-2" htmlFor="allocation">
                   Voucher Allocation
