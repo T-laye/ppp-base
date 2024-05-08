@@ -36,6 +36,7 @@ export async function PATCH(req, context) {
     const voucher_allocation = searchParams.get("voucher_allocation");
     const productValue = searchParams.get("product_value");
     const stockLimit = searchParams.get("stockLimit");
+    const updateValue = searchParams.get("editAllocation");
 
     if (user_email) {
       const findUser = await prisma.user.findUnique({
@@ -77,11 +78,25 @@ export async function PATCH(req, context) {
         { status: 200 }
       );
     }
-    const getProduct = await prisma.product.findUnique({
-      where: {
-        id: productId,
-      },
-    });
+
+    if (updateValue === "true") {
+      const u = await prisma.productAllocation.update({
+        where: {
+          product: {
+            id: productId,
+          },
+          poc: {
+            id: getPocId,
+          },
+        },
+        data: {
+          capacity: capacity ? Number(capacity) : undefined,
+          stockLimit: stockLimit ? Number(stockLimit) : undefined,
+          stockAvailable: productValue ? Number(productValue) : undefined,
+        },
+      });
+      return NextResponse.json({message: 'successful', data: u})
+    }
 
     const updatePoc = await prisma.pointOfConsumption.update({
       where: {
@@ -94,9 +109,23 @@ export async function PATCH(req, context) {
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         ...(productId
           ? {
+              productAllocation: {
+                create: {
+                  capacity: capacity ? Number(capacity) : undefined,
+                  stockLimit: stockLimit ? Number(stockLimit) : undefined,
+                  stockAvailable: productValue
+                    ? Number(productValue)
+                    : undefined,
+                  product: {
+                    connect: {
+                      id: productId,
+                    },
+                  },
+                },
+              },
               product: {
                 connect: { id: productId },
-                ...(productValue || stockLimit || voucher_allocation
+                ...(voucher_allocation
                   ? {
                       update: {
                         where: {
@@ -106,13 +135,6 @@ export async function PATCH(req, context) {
                           voucherAllocation: voucher_allocation
                             ? Number(voucher_allocation)
                             : undefined,
-                          stockAvailable: productValue
-                            ? Number(productValue)
-                            : undefined,
-                          stockLimit: stockLimit
-                            ? Number(stockLimit)
-                            : undefined,
-                          capacity: capacity ? Number(capacity) : undefined,
                         },
                       },
                     }
@@ -122,6 +144,7 @@ export async function PATCH(req, context) {
           : undefined),
       },
     });
+
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,

@@ -20,8 +20,9 @@ export async function POST(req, res) {
     }
     const body = await req.json();
     const {
+      allocationId,
+      productId,
       pocId,
-      voucherCode,
       vehicleType,
       vehicleNumber,
       thirdParty,
@@ -30,50 +31,55 @@ export async function POST(req, res) {
       personnelId,
     } = body;
 
-    const checkAvailability = await prisma.voucher.findUnique({
+    const getP = await prisma.productAllocation.findUnique({
       where: {
-        voucherCode: voucherCode,
+        id: allocationId,
+        poc: {
+          id: pocId
+        },
+        product: {
+          id: productId
+        }
       },
       include: {
-        product: {
+        product: true,
+        poc: {
           include: {
-            poc: {
+            user: true,
+            personnel: {
               include: {
                 user: true,
-                personnel: {
-                  include: {
-                    user: true,
-                  },
-                },
-                management: {
-                  include: {
-                    user: true,
-                  },
-                },
               },
             },
-          },
-        },
-      },
-    });
+            management: {
+              include: {
+                user: true
+              }
+            }
+          }
+        }
+      }
+    })
+
     if (
-      checkAvailability.product.stockAvailable <=
-      checkAvailability.product.stockLimit
+      getP.stockAvailable <=
+      getP.stockLimit
     ) {
+      
       const emailArr = [];
       switch (true) {
-        case checkAvailability?.product?.poc[0]?.user:
-          emailArr.push(checkAvailability?.product?.poc[0]?.user);
+        case getP?.poc?.user:
+          emailArr.push(getP?.poc?.user);
           break;
-        case checkAvailability?.product?.poc[0]?.management:
-          for (const m of checkAvailability?.product?.poc[0]?.management) {
+        case getP?.poc.management:
+          for (const m of getP?.poc?.management) {
             if (m?.user) {
               emailArr.push(m?.user);
             }
           }
           break;
-        case checkAvailability?.product?.poc[0]?.personnel:
-          emailArr.push(checkAvailability?.product?.poc[0]?.personnel?.user);
+        case getP?.poc?.personnel:
+          emailArr.push(getP?.poc?.personnel?.user);
         default:
           break;
       }
@@ -121,21 +127,16 @@ export async function POST(req, res) {
       },
     });
 
-    await prisma.voucher.update({
+    await prisma.productAllocation.update({
       where: {
-        id: checkAvailability.id,
+        product: {
+          id: checkAvailability.product.id
+        }
       },
       data: {
-        collected: true,
-        product: {
-          update: {
-            stockAvailable:
-              checkAvailability.product.stockAvailable -
-              checkAvailability.product.voucherAllocation,
-          },
-        },
-      },
-    });
+        stockAvailable: getP?.stockAvailable - getP?.product?.voucherAllocation
+      }
+    })
     const data = ApiResponseDto({
       message: "successful",
       statusCode: 200,
