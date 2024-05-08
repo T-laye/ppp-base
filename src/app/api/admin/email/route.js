@@ -30,7 +30,7 @@ export async function PATCH(req, context) {
     const subject = searchParams.get("subject");
     const findEmail = await prisma.email.findUnique({
       where: {
-        type: email_type,
+        type: email_type.toUpperCase(),
       },
     });
     if (!findEmail) {
@@ -92,7 +92,7 @@ export async function POST(req, res) {
         body,
         subject,
         title,
-        type,
+        type: type.toUpperCase(),
       },
     });
     const createResponse = ApiResponseDto({
@@ -102,6 +102,49 @@ export async function POST(req, res) {
     return NextResponse.json(createResponse, {
       status: 201,
     });
+  } catch (err) {
+    return NextResponse.json({ message: err.message, status: 500 });
+  }
+}
+
+export async function GET(req, res) {
+  const searchParams = req.nextUrl.searchParams;
+  try {
+    const authResponse = await getAuthUser(req, true);
+    if (authResponse.error) {
+      return NextResponse.json(
+        ApiResponseDto({
+          statusCode: authResponse.status,
+          message: authResponse.error.message,
+        }),
+        { status: authResponse.status }
+      );
+    }
+    if (authResponse.user.role !== "ADMIN") {
+      return NextResponse.json(
+        ApiResponseDto({ message: "not allowed to access this route" }),
+        {
+          status: 403,
+        }
+      );
+    }
+
+    const email_type = searchParams.get("type");
+    const findEmail = await prisma.email.findUnique({
+      where: {
+        type: email_type.toUpperCase(),
+      },
+    });
+    if (!findEmail) {
+      return NextResponse.json(
+        { message: "EMAIL TYPE NOT FOUND" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(
+      { message: "successful", data: findEmail },
+      { status: 200 }
+    );
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500 });
   }
