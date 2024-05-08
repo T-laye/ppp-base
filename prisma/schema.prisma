@@ -93,6 +93,7 @@ model Product {
   createdBy         String
   stockAvailable  Int?
   stockLimit      Int?
+  capacity Int?
 
   @@index([productName, id])
 }
