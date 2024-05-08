@@ -77,6 +77,11 @@ export async function PATCH(req, context) {
         { status: 200 }
       );
     }
+    const getProduct = await prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
 
     const updatePoc = await prisma.pointOfConsumption.update({
       where: {

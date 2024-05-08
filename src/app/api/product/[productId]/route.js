@@ -82,7 +82,6 @@ export async function PATCH(req, context) {
     const voucherAllocation = searchParams.get("voucherAllocation");
     const pocId = searchParams.get("pocId");
     const capacity = searchParams.get("capacity")
-
     const addJ = {
       productName: name ? name : undefined,
       unit: unit ? unit : undefined,
