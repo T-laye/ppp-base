@@ -30,19 +30,31 @@ export default function Page() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
+  useEffect(() => {
+    const getEmail = async () => {
+      const res = await axios.get(
+        `/api/admin/email?type=${formik.values.email_template}`
+      );
+
+      console.log(res);
+    };
+
+    getEmail();
+  }, [formik.values.email_template]);
+
   async function handleSubmit(values) {
     setIsLoading(true);
     const { title, subject, body, email_template } = values;
     try {
-      const res = await axios.patch(
-        `/api/admin/email?type=${email_template}&body=${body}&title=${title}&subject=${subject}`
-      );
-      // const res = await axios.post("/api/admin/email", {
-      //   title,
-      //   subject,
-      //   body,
-      //   type: email_template,
-      // });
+      // const res = await axios.patch(
+      //   `/api/admin/email?type=${email_template}&body=${body}&title=${title}&subject=${subject}`
+      // );
+      const res = await axios.post("/api/admin/email", {
+        title,
+        subject,
+        body,
+        type: email_template,
+      });
       console.log(values);
       if (res) {
         console.log(res);

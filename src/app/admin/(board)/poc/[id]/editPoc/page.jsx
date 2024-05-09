@@ -20,7 +20,7 @@ export default function Page() {
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
 
-  console.log(poc);
+  // console.log(poc);
 
   useEffect(() => {
     const getPocDetails = async () => {
@@ -42,6 +42,7 @@ export default function Page() {
       product: "",
       limit: 0,
       available: 0,
+      capacity: 0,
     },
     validate: poc_validate,
     onSubmit: handleSubmit,
@@ -60,6 +61,7 @@ export default function Page() {
       const getProduct = poc?.product?.find((p) =>
         p.id.trim().includes(formik.values.product)
       );
+      formik.setFieldValue("capacity", getProduct?.capacity || 0);
       formik.setFieldValue("limit", getProduct?.stockLimit || 0);
       formik.setFieldValue("available", getProduct?.stockAvailable || 0);
     }
@@ -68,17 +70,19 @@ export default function Page() {
   // console.log(formik.values.product);
 
   async function handleSubmit(values) {
-    const { name, email, phone, address, limit, available, product } = values;
+    const { name, email, phone, address, limit, available, product, capacity } =
+      values;
     setIsLoading(true);
     try {
       const res = await axios.patch(
-        `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&product_value=${available}&productId=${product}`
+        `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&product_value=${available}&productId=${product}&capacity=${capacity}`
       );
-      console.log(res);
+      // console.log(res);
       if (res) {
         setIsLoading(false);
         toast.success(res.data.message);
         // router.back();
+        window.location.reload();
       }
       // console.log(values);
     } catch (e) {
@@ -213,21 +217,24 @@ export default function Page() {
               )}
             </div>
             <div className="flex flex-col mb-4">
-              <label className="text-sm mb-2" htmlFor="limit">
-                Stock Limit Level
+              <label className="text-sm mb-2" htmlFor="capacity">
+                Stock Capacity
               </label>
               <input
-                id="limit"
-                name="limit"
+                id="capacity"
+                name="capacity"
                 type="number"
-                placeholder="Enter Limit"
-                className={getInputClassNames("limit")}
-                {...formik.getFieldProps("limit")}
+                placeholder="Enter Capacity"
+                className={getInputClassNames("capacity")}
+                {...formik.getFieldProps("capacity")}
               />
-              {formik.touched.limit && formik.errors.limit && (
-                <div className="text-error text-sm">{formik.errors.limit}</div>
+              {formik.touched.capacity && formik.errors.capacity && (
+                <div className="text-error text-sm">
+                  {formik.errors.capacity}
+                </div>
               )}
             </div>
+
             <div className="flex flex-col mb-4">
               <label className="text-sm mb-2" htmlFor="available">
                 Stock Available
@@ -245,6 +252,22 @@ export default function Page() {
                 <div className="text-error text-sm">
                   {formik.errors.available}
                 </div>
+              )}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label className="text-sm mb-2" htmlFor="limit">
+                Stock Limit Level
+              </label>
+              <input
+                id="limit"
+                name="limit"
+                type="number"
+                placeholder="Enter Limit"
+                className={getInputClassNames("limit")}
+                {...formik.getFieldProps("limit")}
+              />
+              {formik.touched.limit && formik.errors.limit && (
+                <div className="text-error text-sm">{formik.errors.limit}</div>
               )}
             </div>
             {/* <div className="flex flex-col mb-4">

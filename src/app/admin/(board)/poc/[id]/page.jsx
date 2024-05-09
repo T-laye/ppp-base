@@ -31,7 +31,7 @@ export default function Page() {
   const { poc } = useSelector((state) => state.poc);
   const { personnels } = useSelector((state) => state.personnels);
   const { pageNumber, take, pocName } = useSelector((state) => state.variables);
-  console.log(poc);
+  // console.log(poc);
 
   const editPOC = () => {
     router.push(`/admin/poc/${id}/editPoc`);
@@ -91,7 +91,7 @@ export default function Page() {
     setIsLoading(true);
     try {
       const res = await axios.delete(`/api/poc/${id}`);
-      console.log(res);
+      // console.log(res);
       if (res) {
         const resPocs = await axios.get(
           `/api/poc?take=${take}&pageNumber=${pageNumber}&name=${pocName}`

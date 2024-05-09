@@ -1,50 +1,40 @@
-'use client'
+"use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import ProgressBar from "./ProgressBar";
 
-export default function PocList({ name, available, total , id}) {
-  const router = useRouter()
-  const percentage = (available / total) * 100;
+export default function PocList({ product, id, name }) {
+  const router = useRouter();
+  console.log(product);
 
-  const barProgress = () => {
-    const result = (available / total) * 100;
-    return `${Math.round(result)}%`;
-  };
-
-  const goToPoc = ()=>{
+  const goToPoc = () => {
     router.push(`/admin/poc/${id}`);
-  }
-  //   console.log(barProgress());
-
-  const barColor = () => {
-    if (percentage < 40) {
-      return "bg-error";
-    } else if (percentage >= 40 && percentage < 65) {
-      return "bg-yellow-400";
-    } else return "bg-primary";
   };
 
-  //   console.log(available);
-  //   console.log(percentage);
-  //   console.log(barProgress());
+  const renderProgressBar = () => {
+    return product?.map((p, i) => {
+      return (
+        <ProgressBar
+          key={i}
+          name={p?.productName}
+          available={p?.stockAvailable}
+          total={p?.capacity}
+          limit={p?.stockLimit}
+        />
+      );
+    });
+  };
 
   return (
     // <Link href="/admin/poc/[id]">
-      <li onClick={goToPoc} className="rounded-xl border px-4 pt-1 pb-4 border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive duration-200 mt-4 cursor-pointer">
-        <div className="flex justify-between items-end">
-          <h4 className="text-lg font-medium">{name}</h4>
-          <div className="text-base">
-            {available}/{total}
-          </div>
-        </div>
-        <div className="h-2 bg-gray-300 rounded-xl mt-4 overflow-hidden">
-          <div
-            style={{ width: barProgress() }}
-            className={`h-full rounded-xl w-[${barProgress()}%]   ${barColor()} `}
-          ></div>
-        </div>
-      </li>
+    <li
+      onClick={goToPoc}
+      className="rounded-xl border px-4 pt-2 pb-4 border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive duration-200 mt-4 cursor-pointer"
+    >
+      <h4 className="text-xl font-medium">{name}</h4>
+      {renderProgressBar()}
+    </li>
     // </Link>
   );
 }

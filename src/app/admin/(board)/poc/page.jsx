@@ -18,7 +18,7 @@ export default function Poc() {
   const { pocs } = useSelector((state) => state.pocs);
   const { data, count } = products;
 
-  console.log(pocs);
+  // console.log(pocs);
 
   const setTab = (tab) => {
     setActiveTab(tab);
@@ -78,11 +78,12 @@ export default function Poc() {
       } else {
         return pocs?.data?.map((p) => (
           <PocList
-            key={p.id}
-            name={p.name}
-            id={p.id}
-            available={p.stockLimit}
-            total={p.stockAvailable}
+            key={p?.id}
+            name={capitalizeWords(p?.name)}
+            id={p?.id}
+            product={p?.product}
+            // available={p.stockLimit}
+            // total={p.stockAvailable}
           />
         ));
       }
