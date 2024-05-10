@@ -67,6 +67,7 @@ export default function Page() {
       const res = await axios.patch(
         `/api/poc/${id}?user_email=${userEmail}&productId=${productId}`
       );
+      console.log(res)
       if (res) {
         toast.success("Successfully Assigned");
         // window.location.reload();

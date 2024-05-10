@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "PointOfConsumption" ALTER COLUMN "updatedAt" SET DATA TYPE TIMESTAMPTZ;
+
+-- AlterTable
+ALTER TABLE "Product" ALTER COLUMN "updatedAt" SET DATA TYPE TIMESTAMPTZ;

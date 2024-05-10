@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("PPP_BASE")
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -67,11 +67,10 @@ model PointOfConsumption {
   phoneNumber       String
   email             String              @unique
   createdAt         DateTime            @default(now()) @db.Timestamptz()
-  updatedAt         DateTime            @default(now()) @updatedAt
+  updatedAt         DateTime            @default(now()) @updatedAt @db.Timestamptz()
   personnelId       String?             @unique
   managementId      String?
   customer          Customer[]
-  product           Product[]           @relation(name: "POCProducts")
   user              User                @relation(fields: [createdBy], references: [id])
   createdBy         String
   VoucherDispense   VoucherDispense?
@@ -81,35 +80,35 @@ model PointOfConsumption {
 }
 
 model Product {
-  id                String               @id @default(uuid())
+  id                String              @id @default(uuid())
   productName       String
   voucherAllocation Int
   unit              String
-  createdAt         DateTime             @default(now()) @db.Timestamptz()
-  updatedAt         DateTime             @default(now()) @updatedAt
-  user              User                 @relation(fields: [createdBy], references: [id])
+  createdAt         DateTime            @default(now()) @db.Timestamptz()
+  updatedAt         DateTime            @default(now()) @updatedAt @db.Timestamptz()
+  user              User                @relation(fields: [createdBy], references: [id])
   voucher           Voucher[]
-  poc               PointOfConsumption[] @relation(name: "POCProducts")
   pocId             String?
   createdBy         String
-  productAllocation ProductAllocation?
+  productAllocation ProductAllocation[]
 
   @@index([productName, id])
 }
 
 model ProductAllocation {
   id             String             @id @default(uuid())
-  product        Product?            @relation(fields: [productId], references: [id])
-  poc            PointOfConsumption @relation(fields: [pocId], references: [id])
-  productId      String @unique
   createdAt      DateTime           @default(now()) @db.Timestamptz()
   updatedAt      DateTime           @default(now()) @updatedAt @db.Timestamptz()
-  pocId          String
   stockAvailable Int?
   stockLimit     Int?
   capacity       Int?
+  product        Product            @relation(fields: [productId], references: [id])
+  productId      String
+  poc            PointOfConsumption @relation(fields: [pocId], references: [id])
+  pocId          String
 
-  @@index([productId, pocId])
+  @@unique([pocId, productId])
+  @@index([id])
 }
 
 enum Gender {
