@@ -2,6 +2,7 @@ import { prisma } from "../../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../../lib/apiResponseHelper";
 import { getAuthUser } from "../../../../../lib/get-auth-user";
 import { NextResponse } from "next/server";
+import { v4 as uuidv4 } from "uuid";
 
 export async function PATCH(req, context) {
   try {
@@ -34,9 +35,9 @@ export async function PATCH(req, context) {
     const address = searchParams.get("address");
     const capacity = searchParams.get("capacity");
     const voucher_allocation = searchParams.get("voucher_allocation");
-    const productValue = searchParams.get("product_value");
+    const productValue = searchParams.get("stockAvailable");
     const stockLimit = searchParams.get("stockLimit");
-    const updateValue = searchParams.get("editAllocation");
+    const allocationId = searchParams.get("allocationId");
 
     if (user_email) {
       const findUser = await prisma.user.findUnique({
@@ -64,7 +65,9 @@ export async function PATCH(req, context) {
         },
         data: {
           ...(findUser.role === "MANAGEMENT"
-            ? { management: { connect: { id: getM.id } } }
+            ? {
+                managementId: getM.id,
+              }
             : { personnel: { connect: { id: getP.id } } }),
         },
       });
@@ -79,25 +82,6 @@ export async function PATCH(req, context) {
       );
     }
 
-    if (updateValue === "true") {
-      const u = await prisma.productAllocation.update({
-        where: {
-          product: {
-            id: productId,
-          },
-          poc: {
-            id: getPocId,
-          },
-        },
-        data: {
-          capacity: capacity ? Number(capacity) : undefined,
-          stockLimit: stockLimit ? Number(stockLimit) : undefined,
-          stockAvailable: productValue ? Number(productValue) : undefined,
-        },
-      });
-      return NextResponse.json({message: 'successful', data: u})
-    }
-
     const updatePoc = await prisma.pointOfConsumption.update({
       where: {
         id: getPocId,
@@ -110,16 +94,34 @@ export async function PATCH(req, context) {
         ...(productId
           ? {
               productAllocation: {
-                create: {
-                  capacity: capacity ? Number(capacity) : undefined,
-                  stockLimit: stockLimit ? Number(stockLimit) : undefined,
-                  stockAvailable: productValue
-                    ? Number(productValue)
-                    : undefined,
-                  product: {
-                    connect: {
+                upsert: {
+                  where: {
+                    id: allocationId ? allocationId : uuidv4(),
+                    product: {
                       id: productId,
                     },
+                    poc: {
+                      id: getPocId,
+                    },
+                  },
+                  create: {
+                    capacity: capacity ? Number(capacity) : undefined,
+                    stockLimit: stockLimit ? Number(stockLimit) : undefined,
+                    stockAvailable: productValue
+                      ? Number(productValue)
+                      : undefined,
+                    product: {
+                      connect: {
+                        id: productId,
+                      },
+                    },
+                  },
+                  update: {
+                    capacity: capacity ? Number(capacity) : undefined,
+                    stockLimit: stockLimit ? Number(stockLimit) : undefined,
+                    stockAvailable: productValue
+                      ? Number(productValue)
+                      : undefined,
                   },
                 },
               },
@@ -240,7 +242,11 @@ export async function GET(req, context) {
       include: {
         management: true,
         personnel: true,
-        product: true,
+        product: {
+          include: {
+            productAllocation: true,
+          },
+        },
       },
     });
     if (!getPocById) {

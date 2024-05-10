@@ -17,22 +17,13 @@ export async function POST(req, res) {
       );
     }
     const body = await req.json();
-    const { name, unit, voucherAllocation, pocId } =
+    const { name, unit, voucherAllocation } =
       body;
     const createProduct = await prisma.product.create({
       data: {
         productName: name.toLowerCase(),
         unit,
         voucherAllocation: Number(voucherAllocation),
-        ...(pocId
-          ? {
-              poc: {
-                connect: {
-                  id: pocId,
-                },
-              },
-            }
-          : undefined),
         user: {
           connect: {
             id: authRes.user.id,
