@@ -159,12 +159,6 @@ export async function POST(req, res) {
     const u = await prisma.productAllocation.update({
       where: {
         id: allocationId,
-        product: {
-          id: getP.product.id,
-        },
-        poc: {
-          id: getP.poc.id,
-        },
       },
       data: {
         stockAvailable: getP?.stockAvailable - getP?.product?.voucherAllocation,
