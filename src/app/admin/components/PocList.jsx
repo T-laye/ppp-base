@@ -18,9 +18,9 @@ export default function PocList({ product, id, name }) {
         <ProgressBar
           key={i}
           name={p?.productName}
-          available={p?.productAllocation[0]?.stockAvailable}
-          total={p?.productAllocation[0]?.capacity}
-          limit={p?.productAllocation[0]?.stockLimit}
+          available={p?.productAllocation?.stockAvailable}
+          total={p?.productAllocation?.capacity}
+          limit={p?.productAllocation?.stockLimit}
         />
       );
     });

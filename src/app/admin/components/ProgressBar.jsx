@@ -34,18 +34,22 @@ export default function ProgressBar({ available, total, name }) {
 
   return (
     <>
-      <div className="flex justify-between items-end mt-3">
-        <h4 className="text-lg">{capitalizeWords(name)}</h4>
-        <div className="text-base">
-          {available}/{total}
-        </div>
-      </div>
-      <div className="h-2 bg-gray-300 rounded-xl mt-2 overflow-hidden">
-        <div
-          style={{ width: barProgress() }}
-          className={`h-full rounded-xl w-[${barProgress()}%]   ${barColor()} `}
-        ></div>
-      </div>
+      {available && (
+        <>
+          <div className="flex justify-between items-end mt-3">
+            <h4 className="text-lg">{capitalizeWords(name)}</h4>
+            <div className="text-base">
+              {available ?? 0}/{total ?? 0}
+            </div>
+          </div>
+          <div className="h-2 bg-gray-300 rounded-xl mt-2 overflow-hidden">
+            <div
+              style={{ width: barProgress() }}
+              className={`h-full rounded-xl w-[${barProgress()}%]   ${barColor()} `}
+            ></div>
+          </div>
+        </>
+      )}
     </>
   );
 }

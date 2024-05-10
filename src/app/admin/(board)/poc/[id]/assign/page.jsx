@@ -37,7 +37,7 @@ export default function Page() {
 
     // const getAllAssignedPersonnelId = pocs?.data?.map((p) => p?.personnel?.userId);
     // console.log(getAllAssignedPersonnelId);
-  // console.log(pocs?.data);
+  console.log(poc);
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
@@ -69,8 +69,9 @@ export default function Page() {
       );
       if (res) {
         toast.success("Successfully Assigned");
-        window.location.reload();
+        // window.location.reload();
       }
+      console.log(res)
       setShowAssignModal(!showAssignModal);
     } catch (err) {
       // console.error(err);
@@ -84,7 +85,7 @@ export default function Page() {
         `/api/poc/manage/${id}?user_Id=${userid}&productId=${productId}`
       );
       if (res) {
-        toast.success("Successfully Remove");
+        toast.success("Successfully Removed");
         window.location.reload();
         // console.log(res)
       }
