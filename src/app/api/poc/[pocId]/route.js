@@ -2,6 +2,7 @@ import { prisma } from "../../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../../lib/apiResponseHelper";
 import { getAuthUser } from "../../../../../lib/get-auth-user";
 import { NextResponse } from "next/server";
+import { v4 as uuidv4 } from "uuid";
 
 export async function PATCH(req, context) {
   try {
@@ -34,8 +35,9 @@ export async function PATCH(req, context) {
     const address = searchParams.get("address");
     const capacity = searchParams.get("capacity");
     const voucher_allocation = searchParams.get("voucher_allocation");
-    const productValue = searchParams.get("product_value");
+    const productValue = searchParams.get("stockAvailable");
     const stockLimit = searchParams.get("stockLimit");
+    const allocationId = searchParams.get("allocationId");
 
     if (user_email) {
       const findUser = await prisma.user.findUnique({
@@ -63,7 +65,9 @@ export async function PATCH(req, context) {
         },
         data: {
           ...(findUser.role === "MANAGEMENT"
-            ? { management: { connect: { id: getM.id } } }
+            ? {
+                managementId: getM.id,
+              }
             : { personnel: { connect: { id: getP.id } } }),
         },
       });
@@ -77,11 +81,6 @@ export async function PATCH(req, context) {
         { status: 200 }
       );
     }
-    const getProduct = await prisma.product.findUnique({
-      where: {
-        id: productId,
-      },
-    });
 
     const updatePoc = await prisma.pointOfConsumption.update({
       where: {
@@ -94,9 +93,41 @@ export async function PATCH(req, context) {
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         ...(productId
           ? {
+              productAllocation: {
+                upsert: {
+                  where: {
+                    id: allocationId ? allocationId : uuidv4(),
+                    product: {
+                      id: productId,
+                    },
+                    poc: {
+                      id: getPocId,
+                    },
+                  },
+                  create: {
+                    capacity: capacity ? Number(capacity) : undefined,
+                    stockLimit: stockLimit ? Number(stockLimit) : undefined,
+                    stockAvailable: productValue
+                      ? Number(productValue)
+                      : undefined,
+                    product: {
+                      connect: {
+                        id: productId,
+                      },
+                    },
+                  },
+                  update: {
+                    capacity: capacity ? Number(capacity) : undefined,
+                    stockLimit: stockLimit ? Number(stockLimit) : undefined,
+                    stockAvailable: productValue
+                      ? Number(productValue)
+                      : undefined,
+                  },
+                },
+              },
               product: {
                 connect: { id: productId },
-                ...(productValue || stockLimit || voucher_allocation
+                ...(voucher_allocation
                   ? {
                       update: {
                         where: {
@@ -106,13 +137,6 @@ export async function PATCH(req, context) {
                           voucherAllocation: voucher_allocation
                             ? Number(voucher_allocation)
                             : undefined,
-                          stockAvailable: productValue
-                            ? Number(productValue)
-                            : undefined,
-                          stockLimit: stockLimit
-                            ? Number(stockLimit)
-                            : undefined,
-                          capacity: capacity ? Number(capacity) : undefined,
                         },
                       },
                     }
@@ -122,6 +146,7 @@ export async function PATCH(req, context) {
           : undefined),
       },
     });
+
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
@@ -217,7 +242,11 @@ export async function GET(req, context) {
       include: {
         management: true,
         personnel: true,
-        product: true,
+        product: {
+          include: {
+            productAllocation: true,
+          },
+        },
       },
     });
     if (!getPocById) {

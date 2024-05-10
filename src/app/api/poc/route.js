@@ -58,6 +58,9 @@ export async function POST(req, res) {
           },
         },
       },
+      include: {
+        productAllocation: true
+      }
     });
     const createResponse = ApiResponseDto({
       message: "poc added successfully",
@@ -134,7 +137,11 @@ export async function GET(req, res) {
         customer: true,
         management: true,
         personnel: true,
-        product: true,
+        product: {
+          include: {
+            productAllocation: true
+          }
+        },
       },
       take: take,
       skip: offset,

@@ -129,10 +129,10 @@ export async function GET(req, res) {
       );
     }
 
-    const email_type = searchParams.get("type");
+    const id = searchParams.get("id");
     const findEmail = await prisma.email.findUnique({
       where: {
-        type: email_type.toUpperCase(),
+        id: id,
       },
     });
     if (!findEmail) {

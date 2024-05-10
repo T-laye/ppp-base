@@ -59,22 +59,23 @@ enum Permission {
 }
 
 model PointOfConsumption {
-  id              String           @id @default(uuid())
-  personnel       Personnel?       @relation(fields: [personnelId], references: [id], onDelete: SetNull)
-  management      Management[]
-  address         String
-  name            String
-  phoneNumber     String
-  email           String           @unique
-  createdAt       DateTime         @default(now()) @db.Timestamptz()
-  updatedAt       DateTime         @default(now()) @updatedAt
-  personnelId     String?          @unique
-  managementId    String?
-  customer        Customer[]
-  product         Product[]        @relation(name: "POCProducts")
-  user            User             @relation(fields: [createdBy], references: [id])
-  createdBy       String
-  VoucherDispense VoucherDispense?
+  id                String              @id @default(uuid())
+  personnel         Personnel?          @relation(fields: [personnelId], references: [id], onDelete: SetNull)
+  management        Management[]
+  address           String
+  name              String
+  phoneNumber       String
+  email             String              @unique
+  createdAt         DateTime            @default(now()) @db.Timestamptz()
+  updatedAt         DateTime            @default(now()) @updatedAt
+  personnelId       String?             @unique
+  managementId      String?
+  customer          Customer[]
+  product           Product[]           @relation(name: "POCProducts")
+  user              User                @relation(fields: [createdBy], references: [id])
+  createdBy         String
+  VoucherDispense   VoucherDispense?
+  productAllocation ProductAllocation[]
 
   @@index([id, name])
 }
@@ -91,11 +92,24 @@ model Product {
   poc               PointOfConsumption[] @relation(name: "POCProducts")
   pocId             String?
   createdBy         String
-  stockAvailable  Int?
-  stockLimit      Int?
-  capacity Int?
+  productAllocation ProductAllocation[]
 
   @@index([productName, id])
+}
+
+model ProductAllocation {
+  id             String             @id @default(uuid())
+  product        Product            @relation(fields: [productId], references: [id])
+  poc            PointOfConsumption @relation(fields: [pocId], references: [id])
+  productId      String
+  createdAt      DateTime           @default(now()) @db.Timestamptz()
+  updatedAt      DateTime           @default(now()) @updatedAt
+  pocId          String
+  stockAvailable Int?
+  stockLimit     Int?
+  capacity       Int?
+
+  @@index([productId, pocId])
 }
 
 enum Gender {
