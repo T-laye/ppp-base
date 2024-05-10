@@ -93,18 +93,15 @@ export async function PATCH(req, context) {
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         ...(productId
           ? {
-              productAllocation: {
+            productAllocation: {
                 upsert: {
                   where: {
                     id: allocationId ? allocationId : uuidv4(),
-                    product: {
-                      id: productId,
-                    },
                     poc: {
                       id: getPocId,
                     },
                   },
-                  create: {
+                  create: { 
                     capacity: capacity ? Number(capacity) : undefined,
                     stockLimit: stockLimit ? Number(stockLimit) : undefined,
                     stockAvailable: productValue
@@ -124,23 +121,6 @@ export async function PATCH(req, context) {
                       : undefined,
                   },
                 },
-              },
-              product: {
-                connect: { id: productId },
-                ...(voucher_allocation
-                  ? {
-                      update: {
-                        where: {
-                          id: productId,
-                        },
-                        data: {
-                          voucherAllocation: voucher_allocation
-                            ? Number(voucher_allocation)
-                            : undefined,
-                        },
-                      },
-                    }
-                  : undefined),
               },
             }
           : undefined),

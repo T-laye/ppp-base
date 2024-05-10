@@ -92,18 +92,18 @@ model Product {
   poc               PointOfConsumption[] @relation(name: "POCProducts")
   pocId             String?
   createdBy         String
-  productAllocation ProductAllocation[]
+  productAllocation ProductAllocation?
 
   @@index([productName, id])
 }
 
 model ProductAllocation {
   id             String             @id @default(uuid())
-  product        Product            @relation(fields: [productId], references: [id])
+  product        Product?            @relation(fields: [productId], references: [id])
   poc            PointOfConsumption @relation(fields: [pocId], references: [id])
-  productId      String
+  productId      String @unique
   createdAt      DateTime           @default(now()) @db.Timestamptz()
-  updatedAt      DateTime           @default(now()) @updatedAt
+  updatedAt      DateTime           @default(now()) @updatedAt @db.Timestamptz()
   pocId          String
   stockAvailable Int?
   stockLimit     Int?
