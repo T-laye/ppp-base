@@ -63,17 +63,17 @@ export default function Page() {
       );
       formik.setFieldValue(
         "capacity",
-        getProduct?.productAllocation[0]?.capacity || 0
+        getProduct?.productAllocation?.capacity || 0
       );
       formik.setFieldValue(
         "limit",
-        getProduct?.productAllocation[0]?.stockLimit || 0
+        getProduct?.productAllocation?.stockLimit || 0
       );
       formik.setFieldValue(
         "available",
-        getProduct?.productAllocation[0]?.stockAvailable || 0
+        getProduct?.productAllocation?.stockAvailable || 0
       );
-      setAllocationId(getProduct?.productAllocation[0]?.id);
+      setAllocationId(getProduct?.productAllocation?.id);
       // console.log(getProduct.productAllocation[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,12 +88,12 @@ export default function Page() {
       const res = await axios.patch(
         `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&stockAvailable=${available}&productId=${product}&capacity=${capacity}&allocationId=${allocationId}`
       );
-      // console.log(res);
+      console.log(res);
       if (res) {
         setIsLoading(false);
         toast.success(res.data.message);
         // router.back();
-        window.location.reload();
+        // window.location.reload();
       }
       // console.log(values);
     } catch (e) {

@@ -88,7 +88,6 @@ export async function GET(req, context) {
 
     const { params } = context;
     const getVoucherId = params.vId;
-    // console.log(getVoucherId);
     const findV = await prisma.voucher.findUnique({
       where: {
         id: getVoucherId,

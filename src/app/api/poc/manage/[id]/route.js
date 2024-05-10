@@ -24,12 +24,12 @@ export async function PATCH(req, context) {
     const getPocId = params.id;
     const searchParams = req.nextUrl.searchParams;
     const user_Id = searchParams.get("user_Id");
-    const productId = searchParams.get("productId");
+    const allocationId = searchParams.get("allocationId");
 
     if (user_Id) {
       const findUser = await prisma.user.findUnique({
         where: {
-          id: user_Id
+          id: user_Id,
         },
         include: {
           management: true,
@@ -77,32 +77,10 @@ export async function PATCH(req, context) {
         { status: 200 }
       );
     }
-    if (productId) {
-      const findAc = await prisma.productAllocation.findUnique({
+    if (allocationId) {
+      const updatePoc = await prisma.productAllocation.delete({
         where: {
-          productId: productId
-        }
-      })
-      const updatePoc = await prisma.pointOfConsumption.update({
-        where: {
-          id: getPocId,
-        },
-        data: {
-          ...(productId
-            ? {
-              productAllocation: {
-                disconnect: {
-                  id: findAc.id
-                }
-              },
-                product: {
-                  disconnect: {
-                    id: productId,
-                },
-                  
-                },
-              }
-            : undefined),
+          id: allocationId,
         },
       });
       return NextResponse.json(
