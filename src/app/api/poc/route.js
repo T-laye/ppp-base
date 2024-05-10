@@ -3,6 +3,7 @@ import ApiResponseDto from "../../../../lib/apiResponseHelper";
 import { prisma } from "../../../../config/prisma.connect";
 import { getAuthUser } from "../../../../lib/get-auth-user";
 
+
 export async function POST(req, res) {
   try {
     const authResponse = await getAuthUser(req, true);
@@ -26,41 +27,19 @@ export async function POST(req, res) {
       phoneNumber,
       address,
       email,
-      product_name,
-      product_unit,
-      voucher_allocation,
     } = body;
     const createPOC = await prisma.pointOfConsumption.create({
       data: {
-        address,
-        email,
+        address: address.toLowerCase(),
+        email: email.toLowerCase(),
         name: poc_name.toLowerCase(),
         phoneNumber,
-        ...(product_name && product_unit
-          ? {
-              product: {
-                create: {
-                  productName: product_name.toLowerCase(),
-                  unit: product_unit,
-                  voucherAllocation: Number(voucher_allocation),
-                  user: {
-                    connect: {
-                      id: authResponse.user.id,
-                    },
-                  },
-                },
-              },
-            }
-          : undefined),
         user: {
           connect: {
             id: authResponse.user.id,
           },
         },
       },
-      include: {
-        productAllocation: true
-      }
     });
     const createResponse = ApiResponseDto({
       message: "poc added successfully",
@@ -97,7 +76,7 @@ export async function GET(req, res) {
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const name = searchParams.get("name");
     const productName = searchParams.get("productName");
-    const productId = searchParams.get("productId")
+    const productId = searchParams.get("productId");
     const order = searchParams.get("order");
     const take = searchParams.get("take")
       ? parseInt(searchParams.get("take"))
@@ -137,23 +116,28 @@ export async function GET(req, res) {
         customer: true,
         management: true,
         personnel: true,
-        product: {
+        productAllocation: {
           include: {
-            productAllocation: true
+            product: true
           }
-        },
+        }
       },
       take: take,
       skip: offset,
       where: {
         name: name ? { contains: name } : {},
-        ...(productName || productId ? {
-          product: {
-            some: {
-            id: productId ? productId : {},
-            productName: productName ? { contains: productName } : {},
-          },
-        }}: {})
+        ...(productName || productId
+          ? {
+              productAllocation: {
+                every: {
+                  product: {
+                    id: productId ? productId : {},
+                    productName: productName ? { contains: productName } : {},
+                  },
+                },
+              },
+            }
+          : {}),
       },
     });
     return NextResponse.json(
@@ -162,7 +146,7 @@ export async function GET(req, res) {
         message: "successful",
         data: getPoc,
         count: totalCount,
-        totalPages: totalPages
+        totalPages: totalPages,
       },
       { status: 200 }
     );

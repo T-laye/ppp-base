@@ -34,7 +34,6 @@ export async function PATCH(req, context) {
     const phoneNumber = searchParams.get("phoneNumber");
     const address = searchParams.get("address");
     const capacity = searchParams.get("capacity");
-    const voucher_allocation = searchParams.get("voucher_allocation");
     const productValue = searchParams.get("stockAvailable");
     const stockLimit = searchParams.get("stockLimit");
     const allocationId = searchParams.get("allocationId");
@@ -87,46 +86,47 @@ export async function PATCH(req, context) {
         id: getPocId,
       },
       data: {
-        address: address ? address : undefined,
-        email: email ? email : undefined,
-        name: poc_name ? poc_name : undefined,
+        address: address ? address.toLowerCase() : undefined,
+        email: email ? email.toLowerCase() : undefined,
+        name: poc_name ? poc_name.toLowerCase() : undefined,
         phoneNumber: phoneNumber ? phoneNumber : undefined,
         ...(productId
           ? {
-            productAllocation: {
-                upsert: {
-                  where: {
-                    id: allocationId ? allocationId : uuidv4(),
-                    poc: {
-                      id: getPocId,
-                    },
-                  },
-                  create: { 
-                    capacity: capacity ? Number(capacity) : undefined,
-                    stockLimit: stockLimit ? Number(stockLimit) : undefined,
-                    stockAvailable: productValue
-                      ? Number(productValue)
-                      : undefined,
-                    product: {
-                      connect: {
-                        id: productId,
+              productAllocation: {
+                ...(allocationId
+                  ? {
+                      update: {
+                        where: {
+                          id: allocationId,
+                        },
+                        data: {
+                          capacity: capacity ? Number(capacity) : undefined,
+                          stockAvailable: productValue
+                            ? Number(productValue)
+                            : undefined,
+                          stockLimit: stockLimit ? Number(stockLimit) : undefined,
+                        },
                       },
-                    },
-                  },
-                  update: {
-                    capacity: capacity ? Number(capacity) : undefined,
-                    stockLimit: stockLimit ? Number(stockLimit) : undefined,
-                    stockAvailable: productValue
-                      ? Number(productValue)
-                      : undefined,
-                  },
-                },
+                    }
+                  : {
+                      create: {
+                        capacity: capacity ? Number(capacity) : undefined,
+                        stockLimit: stockLimit ? Number(stockLimit) : undefined,
+                        stockAvailable: productValue
+                          ? Number(productValue)
+                        : undefined,
+                        product: {
+                          connect: {
+                            id: productId,
+                          },
+                        },
+                      },
+                    }),
               },
             }
           : undefined),
       },
     });
-
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
