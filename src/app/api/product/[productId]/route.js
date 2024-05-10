@@ -27,8 +27,11 @@ export async function GET(req, context) {
         id: getProductId,
       },
       include: {
-        voucher: true,
-        poc: true,
+        productAllocation: {
+          include: {
+            product: true
+          }
+        },
         user: true,
       },
     });
@@ -81,16 +84,12 @@ export async function PATCH(req, context) {
     const unit = searchParams.get("unit");
     const voucherAllocation = searchParams.get("voucherAllocation");
     const pocId = searchParams.get("pocId");
-    const capacity = searchParams.get("capacity")
     const addJ = {
       productName: name ? name : undefined,
       unit: unit ? unit : undefined,
       voucherAllocation: voucherAllocation
         ? Number(voucherAllocation)
         : undefined,
-      stockAvailable: stockAvailable ? Number(stockAvailable) : undefined,
-      stockLimit: stockLimit ? Number(stockLimit) : undefined,
-      capacity: capacity ? Number(capacity): undefined,
     };
 
     const updateProduct = await prisma.product.update({
