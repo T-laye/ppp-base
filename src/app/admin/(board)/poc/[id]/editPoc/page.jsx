@@ -14,13 +14,13 @@ import { getPoc } from "@/redux/slices/getPocSlice";
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [product, setProduct] = useState({});
+  const [allocationId, setAllocationId] = useState('');
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
 
-  // console.log(poc);
+  // console.log(allocationId);
 
   useEffect(() => {
     const getPocDetails = async () => {
@@ -61,9 +61,20 @@ export default function Page() {
       const getProduct = poc?.product?.find((p) =>
         p.id.trim().includes(formik.values.product)
       );
-      formik.setFieldValue("capacity", getProduct?.capacity || 0);
-      formik.setFieldValue("limit", getProduct?.stockLimit || 0);
-      formik.setFieldValue("available", getProduct?.stockAvailable || 0);
+      formik.setFieldValue(
+        "capacity",
+        getProduct?.productAllocation[0]?.capacity || 0
+      );
+      formik.setFieldValue(
+        "limit",
+        getProduct?.productAllocation[0]?.stockLimit || 0
+      );
+      formik.setFieldValue(
+        "available",
+        getProduct?.productAllocation[0]?.stockAvailable || 0
+      );
+      setAllocationId(getProduct?.productAllocation[0]?.id);
+      // console.log(getProduct.productAllocation[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.product, poc?.product]);
@@ -75,7 +86,7 @@ export default function Page() {
     setIsLoading(true);
     try {
       const res = await axios.patch(
-        `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&product_value=${available}&productId=${product}&capacity=${capacity}`
+        `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&stockAvailable=${available}&productId=${product}&capacity=${capacity}&allocationId=${allocationId}`
       );
       // console.log(res);
       if (res) {

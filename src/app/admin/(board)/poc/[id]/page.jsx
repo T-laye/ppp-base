@@ -31,7 +31,7 @@ export default function Page() {
   const { poc } = useSelector((state) => state.poc);
   const { personnels } = useSelector((state) => state.personnels);
   const { pageNumber, take, pocName } = useSelector((state) => state.variables);
-  // console.log(poc);
+  console.log(poc);
 
   const editPOC = () => {
     router.push(`/admin/poc/${id}/editPoc`);

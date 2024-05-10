@@ -6,7 +6,7 @@ import ProgressBar from "./ProgressBar";
 
 export default function PocList({ product, id, name }) {
   const router = useRouter();
-  console.log(product);
+  // console.log(product);
 
   const goToPoc = () => {
     router.push(`/admin/poc/${id}`);
@@ -18,9 +18,9 @@ export default function PocList({ product, id, name }) {
         <ProgressBar
           key={i}
           name={p?.productName}
-          available={p?.stockAvailable}
-          total={p?.capacity}
-          limit={p?.stockLimit}
+          available={p?.productAllocation[0]?.stockAvailable}
+          total={p?.productAllocation[0]?.capacity}
+          limit={p?.productAllocation[0]?.stockLimit}
         />
       );
     });

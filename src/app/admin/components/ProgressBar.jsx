@@ -11,7 +11,7 @@ export default function ProgressBar({ available, total, name }) {
   //   console.log(barProgress());
 
   const barColor = () => {
-    if (available < 40) {
+    if (percentage < 40) {
       return "bg-error";
     } else if (percentage >= 40 && percentage < 65) {
       return "bg-yellow-400";
