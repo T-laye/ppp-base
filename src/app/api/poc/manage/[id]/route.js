@@ -78,6 +78,11 @@ export async function PATCH(req, context) {
       );
     }
     if (productId) {
+      const findAc = await prisma.productAllocation.findUnique({
+        where: {
+          productId: productId
+        }
+      })
       const updatePoc = await prisma.pointOfConsumption.update({
         where: {
           id: getPocId,
@@ -85,10 +90,16 @@ export async function PATCH(req, context) {
         data: {
           ...(productId
             ? {
+              productAllocation: {
+                disconnect: {
+                  id: findAc.id
+                }
+              },
                 product: {
                   disconnect: {
                     id: productId,
-                  },
+                },
+                  
                 },
               }
             : undefined),
