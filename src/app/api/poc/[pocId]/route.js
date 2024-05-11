@@ -64,7 +64,7 @@ export async function PATCH(req, context) {
         data: {
           ...(findUser.role === "MANAGEMENT"
             ? {
-                managementId: getM.id,
+                management: { connect: { id: getM.id } },
               }
             : { personnel: { connect: { id: getP.id } } }),
         },
@@ -221,8 +221,16 @@ export async function GET(req, context) {
         id: getPocId,
       },
       include: {
-        management: true,
-        personnel: true,
+        management: {
+          include: {
+            user: true
+          }
+        },
+        personnel: {
+          include: {
+            user: true
+          }
+        },
         user: true,
         productAllocation: {
           include: {
