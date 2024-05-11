@@ -318,8 +318,8 @@ export async function GET(req, res) {
     const boolCheck = av4D === "true" ? true : false;
     const boolCheck2 = collected === "true" ? true : false;
     const totalPages = Math.ceil(totalCount / take);
-    const offset = (pageNumber - 1) * totalPages;
-    if (offset > totalCount) {
+    const offset = (pageNumber - 1) * take;
+    if (offset >= totalCount) {
       return NextResponse.json(
         {
           message:
