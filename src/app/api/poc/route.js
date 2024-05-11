@@ -114,8 +114,17 @@ export async function GET(req, res) {
       },
       include: {
         customer: true,
-        management: true,
-        personnel: true,
+        user: true,
+        management: {
+          include: {
+            user: true
+          }
+        },
+        personnel: {
+          include: {
+            user: true
+          }
+        },
         productAllocation: {
           include: {
             product: true,
