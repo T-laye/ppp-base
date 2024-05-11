@@ -97,8 +97,8 @@ export async function GET(req, res) {
     }
     const totalCount = await prisma.pointOfConsumption.count();
     const totalPages = Math.ceil(totalCount / take);
-    const offset = (pageNumber - 1) * totalPages;
-    if (offset > totalCount) {
+    const offset = (pageNumber - 1) * take;
+    if (offset >= totalCount) {
       return NextResponse.json(
         {
           message:

@@ -134,12 +134,12 @@ export async function GET(req, res) {
         }),
         { status: 404 }
       );
-    const pageNumber = parseInt(searchParams.get("pageNumber"));
+    const pageNumber = Number(searchParams.get("pageNumber"));
     const createdBy = searchParams.get("createdBy");
     const name = searchParams.get("name");
     const order = searchParams.get("order");
     const take = searchParams.get("take")
-      ? parseInt(searchParams.get("take"))
+      ? Number(searchParams.get("take"))
       : 10;
     if (take || pageNumber) {
       if (isNaN(take) || isNaN(pageNumber)) {
@@ -148,25 +148,20 @@ export async function GET(req, res) {
           { status: 400 }
         );
       }
-      if (pageNumber < 1) {
-        return NextResponse.json({
-          message: "please provide a valid page number counting from 1",
-        });
-      }
     }
 
     const totalCount = await prisma.customer.count();
     const totalPages = Math.ceil(totalCount / take);
-    const offset = (pageNumber - 1) * totalPages;
-    if (offset > totalCount) {
-      return NextResponse.json(
-        {
-          message:
-            "the page number you used is not available yet, use a lesser value",
-        },
-        { status: 400 }
-      );
-    }
+    const offset = (pageNumber - 1) * take;
+     if (offset >= totalCount) {
+       return NextResponse.json(
+         {
+           message:
+             "the page number you used is not available yet, use a lesser value",
+         },
+         { status: 400 }
+       );
+     }
     const getAllCustomer = await prisma.customer.findMany({
       orderBy: {
         createdAt: "desc",
