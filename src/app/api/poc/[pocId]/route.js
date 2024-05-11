@@ -2,7 +2,6 @@ import { prisma } from "../../../../../config/prisma.connect";
 import ApiResponseDto from "../../../../../lib/apiResponseHelper";
 import { getAuthUser } from "../../../../../lib/get-auth-user";
 import { NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
 
 export async function PATCH(req, context) {
   try {
@@ -104,7 +103,9 @@ export async function PATCH(req, context) {
                           stockAvailable: productValue
                             ? Number(productValue)
                             : undefined,
-                          stockLimit: stockLimit ? Number(stockLimit) : undefined,
+                          stockLimit: stockLimit
+                            ? Number(stockLimit)
+                            : undefined,
                         },
                       },
                     }
@@ -114,7 +115,7 @@ export async function PATCH(req, context) {
                         stockLimit: stockLimit ? Number(stockLimit) : undefined,
                         stockAvailable: productValue
                           ? Number(productValue)
-                        : undefined,
+                          : undefined,
                         product: {
                           connect: {
                             id: productId,
@@ -222,9 +223,10 @@ export async function GET(req, context) {
       include: {
         management: true,
         personnel: true,
-        product: {
+        user: true,
+        productAllocation: {
           include: {
-            productAllocation: true,
+            product: true,
           },
         },
       },

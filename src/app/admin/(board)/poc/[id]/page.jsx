@@ -31,7 +31,7 @@ export default function Page() {
   const { poc } = useSelector((state) => state.poc);
   const { personnels } = useSelector((state) => state.personnels);
   const { pageNumber, take, pocName } = useSelector((state) => state.variables);
-  console.log(poc);
+  // console.log(poc?.productAllocation);
 
   const editPOC = () => {
     router.push(`/admin/poc/${id}/editPoc`);
@@ -43,7 +43,7 @@ export default function Page() {
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
-      // console.log(res);
+      console.log(res);
 
       dispatch(getPoc({ ...res.data.data }));
     };
@@ -122,21 +122,24 @@ export default function Page() {
 
       // Joining the names with commas
       const formattedNames = assignedPersonnelNames?.join(", ");
-
       return formattedNames;
     }
   };
 
   const renderAssignedProducts = () => {
-    if (poc?.product?.length > 0) {
-      const productNames = poc?.product?.map((p) => p.productName); // Assuming 'name' is the property containing the product name
+    if (poc?.productAllocation?.length > 0) {
+      const productNames = poc?.productAllocation?.map(
+        (p) => p.product.productName
+      ); // Assuming 'name' is the property containing the product name
 
       // Joining the product names with commas
       const formattedProductNames = productNames?.join(", ");
 
+      // console.log(productNames);
       return formattedProductNames;
     }
   };
+  // renderAssignedProducts();
 
   return (
     <section className="min-h-screen pt-8 pb-20">

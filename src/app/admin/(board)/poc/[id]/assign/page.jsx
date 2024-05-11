@@ -221,17 +221,17 @@ export default function Page() {
   // console.log(poc.product);
 
   const renderAssignedProducts = () => {
-    if (poc?.product?.length > 0) {
-      return poc?.product?.map((p) => {
+    if (poc?.productAllocation?.length > 0) {
+      return poc?.productAllocation?.map((p) => {
         return (
           <li
-            key={p.id}
+            key={p.product.id}
             className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
           >
-            <div className="text-lg">{capitalizeWords(p?.productName)}</div>
+            <div className="text-lg">{capitalizeWords(p?.product?.productName)}</div>
             <div>
               <button
-                onClick={() => handleRemove("", p?.id)}
+                onClick={() => handleRemove("", p?.product?.id)}
                 className="btn bg-error place-self-end"
               >
                 Remove
