@@ -235,21 +235,9 @@ export async function GET(req, context) {
                     product: true
                   }
                 }
-              },
-            },
-          },
-        },
-        admin: true,
-        personnel: {
-          include: {
-            poc: {
-              include: {
-                productAllocation: {
-                  product: true
-                }
-              },
-            },
-          },
+              }
+            }
+          }
         },
         poc: {
           include: {
@@ -260,6 +248,20 @@ export async function GET(req, context) {
             }
           },
         },
+        personnel: {
+          include: {
+            poc: {
+              include: {
+                productAllocation: {
+                  include: {
+                    product: true
+                  }
+                }
+              }
+            }
+          }
+        },
+        admin: true
       },
     });
     if (!getUserData) {
