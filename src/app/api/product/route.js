@@ -108,7 +108,7 @@ export async function GET(req, res) {
         unit: v?.unit,
         stockLimit: v?.stockLimit,
         stockAvailable: v?.stockAvailable,
-        createdDate: v?.createdAt
+        createdDate: v?.createdAt 
       })),
       count: totalCount,
       totalPages: totalPages,
