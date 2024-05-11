@@ -17,7 +17,7 @@ export default function PocList({ product, id, name }) {
       return (
         <ProgressBar
           key={i}
-          name={p?.productName}
+          name={p?.product?.productName}
           available={p?.stockAvailable}
           total={p?.capacity}
           limit={p?.stockLimit}

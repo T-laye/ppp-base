@@ -35,8 +35,8 @@ export default function Page() {
   const { pageNumber, take, search, productName, staffName, pocName } =
     useSelector((state) => state.variables);
 
-    // const getAllAssignedPersonnelId = pocs?.data?.map((p) => p?.personnel?.userId);
-    // console.log(getAllAssignedPersonnelId);
+  // const getAllAssignedPersonnelId = pocs?.data?.map((p) => p?.personnel?.userId);
+  // console.log(getAllAssignedPersonnelId);
   console.log(poc);
   useEffect(() => {
     const getPocDetails = async () => {
@@ -67,12 +67,12 @@ export default function Page() {
       const res = await axios.patch(
         `/api/poc/${id}?user_email=${userEmail}&productId=${productId}`
       );
-      console.log(res)
+      // console.log(res)
       if (res) {
         toast.success("Successfully Assigned");
-        // window.location.reload();
+        window.location.reload();
       }
-      console.log(res)
+      console.log(res);
       setShowAssignModal(!showAssignModal);
     } catch (err) {
       // console.error(err);
@@ -80,15 +80,15 @@ export default function Page() {
       toast.error("Unable to Assign");
     }
   };
-  const handleRemove = async (userid, productId) => {
+  const handleRemove = async (userid, allocationId) => {
     try {
       const res = await axios.patch(
-        `/api/poc/manage/${id}?user_Id=${userid}&productId=${productId}`
+        `/api/poc/manage/${id}?user_Id=${userid}&allocationId=${allocationId}`
       );
       if (res) {
         toast.success("Successfully Removed");
         window.location.reload();
-        // console.log(res)
+        console.log(res);
       }
 
       // setShowAssignModal(!showAssignModal);
@@ -229,10 +229,12 @@ export default function Page() {
             key={p.product.id}
             className="flex mb-4 border border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive rounded-xl py-3 text-base px-3 items-center justify-between duration-200 cursor-pointer"
           >
-            <div className="text-lg">{capitalizeWords(p?.product?.productName)}</div>
+            <div className="text-lg">
+              {capitalizeWords(p?.product?.productName)}
+            </div>
             <div>
               <button
-                onClick={() => handleRemove("", p?.product?.id)}
+                onClick={() => handleRemove("", p?.id)}
                 className="btn bg-error place-self-end"
               >
                 Remove
