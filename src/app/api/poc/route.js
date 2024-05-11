@@ -118,7 +118,7 @@ export async function GET(req, res) {
         personnel: true,
         productAllocation: {
           include: {
-            product: true
+            product: true,
           }
         }
       },
@@ -129,7 +129,7 @@ export async function GET(req, res) {
         ...(productName || productId
           ? {
               productAllocation: {
-                every: {
+                some: {
                   product: {
                     id: productId ? productId : {},
                     productName: productName ? { contains: productName } : {},
