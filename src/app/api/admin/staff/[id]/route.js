@@ -230,7 +230,11 @@ export async function GET(req, context) {
           include: {
             poc: {
               include: {
-                product: true,
+                productAllocation: {
+                  include: {
+                    product: true
+                  }
+                }
               },
             },
           },
@@ -240,14 +244,20 @@ export async function GET(req, context) {
           include: {
             poc: {
               include: {
-                product: true,
+                productAllocation: {
+                  product: true
+                }
               },
             },
           },
         },
         poc: {
           include: {
-            product: true,
+            productAllocation: {
+              include: {
+                product: true
+              }
+            }
           },
         },
       },
@@ -264,7 +274,7 @@ export async function GET(req, context) {
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
-        data: mapSingleStaff(getUserData),
+        data:getUserData,
         message: "successful",
       }),
       { status: 200 }
