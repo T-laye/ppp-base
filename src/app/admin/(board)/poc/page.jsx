@@ -81,7 +81,7 @@ export default function Poc() {
             key={p?.id}
             name={capitalizeWords(p?.name)}
             id={p?.id}
-            product={p?.product}
+            product={p?.productAllocation}
             // available={p.stockLimit}
             // total={p.stockAvailable}
           />
