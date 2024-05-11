@@ -1,7 +1,18 @@
 import Link from "next/link";
 import React from "react";
 
-export default function QuantityCards({ info, available, total }) {
+export default function QuantityCards({ info, products }) {
+  const filteredProduct = products?.filter(
+    (p) => info?.productId === p?.productId
+  );
+  const available = filteredProduct
+    ?.map((p) => p.stockAvailable)
+    ?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+  const total = filteredProduct
+    ?.map((p) => p.capacity)
+    ?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
   const percentage = (available / total) * 100;
 
   const barProgress = () => {
@@ -44,14 +55,16 @@ export default function QuantityCards({ info, available, total }) {
             {capitalizeWords(info?.name) + " " + "Level"}
           </h4>
           <div className="text-base">
-            {available}/{total}
+            {available ?? 0}/{total ?? 0}
           </div>
         </div>
         <div className="h-2 bg-gray-300 rounded-xl mt-4 overflow-hidden">
-          <div
-            style={{ width: barProgress() }}
-            className={`h-full rounded-xl w-[${barProgress()}%]   ${barColor()} `}
-          ></div>
+          {available && (
+            <div
+              style={{ width: barProgress() }}
+              className={`h-full rounded-xl w-[${barProgress()}%]   ${barColor()}`}
+            ></div>
+          )}
         </div>
       </div>
     </Link>

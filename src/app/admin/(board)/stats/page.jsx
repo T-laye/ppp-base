@@ -22,14 +22,31 @@ export default function Stats() {
     (state) => state.vouchers
   );
   const { count, data } = products;
-  // console.log(
-  //   "queue:",
-  //   queuedVouchers,
-  //   "approved:",
-  //   approvedVouchers,
-  //   "collected:",
-  //   collectedVouchers
-  // );
+  const productDetails = pocs?.data?.map((p) => p.productAllocation).flat();
+
+  const available = productDetails
+    ?.map((p) => p.stockAvailable)
+    ?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+  const total = productDetails
+    ?.map((p) => p.capacity)
+    ?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  // console.log(total);
+
+  const percentage = (available / total) * 100;
+
+  const barProgress = () => {
+    const result = (available / total) * 100;
+    return `${Math.round(result)}%`;
+  };
+
+  const barColor = () => {
+    if (percentage < 40) {
+      return "bg-error";
+    } else if (percentage >= 40 && percentage < 65) {
+      return "bg-yellow-500";
+    } else return "bg-primary";
+  };
 
   useEffect(() => {
     dispatch(handleProductName(""));
@@ -45,6 +62,7 @@ export default function Stats() {
           <QuantityCards
             key={p.productId}
             info={p}
+            products={productDetails}
             available={420}
             total={600}
           />
@@ -121,13 +139,17 @@ export default function Stats() {
             <div className="rounded-xl border px-4 pt-1 pb-4 hover:text-white active:bg-primaryActive cursor-pointer active:border-primaryActive hover:bg-primaryActive duration-200 mt-4">
               <div className="flex justify-between items-end">
                 <h4 className="text-lg font-medium">Total Level</h4>
-                <div className="text-base">500/1000</div>
+                <div className="text-base">
+                  {available ?? 0}/{total ?? 0}
+                </div>
               </div>
               <div className="h-2 bg-gray-300 rounded-xl mt-4 overflow-hidden">
-                <div
-                  style={{ width: "80%" }}
-                  className={`h-full rounded-xl w-[80%]   bg-yellow-500 `}
-                ></div>
+                {available && (
+                  <div
+                    style={{ width: barProgress() }}
+                    className={`h-full rounded-xl w-[${barProgress()}%]   ${barColor()}`}
+                  ></div>
+                )}
               </div>
             </div>
           )}
