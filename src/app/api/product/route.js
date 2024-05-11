@@ -93,11 +93,6 @@ export async function GET(req, res) {
       orderBy: {
         createdAt: "desc",
       },
-      include: {
-        voucher: true,
-        poc: true,
-        user: true,
-      },
       take: take,
       skip: offset,
       where: {
@@ -113,21 +108,7 @@ export async function GET(req, res) {
         unit: v?.unit,
         stockLimit: v?.stockLimit,
         stockAvailable: v?.stockAvailable,
-        poc_id: v?.poc?.id,
-        poc_name: v?.poc?.name,
-        product_capacity: v?.capacity,
-        poc_address: v?.poc?.address,
-        poc_phoneNumber: v?.poc?.phoneNumber,
-        poc_stockAvailable: v?.poc?.stockAvailable,
-        poc_stockLimit: v?.poc?.stockLimit,
-        poc_createdAt: v?.poc?.createdAt,
-        voucher: v.voucher.map((v) => ({
-          voucherCode: v?.voucherCode,
-          createdDate: v?.createdAt,
-          collectionStatus: v?.collected,
-          customerId: v?.customerId,
-          id: v?.voucherId,
-        })),
+        createdDate: v?.createdAt 
       })),
       count: totalCount,
       totalPages: totalPages,

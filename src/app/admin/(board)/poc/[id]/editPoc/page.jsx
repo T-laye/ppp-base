@@ -58,27 +58,28 @@ export default function Page() {
 
   useEffect(() => {
     if (formik.values.product) {
-      const getProduct = poc?.product?.find((p) =>
-        p.id.trim().includes(formik.values.product)
+      const getProduct = poc?.productAllocation?.find((p) =>
+        p.product.id.trim().includes(formik.values.product)
       );
+
+      console.log(getProduct)
       formik.setFieldValue(
         "capacity",
-        getProduct?.productAllocation?.capacity || 0
+        getProduct?.capacity || 0
       );
       formik.setFieldValue(
         "limit",
-        getProduct?.productAllocation?.stockLimit || 0
+        getProduct?.stockLimit || 0
       );
       formik.setFieldValue(
         "available",
-        getProduct?.productAllocation?.stockAvailable || 0
+        getProduct?.stockAvailable || 0
       );
-      setAllocationId(getProduct?.productAllocation?.id);
+      setAllocationId(getProduct?.id);
       // console.log(getProduct.productAllocation[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values.product, poc?.product]);
-  // console.log(formik.values.product);
 
   async function handleSubmit(values) {
     const { name, email, phone, address, limit, available, product, capacity } =
@@ -92,7 +93,7 @@ export default function Page() {
       if (res) {
         setIsLoading(false);
         toast.success(res.data.message);
-        // router.back();
+        router.back();
         // window.location.reload();
       }
       // console.log(values);
@@ -104,10 +105,10 @@ export default function Page() {
   }
 
   const renderProducts = () => {
-    return poc?.product?.map((p, i) => {
+    return poc?.productAllocation?.map((p, i) => {
       return (
-        <option key={i} value={p.id}>
-          {p.productName}
+        <option key={i} value={p.product.id}>
+          {p.product.productName}
         </option>
       );
     });
