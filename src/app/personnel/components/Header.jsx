@@ -39,7 +39,7 @@ export default function Header() {
   };
 
   return (
-    <header className=" max-w-2xl mx-auto bg-white h-14 fixed top-0 left-0 right-0 shadow-sm    z-10">
+    <header className=" lg:max-w-2xl mx-auto bg-white h-14 fixed top-0 left-0 right-0 shadow-sm    z-10">
       <div className="relative flex justify-between items-center px-4 py-1">
         <Logo />
         <div className="cursor-pointer text-error">

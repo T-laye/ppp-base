@@ -31,9 +31,10 @@ export default function Page() {
   const managementCanEdit = worker?.management?.map((p) => p.canEdit).flat();
   const managementPoc = worker?.management?.map((p) => p.poc).flat();
   const pocs = useSelector((state) => state.pocs);
+  const { personnels } = useSelector((state) => state.personnels);
   const { pageNumber, take, pocName } = useSelector((state) => state.variables);
   // console.log(pocs);
-  console.log(managementPoc);
+  // console.log(managementPoc);
 
   const editPOC = () => {
     router.push(`/management/stats/${id}/editPoc`);
@@ -42,7 +43,7 @@ export default function Page() {
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
-      console.log(res);
+      // console.log(res);
 
       dispatch(getPoc({ ...res.data.data }));
     };
@@ -125,18 +126,22 @@ export default function Page() {
   //     return formattedNames;
   //   }
   // };
+ const renderAssignedPersonnel = personnels?.data?.find(
+   (p) => p.id === poc?.personnel?.userId
+ );
+    const renderAssignedProducts = () => {
+      if (poc?.productAllocation?.length > 0) {
+        const productNames = poc?.productAllocation?.map(
+          (p) => p.product.productName
+        ); // Assuming 'name' is the property containing the product name
 
-  const renderAssignedProducts = () => {
-    if (poc?.product?.length > 0) {
-      const productNames = poc.product.map((p) => p.productName); // Assuming 'name' is the property containing the product name
+        // Joining the product names with commas
+        const formattedProductNames = productNames?.join(", ");
 
-      // Joining the product names with commas
-      const formattedProductNames = productNames.join(", ");
-
-      return formattedProductNames;
-    }
-  };
-
+        // console.log(productNames);
+        return formattedProductNames;
+      }
+    };
   return (
     <section className="min-h-screen pt-8 pb-20">
       <div className="mb-3">
@@ -167,6 +172,12 @@ export default function Page() {
               value={poc?.address}
               icon={<IoLocationSharp size={20} />}
             />
+            <DetailList
+              title="Personnel"
+              value={capitalizeWords(renderAssignedPersonnel?.name)}
+              // icon={<BsFillFuelPumpDieselFill size={24} />}
+              icon={<FaUser size={16} />}
+            />
             {/* <DetailList
               title="Personnel"
               value={capitalizeWords(renderAssignedPersonnel?.name)}
@@ -184,12 +195,12 @@ export default function Page() {
               value={capitalizeWords(renderAssignedProducts())}
               icon={<ImDroplet size={16} />}
             />
-            <DetailList
+            {/* <DetailList
               title="Amount Allocated"
               value={250}
               icon={<MdAssignmentTurnedIn size={18} />}
-            />
-
+            /> */}
+            {/* 
             <div className="flex gap-2 items-end">
               <DetailList
                 title="Available"
@@ -201,7 +212,7 @@ export default function Page() {
                 value={poc?.stockLimit}
                 icon={<ImDroplet size={16} />}
               />
-            </div>
+            </div> */}
             <DetailList
               title="Total Product Dispensed"
               value=""
@@ -211,7 +222,7 @@ export default function Page() {
               title="Created At"
               value={formatDate(poc?.createdAt)}
               icon={<IoIosTime size={16} />}
-            />
+            /> 
 
             {managementCanEdit?.includes(true) && (
               <button onClick={editPOC} className="btn bg-primary w-full mt-5">

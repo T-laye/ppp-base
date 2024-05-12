@@ -28,17 +28,19 @@ export default function Page() {
   const { id } = useParams();
   const { worker } = useSelector((state) => state.worker);
   const { poc } = useSelector((state) => state.poc);
-  const managementCanEdit = worker?.management?.map((p) => p.canEdit).flat();
-  // const managementPoc = worker?.management?.map((p) => p.poc).flat();
-  const pocs = useSelector((state) => state.pocs);
-  const { pageNumber, take, pocName } = useSelector((state) => state.variables);
+  // const { personnels } = useSelector((state) => state.personnels);
+  // const { pageNumber, take, pocName } = useSelector((state) => state.variables);
   // console.log(pocs);
-  console.log(worker);
+  // console.log(managementPoc);
+
+  const editPOC = () => {
+    router.push(`/management/stats/${id}/editPoc`);
+  };
 
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
-      console.log(res);
+      // console.log(res);
 
       dispatch(getPoc({ ...res.data.data }));
     };
@@ -82,36 +84,22 @@ export default function Page() {
     return;
   }
 
-
-  // const renderAssignedPersonnel = personnels?.data?.find(
-  //   (p) => p.id === poc?.personnel?.userId
-  // );
-
-  // const renderAssignedManagement = () => {
-  //   const assignedManagement = poc?.management?.map((m) => m.userId);
-  //   if (assignedManagement) {
-  //     const assignedPersonnelNames = personnels?.data
-  //       ?.filter((p) => assignedManagement?.includes(p.id))
-  //       .map((p) => p.name); // Assuming 'name' is the property containing the person's name
-
-  //     // Joining the names with commas
-  //     const formattedNames = assignedPersonnelNames.join(", ");
-
-  //     return formattedNames;
-  //   }
-  // };
-
+  const renderAssignedPersonnel = personnels?.data?.find(
+    (p) => p.id === poc?.personnel?.userId
+  );
   const renderAssignedProducts = () => {
-    if (poc?.product?.length > 0) {
-      const productNames = poc.product.map((p) => p.productName); // Assuming 'name' is the property containing the product name
+    if (poc?.productAllocation?.length > 0) {
+      const productNames = poc?.productAllocation?.map(
+        (p) => p.product.productName
+      ); // Assuming 'name' is the property containing the product name
 
       // Joining the product names with commas
-      const formattedProductNames = productNames.join(", ");
+      const formattedProductNames = productNames?.join(", ");
 
+      // console.log(productNames);
       return formattedProductNames;
     }
   };
-
   return (
     <section className="min-h-screen pt-8 pb-20">
       <div className="mb-3">
@@ -145,38 +133,13 @@ export default function Page() {
             {/* <DetailList
               title="Personnel"
               value={capitalizeWords(renderAssignedPersonnel?.name)}
-              // icon={<BsFillFuelPumpDieselFill size={24} />}
               icon={<FaUser size={16} />}
-            /> */}
-            {/* <DetailList
-              title="Management"
-              value={capitalizeWords(renderAssignedManagement())}
-              icon={<FaUser size={16} />}
-              // icon={<BsFillFuelPumpDieselFill size={24} />}
             /> */}
             <DetailList
               title="Product"
               value={capitalizeWords(renderAssignedProducts())}
               icon={<ImDroplet size={16} />}
             />
-            <DetailList
-              title="Amount Allocated"
-              value={250}
-              icon={<MdAssignmentTurnedIn size={18} />}
-            />
-
-            <div className="flex gap-2 items-end">
-              <DetailList
-                title="Available"
-                value={poc?.stockAvailable}
-                icon={<PiDropHalfBottomFill size={18} />}
-              />
-              <DetailList
-                title="Limit"
-                value={poc?.stockLimit}
-                icon={<ImDroplet size={16} />}
-              />
-            </div>
             <DetailList
               title="Total Product Dispensed"
               value=""
@@ -187,6 +150,7 @@ export default function Page() {
               value={formatDate(poc?.createdAt)}
               icon={<IoIosTime size={16} />}
             />
+
           </div>
         ) : (
           <Loading />

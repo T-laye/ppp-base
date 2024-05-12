@@ -8,18 +8,19 @@ import { poc_validate } from "../../../../../../../lib/validate";
 import { useParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "@/components/Loading";
-import axios from 'axios'
+import axios from "axios";
 import { getPoc } from "@/redux/slices/getPocSlice";
 
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [allocationId, setAllocationId] = useState('');
   const router = useRouter();
   const dispatch = useDispatch();
   const { id } = useParams();
   const { poc } = useSelector((state) => state.poc);
-  
-  // console.log(poc, id);
+
+  // console.log(allocationId);
 
   useEffect(() => {
     const getPocDetails = async () => {
@@ -38,8 +39,10 @@ export default function Page() {
       email: poc?.email,
       phone: poc?.phoneNumber,
       address: poc?.address,
-      limit: poc?.stockLimit,
-      available: poc?.stockAvailable,
+      product: "",
+      limit: 0,
+      available: 0,
+      capacity: 0,
     },
     validate: poc_validate,
     onSubmit: handleSubmit,
@@ -49,18 +52,49 @@ export default function Page() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
+  useEffect(() => {
+    setIsFormValid(formik.isValid);
+  }, [formik.values, formik.errors, formik.isValid]);
+
+  useEffect(() => {
+    if (formik.values.product) {
+      const getProduct = poc?.productAllocation?.find((p) =>
+        p.product.id.trim().includes(formik.values.product)
+      );
+
+      console.log(getProduct)
+      formik.setFieldValue(
+        "capacity",
+        getProduct?.capacity || 0
+      );
+      formik.setFieldValue(
+        "limit",
+        getProduct?.stockLimit || 0
+      );
+      formik.setFieldValue(
+        "available",
+        getProduct?.stockAvailable || 0
+      );
+      setAllocationId(getProduct?.id);
+      // console.log(getProduct.productAllocation[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formik.values.product, poc?.product]);
+
   async function handleSubmit(values) {
-    const { name, email, phone, address, limit, available } = values;
+    const { name, email, phone, address, limit, available, product, capacity } =
+      values;
     setIsLoading(true);
     try {
       const res = await axios.patch(
-        `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&stockAvailable=${available}`
+        `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&stockAvailable=${available}&productId=${product}&capacity=${capacity}&allocationId=${allocationId}`
       );
       console.log(res);
       if (res) {
         setIsLoading(false);
-        toast.success(res.data.data.message);
+        toast.success(res.data.message);
         router.back();
+        // window.location.reload();
       }
       // console.log(values);
     } catch (e) {
@@ -69,6 +103,23 @@ export default function Page() {
       console.log(e);
     }
   }
+
+  const renderProducts = () => {
+    return poc?.productAllocation?.map((p, i) => {
+      return (
+        <option key={i} value={p.product.id}>
+          {p.product.productName}
+        </option>
+      );
+    });
+  };
+
+  // const handleProduct = (e) => {
+  //   console.log("Product selected:", e.target.value);
+  //   const getProduct = poc?.product?.find((p) => p.id === e.target.value);
+  //   console.log("Selected product:", getProduct);
+  //   setProduct(getProduct);
+  // };
 
   const getInputClassNames = (fieldName) =>
     `${
@@ -81,12 +132,6 @@ export default function Page() {
     <section className="pt-8 pb-20 min-h-screen bg-ed-500">
       <div className="flex justify-between items-center">
         <GoBack />
-        {/* <button
-          onClick={handleEdit}
-          className={`btn ${!isEditable ? "bg-primary" : "bg-customGray"}`}
-        >
-          {isEditable ? "Cancel" : "Edit"}
-        </button> */}
       </div>
       <h3 className="text-center text-lg font-medium mt-3">POC Details</h3>
 
@@ -164,22 +209,44 @@ export default function Page() {
               )}
             </div>
             <div className="flex flex-col mb-4">
-              <label className="text-sm mb-2" htmlFor="limit">
-                Stock Limit Level
+              <label className="text-sm mb-2" htmlFor="product">
+                Select Product
               </label>
-              <input
-                //   disabled={!isEditable}
-                id="limit"
-                name="limit"
-                type="number"
-                placeholder="Enter Limit"
-                className={getInputClassNames("limit")}
-                {...formik.getFieldProps("limit")}
-              />
-              {formik.touched.limit && formik.errors.limit && (
-                <div className="text-error text-sm">{formik.errors.limit}</div>
+              <select
+                id="product"
+                name="product"
+                placeholder="Select Product"
+                className={getInputClassNames("product")}
+                {...formik.getFieldProps("product")}
+              >
+                <option>Select Product</option>
+                {renderProducts()}
+              </select>
+              {formik.touched.product && formik.errors.product && (
+                <div className="text-error text-sm">
+                  {formik.errors.product}
+                </div>
               )}
             </div>
+            <div className="flex flex-col mb-4">
+              <label className="text-sm mb-2" htmlFor="capacity">
+                Stock Capacity
+              </label>
+              <input
+                id="capacity"
+                name="capacity"
+                type="number"
+                placeholder="Enter Capacity"
+                className={getInputClassNames("capacity")}
+                {...formik.getFieldProps("capacity")}
+              />
+              {formik.touched.capacity && formik.errors.capacity && (
+                <div className="text-error text-sm">
+                  {formik.errors.capacity}
+                </div>
+              )}
+            </div>
+
             <div className="flex flex-col mb-4">
               <label className="text-sm mb-2" htmlFor="available">
                 Stock Available
@@ -197,6 +264,22 @@ export default function Page() {
                 <div className="text-error text-sm">
                   {formik.errors.available}
                 </div>
+              )}
+            </div>
+            <div className="flex flex-col mb-4">
+              <label className="text-sm mb-2" htmlFor="limit">
+                Stock Limit Level
+              </label>
+              <input
+                id="limit"
+                name="limit"
+                type="number"
+                placeholder="Enter Limit"
+                className={getInputClassNames("limit")}
+                {...formik.getFieldProps("limit")}
+              />
+              {formik.touched.limit && formik.errors.limit && (
+                <div className="text-error text-sm">{formik.errors.limit}</div>
               )}
             </div>
             {/* <div className="flex flex-col mb-4">
@@ -218,7 +301,6 @@ export default function Page() {
               </div>
             )}
           </div> */}
-
             <button
               type="submit"
               className={`btn w-full h-11 mt-6 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl  ${

@@ -7,12 +7,13 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { handleSearch } from "@/redux/slices/variableSlice";
 import Loading from "@/components/Loading";
+import Pagination from "@/components/Pagination";
 
 export default function Customers() {
   const [term, setTerm] = useState("");
   const router = useRouter();
   const { customers } = useSelector((state) => state.customers);
-  const { data, count } = customers;
+  const { data, count, totalPages } = customers;
   const dispatch = useDispatch();
 
   // console.log(customers);
@@ -70,8 +71,11 @@ export default function Customers() {
             </div>
           </div>
         </form>
-        <div className="text-end mt-3 text-sm text-gray-500 pr-2">
-          {data?.length ?? 0}
+        <div className="flex justify-between mt-2">
+          <Pagination totalPages={totalPages} />
+          <p className="text-end mt-3 text-sm text-gray-500 pr-2">
+            {data?.length ?? 0}
+          </p>
         </div>
 
         <div className="bg-gren-400 pt-3 pb-10">

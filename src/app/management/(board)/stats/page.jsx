@@ -25,38 +25,39 @@ export default function Stats() {
   useEffect(() => {
     dispatch(handleProductName(""));
   }, [dispatch]);
-  console.log(pocs);
+  // console.log(products);
 
   const setTab = (tab) => {
     setActiveTab(tab);
     // console.log(tab);
   };
   const renderPoc = () => {
-   
     return pocs?.map((p, i) => {
-      const productsInPoc = p?.products.map((p) => p).flat();
-      const productNames = productsInPoc.map((p) =>
-        p.product_name.toLowerCase()
+      const productsInPoc = p?.productAllocation?.map((p) => p).flat();
+      const productNames = productsInPoc?.map((p) =>
+        p?.product.productName?.toLowerCase()
       );
       // console.log(productNames);
-      if (activeTab !== "" && productNames.includes(activeTab)) {
+      if (activeTab !== "" && productNames?.includes(activeTab)) {
         return (
           <PocList
-            id={p.poc_id}
-            key={i}
+            key={p?.id}
             name={capitalizeWords(p?.name)}
-            available={p?.stockAvailable}
-            total={p?.stockLimit}
+            id={p?.id}
+            product={p?.productAllocation}
+            // available={p.stockLimit}
+            // total={p.stockAvailable}
           />
         );
       } else if (activeTab === "") {
         return (
           <PocList
-            key={i}
-            id={p.poc_id}
+            key={p?.id}
             name={capitalizeWords(p?.name)}
-            available={p?.stockAvailable}
-            total={p?.stockLimit}
+            id={p?.id}
+            product={p?.productAllocation}
+            // available={p.stockLimit}
+            // total={p.stockAvailable}
           />
         );
       }

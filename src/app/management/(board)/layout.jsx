@@ -10,10 +10,12 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "@/redux/slices/authSlice";
 import {
+  handlePageNumber,
   handlePocName,
   handleProductName,
   handleSearch,
   handleStaffName,
+  handleTake,
 } from "@/redux/slices/variableSlice";
 import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
@@ -46,6 +48,8 @@ export default function Layout({ children }) {
         dispatch(handleProductName(""));
         dispatch(handlePocName(""));
         dispatch(handleStaffName(""));
+        dispatch(handlePageNumber(1));
+        dispatch(handleTake(10));
       }
     })();
   }, [dispatch, router]);
@@ -89,7 +93,7 @@ export default function Layout({ children }) {
         const resWorker = await axios.get(
           `/api/admin/staff/${userInfo?.id}?email=${userInfo?.email}`
         );
-        console.log(resWorker);
+        // console.log(resWorker);
         dispatch(getWorker({ ...resWorker?.data.data }));
       } else {
         return;

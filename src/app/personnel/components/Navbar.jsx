@@ -19,7 +19,7 @@ export default function Navbar() {
   //   console.log(pathname);
 
   return (
-    <nav className="fixed z-5 bottom-0  left-0 right-0 h-14 border-t border-t-gray-100 bg-white max-w-2xl mx-auto">
+    <nav className="fixed z-5 bottom-0  left-0 right-0 h-14 border-t border-t-gray-100 bg-white lg:max-w-2xl mx-auto">
       <ul className="h-full flex justify-evenly ">
         <Link href="/personnel/stats" legacyBehavior>
           <li

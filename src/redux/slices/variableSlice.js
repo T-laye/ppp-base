@@ -33,6 +33,12 @@ const variableSlice = createSlice({
   },
 });
 
-export const { handlePageNumber, handleTake, handleSearch, handleProductName, handlePocName, handleStaffName } =
-  variableSlice.actions;
+export const {
+  handlePageNumber,
+  handleTake,
+  handleSearch,
+  handleProductName,
+  handlePocName,
+  handleStaffName,
+} = variableSlice.actions;
 export default variableSlice.reducer;

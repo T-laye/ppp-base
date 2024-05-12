@@ -53,7 +53,7 @@ export default function Layout({ children }) {
         const resWorker = await axios.get(
           `/api/admin/staff/${userInfo?.id}?email=${userInfo?.email}`
         );
-        // console.log(resProducts);
+        // console.log(resWorker);
         dispatch(getWorker({ ...resWorker?.data.data }));
       } else {
         return;

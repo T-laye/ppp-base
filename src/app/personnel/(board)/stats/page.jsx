@@ -14,9 +14,9 @@ import { useSelector } from "react-redux";
 export default function Stats() {
   const { worker } = useSelector((state) => state.worker);
   const { collectedVouchers } = useSelector((state) => state.vouchers);
-  const personnelPocData = worker?.personnel_poc_data?.map((p) => p).flat();
+  const personnelPoc = worker?.personnel?.map((p) => p.poc);
 
-  console.log(personnelPocData);
+  console.log(personnelPoc);
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
     let words = sentence?.split(" ");
@@ -32,16 +32,15 @@ export default function Stats() {
   }
   //
   const renderPoc = () => {
-    if (personnelPocData?.length === 0) {
+    if (personnelPoc?.length === 0) {
       return <div>No Point of Consumption Assigned</div>;
     } else {
-      return personnelPocData?.map((p, i) => (
+      return personnelPoc?.map((p, i) => (
         <PocList
-          key={p.poc_id}
-          id={p.poc_id}
-          name={capitalizeWords(p.poc_name)}
-          available={p.poc_stockAvailable}
-          total={p.poc_stockLimit}
+          key={p.id}
+          id={p.id}
+          name={capitalizeWords(p.name)}
+          product={p?.productAllocation}
         />
       ));
     }
@@ -72,9 +71,7 @@ export default function Stats() {
         <h4 className="font-medium text-base mt-2 text-center">
           Product Level at POC
         </h4>
-        <div>
-          {renderPoc()} {/* Corrected invocation */}
-        </div>
+        <div>{renderPoc()}</div>
       </div>
     </section>
   );

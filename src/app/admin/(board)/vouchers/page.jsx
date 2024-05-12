@@ -8,6 +8,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { handleProductName, handleSearch } from "@/redux/slices/variableSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "@/components/Loading";
+import Pagination from "@/components/Pagination";
 
 export default function Vouchers() {
   const [approved, setApproved] = useState(false);
@@ -25,6 +26,10 @@ export default function Vouchers() {
   const { products } = useSelector((state) => state.products);
 
   const voucherList = approved ? approvedVouchers : queuedVouchers;
+
+  const totalPages = approved
+    ? approvedVouchers.totalPages
+    : queuedVouchers.totalPages;
 
   useEffect(() => {
     const activeProduct = products?.data?.find((p, i) => i === activeTab);
@@ -104,7 +109,6 @@ export default function Vouchers() {
       ));
     }
   };
-
 
   const renderVouchers = () => {
     if (voucherList?.data) {
@@ -218,8 +222,12 @@ export default function Vouchers() {
             </div>
           </div>
         </form>
-        <div className="text-end mt-3 text-sm text-gray-500 pr-2">
-          {voucherList.count ?? 0}
+
+        <div className="flex justify-between mt-2">
+          <Pagination totalPages={totalPages} />
+          <p className="text-end mt-3 text-sm text-gray-500 pr-2">
+            {voucherList.count ?? 0}
+          </p>
         </div>
 
         <div className="bg-gren-400 pt-3 pb-10">

@@ -10,10 +10,12 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
 import {
+  handlePageNumber,
   handlePocName,
   handleProductName,
   handleSearch,
   handleStaffName,
+  handleTake,
 } from "@/redux/slices/variableSlice";
 import { setCredentials } from "@/redux/slices/authSlice";
 import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
@@ -50,6 +52,8 @@ export default function Layout({ children }) {
         dispatch(handleProductName(""));
         dispatch(handlePocName(""));
         dispatch(handleStaffName(""));
+        dispatch(handlePageNumber(1));
+        dispatch(handleTake(10));
       }
     })();
   }, [dispatch, router]);
