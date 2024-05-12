@@ -29,6 +29,12 @@ export default function Verify() {
   const { userInfo } = useSelector((state) => state.auth);
   const personnelPocData = worker?.personnel?.map((p) => p.poc);
   const voucherLength = 11;
+  const getAllocation = personnelPocData
+    ?.map((p) => p.productAllocation)
+    .flat();
+  const getAllocationId = getAllocation?.find(
+    (p) => p?.product?.id === data?.product?.id
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -42,7 +48,9 @@ export default function Verify() {
     onSubmit: handleSubmit,
   });
 
-  // console.log(data);
+  // console.log(personnelPocData);
+  // console.log(getAllocationId);
+  console.log(getAllocationId);
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
@@ -74,7 +82,7 @@ export default function Verify() {
         thirdParty: values.third_party,
         thirdPartyName: values.pick_up_person,
         thirdPartyPhoneNumber: values.phone_of_pick_up_person,
-        personnelId,
+        allocationId: getAllocationId.id,
       });
 
       console.log(res);
