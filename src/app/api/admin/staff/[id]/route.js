@@ -91,7 +91,7 @@ export async function PATCH(req, context) {
                           id: findUser?.management[0]?.id,
                         },
                         data: {
-                          canEdit: canEdit,
+                          canEdit: canEdit === "true" ? true : false,
                         },
                       },
                     }
@@ -232,20 +232,20 @@ export async function GET(req, context) {
               include: {
                 productAllocation: {
                   include: {
-                    product: true
-                  }
-                }
-              }
-            }
-          }
+                    product: true,
+                  },
+                },
+              },
+            },
+          },
         },
         poc: {
           include: {
             productAllocation: {
               include: {
-                product: true
-              }
-            }
+                product: true,
+              },
+            },
           },
         },
         personnel: {
@@ -254,14 +254,14 @@ export async function GET(req, context) {
               include: {
                 productAllocation: {
                   include: {
-                    product: true
-                  }
-                }
-              }
-            }
-          }
+                    product: true,
+                  },
+                },
+              },
+            },
+          },
         },
-        admin: true
+        admin: true,
       },
     });
     if (!getUserData) {
@@ -339,7 +339,7 @@ function mapSingleStaff(data) {
             address: v.address,
             phoneNumber: v.phoneNumber,
             productAllocation: v.productAllocation.map((v) => ({
-              ...v
+              ...v,
             })),
           })),
         })),
