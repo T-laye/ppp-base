@@ -27,20 +27,7 @@ export default function Verify() {
   const router = useRouter();
   const { worker } = useSelector((state) => state.worker);
   const { userInfo } = useSelector((state) => state.auth);
-  const personnelPocData = worker?.personnel_poc_data
-    ?.map((p) => p.poc_name)
-    .flat();
-  const personnel = worker?.personnel_poc_data
-    ?.map((p) => p.personnelId)
-    .flat();
-  const personnelPocId = worker?.personnel_poc_data
-    ?.map((p) => p.poc_id)
-    .flat();
-
-  const personnelId = personnel?.[0];
-
-  console.log(personnelId);
-  // console.log(worker);
+  const personnelPocData = worker?.personnel?.map((p) => p.poc);
   const voucherLength = 11;
 
   const formik = useFormik({
@@ -80,7 +67,7 @@ export default function Verify() {
     setIsLoading(true);
     try {
       const res = await axios.post("/api/admin/voucher/verify", {
-        pocId: personnelPocId?.[0],
+        pocId: personnelPocData.id,
         voucherCode: data?.voucher?.voucherCode,
         vehicleType: values.vehicle_type,
         vehicleNumber: values.vehicle_plate_number,
@@ -117,12 +104,13 @@ export default function Verify() {
     return words?.join(" ");
   }
 
-  const getInputClassNames = (fieldName) =>
+  const getInputClassNames = (fieldName) => {
     `${
       formik.errors[fieldName] && formik.touched[fieldName]
         ? "border-error text-error"
         : ""
     }`;
+  };
 
   useEffect(() => {
     if (loading) {
@@ -255,7 +243,7 @@ export default function Verify() {
                   />
                   <DetailList
                     title="POC Name"
-                    value={capitalizeWords(personnelPocData[0])}
+                    value={capitalizeWords(personnelPocData[0]?.name)}
                     // value={personnelPocData)}
                     icon={<BsFillFuelPumpDieselFill size={16} />}
                   />

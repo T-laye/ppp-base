@@ -84,9 +84,9 @@ export default function Page() {
     return;
   }
 
-  const renderAssignedPersonnel = personnels?.data?.find(
-    (p) => p.id === poc?.personnel?.userId
-  );
+  // const renderAssignedPersonnel = personnels?.data?.find(
+  //   (p) => p.id === poc?.personnel?.userId
+  // );
   const renderAssignedProducts = () => {
     if (poc?.productAllocation?.length > 0) {
       const productNames = poc?.productAllocation?.map(
