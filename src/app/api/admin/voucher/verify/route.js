@@ -117,6 +117,9 @@ export async function POST(req, res) {
         voucherCode: voucherCode,
       },
     });
+    if (!findVoucher) {
+      NextResponse.json({ message: "the voucher is invalid" });
+    }
     const createVDispenseData = await prisma.voucherDispense.create({
       data: {
         dateUsed: new Date().toISOString(),
