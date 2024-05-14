@@ -29,6 +29,25 @@ export async function POST(req, res) {
       thirdPartyPhoneNumber,
     } = body;
 
+    const findVoucher = await prisma.voucher.findUnique({
+      where: {
+        voucherCode: voucherCode,
+      },
+    });
+
+    if (!findVoucher) {
+      NextResponse.json({ message: "the voucher is invalid" });
+    }
+    if (
+      findVoucher.collected === true ||
+      findVoucher.availableForDispense === false ||
+      findVoucher.approvedByAdmin === false
+    ) {
+      return NextResponse.json({
+        message:
+          "this voucher is invalid, invalid voucher operation, theft alert",
+      });
+    }
     const getP = await prisma.productAllocation.findUnique({
       where: {
         id: allocationId,
@@ -112,14 +131,7 @@ export async function POST(req, res) {
     //   }
     //   await Promise.all(emailArr);
     // }
-    const findVoucher = await prisma.voucher.findUnique({
-      where: {
-        voucherCode: voucherCode,
-      },
-    });
-    if (!findVoucher) {
-      NextResponse.json({ message: "the voucher is invalid" });
-    }
+
     const createVDispenseData = await prisma.voucherDispense.create({
       data: {
         dateUsed: new Date().toISOString(),

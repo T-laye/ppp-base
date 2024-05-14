@@ -27,7 +27,6 @@ export async function PATCH(req, context) {
         }
       );
     }
-    const adminId = authResponse?.user?.id;
     const searchParams = req.nextUrl.searchParams;
     const { params } = context;
     const getId = params.id;
@@ -60,7 +59,8 @@ export async function PATCH(req, context) {
         { status: 404 }
       );
     }
-
+    const getM = findUser.management.find((m) => m.userId === findUser.id);
+    const getP = findUser.personnel.find((p) => p.userId === findUser.id);
     const updateUser = await prisma.user.update({
       where: {
         id: getId,
@@ -72,30 +72,36 @@ export async function PATCH(req, context) {
         name: name ? name.toLowerCase() : undefined,
         password: password ? await hashPassword(password) : undefined,
         phoneNumber: phoneNumber ? phoneNumber : undefined,
-        ...(role && role === "MANAGEMENT"
+        ...(canEdit
           ? {
-              role: role,
               management: {
-                connectOrCreate: {
+                update: {
                   where: {
-                    id: getId,
+                    id: getM.id,
                   },
-                  create: {
-                    id: getId,
+                  data: {
+                    canEdit: canEdit === "true" ? true : false,
                   },
                 },
-                ...(canEdit
-                  ? {
-                      update: {
-                        where: {
-                          id: findUser?.management[0]?.id,
-                        },
-                        data: {
-                          canEdit: canEdit === "true" ? true : false,
-                        },
-                      },
-                    }
-                  : undefined),
+              },
+            }
+          : undefined),
+
+        ...(role && role === "MANAGEMENT"
+          ? {
+              role: role.toUpperCase(),
+              management: {
+                upsert: {
+                  create: {
+                    canEdit: false,
+                  },
+                  where: {
+                    id: getM ? getM.id : getId,
+                  },
+                  update: {
+                    canEdit: undefined,
+                  },
+                },
               },
             }
           : role === "ADMIN"
@@ -112,15 +118,15 @@ export async function PATCH(req, context) {
                 },
               },
             }
-          : {
+          : role === "PERSONNEL"
+          ? {
               role: role,
               personnel: {
                 connectOrCreate: {
                   where: {
-                    id: getId,
+                    id: getP.id,
                   },
                   create: {
-                    id: getId,
                     createdBy: {
                       connect: {
                         id: adminId,
@@ -129,10 +135,10 @@ export async function PATCH(req, context) {
                   },
                 },
               },
-            }),
+            }
+          : undefined),
       },
     });
-
     return NextResponse.json(
       ApiResponseDto({
         statusCode: 200,
@@ -343,6 +349,11 @@ function mapSingleStaff(data) {
             })),
           })),
         })),
+      };
+    case "ADMIN":
+      return {
+        ...commonData,
+        admin: { ...data.admin },
       };
     default:
       return null;
