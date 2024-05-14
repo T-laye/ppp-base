@@ -47,10 +47,10 @@ export default function Page() {
       phone: worker?.phoneNumber,
       address: worker?.address,
       gender: worker?.gender,
-      role: worker?.role,
+      role: '',
       password: "",
     },
-    validate: personnel_validate,
+    // validate: personnel_validate,
     onSubmit: handleSubmit,
   });
 
