@@ -73,7 +73,7 @@ export default function Page() {
       }
       // console.log(values);
     } catch (e) {
-      toast.error(e.data.message);
+      toast.error('update failed');
       setIsLoading(false);
       console.log(e);
     }

@@ -24,6 +24,8 @@ export default function Vouchers() {
   );
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
+  const { worker } = useSelector((state) => state.worker);
+  const managementDetails = worker?.management?.map((p) => p.canEdit).flat();
 
   const voucherList = approved ? approvedVouchers : queuedVouchers;
   const totalPages = approved
@@ -196,12 +198,14 @@ export default function Vouchers() {
               {approved ? "Approved" : "Queue"}
             </div>
           </div>
-          <button
-            onClick={handleAddVoucher}
-            className="btn max-[285px]:mx-auto bg-primary"
-          >
-            + Add
-          </button>
+          {managementDetails?.includes(true) && (
+            <button
+              onClick={handleAddVoucher}
+              className="btn max-[285px]:mx-auto bg-primary"
+            >
+              + Add
+            </button>
+          )}
         </div>
       </div>
       <div className="mt-4">

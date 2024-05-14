@@ -61,13 +61,13 @@ export default function Page() {
 
     try {
       const res = await axios.patch(
-        `/api/admin/staff/${id}?edit=${edit}&role=MANAGEMENT`
+        `/api/admin/staff/${id}?edit=${edit}&`
       );
       console.log(res);
       if (res) {
         // setIsLoading(false);
         toast.success(res.data.data.message);
-        router.back();
+        window.location.reload()
       }
     } catch (e) {
       toast.error(e.data.message);
@@ -151,17 +151,17 @@ export default function Page() {
               value={worker?.role}
               icon={<BsPersonFillGear size={16} />}
             />
-            <DetailList
+            {/* <DetailList
               title="Assigned Point of Collection"
               value="Total Fueling Station"
               icon={<BsFillFuelPumpDieselFill size={16} />}
-            />
+            /> */}
 
-            <DetailList
+            {/* <DetailList
               title="Created At"
-              value={formatDate(worker?.management[0]?.createdAt)}
+              // value={formatDate(worker?.management[0]?.createdAt)}
               icon={<FaUser size={16} />}
-            />
+            /> */}
 
             {id !== userInfo?.id && (
               <div>
@@ -196,7 +196,7 @@ export default function Page() {
                   } `}
                   disabled={isLoading}
                 >
-                  {isLoading ? <Loader /> : "Delete Product"}
+                  {isLoading ? <Loader /> : "Delete Person"}
                 </button>
               </div>
             )}
