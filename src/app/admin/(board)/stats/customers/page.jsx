@@ -30,14 +30,10 @@ export default function Customers() {
   };
 
   const renderCustomers = () => {
-    if (data) {
-      if (data.length === 0) {
-        return <div>No Customers Found</div>;
-      } else {
-        return data?.map((c) => <CustomerList key={c?.customerId} c={c} />);
-      }
+    if (!data) {
+      return <div>No Customers Found</div>;
     } else {
-      return <Loading />;
+      return data?.map((c) => <CustomerList key={c?.customerId} c={c} />);
     }
   };
 
@@ -72,7 +68,7 @@ export default function Customers() {
           </div>
         </form>
         <div className="flex justify-between mt-2">
-          <Pagination totalPages={totalPages} />
+          {data && <Pagination totalPages={totalPages} />}
           <p className="text-end mt-3 text-sm text-gray-500 pr-2">
             {data?.length ?? 0}
           </p>

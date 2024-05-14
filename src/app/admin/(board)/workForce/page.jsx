@@ -16,7 +16,7 @@ export default function WorkForce() {
   const { personnels } = useSelector((state) => state.personnels);
   const { data, count, totalPages } = personnels;
   const dispatch = useDispatch();
-  // console.log(staffName);
+  console.log(data);
 
   const goToNewPersonnel = () => {
     router.push("/newPersonnel");
@@ -130,14 +130,13 @@ export default function WorkForce() {
           </div>
         </form>
 
-  <div className="flex justify-between mt-2">
+        <div className="flex justify-between mt-2">
           <Pagination totalPages={totalPages} />
           <p className="text-end mt-3 text-sm text-gray-500 pr-2">
-          
-          {data?.length ?? 0}
+            {data?.length ?? 0}
           </p>
         </div>
-        
+
         <div className="bg-gren-400 pt-3 pb-10">
           <ul>{renderPersons()}</ul>
         </div>

@@ -35,7 +35,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const { worker } = useSelector((state) => state.worker);
   const managementDetails = worker?.management?.map((p) => p.canEdit).flat();
-  // console.log(managementDetails);
+  // console.log(worker);
 
   // console.log(customer);
   useEffect(() => {

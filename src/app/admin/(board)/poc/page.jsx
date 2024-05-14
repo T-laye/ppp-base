@@ -72,23 +72,19 @@ export default function Poc() {
   // console.log("Total assigned:", totalAssigned);
 
   const renderPocs = () => {
-    if (pocs.data) {
-      if (pocs?.data?.length === 0) {
-        return <div>No POC Found</div>;
-      } else {
-        return pocs?.data?.map((p) => (
-          <PocList
-            key={p?.id}
-            name={capitalizeWords(p?.name)}
-            id={p?.id}
-            product={p?.productAllocation}
-            // available={p.stockLimit}
-            // total={p.stockAvailable}
-          />
-        ));
-      }
+    if (!pocs?.data || pocs?.data?.length === 0) {
+      return <div>No POC Found</div>;
     } else {
-      return <Loading />;
+      return pocs?.data?.map((p) => (
+        <PocList
+          key={p?.id}
+          name={capitalizeWords(p?.name)}
+          id={p?.id}
+          product={p?.productAllocation}
+          // available={p.stockLimit}
+          // total={p.stockAvailable}
+        />
+      ));
     }
   };
 

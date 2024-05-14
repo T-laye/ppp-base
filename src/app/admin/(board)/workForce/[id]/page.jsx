@@ -29,12 +29,12 @@ export default function Page() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const { userInfo } = useSelector((state) => state.auth);
-  // console.log(userInfo);
+  // console.log(worker?.management[0]?.createdAt);
 
   useEffect(() => {
     const getWorkerDetails = async () => {
       const res = await axios.get(`/api/admin/staff/${id}`);
-
+      console.log(res);
       dispatch(getWorker({ ...res.data.data }));
     };
 
@@ -55,6 +55,26 @@ export default function Page() {
     }
     // console.log(res);
   };
+
+  async function handleCanEdit(edit) {
+    console.log(edit);
+
+    try {
+      const res = await axios.patch(
+        `/api/admin/staff/${id}?edit=${edit}&role=MANAGEMENT`
+      );
+      console.log(res);
+      if (res) {
+        // setIsLoading(false);
+        toast.success(res.data.data.message);
+        router.back();
+      }
+    } catch (e) {
+      toast.error(e.data.message);
+      // setIsLoading(false);
+      console.log(e);
+    }
+  }
 
   const editPerson = () => {
     router.push(`/admin/workForce/${id}/editPerson`);
@@ -78,7 +98,7 @@ export default function Page() {
     // Parse the date string
     const date = new Date(dateString);
     // console.log(date);
-    if (worker?.createdDate) {
+    if (worker?.management[0]?.createdAt) {
       const dateOptions = {
         weekday: "long",
         year: "numeric",
@@ -139,7 +159,7 @@ export default function Page() {
 
             <DetailList
               title="Created At"
-              value={formatDate(worker?.createdAt)}
+              value={formatDate(worker?.management[0]?.createdAt)}
               icon={<FaUser size={16} />}
             />
 
@@ -152,21 +172,32 @@ export default function Page() {
                   Edit Person
                 </button>
 
-                {worker?.role === "MANAGEMENT" && (
-                  <button className="btn bg-blue-500 w-full mt-5">
-                    Enable Edit
-                  </button>
-                )}
-                 <button
-                onClick={handleDeletePersonnel}
-                type="submit"
-                className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
-                  isLoading ? "bg-customGray" : "bg-error"
-                } `}
-                disabled={isLoading}
-              >
-                {isLoading ? <Loader /> : "Delete Product"}
-              </button>
+                {worker?.role === "MANAGEMENT" &&
+                  (!worker?.management[0]?.canEdit ? (
+                    <button
+                      onClick={() => handleCanEdit("true")}
+                      className="btn bg-blue-500 w-full mt-5"
+                    >
+                      Enable Edit
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => handleCanEdit("false")}
+                      className="btn bg-blue-500 w-full mt-5"
+                    >
+                      Disable Edit
+                    </button>
+                  ))}
+                <button
+                  onClick={handleDeletePersonnel}
+                  type="submit"
+                  className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
+                    isLoading ? "bg-customGray" : "bg-error"
+                  } `}
+                  disabled={isLoading}
+                >
+                  {isLoading ? <Loader /> : "Delete Product"}
+                </button>
               </div>
             )}
           </div>

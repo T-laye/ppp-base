@@ -21,7 +21,7 @@ export default function Stats() {
   const { queuedVouchers, approvedVouchers, collectedVouchers } = useSelector(
     (state) => state.vouchers
   );
-  const { count, data } = products;
+  const { data, count } = products;
   const productDetails = pocs?.data?.map((p) => p.productAllocation).flat();
 
   const available = productDetails
@@ -31,7 +31,7 @@ export default function Stats() {
   const total = productDetails
     ?.map((p) => p.capacity)
     ?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  // console.log(total);
+  console.log(data);
 
   const percentage = (available / total) * 100;
 
@@ -54,22 +54,19 @@ export default function Stats() {
 
   const renderProducts = () => {
     // const renderCustomers = () => {
-    if (data) {
-      if (count === 0) {
-        return <div className="text-lg">No Products Found</div>;
-      } else {
-        return data?.map((p) => (
-          <QuantityCards
-            key={p.productId}
-            info={p}
-            products={productDetails}
-            available={420}
-            total={600}
-          />
-        ));
-      }
+
+    if (!data) {
+      return <div className="text-lg">No Products Found</div>;
     } else {
-      return <Loading />;
+      return data?.map((p) => (
+        <QuantityCards
+          key={p.productId}
+          info={p}
+          products={productDetails}
+          available={420}
+          total={600}
+        />
+      ));
     }
   };
   // }
