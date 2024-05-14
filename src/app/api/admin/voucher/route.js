@@ -282,14 +282,6 @@ export async function GET(req, res) {
         { status: authResponse.status }
       );
     }
-    if (
-      authResponse.user.role !== "ADMIN" &&
-      authResponse.user.management.canEdit === true
-    ) {
-      return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
-        status: 403,
-      });
-    }
     const pageNumber = parseInt(searchParams.get("pageNumber"));
     const order = searchParams.get("order");
     const take = searchParams.get("take")

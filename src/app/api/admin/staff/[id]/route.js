@@ -315,17 +315,17 @@ function mapSingleStaff(data) {
       return {
         ...commonData,
         personnel: v.personnel?.flatMap((p) => ({
-          personnelId: p.id,
-          createdById: p.createdById,
+          personnelId: p?.id,
+          createdById: p?.createdById,
           poc: {
-            id: p.poc.id,
-            name: p.poc.name,
-            address: p.poc.address,
-            phoneNumber: p.poc.phoneNumber,
-            stockAvailable: p.poc.stockAvailable,
-            stockLimit: p.poc.stockLimit,
-            createdAt: p.poc.createdAt,
-            productAllocation: p.poc.productAllocation.map((v) => ({
+            id: p?.poc?.id,
+            name: p?.poc?.name,
+            address: p?.poc?.address,
+            phoneNumber: p?.poc?.phoneNumber,
+            stockAvailable: p?.poc?.stockAvailable,
+            stockLimit: p?.poc?.stockLimit,
+            createdAt: p?.poc?.createdAt,
+            productAllocation: p?.poc?.productAllocation?.map((v) => ({
               ...v,
             })),
           },
@@ -335,16 +335,16 @@ function mapSingleStaff(data) {
       return {
         ...commonData,
         management: v.management?.flatMap((p) => ({
-          id: p.id,
-          createdAt: p.createdAt,
-          userId: p.userId,
-          canEdit: p.canEdit,
-          poc: p.poc.flatMap((v) => ({
-            poc_id: v.id,
-            name: v.name,
-            address: v.address,
-            phoneNumber: v.phoneNumber,
-            productAllocation: v.productAllocation.map((v) => ({
+          id: p?.id,
+          createdAt: p?.createdAt,
+          userId: p?.userId,
+          canEdit: p?.canEdit,
+          poc: p?.poc?.flatMap((v) => ({
+            poc_id: v?.id,
+            name: v?.name,
+            address: v?.address,
+            phoneNumber: v?.phoneNumber,
+            productAllocation: v?.productAllocation.map((v) => ({
               ...v,
             })),
           })),
@@ -353,7 +353,7 @@ function mapSingleStaff(data) {
     case "ADMIN":
       return {
         ...commonData,
-        admin: { ...data.admin },
+        admin: { ...data?.admin },
       };
     default:
       return null;
