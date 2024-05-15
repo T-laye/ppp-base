@@ -77,14 +77,6 @@ export async function GET(req, context) {
         { status: authResponse.status }
       );
     }
-    if (
-      authResponse.user.role !== "ADMIN" &&
-      authResponse.user.management.canEdit === true
-    ) {
-      return NextResponse.json(ApiResponseDto({ message: "not allowed" }), {
-        status: 403,
-      });
-    }
 
     const { params } = context;
     const getVoucherId = params.vId;
