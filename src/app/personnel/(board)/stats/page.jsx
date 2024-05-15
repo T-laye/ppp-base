@@ -15,8 +15,11 @@ export default function Stats() {
   const { worker } = useSelector((state) => state.worker);
   const { collectedVouchers } = useSelector((state) => state.vouchers);
   const personnelPoc = worker?.personnel?.map((p) => p.poc);
+  const getAllocation = collectedVouchers?.data
+    ?.map((a) => a?.voucher?.product.voucherAllocation)
+    .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-  console.log(personnelPoc);
+  console.log(getAllocation);
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
     let words = sentence?.split(" ");
@@ -54,13 +57,13 @@ export default function Stats() {
         </h4>
         <div className="flex flex-col flex-wrap gap-3 mt-4">
           <StatsCard
-            number={34}
+            number={getAllocation ?? 0}
             color="bg-primary"
             title="Total Product Dispensed"
             icon={<PiDropFill size={24} />}
           />
           <StatsCard
-            number={collectedVouchers?.count ?? 0}
+            number={collectedVouchers?.data?.length ?? 0}
             color="bg-customGray"
             title="Used Vouchers"
             icon={<MdVerifiedUser size={24} />}

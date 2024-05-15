@@ -21,11 +21,15 @@ export default function Stats() {
   const managementDetails = worker?.management?.map((p) => p.poc);
   const pocs = managementDetails?.map((p) => p).flat();
   const pocProducts = pocs?.map((p) => p.products).flat();
+  const getAllocation = collectedVouchers?.data
+    ?.map((a) => a.product.voucherAllocation)
+    .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+  // console.log(getAllocation);
 
   useEffect(() => {
     dispatch(handleProductName(""));
   }, [dispatch]);
-  // console.log(products);
 
   const setTab = (tab) => {
     setActiveTab(tab);
@@ -127,7 +131,7 @@ export default function Stats() {
           /> */}
           <StatsCard
             link="#"
-            number={34}
+            number={getAllocation ?? 0}
             color="bg-primary"
             title="Total Product Dispensed"
             icon={<PiDropFill size={24} />}

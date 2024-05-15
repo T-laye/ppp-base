@@ -184,7 +184,7 @@ export default function Page() {
               />
               <DetailList
                 title="Vehicle Plate Number"
-                value={voucher?.voucherDispense?.vehicleNumber}
+                value={voucher?.voucherDispense?.vehicleNUmber}
                 icon={<FaBarcode size={16} />}
               />
               <DetailList
