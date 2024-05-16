@@ -72,65 +72,65 @@ export async function POST(req, res) {
       },
     });
 
-    // if (getP.stockAvailable <= getP.stockLimit) {
-    //   const emailArr = [];
-    //   const hasUser = !!getP?.poc?.user;
-    //   const hasManagement = !!getP.poc.management;
-    //   const hasPersonnel = !!getP?.poc?.personnel;
+    if (getP.stockAvailable <= getP.stockLimit) {
+      const emailArr = [];
+      const hasUser = !!getP?.poc?.user;
+      const hasManagement = !!getP.poc.management;
+      const hasPersonnel = !!getP?.poc?.personnel;
 
-    //   if (hasUser) {
-    //     emailPromises.push(
-    //       sendEmailHelper({
-    //         email: getP?.poc?.user.email,
-    //         Body: ProductNotificationEmail({
-    //           name: getP?.poc?.user.name?.split(" ")[0],
-    //           poc: getP.poc.name,
-    //           address: getP.poc.address,
-    //           product: getP.product.productName,
-    //           productAvailable: getP.stockAvailable,
-    //           stockLimit: getP.stockLimit,
-    //         }),
-    //       })
-    //     );
-    //   }
+      if (hasUser) {
+        emailPromises.push(
+          sendEmailHelper({
+            email: getP?.poc?.user.email,
+            Body: ProductNotificationEmail({
+              name: getP?.poc?.user.name?.split(" ")[0],
+              poc: getP.poc.name,
+              address: getP.poc.address,
+              product: getP.product.productName,
+              productAvailable: getP.stockAvailable,
+              stockLimit: getP.stockLimit,
+            }),
+          })
+        );
+      }
 
-    //   if (hasManagement) {
-    //     for (const m of getP.poc.management) {
-    //       if (m?.user) {
-    //         emailPromises.push(
-    //           sendEmailHelper({
-    //             email: m.user.email,
-    //             Body: ProductNotificationEmail({
-    //               name: m.user.name?.split(" ")[0],
-    //               poc: getP.poc.name,
-    //               address: getP.poc.address,
-    //               product: getP.product.productName,
-    //               productAvailable: getP.stockAvailable,
-    //               stockLimit: getP.stockLimit,
-    //             }),
-    //           })
-    //         );
-    //       }
-    //     }
-    //   }
+      if (hasManagement) {
+        for (const m of getP.poc.management) {
+          if (m?.user) {
+            emailPromises.push(
+              sendEmailHelper({
+                email: m.user.email,
+                Body: ProductNotificationEmail({
+                  name: m.user.name?.split(" ")[0],
+                  poc: getP.poc.name,
+                  address: getP.poc.address,
+                  product: getP.product.productName,
+                  productAvailable: getP.stockAvailable,
+                  stockLimit: getP.stockLimit,
+                }),
+              })
+            );
+          }
+        }
+      }
 
-    //   if (hasPersonnel) {
-    //     emailPromises.push(
-    //       sendEmailHelper({
-    //         email: getP?.poc?.personnel?.user.email,
-    //         Body: ProductNotificationEmail({
-    //           name: getP?.poc?.personnel?.user.name?.split(" ")[0],
-    //           poc: getP.poc.name,
-    //           address: getP.poc.address,
-    //           product: getP.product.productName,
-    //           productAvailable: getP.stockAvailable,
-    //           stockLimit: getP.stockLimit,
-    //         }),
-    //       })
-    //     );
-    //   }
-    //   await Promise.all(emailArr);
-    // }
+      if (hasPersonnel) {
+        emailPromises.push(
+          sendEmailHelper({
+            email: getP?.poc?.personnel?.user.email,
+            Body: ProductNotificationEmail({
+              name: getP?.poc?.personnel?.user.name?.split(" ")[0],
+              poc: getP.poc.name,
+              address: getP.poc.address,
+              product: getP.product.productName,
+              productAvailable: getP.stockAvailable,
+              stockLimit: getP.stockLimit,
+            }),
+          })
+        );
+      }
+      await Promise.all(emailArr);
+    }
 
     const createVDispenseData = await prisma.voucherDispense.create({
       data: {
