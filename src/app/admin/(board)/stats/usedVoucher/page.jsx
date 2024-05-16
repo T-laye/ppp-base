@@ -29,7 +29,7 @@ export default function UsedVoucher() {
   };
 
   const renderUsedVouchers = () => {
-    if (collectedVouchers?.data?.length === 0) {
+    if (collectedVouchers?.data?.length === 0 || !collectedVouchers.data) {
       return <h2>No Voucher Found</h2>;
     } else {
       return collectedVouchers?.data?.map((v, i) => {

@@ -47,10 +47,10 @@ export default function Page() {
       phone: worker?.phoneNumber,
       address: worker?.address,
       gender: worker?.gender,
-      role: worker?.role,
+      role: '',
       password: "",
     },
-    validate: personnel_validate,
+    // validate: personnel_validate,
     onSubmit: handleSubmit,
   });
 
@@ -73,7 +73,7 @@ export default function Page() {
       }
       // console.log(values);
     } catch (e) {
-      toast.error(e.data.message);
+      toast.error('update failed');
       setIsLoading(false);
       console.log(e);
     }

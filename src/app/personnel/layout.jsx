@@ -67,10 +67,15 @@ export default function Layout({ children }) {
       if (isAuth) {
         try {
           const resCollectedVouchers = await axios.get(
-            `/api/admin/voucher?product_name=${productName}&verifiedBy=${personnelId}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+            `/api/admin/voucher/personnel`
           );
-          dispatch(fetchCollectedVouchers({ ...resCollectedVouchers?.data }));
-          //  console.log(resCollectedVouchers);
+          // const resCollectedVouchers = await axios.get(
+          //   `/api/admin/voucher?product_name=${productName}&verifiedBy=${personnelId}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+          // );
+          dispatch(
+            fetchCollectedVouchers({...resCollectedVouchers?.data})
+          );
+          // console.log(resCollectedVouchers);
           // console.log(resPocs)
         } catch (e) {
           console.log(e);

@@ -78,22 +78,26 @@ export default function Vouchers() {
   };
 
   const renderProductsTab = () => {
-    return products?.data?.map((p, i) => {
-      return (
-        <div
-          key={i}
-          onClick={() => {
-            setTab(i);
-            dispatch(handleProductName(p.name));
-          }}
-          className={`${
-            activeTab === i ? "bg-primary text-white" : "border text-gray-400 "
-          }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
-        >
-          {capitalizeWords(p.name)}
-        </div>
-      );
-    });
+    if (products.data) {
+      return products?.data?.map((p, i) => {
+        return (
+          <div
+            key={i}
+            onClick={() => {
+              setTab(i);
+              dispatch(handleProductName(p.name));
+            }}
+            className={`${
+              activeTab === i
+                ? "bg-primary text-white"
+                : "border text-gray-400 "
+            }  px-3 py-1 rounded-xl duration-200 text-center cursor-pointer`}
+          >
+            {capitalizeWords(p.name)}
+          </div>
+        );
+      });
+    } else return;
   };
 
   const renderCustomers = () => {
@@ -111,46 +115,42 @@ export default function Vouchers() {
   };
 
   const renderVouchers = () => {
-    if (voucherList?.data) {
-      if (voucherList?.data?.length === 0) {
-        return <p>No Voucher Found</p>;
-      } else if (approved) {
-        return voucherList?.data
-          ?.filter(
-            (v) =>
-              v?.product?.productName?.toLowerCase() === activeTabProduct &&
-              v.availableForDispense
-          )
-          .reverse()
-          .map((c, i) => (
-            <VoucherList
-              key={i}
-              name={capitalizeWords(c.customer?.name)}
-              id={c?.id}
-              index={i}
-              approved={approved}
-            />
-          ));
-      } else {
-        return voucherList?.data
-          ?.filter(
-            (v) =>
-              v?.product?.productName?.toLowerCase() === activeTabProduct &&
-              !v.availableForDispense
-          )
-          .reverse()
-          .map((c, i) => (
-            <VoucherList
-              approved={approved}
-              key={i}
-              name={capitalizeWords(c.customer?.name)}
-              index={i}
-              id={c?.id}
-            />
-          ));
-      }
+    if (!voucherList?.data || voucherList?.data?.length === 0) {
+      return <p>No Voucher Found</p>;
+    } else if (approved) {
+      return voucherList?.data
+        ?.filter(
+          (v) =>
+            v?.product?.productName?.toLowerCase() === activeTabProduct &&
+            v.availableForDispense
+        )
+        .reverse()
+        .map((c, i) => (
+          <VoucherList
+            key={i}
+            name={capitalizeWords(c.customer?.name)}
+            id={c?.id}
+            index={i}
+            approved={approved}
+          />
+        ));
     } else {
-      return <Loading />;
+      return voucherList?.data
+        ?.filter(
+          (v) =>
+            v?.product?.productName?.toLowerCase() === activeTabProduct &&
+            !v.availableForDispense
+        )
+        .reverse()
+        .map((c, i) => (
+          <VoucherList
+            approved={approved}
+            key={i}
+            name={capitalizeWords(c.customer?.name)}
+            index={i}
+            id={c?.id}
+          />
+        ));
     }
   };
   // console.log(voucherList);
@@ -224,7 +224,7 @@ export default function Vouchers() {
         </form>
 
         <div className="flex justify-between mt-2">
-          <Pagination totalPages={totalPages} />
+          {voucherList.count && <Pagination totalPages={totalPages} />}
           <p className="text-end mt-3 text-sm text-gray-500 pr-2">
             {voucherList.count ?? 0}
           </p>

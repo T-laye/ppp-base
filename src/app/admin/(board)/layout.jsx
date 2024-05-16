@@ -61,11 +61,15 @@ export default function Layout({ children }) {
   useEffect(() => {
     (async () => {
       if (isAuth) {
-        const resProducts = await axios.get(
-          `/api/product?take=${take}&pageNumber=${pageNumber}&name`
-        );
-        // console.log(resProducts);
-        dispatch(fetchProducts({ ...resProducts?.data }));
+        try {
+          const resProducts = await axios.get(
+            `/api/product?take=${take}&pageNumber=${pageNumber}&name`
+          );
+          // console.log(resProducts);
+          dispatch(fetchProducts({ ...resProducts?.data }));
+        } catch (e) {
+          console.log(e);
+        }
       } else {
         return;
       }
@@ -89,11 +93,15 @@ export default function Layout({ children }) {
   useEffect(() => {
     (async () => {
       if (isAuth) {
-        const resPocs = await axios.get(
-          `/api/poc?name=${pocName}&take=${take}&pageNumber=${pageNumber}&productName=${productName}`
-        );
-        // console.log(resPocs);
-        dispatch(fetchPocs({ ...resPocs?.data }));
+        try {
+          const resPocs = await axios.get(
+            `/api/poc?name=${pocName}&take=${take}&pageNumber=${pageNumber}&productName=${productName}`
+          );
+          // console.log(resPocs);
+          dispatch(fetchPocs({ ...resPocs?.data }));
+        } catch (err) {
+          console.log(err);
+        }
       } else {
         return;
       }
@@ -169,7 +177,7 @@ export default function Layout({ children }) {
           // console.log(resApprovedVouchers);
           // console.log(resPocs)
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;
@@ -185,7 +193,7 @@ export default function Layout({ children }) {
             `/api/admin/voucher?product_name=${productName}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
           );
           dispatch(fetchCollectedVouchers({ ...resCollectedVouchers?.data }));
-          // console.log(resCollectedVouchers);
+          console.log(resCollectedVouchers);
           // console.log(resPocs)
         } catch (e) {
           console.log(e);

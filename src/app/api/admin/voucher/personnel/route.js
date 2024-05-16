@@ -3,8 +3,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../../../../config/prisma.connect";
 import { endOfDay, isValid } from "date-fns";
 
-export async function GET() {
-  const searchParams = req.nextUrl.searchParams;
+export async function GET(req, res) {
   try {
     const authResponse = await getAuthUser(req, true);
     if (authResponse.error) {
@@ -22,6 +21,7 @@ export async function GET() {
       },
       include: {
         personnel: true,
+
       },
     });
     if (getP.role !== "PERSONNEL") {
@@ -69,7 +69,13 @@ export async function GET() {
         },
       },
       include: {
-        voucher: true,
+        voucher: {
+          include: {
+            customer: true,
+            product: true,
+          }
+        },
+        
       },
     });
     return NextResponse.json(

@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "@/components/Loading";
 import { BsPersonFillGear } from "react-icons/bs";
 import { handleProductName } from "@/redux/slices/variableSlice";
+import { PiDropFill } from "react-icons/pi";
 
 export default function Stats() {
   const dispatch = useDispatch();
@@ -21,8 +22,13 @@ export default function Stats() {
   const { queuedVouchers, approvedVouchers, collectedVouchers } = useSelector(
     (state) => state.vouchers
   );
-  const { count, data } = products;
+  const { data, count } = products;
   const productDetails = pocs?.data?.map((p) => p.productAllocation).flat();
+  const getAllocation = collectedVouchers?.data
+    ?.map((a) => a?.product?.voucherAllocation)
+    .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+
+  // console.log(getAllocation);
 
   const available = productDetails
     ?.map((p) => p.stockAvailable)
@@ -31,7 +37,7 @@ export default function Stats() {
   const total = productDetails
     ?.map((p) => p.capacity)
     ?.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  // console.log(total);
+  // console.log(data);
 
   const percentage = (available / total) * 100;
 
@@ -54,22 +60,19 @@ export default function Stats() {
 
   const renderProducts = () => {
     // const renderCustomers = () => {
-    if (data) {
-      if (count === 0) {
-        return <div className="text-lg">No Products Found</div>;
-      } else {
-        return data?.map((p) => (
-          <QuantityCards
-            key={p.productId}
-            info={p}
-            products={productDetails}
-            available={420}
-            total={600}
-          />
-        ));
-      }
+
+    if (!data) {
+      return <div className="text-lg">No Products Found</div>;
     } else {
-      return <Loading />;
+      return data?.map((p) => (
+        <QuantityCards
+          key={p.productId}
+          info={p}
+          products={productDetails}
+          available={420}
+          total={600}
+        />
+      ));
     }
   };
   // }
@@ -104,6 +107,12 @@ export default function Stats() {
             icon={<BsPersonFillGear size={24} />}
           />
           <StatsCard
+            number={getAllocation ?? 0}
+            title="Total Product Dispensed"
+            icon={<PiDropFill size={24} />}
+            color="bg-primary"
+          />
+          <StatsCard
             link="/admin/vouchers"
             color="bg-yellow-500"
             number={queuedVouchers?.count ?? 0}
@@ -113,7 +122,7 @@ export default function Stats() {
           <StatsCard
             link="/admin/vouchers"
             number={approvedVouchers?.count ?? 0}
-            color="bg-primary"
+            color="bg-green-500"
             title="Approved"
             icon={<IoCheckmarkDoneCircle size={24} />}
           />
