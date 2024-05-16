@@ -321,7 +321,7 @@ export async function GET(req, res) {
       );
     }
 
-    if (!isValid(new Date(date))) {
+    if (date && !isValid(new Date(date))) {
       return NextResponse.json(
         {
           message:

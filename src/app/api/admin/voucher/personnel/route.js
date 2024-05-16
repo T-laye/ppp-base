@@ -1,6 +1,7 @@
 import { getAuthUser } from "../../../../../../lib/get-auth-user";
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../../../config/prisma.connect";
+import { endOfDay, isValid } from "date-fns";
 
 export async function GET(req, res) {
   try {
@@ -29,15 +30,42 @@ export async function GET(req, res) {
         { status: 200 }
       );
     }
+    const customer = searchParams.get("customer");
+    const date = searchParams.get("date");
+    const product = searchParams.get("product_name");
+    if (date && !isValid(new Date(date))) {
+      return NextResponse.json(
+        {
+          message:
+            "the date format is not correct, date is supposed to be of type YYYY-MM-DD",
+          error: "invalid date format",
+        },
+        { status: 400 }
+      );
+    }
 
     const getPId = getP.personnel?.find((p) => p?.userId === getP?.id);
     const getUsedV = await prisma.voucherDispense.findMany({
       where: {
+        ...(date
+          ? {
+              createdAt: {
+                gte: new Date(date).toISOString(),
+                lt: endOfDay(new Date(date)),
+              },
+            }
+          : undefined),
         verifiedBy: {
           id: getPId?.id,
         },
         voucher: {
           collected: true,
+          product: {
+            productName: product ? { contains: product } : {},
+          },
+          customer: {
+            name: customer ? { contains: customer } : {},
+          },
         },
       },
       include: {

@@ -80,7 +80,7 @@ export async function POST(req, res) {
       message: "successful",
       data: {
         customer: newCustomer,
-        // email: sendEmail.data ? "email sent successfully" : "error occurred",
+        email: sendEmail.data ? "email sent successfully" : "error occurred",
       },
       statusCode: 201,
     });
