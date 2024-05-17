@@ -183,6 +183,20 @@ export async function POST(req, res) {
     }
     const body = await req.json();
     const { customerId, productId } = body;
+    const getCustomer = await prisma.customer.findUnique({
+      where: {
+        id: customerId,
+      },
+    });
+    if (getCustomer.acceptTerms !== true) {
+      return NextResponse.json(
+        {
+          message: `customer with name ${getCustomer.name} is not verified. Kindly contact admin`,
+          data: null,
+        },
+        { status: 400 }
+      );
+    }
     const vToken = await generateVoucherCode({
       customerId: customerId,
       product: productId,
@@ -226,28 +240,28 @@ export async function POST(req, res) {
         },
       });
 
-      // if (v) {
-      //   await sendVoucherCreationEmail({
-      //     email: v.customer.email,
-      //     firstName: v.customer.name.split(" ")[0],
-      //   });
-      // }
+      if (v) {
+        await sendVoucherCreationEmail({
+          email: v.customer.email,
+          firstName: v.customer.name.split(" ")[0],
+        });
+      }
     });
     const vQueue = await checkVoucherListAction({ productId: productId });
     if (vQueue?.data) {
-      // if (vQueue.data.customer) {
-      //   const {
-      //     customer: {
-      //       voucherCode,
-      //       customer: { name, email },
-      //     },
-      //   } = vQueue.data;
-      //   await sendVoucherEmailNotification({
-      //     customerName: name.split(" ")[0],
-      //     email: email,
-      //     voucherCode: voucherCode,
-      //   });
-      // }
+      if (vQueue.data.customer) {
+        const {
+          customer: {
+            voucherCode,
+            customer: { name, email },
+          },
+        } = vQueue.data;
+        await sendVoucherEmailNotification({
+          customerName: name.split(" ")[0],
+          email: email,
+          voucherCode: voucherCode,
+        });
+      }
       return NextResponse.json(
         {
           message: "successful",
