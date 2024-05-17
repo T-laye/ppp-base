@@ -64,15 +64,15 @@ export default function NewVoucher() {
       });
 
       if (res) {
-        console.log(res);
+        // console.log(res);
         setIsLoading(false);
         toast.success("Successful");
-        router.back()
+        router.back();
       }
     } catch (err) {
       setIsLoading(false);
-      console.error(err);
-      toast.error("Something went wrong");
+      // console.error(err);
+      toast.error(err?.response?.data?.message);
     }
     // console.log("res");
 

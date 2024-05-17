@@ -37,7 +37,7 @@ export default function Page() {
 
   // const getAllAssignedPersonnelId = pocs?.data?.map((p) => p?.personnel?.userId);
   // console.log(getAllAssignedPersonnelId);
-  console.log(poc);
+  // console.log(poc);
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
@@ -88,7 +88,7 @@ export default function Page() {
       if (res) {
         toast.success("Successfully Removed");
         window.location.reload();
-        console.log(res);
+        // console.log(res);
       }
 
       // setShowAssignModal(!showAssignModal);

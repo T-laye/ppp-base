@@ -19,7 +19,7 @@ export default function Stats() {
     ?.map((a) => a?.voucher?.product.voucherAllocation)
     .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-  console.log(getAllocation);
+  // console.log(getAllocation);
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
     let words = sentence?.split(" ");

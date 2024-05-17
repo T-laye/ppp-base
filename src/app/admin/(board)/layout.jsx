@@ -33,7 +33,7 @@ export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { pageNumber, take, search, productName, staffName, pocName } =
+  const { pageNumber, take, search, productName, staffName, pocName, date } =
     useSelector((state) => state.variables);
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -58,23 +58,23 @@ export default function Layout({ children }) {
     })();
   }, [dispatch, router]);
 
-  useEffect(() => {
-    (async () => {
-      if (isAuth) {
-        try {
-          const resProducts = await axios.get(
-            `/api/product?take=${take}&pageNumber=${pageNumber}&name`
-          );
-          // console.log(resProducts);
-          dispatch(fetchProducts({ ...resProducts?.data }));
-        } catch (e) {
-          console.log(e);
-        }
-      } else {
-        return;
-      }
-    })();
-  }, [dispatch, isAuth, pageNumber, take, productName]);
+      useEffect(() => {
+        (async () => {
+          if (isAuth) {
+            try {
+              const resProducts = await axios.get(
+                `/api/product?take=${take}&pageNumber=${pageNumber}&name`
+              );
+              // console.log(resProducts);
+              dispatch(fetchProducts({ ...resProducts?.data }));
+            } catch (e) {
+              console.log(e);
+            }
+          } else {
+            return;
+          }
+        })();
+      }, [dispatch, isAuth, pageNumber, take, productName]);
 
   useEffect(() => {
     (async () => {
@@ -190,10 +190,10 @@ export default function Layout({ children }) {
       if (isAuth) {
         try {
           const resCollectedVouchers = await axios.get(
-            `/api/admin/voucher?product_name=${productName}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+            `/api/admin/voucher?product_name=${productName}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}&date=${date}`
           );
           dispatch(fetchCollectedVouchers({ ...resCollectedVouchers?.data }));
-          console.log(resCollectedVouchers);
+          // console.log(resCollectedVouchers);
           // console.log(resPocs)
         } catch (e) {
           console.log(e);
@@ -202,7 +202,7 @@ export default function Layout({ children }) {
         return;
       }
     })();
-  }, [dispatch, isAuth, pageNumber, productName, search, take]);
+  }, [dispatch, isAuth, pageNumber, productName, search, take, date]);
   // console.log(isAuth);
 
   if (!isAuth) {

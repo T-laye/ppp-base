@@ -26,7 +26,7 @@ export default function Page() {
   const dispatch = useDispatch();
   const { voucher } = useSelector((state) => state.voucher);
 
-  console.log(voucher);
+  // console.log(voucher);
 
   useEffect(() => {
     const getVoucherDetails = async () => {
@@ -36,7 +36,7 @@ export default function Page() {
         // );
         const res = await axios.get(`/api/admin/voucher/verify/${id}`);
         if (res.data.data) {
-          console.log(res.data);
+          // console.log(res.data);
           dispatch(getVoucher({ ...res.data.data }));
         }
       } catch (err) {

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "react-toastify";
 
-export default function VoucherList({ id, name, index, approved }) {
+export default function VoucherList({ id, name, index, approved, term }) {
   const router = useRouter();
 
   const gotoVoucher = () => {
@@ -16,7 +16,7 @@ export default function VoucherList({ id, name, index, approved }) {
     try {
       const res = await axios.patch(`/api/admin/voucher/verify/${id}`);
       if (res) {
-        console.log(res);
+        // console.log(res);
         toast.success(res.data.message);
         window.location.reload();
       }
@@ -33,7 +33,7 @@ export default function VoucherList({ id, name, index, approved }) {
       >
         {name}
       </div>
-      {index === 0 && !approved && (
+      {index === 0 && !approved && !term && (
         <button onClick={approveVoucherManually} className="btn bg-primary">
           Approve
         </button>
