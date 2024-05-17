@@ -4,6 +4,7 @@ import { prisma } from "../../../../../../config/prisma.connect";
 import { endOfDay, isValid } from "date-fns";
 
 export async function GET(req, res) {
+  const searchParams = req.nextUrl.searchParams;
   try {
     const authResponse = await getAuthUser(req, true);
     if (authResponse.error) {
