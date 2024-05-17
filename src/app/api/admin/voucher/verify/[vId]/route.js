@@ -50,11 +50,11 @@ export async function PATCH(req, context) {
         product: true,
       },
     });
-    // await sendVoucherEmailNotification({
-    //   customerName: updateV.customer.name,
-    //   email: updateV.customer.email,
-    //   voucherCode: updateV.voucherCode,
-    // });
+    await sendVoucherEmailNotification({
+      customerName: updateV.customer.name,
+      email: updateV.customer.email,
+      voucherCode: updateV.voucherCode,
+    });
     return NextResponse.json(
       { message: "voucher update was successful" },
       { status: 200 }

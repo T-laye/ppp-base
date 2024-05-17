@@ -20,8 +20,8 @@ const VoucherCreationEmail = ({ firstName }) => {
       <Body style={main}>
         <Container style={container}>
           <img
-            src={`logo-removebg.png`}
-            width="170"
+            src={`https://ppp-base.vercel.app/_next/image?url=%2Fimages%2Flogo-removebg.png&w=256&q=75`}
+            width="50"
             height="50"
             alt="ppp-base logo"
             style={logo}
