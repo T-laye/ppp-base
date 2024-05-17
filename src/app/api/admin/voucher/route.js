@@ -226,28 +226,28 @@ export async function POST(req, res) {
         },
       });
 
-      // if (v) {
-      //   await sendVoucherCreationEmail({
-      //     email: v.customer.email,
-      //     firstName: v.customer.name.split(" ")[0],
-      //   });
-      // }
+      if (v) {
+        await sendVoucherCreationEmail({
+          email: v.customer.email,
+          firstName: v.customer.name.split(" ")[0],
+        });
+      }
     });
     const vQueue = await checkVoucherListAction({ productId: productId });
     if (vQueue?.data) {
-      // if (vQueue.data.customer) {
-      //   const {
-      //     customer: {
-      //       voucherCode,
-      //       customer: { name, email },
-      //     },
-      //   } = vQueue.data;
-      //   await sendVoucherEmailNotification({
-      //     customerName: name.split(" ")[0],
-      //     email: email,
-      //     voucherCode: voucherCode,
-      //   });
-      // }
+      if (vQueue.data.customer) {
+        const {
+          customer: {
+            voucherCode,
+            customer: { name, email },
+          },
+        } = vQueue.data;
+        await sendVoucherEmailNotification({
+          customerName: name.split(" ")[0],
+          email: email,
+          voucherCode: voucherCode,
+        });
+      }
       return NextResponse.json(
         {
           message: "successful",
