@@ -8,7 +8,7 @@ export async function GET(req, res) {
     const token = searchParams.get("token");
     const findCustomer = await prisma.customer.findUnique({
       where: {
-        verificationToken: { contains: token },
+        verificationToken: token,
       },
     });
     if (!findCustomer) {
