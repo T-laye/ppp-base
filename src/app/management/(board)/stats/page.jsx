@@ -22,7 +22,7 @@ export default function Stats() {
   const pocs = managementDetails?.map((p) => p).flat();
   const pocProducts = pocs?.map((p) => p.products).flat();
   const getAllocation = collectedVouchers?.data
-    ?.map((a) => a.product.voucherAllocation)
+    ?.map((a) => a?.product?.voucherAllocation)
     .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
   // console.log(getAllocation);
@@ -39,7 +39,7 @@ export default function Stats() {
     return pocs?.map((p, i) => {
       const productsInPoc = p?.productAllocation?.map((p) => p).flat();
       const productNames = productsInPoc?.map((p) =>
-        p?.product.productName?.toLowerCase()
+        p?.product?.productName?.toLowerCase()
       );
       // console.log(productNames);
       if (activeTab !== "" && productNames?.includes(activeTab)) {

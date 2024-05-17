@@ -4,7 +4,11 @@ import React, { useEffect, useState } from "react";
 import UvcList from "@/components/UvcList";
 import GoBack from "@/components/GoBack";
 import { useDispatch, useSelector } from "react-redux";
-import { handleProductName, handleSearch } from "@/redux/slices/variableSlice";
+import {
+  handleDate,
+  handleProductName,
+  handleSearch,
+} from "@/redux/slices/variableSlice";
 
 export default function UsedVoucher() {
   const [term, setTerm] = useState("");
@@ -26,6 +30,7 @@ export default function UsedVoucher() {
   };
   const handleDateChange = (e) => {
     setDate(e.target.value);
+    dispatch(handleDate(e.target.value));
   };
 
   const renderUsedVouchers = () => {
@@ -90,14 +95,14 @@ export default function UsedVoucher() {
             {renderProducts()}
           </select>
         </div>
-        {/* <div>
+        <div>
           <input
             type="date"
             id="dateInput"
             value={date}
             onChange={handleDateChange}
           />
-        </div> */}
+        </div>
       </div>
       <div className="text-end text-sm text-gray-600 font-medium mt-4">
         {collectedVouchers?.count || 0}

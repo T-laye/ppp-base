@@ -24,7 +24,7 @@ export default function UsedVoucher() {
   const handleChange = (e) => {
     setTerm(e.target.value);
     dispatch(handleSearch(e.target.value.toLowerCase()));
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
   const handleProduct = (e) => {
     setProduct(e.target.value);

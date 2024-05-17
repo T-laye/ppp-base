@@ -10,6 +10,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
 import {
+  handleDate,
   handlePageNumber,
   handlePocName,
   handleProductName,
@@ -54,27 +55,28 @@ export default function Layout({ children }) {
         dispatch(handleStaffName(""));
         dispatch(handlePageNumber(1));
         dispatch(handleTake(10));
+        dispatch(handleDate(""));
       }
     })();
   }, [dispatch, router]);
 
-      useEffect(() => {
-        (async () => {
-          if (isAuth) {
-            try {
-              const resProducts = await axios.get(
-                `/api/product?take=${take}&pageNumber=${pageNumber}&name`
-              );
-              // console.log(resProducts);
-              dispatch(fetchProducts({ ...resProducts?.data }));
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            return;
-          }
-        })();
-      }, [dispatch, isAuth, pageNumber, take, productName]);
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        try {
+          const resProducts = await axios.get(
+            `/api/product?take=${take}&pageNumber=${pageNumber}&name`
+          );
+          // console.log(resProducts);
+          dispatch(fetchProducts({ ...resProducts?.data }));
+        } catch (e) {
+          console.log(e);
+        }
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, take, productName]);
 
   useEffect(() => {
     (async () => {

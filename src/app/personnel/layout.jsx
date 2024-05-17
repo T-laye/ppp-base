@@ -60,6 +60,13 @@ export default function Layout({ children }) {
         // if no error
         dispatch(setCredentials({ ...user.user }));
         setIsAuth(true);
+        dispatch(handleDate(""));
+        dispatch(handleSearch(""));
+        dispatch(handleProductName(""));
+        dispatch(handlePocName(""));
+        dispatch(handleStaffName(""));
+        dispatch(handlePageNumber(1));
+        dispatch(handleTake(10));
       }
       // console.log(user);
     })();
