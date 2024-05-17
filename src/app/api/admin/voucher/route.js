@@ -183,6 +183,20 @@ export async function POST(req, res) {
     }
     const body = await req.json();
     const { customerId, productId } = body;
+    const getCustomer = await prisma.customer.findUnique({
+      where: {
+        id: customerId,
+      },
+    });
+    if (getCustomer.acceptTerms !== true) {
+      return NextResponse.json(
+        {
+          message: `customer with name ${getCustomer.name} is not verified. Kindly contact admin`,
+          data: null,
+        },
+        { status: 400 }
+      );
+    }
     const vToken = await generateVoucherCode({
       customerId: customerId,
       product: productId,
