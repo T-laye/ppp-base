@@ -132,6 +132,7 @@ export default function Vouchers() {
             id={c?.id}
             index={i}
             approved={approved}
+            term={term}
           />
         ));
     } else {
@@ -148,6 +149,7 @@ export default function Vouchers() {
             key={i}
             name={capitalizeWords(c.customer?.name)}
             index={i}
+            term={term}
             id={c?.id}
           />
         ));

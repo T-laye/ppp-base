@@ -39,7 +39,7 @@ export default function Page() {
       console.log(res);
       if (res.data) {
         setLoading(false);
-        console.log(res.data);
+        // console.log(res.data);
         dispatch(getVoucher({ ...res.data.data }));
         router.back();
         toast.success(res.data.message);

@@ -18,7 +18,7 @@ export default function Poc() {
   const { pocs } = useSelector((state) => state.pocs);
   const { data, count } = products;
 
-  console.log(data);
+  // console.log(data);
 
   const setTab = (tab) => {
     setActiveTab(tab);

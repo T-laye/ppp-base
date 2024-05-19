@@ -4,7 +4,11 @@ import React, { useEffect, useState } from "react";
 import UvcList from "@/components/UvcList";
 import GoBack from "@/components/GoBack";
 import { useDispatch, useSelector } from "react-redux";
-import { handleProductName, handleSearch } from "@/redux/slices/variableSlice";
+import {
+  handleDate,
+  handleProductName,
+  handleSearch,
+} from "@/redux/slices/variableSlice";
 
 export default function UsedVoucher() {
   const [term, setTerm] = useState("");
@@ -15,19 +19,24 @@ export default function UsedVoucher() {
   const { products } = useSelector((state) => state.products);
   const voucherDetails = collectedVouchers?.data?.map((v) => v);
 
-  console.log(voucherDetails);
+  // console.log(products);
 
   const handleChange = (e) => {
     setTerm(e.target.value);
     dispatch(handleSearch(e.target.value.toLowerCase()));
+    // console.log(e.target.value);
   };
   const handleProduct = (e) => {
     setProduct(e.target.value);
     dispatch(handleProductName(e.target.value.toLowerCase()));
   };
+
   const handleDateChange = (e) => {
     setDate(e.target.value);
+    dispatch(handleDate(e.target.value));
   };
+
+  // console.log(date);
 
   const renderUsedVouchers = () => {
     if (collectedVouchers?.data?.length === 0) {
@@ -91,14 +100,14 @@ export default function UsedVoucher() {
             {renderProducts()}
           </select>
         </div>
-        {/* <div>
+        <div>
           <input
             type="date"
             id="dateInput"
             value={date}
             onChange={handleDateChange}
           />
-        </div> */}
+        </div>
       </div>
       <div className="text-end text-sm text-gray-600 font-medium mt-4">
         {collectedVouchers?.data?.length || 0}

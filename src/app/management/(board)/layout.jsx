@@ -10,6 +10,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "@/redux/slices/authSlice";
 import {
+  handleDate,
   handlePageNumber,
   handlePocName,
   handleProductName,
@@ -22,13 +23,18 @@ import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
 import { fetchPocs } from "@/redux/slices/fetchPocsSlice";
 import { getWorker } from "@/redux/slices/getWorkerSlice";
 import { fetchPersonnels } from "@/redux/slices/fetchPersonnelsSlice";
-import { fetchApprovedVouchers, fetchCollectedVouchers, fetchQueuedVouchers, fetchVouchers } from "@/redux/slices/fetchVouchersSlice";
+import {
+  fetchApprovedVouchers,
+  fetchCollectedVouchers,
+  fetchQueuedVouchers,
+  fetchVouchers,
+} from "@/redux/slices/fetchVouchersSlice";
 
 export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { pageNumber, take, search, productName, staffName, pocName } =
+  const { pageNumber, take, search, productName, staffName, pocName, date } =
     useSelector((state) => state.variables);
   const { userInfo } = useSelector((state) => state.auth);
   // console.log(userInfo.email);
@@ -50,6 +56,7 @@ export default function Layout({ children }) {
         dispatch(handleStaffName(""));
         dispatch(handlePageNumber(1));
         dispatch(handleTake(10));
+        dispatch(handleDate(""));
       }
     })();
   }, [dispatch, router]);
@@ -68,24 +75,24 @@ export default function Layout({ children }) {
     })();
   }, [dispatch, isAuth, pageNumber, take, productName]);
 
-    useEffect(() => {
-      (async () => {
-        if (isAuth) {
-          try {
-            const resPersonnels = await axios.get(
-              `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
-            );
-            dispatch(fetchPersonnels({ ...resPersonnels?.data }));
-            // console.log(resPersonnels);
-            // console.log(resPocs)
-          } catch (e) {
-            // console.log(e);
-          }
-        } else {
-          return;
+  useEffect(() => {
+    (async () => {
+      if (isAuth) {
+        try {
+          const resPersonnels = await axios.get(
+            `/api/admin/staff?name=${staffName}&take=${take}&pageNumber=${pageNumber}`
+          );
+          dispatch(fetchPersonnels({ ...resPersonnels?.data }));
+          // console.log(resPersonnels);
+          // console.log(resPocs)
+        } catch (e) {
+          // console.log(e);
         }
-      })();
-    }, [dispatch, isAuth, pageNumber, staffName, take]);
+      } else {
+        return;
+      }
+    })();
+  }, [dispatch, isAuth, pageNumber, staffName, take]);
 
   useEffect(() => {
     (async () => {
@@ -129,7 +136,6 @@ export default function Layout({ children }) {
     })();
   }, [dispatch, isAuth, pageNumber, pocName, productName, take]);
 
-   
   useEffect(() => {
     (async () => {
       if (isAuth) {
@@ -190,9 +196,9 @@ export default function Layout({ children }) {
   useEffect(() => {
     (async () => {
       if (isAuth) {
-        try {
+        try { 
           const resCollectedVouchers = await axios.get(
-            `/api/admin/voucher?product_name=${productName}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+            `/api/admin/voucher?product_name=${productName}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}&date=${date}`
           );
           dispatch(fetchCollectedVouchers({ ...resCollectedVouchers?.data }));
           // console.log(resCollectedVouchers);
@@ -204,7 +210,7 @@ export default function Layout({ children }) {
         return;
       }
     })();
-  }, [dispatch, isAuth, pageNumber, productName, search, take]);
+  }, [dispatch, isAuth, pageNumber, productName, search, take, date]);
   if (!isAuth) {
     return (
       <section className="h-screen">

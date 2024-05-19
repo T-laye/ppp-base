@@ -43,7 +43,7 @@ export default function Page() {
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
-      console.log(res);
+      // console.log(res);
 
       dispatch(getPoc({ ...res.data.data }));
     };
@@ -104,7 +104,7 @@ export default function Page() {
     } catch (e) {
       // toast.success(res.data.message);
       setIsLoading(false);
-      console.log(e);
+      // console.log(e);
     }
     // console.log(res);
   };

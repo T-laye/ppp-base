@@ -3,7 +3,7 @@ import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
 import React, { Suspense, useEffect, useState } from "react";
 import { ImDroplet } from "react-icons/im";
-import { MdAssignmentTurnedIn } from "react-icons/md";
+import { MdAssignmentTurnedIn, MdOutlineVerifiedUser } from "react-icons/md";
 import { TbRulerMeasure } from "react-icons/tb";
 import { PiBatteryVerticalFullFill } from "react-icons/pi";
 import { PiDropHalfBottomFill } from "react-icons/pi";
@@ -115,30 +115,37 @@ export default function Page() {
         <h3 className="font-semibold">Customer Details</h3>
 
         {customer?.name ? (
-          <><div className="h-48 w-48 mt-5 rounded-lg overflow-hidden mx-auto">
-            <Image
-              className="h-full w-full object-cover"
-              src={customer?.image}
-              alt={customer?.name}
-              height={500}
-              width={500} />
-          </div><div className="mt-4">
+          <>
+            <div className="h-48 w-48 mt-5 rounded-lg overflow-hidden mx-auto">
+              <Image
+                className="h-full w-full object-cover"
+                src={customer?.image}
+                alt={customer?.name}
+                height={500}
+                width={500}
+              />
+            </div>
+            <div className="mt-4">
               <DetailList
                 title="Full Name"
                 value={capitalizeWords(customer?.name)}
-                icon={<FaUser size={16} />} />
+                icon={<FaUser size={16} />}
+              />
               <DetailList
                 title="Email"
                 value={customer?.email}
-                icon={<MdEmail size={16} />} />
+                icon={<MdEmail size={16} />}
+              />
               <DetailList
                 title="Phone Number"
                 value={customer?.phoneNumber}
-                icon={<BsFillTelephoneFill size={16} />} />
+                icon={<BsFillTelephoneFill size={16} />}
+              />
               <DetailList
                 title="Created By"
                 value={capitalizeWords(customer?.user?.name)}
-                icon={<FaUser size={16} />} />
+                icon={<FaUser size={16} />}
+              />
               {/* <DetailList
       title="Creator Role"
       value={capitalizeWords(customer?.createdByRole)}
@@ -147,11 +154,27 @@ export default function Page() {
               <DetailList
                 title="Created At"
                 value={formatDate(customer?.createdAt)}
-                icon={<IoIosTime size={16} />} />
+                icon={<IoIosTime size={16} />}
+              />
               <DetailList
                 title="Address"
                 value={capitalizeWords(customer?.address)}
-                icon={<FaLocationDot size={16} />} />
+                icon={<FaLocationDot size={16} />}
+              />
+              <DetailList
+                title="Verification Status"
+                value={customer?.emailVerified ? "Verified" : "Unverified"}
+                icon={
+                  <MdOutlineVerifiedUser
+                    size={16}
+                    className={`${
+                      customer?.emailVerified
+                        ? "text-primary"
+                        : "text-customGray"
+                    }`}
+                  />
+                }
+              />
               {/* <DetailList
     title="Product"
     value="Fuel"
@@ -204,7 +227,8 @@ export default function Page() {
     >
       {isLoading ? <Loader /> : "Delete Customer"}
     </button> */}
-            </div></>
+            </div>
+          </>
         ) : (
           <Loading />
         )}

@@ -10,6 +10,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "@/redux/slices/fetchCustomersSlice";
 import {
+  handleDate,
   handlePageNumber,
   handlePocName,
   handleProductName,
@@ -33,7 +34,7 @@ export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { pageNumber, take, search, productName, staffName, pocName } =
+  const { pageNumber, take, search, productName, staffName, pocName, date } =
     useSelector((state) => state.variables);
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -54,6 +55,7 @@ export default function Layout({ children }) {
         dispatch(handleStaffName(""));
         dispatch(handlePageNumber(1));
         dispatch(handleTake(10));
+        dispatch(handleDate(""));
       }
     })();
   }, [dispatch, router]);
@@ -190,10 +192,10 @@ export default function Layout({ children }) {
       if (isAuth) {
         try {
           const resCollectedVouchers = await axios.get(
-            `/api/admin/voucher?product_name=${productName}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
+            `/api/admin/voucher?product_name=${productName}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}&date=${date}`
           );
           dispatch(fetchCollectedVouchers({ ...resCollectedVouchers?.data }));
-          console.log(resCollectedVouchers);
+          // console.log(resCollectedVouchers);
           // console.log(resPocs)
         } catch (e) {
           console.log(e);
@@ -202,7 +204,7 @@ export default function Layout({ children }) {
         return;
       }
     })();
-  }, [dispatch, isAuth, pageNumber, productName, search, take]);
+  }, [dispatch, isAuth, pageNumber, productName, search, take, date]);
   // console.log(isAuth);
 
   if (!isAuth) {

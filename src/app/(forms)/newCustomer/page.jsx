@@ -89,14 +89,14 @@ export default function NewCustomer() {
 
     try {
       // Debugging: Log FormData to ensure all data is appended
-      console.log("FormData:", formData);
+      // console.log("FormData:", formData);
 
       // Make Axios request
       const res = await axios.post("/api/customer", formData);
 
       if (res) {
         setIsLoading(false);
-        console.log(res);
+        // console.log(res);
         toast.success(res.data.message);
         router.back();
       }

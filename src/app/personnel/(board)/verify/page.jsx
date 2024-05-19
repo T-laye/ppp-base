@@ -50,7 +50,7 @@ export default function Verify() {
 
   // console.log(personnelPocData);
   // console.log(getAllocationId);
-  console.log(getAllocationId);
+  // console.log(getAllocationId);
 
   useEffect(() => {
     setIsFormValid(formik.isValid);
@@ -85,7 +85,7 @@ export default function Verify() {
         allocationId: getAllocationId.id,
       });
 
-      console.log(res);
+      // console.log(res);
       if (res.data) {
         setIsLoading(false);
         toast.success("Successful");
@@ -145,7 +145,7 @@ export default function Verify() {
           setValid(true);
 
           toast.success(res.data.message);
-          console.log(res.data);
+          // console.log(res.data);
         }
       } catch (err) {
         setLoading(false);

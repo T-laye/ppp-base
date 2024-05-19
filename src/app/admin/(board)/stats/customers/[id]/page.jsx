@@ -3,7 +3,7 @@ import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
 import React, { Suspense, useEffect, useState } from "react";
 import { ImDroplet } from "react-icons/im";
-import { MdAssignmentTurnedIn } from "react-icons/md";
+import { MdAssignmentTurnedIn, MdOutlineVerifiedUser } from "react-icons/md";
 import { TbRulerMeasure } from "react-icons/tb";
 import { PiBatteryVerticalFullFill } from "react-icons/pi";
 import { PiDropHalfBottomFill } from "react-icons/pi";
@@ -157,6 +157,20 @@ export default function Page() {
                 title="Address"
                 value={capitalizeWords(customer?.address)}
                 icon={<FaLocationDot size={16} />}
+              />
+              <DetailList
+                title="Verification Status"
+                value={customer?.emailVerified ? "Verified" : "Unverified"}
+                icon={
+                  <MdOutlineVerifiedUser
+                    size={16}
+                    className={`${
+                      customer?.emailVerified
+                        ? "text-primary"
+                        : "text-customGray"
+                    }`}
+                  />
+                }
               />
               {/* <DetailList
     title="Product"

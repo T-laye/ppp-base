@@ -7,6 +7,7 @@ const initialState = {
   productName: "",
   pocName: "",
   staffName: "",
+  date: "",
 };
 const variableSlice = createSlice({
   name: "variables",
@@ -30,6 +31,9 @@ const variableSlice = createSlice({
     handleStaffName: (state, action) => {
       state.staffName = action.payload;
     },
+    handleDate: (state, action) => {
+      state.date = action.payload;
+    },
   },
 });
 
@@ -40,5 +44,6 @@ export const {
   handleProductName,
   handlePocName,
   handleStaffName,
+  handleDate,
 } = variableSlice.actions;
 export default variableSlice.reducer;
