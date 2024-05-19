@@ -68,7 +68,23 @@ const VoucherDispenseNotification = ({
           </Text>
           <Hr style={hr} />
           <Text style={footer}>
-            N/B: this is an automated email, thus cannot send or receive replies
+            MYITA Farmers Multipurpose Cooperative Society Limited This message
+            and any files transmitted with it email is intended only for the use
+            of the person(s) to whom it is addressed Intended Recipient. The
+            email may contain information which is privileged, confidential or
+            protected by other intellectual property rights. If you are not the
+            Intended Recipient you should notify the sender immediately and
+            delete the email from your system, any use, disclosure,
+            dissemination, forwarding, printing or copying is prohibited and
+            will be considered a legal infringement. Any views or opinions
+            presented in the email are solely those of the individual sender and
+            do not necessarily represent those of MYITA Farmers MPCS. No
+            contracts can be concluded via email. Emails cannot be guaranteed to
+            be secure or error-free as information could be intercepted,
+            corrupted, lost, destroyed, arrive late or incomplete, or contain
+            viruses. MYITA Farmers MPCS therefore does not accept liability for
+            any errors, omissions or viruses in the email and the recipient is
+            responsible for checking each email for viruses.
           </Text>
         </Container>
       </Body>
