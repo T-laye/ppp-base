@@ -16,7 +16,7 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
   return (
     <Html>
       <Head />
-      <Preview>Petroleum Personnel Privilege (PPP) Welcome Email</Preview>
+      <Preview>Petroleum Personnel Privilege (PPP) Onboard Email</Preview>
       <Body style={main}>
         <Container style={container}>
           <img
@@ -48,13 +48,22 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
             your full consent to validate your willingness to join the PPP
             community. We enjoin you to carefully read through the guidelines of
             the PPP system, make effort to understand each one, so you can make
-            the most of your membership.
+            the most of your membership. Learn more about the guidelines of the
+            PPP system, here. Now, you can accept this offer of membership which
+            expressly communicates that you agree to follow the guidelines as
+            presented above.
             <br />
             <br />
-            The guidelines, as listed below have been designed primarily to
-            guarantee full access to all offerings and mitigate all forms of
-            abuse of the benefits and privileges of being enjoyed through the
-            PPP system. The guidelines are as follows:
+            Create a Tab with I accept with this link -
+            https://myita.com.ng/welcome/(opens in a new tab)
+            
+            
+            
+            The guidelines, as
+            listed below have been designed primarily to guarantee full access
+            to all offerings and mitigate all forms of abuse of the benefits and
+            privileges of being enjoyed through the PPP system. The guidelines
+            are as follows:
             <ol type="1">
               <li>
                 The Petroleum Personnel Privilege (PPP) system by design serves
