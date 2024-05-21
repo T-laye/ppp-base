@@ -113,7 +113,7 @@ export default function Page() {
             </p>
           </div>
 
-          <div className="mt-7">
+          {/* <div className="mt-7">
             <p>
               For more information concerning PPP-Base click the link below:
             </p>
@@ -123,7 +123,7 @@ export default function Page() {
             >
               Click Here For More Info
             </Link>
-          </div>
+          </div> */}
         </div>
       )}
     </section>
