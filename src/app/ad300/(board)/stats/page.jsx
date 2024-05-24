@@ -86,21 +86,21 @@ export default function Stats() {
         {/* <h4 className="text-sm ">Hello, Admin</h4> */}
         <div className="flex flex-wrap gap-3 mt-4">
           <StatsCard
-            link="/admin/stats/customers"
+            link="/ad300/stats/customers"
             color="bg-error"
             number={customers?.count ?? 0}
             title="Customers"
             icon={<FaUsers size={26} />}
           />
           <StatsCard
-            link="/admin/poc"
+            link="/ad300/poc"
             number={pocs.count ?? 0}
             color="bg-blue-400"
             title="POC"
             icon={<GiGasPump size={24} />}
           />
           <StatsCard
-            link="/admin/workForce"
+            link="/ad300/workForce"
             number={personnels?.count ?? 0}
             color="bg-blue-900"
             title="Work Force"
@@ -113,14 +113,14 @@ export default function Stats() {
             color="bg-primary"
           />
           <StatsCard
-            link="/admin/vouchers"
+            link="/ad300/vouchers"
             color="bg-yellow-500"
             number={queuedVouchers?.count ?? 0}
             title="Queue"
             icon={<IoMdTimer size={24} />}
           />
           <StatsCard
-            link="/admin/vouchers"
+            link="/ad300/vouchers"
             number={approvedVouchers?.count ?? 0}
             color="bg-green-500"
             title="Approved"
@@ -128,7 +128,7 @@ export default function Stats() {
           />
 
           <StatsCard
-            link="/admin/stats/usedVoucher"
+            link="/ad300/stats/usedVoucher"
             number={collectedVouchers?.count ?? 0}
             color="bg-customGray"
             title="Used Vouchers"

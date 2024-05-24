@@ -27,7 +27,7 @@ export default function Header() {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout());
-      router.push("/admin");
+      router.push("/ad300");
       // console.log("log out");
     } catch (err) {
       console.log(err);
@@ -104,7 +104,7 @@ export default function Header() {
                   <a href="">New Product</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="/admin/editEmails">
+              <Link legacyBehavior href="/ad300/editEmails">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
@@ -113,7 +113,7 @@ export default function Header() {
                   <a href="">Edit Emails</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="/admin/stats/usedVoucher">
+              <Link legacyBehavior href="/ad300/stats/usedVoucher">
                 <li
                   onClick={handleNav}
                   className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"

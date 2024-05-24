@@ -64,7 +64,7 @@ export default function Page() {
   };
 
   const editProduct = () => {
-    router.push(`/admin/stats/${productId}/editProduct`);
+    router.push(`/ad300/stats/${productId}/editProduct`);
   };
   return (
     <section className="min-h-screen pt-8 pb-20">

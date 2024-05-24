@@ -2,7 +2,7 @@
 import { BiSearchAlt2 } from "react-icons/bi";
 import React, { useState } from "react";
 import GoBack from "@/components/GoBack";
-import CustomerList from "@/app/admin/components/CustomerList";
+import CustomerList from "@/app/ad300/components/CustomerList";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { handleSearch } from "@/redux/slices/variableSlice";

@@ -52,7 +52,7 @@ export default function AdminSignIn() {
       // console.log(route);
       // console.log(values);
       toast.success(res.message);
-      router.push("/admin/stats");
+      router.push("/ad300/stats");
     } catch (e) {
       toast.error(e.data.message);
       console.log(e);

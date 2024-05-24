@@ -29,13 +29,13 @@ export default function PersonnelList({ info }) {
   }
 
   const viewPerson = () => {
-    router.push(`/admin/workForce/${info?.id}`);
+    router.push(`/ad300/workForce/${info?.id}`);
   };
 
   return (
     // <Link
-    //   href="/admin/workForce/id"
-    //   as={`/admin/stats/workForce/${info?.id}`}
+    //   href="/ad300/workForce/id"
+    //   as={`/ad300/stats/workForce/${info?.id}`}
     // >
     <li
       onClick={viewPerson}

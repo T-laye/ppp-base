@@ -99,7 +99,7 @@ export default function Page() {
   }
 
   const editCustomer = () => {
-    router.push(`/admin/stats/customers/${id}/editCustomer`);
+    router.push(`/ad300/stats/customers/${id}/editCustomer`);
   };
 
   return (
