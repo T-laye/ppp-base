@@ -12,7 +12,7 @@ import { getPoc } from "@/redux/slices/getPocSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
-import CustomerList from "@/app/admin/components/CustomerList";
+import CustomerList from "@/app/ad300/components/CustomerList";
 import {
   handleProductName,
   handleSearch,

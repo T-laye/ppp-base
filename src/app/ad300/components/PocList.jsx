@@ -9,7 +9,7 @@ export default function PocList({ product, id, name }) {
   // console.log(product);
 
   const goToPoc = () => {
-    router.push(`/admin/poc/${id}`);
+    router.push(`/ad300/poc/${id}`);
   };
 
   const renderProgressBar = () => {
@@ -27,7 +27,7 @@ export default function PocList({ product, id, name }) {
   };
 
   return (
-    // <Link href="/admin/poc/[id]">
+    // <Link href="/ad300/poc/[id]">
     <li
       onClick={goToPoc}
       className="rounded-xl border px-4 pt-2 pb-4 border-gray-200 bg-red-30 hover:text-white hover:bg-primaryActive active:border-primaryActive duration-200 mt-4 cursor-pointer"

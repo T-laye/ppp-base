@@ -17,13 +17,13 @@ export default function Account() {
 
           <div className="flex flex-wrap  flex-col gap-5 mt-10 justify-center bg-geen-600">
             <AccountCard
-              link="/admin/account/profile"
+              link="/ad300/account/profile"
               title="Edit Profile"
               color="bg-blue-600"
               icon={<FaUser size={28} />}
             />
             <AccountCard
-              link="/admin/account/password"
+              link="/ad300/account/password"
               title="Change Password"
               color="bg-red-700"
               icon={<MdLock size={30} />}
@@ -34,7 +34,7 @@ export default function Account() {
               icon={<FaUser size={30} />}
             /> */}
             <AccountCard
-              link="/admin"
+              link="/ad300"
               title="Sign Out"
               color="bg-customGray"
               icon={<TbLogout2 size={30} />}

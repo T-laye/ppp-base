@@ -43,7 +43,7 @@ export default function Layout({ children }) {
     (async () => {
       const { user } = await getUser();
       if (!user || user.user.role !== "ADMIN") {
-        router.push("/admin");
+        router.push("/ad300");
         setIsAuth(false);
         return;
       } else {

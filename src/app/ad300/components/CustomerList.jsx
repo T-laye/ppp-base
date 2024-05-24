@@ -21,8 +21,8 @@ export default function CustomerList({ c }) {
   }
   return (
     <Link
-      href="/admin/stats/customers/[id]"
-      as={`/admin/stats/customers/${c.customerId}`}
+      href="/ad300/stats/customers/[id]"
+      as={`/ad300/stats/customers/${c.customerId}`}
     >
       <li
         // onClick={getCustomerDetails}

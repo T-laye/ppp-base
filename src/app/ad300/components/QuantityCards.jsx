@@ -48,7 +48,7 @@ export default function QuantityCards({ info, products }) {
   //   console.log(barProgress());
 
   return (
-    <Link href="/admin/stats/[productId]" as={`/admin/stats/${info.productId}`}>
+    <Link href="/ad300/stats/[productId]" as={`/ad300/stats/${info.productId}`}>
       <div className="rounded-xl border px-4 pt-1 pb-4 hover:text-white active:bg-primaryActive cursor-pointer active:border-primaryActive hover:bg-primaryActive duration-200 mt-4">
         <div className="flex justify-between items-end">
           <h4 className="text-lg font-medium">

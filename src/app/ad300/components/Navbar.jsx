@@ -20,10 +20,10 @@ export default function Navbar() {
   return (
     <nav className="fixed z-5 bottom-0  left-0 right-0 h-14 border-t border-t-gray-100 bg-white lg:max-w-2xl mx-auto">
       <ul className="h-full flex justify-evenly ">
-        <Link href="/admin/stats" legacyBehavior>
+        <Link href="/ad300/stats" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/stats" || pathname.startsWith("/admin/stats")
+              pathname === "/ad300/stats" || pathname.startsWith("/ad300/stats")
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
@@ -36,11 +36,11 @@ export default function Navbar() {
             <a className="text-xs max-[300px]:text-[10px] block ">Statistics</a>
           </li>
         </Link>
-        <Link href="/admin/vouchers" legacyBehavior>
+        <Link href="/ad300/vouchers" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/vouchers" ||
-              pathname.startsWith("/admin/vouchers")
+              pathname === "/ad300/vouchers" ||
+              pathname.startsWith("/ad300/vouchers")
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
@@ -49,10 +49,10 @@ export default function Navbar() {
             <a className="text-xs max-[300px]:text-[10px]">Vouchers</a>
           </li>
         </Link>
-        <Link href="/admin/poc" legacyBehavior>
+        <Link href="/ad300/poc" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/poc" || pathname.startsWith("/admin/poc")
+              pathname === "/ad300/poc" || pathname.startsWith("/ad300/poc")
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
@@ -61,11 +61,11 @@ export default function Navbar() {
             <a className="text-xs max-[300px]:text-[10px]">POC</a>
           </li>
         </Link>
-        <Link href="/admin/workForce" legacyBehavior>
+        <Link href="/ad300/workForce" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/workForce" ||
-              pathname.startsWith("/admin/workForce")
+              pathname === "/ad300/workForce" ||
+              pathname.startsWith("/ad300/workForce")
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
@@ -74,11 +74,11 @@ export default function Navbar() {
             <a className="text-xs max-[300px]:text-[10px]">Work Force</a>
           </li>
         </Link>
-        <Link href="/admin/account" legacyBehavior>
+        <Link href="/ad300/account" legacyBehavior>
           <li
             className={`${
-              pathname === "/admin/account" ||
-              pathname.startsWith("/admin/account")
+              pathname === "/ad300/account" ||
+              pathname.startsWith("/ad300/account")
                 ? "text-primary"
                 : "text-gray-500"
             } flex flex-col items-center justify-between bg-green-40 h-full py-2 cursor-pointer`}
