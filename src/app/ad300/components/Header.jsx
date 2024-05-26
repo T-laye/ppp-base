@@ -104,15 +104,7 @@ export default function Header() {
                   <a href="">New Product</a>
                 </li>
               </Link>
-              <Link legacyBehavior href="/ad300/editEmails">
-                <li
-                  onClick={handleNav}
-                  className="flex items-center space-x-2 active:text-primary duration-200 hover:text-primary"
-                >
-                  <MdAttachEmail  size={20} />
-                  <a href="">Edit Emails</a>
-                </li>
-              </Link>
+
               <Link legacyBehavior href="/ad300/stats/usedVoucher">
                 <li
                   onClick={handleNav}

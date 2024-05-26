@@ -77,7 +77,7 @@ export default function Page() {
   }
 
   const editPerson = () => {
-    router.push(`/admin/workForce/${id}/editPerson`);
+    router.push(`/ad300/workForce/${id}/editPerson`);
   };
 
   function capitalizeWords(sentence) {
