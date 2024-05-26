@@ -34,10 +34,10 @@ export default function Page() {
   // console.log(poc?.productAllocation);
 
   const editPOC = () => {
-    router.push(`/admin/poc/${id}/editPoc`);
+    router.push(`/ad300/poc/${id}/editPoc`);
   };
   const assign = () => {
-    router.push(`/admin/poc/${id}/assign`);
+    router.push(`/ad300/poc/${id}/assign`);
   };
 
   useEffect(() => {
