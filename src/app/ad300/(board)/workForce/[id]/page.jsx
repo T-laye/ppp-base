@@ -53,11 +53,11 @@ export default function Page() {
       toast.success(res.data.message);
       router.back();
     }
-    // console.log(res);
+    console.log(res);
   };
 
   async function handleCanEdit(edit) {
-    console.log(edit);
+    // console.log(edit);
 
     try {
       const res = await axios.patch(
@@ -72,7 +72,7 @@ export default function Page() {
     } catch (e) {
       toast.error(e.data.message);
       // setIsLoading(false);
-      console.log(e);
+      // console.log(e);
     }
   }
 

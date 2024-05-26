@@ -14,6 +14,7 @@ import {
   fetchVouchers,
 } from "@/redux/slices/fetchVouchersSlice";
 import { fetchProducts } from "@/redux/slices/fetchProductsSlice";
+import { handleDate, handlePageNumber, handlePocName, handleProductName, handleSearch, handleStaffName, handleTake } from "@/redux/slices/variableSlice";
 
 export default function Layout({ children }) {
   const [isAuth, setIsAuth] = useState(false);
