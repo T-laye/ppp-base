@@ -47,7 +47,7 @@ export default function Page() {
       phone: worker?.phoneNumber,
       address: worker?.address,
       gender: worker?.gender,
-      role: '',
+      role: worker?.role,
       password: "",
     },
     // validate: personnel_validate,

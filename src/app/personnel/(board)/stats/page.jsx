@@ -76,6 +76,8 @@ export default function Stats() {
         </h4>
         <div>{renderPoc()}</div>
       </div>
+
+      
     </section>
   );
 }
