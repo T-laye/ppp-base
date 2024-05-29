@@ -69,6 +69,7 @@ export async function POST(req, res) {
         token: addCustomer.verificationToken,
       }),
     });
+    console.log(sendEmail);
     const newCustomer = {
       ...addCustomer,
       image: `data:image/jpeg;base64,${addCustomer?.profilePicture?.toString(
