@@ -23,7 +23,9 @@ const VoucherDispenseNotification = ({
   return (
     <Html>
       <Head />
-      <Preview>Petroleum Personnel Privilege (PPP) Notification</Preview>
+      <Preview>
+        Petroleum Personnel Privilege (PPP) PRODUCT PICKUP Notification
+      </Preview>
       <Body style={main}>
         <Container style={container}>
           <img
@@ -45,8 +47,9 @@ const VoucherDispenseNotification = ({
           </Text>
           <Text style={paragraph}>
             Your voucher has been used and product collected at our {pocName}{" "}
-            Point of Collection (POC).
-            <br /> Here are the details of the transaction: <br /> <br />
+            Point of Collection (POC) Center.
+            <br /> <br />
+            Here are the details of the transaction: <br /> 
             Name of Pick up person: {pickUpName}
             <br />
             Vehicle Type: {vehicleType}
@@ -57,7 +60,7 @@ const VoucherDispenseNotification = ({
             We trust your pick-up experience was seamless and stress free. Feel
             free to let us know if you have any complaints or suggestions for
             improvement. Send us an email to{" "}
-            <a href="mailto:csu@ppp.com.ng">csu@ppp.com.ng</a>.
+            <a href="mailto:csu@myita.com.ng">CSU@MYITA.COM.NG</a>.
             <br />
             <br />
             Many thanks from the entire PPP community!
