@@ -35,8 +35,8 @@ export async function POST(req, res) {
         voucherCode: voucherCode,
       },
       include: {
-        customer: true
-      }
+        customer: true,
+      },
     });
 
     if (!findVoucher) {
@@ -165,8 +165,8 @@ export async function POST(req, res) {
         },
       },
       include: {
-        poc: true
-      }
+        poc: true,
+      },
     });
 
     await prisma.voucher.update({
@@ -197,12 +197,18 @@ export async function POST(req, res) {
     await pickUpNotification({
       email: findVoucher.customer.email,
       firstName: findVoucher.customer.name,
-      person: createVDispenseData.thirdPartyName ? createVDispenseData.thirdPartyName : findVoucher.customer.name,
-      pocName: createVDispenseData.poc.name,
-      timeStamp: createVDispenseData.createdAt.toLocaleDateString(),
+      person: createVDispenseData.thirdPartyName
+        ? createVDispenseData.thirdPartyName.replace(/\b\w/g, (char) => char.toUpperCase())
+        : findVoucher.customer.name.replace(/\b\w/g, (c) => c.toUpperCase()),
+      pocName: createVDispenseData.poc.name.replace(/\b\w/g, (c) => c.toUpperCase()),
+      timeStamp: `${createVDispenseData.createdAt.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })} : ${createVDispenseData.createdAt.toLocaleTimeString()}`,
       vehicleNumber: createVDispenseData.vehicleNUmber,
       vehicleType: createVDispenseData.vehicleType,
-    })
+    });
     return NextResponse.json(data, {
       status: 200,
     });
@@ -266,19 +272,18 @@ async function pickUpNotification({
   vehicleNumber,
   timeStamp,
   pocName,
-  email
-}){
+  email,
+}) {
   await sendEmailHelper({
     email,
-    subject: 'PRODUCT PICKUP NOTIFICATION',
+    subject: "PRODUCT PICKUP NOTIFICATION",
     Body: VoucherDispenseNotification({
       firstName: firstName.split(" ")[0],
       pickUpName: person,
       pocName,
       timeStamp,
       vehicleNumber,
-      vehicleType
-    })
-  })
-
+      vehicleType,
+    }),
+  });
 }
