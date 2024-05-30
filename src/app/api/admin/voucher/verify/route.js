@@ -5,6 +5,7 @@ import { getAuthUser } from "../../../../../../lib/get-auth-user";
 import { isVoucherValidHelper } from "../../../../../../lib/hashHelper";
 import { sendEmailHelper } from "../../../../../../lib/email/email-transport";
 import ProductNotificationEmail from "../../../../../../lib/email/templates/product-notification";
+import VoucherDispenseNotification from "../../../../../../lib/email/templates/voucher-dispense";
 
 export async function POST(req, res) {
   try {
@@ -33,6 +34,9 @@ export async function POST(req, res) {
       where: {
         voucherCode: voucherCode,
       },
+      include: {
+        customer: true
+      }
     });
 
     if (!findVoucher) {
@@ -160,6 +164,9 @@ export async function POST(req, res) {
           },
         },
       },
+      include: {
+        poc: true
+      }
     });
 
     await prisma.voucher.update({
@@ -187,6 +194,15 @@ export async function POST(req, res) {
         updateProduct: u,
       },
     });
+    await pickUpNotification({
+      email: findVoucher.customer.email,
+      firstName: findVoucher.customer.name,
+      person: createVDispenseData.thirdPartyName ? createVDispenseData.thirdPartyName : findVoucher.customer.name,
+      pocName: createVDispenseData.poc.name,
+      timeStamp: createVDispenseData.createdAt.toLocaleDateString(),
+      vehicleNumber: createVDispenseData.vehicleNUmber,
+      vehicleType: createVDispenseData.vehicleType,
+    })
     return NextResponse.json(data, {
       status: 200,
     });
@@ -241,4 +257,28 @@ export async function GET(req, res) {
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500 });
   }
+}
+
+async function pickUpNotification({
+  firstName,
+  person,
+  vehicleType,
+  vehicleNumber,
+  timeStamp,
+  pocName,
+  email
+}){
+  await sendEmailHelper({
+    email,
+    subject: 'PRODUCT PICKUP NOTIFICATION',
+    Body: VoucherDispenseNotification({
+      firstName: firstName.split(" ")[0],
+      pickUpName: person,
+      pocName,
+      timeStamp,
+      vehicleNumber,
+      vehicleType
+    })
+  })
+
 }

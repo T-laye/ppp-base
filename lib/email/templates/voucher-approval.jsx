@@ -38,33 +38,44 @@ const VoucherApprovalNotification = ({ firstName, voucherCode }) => {
           </Text>
           <Text style={paragraph}>
             Your voucher has been approved and you can proceed to pick up your
-            product at any of our Point of Collection (POC). <br />
+            product at any of our Point of Collection (POC). <br /> <br />
             VOUCHER CODE: {voucherCode} <br />
             <span style={{ color: "#B91C1C", fontWeight: "700" }}>
               DO NOT SHARE THIS CODE WITH ANYONE TO AVOID THEFT OF YOUR
               PRODUCTS.
             </span>
-            <h4>
+            <br />
+            <br />
+            <text>
               You can learn more about ways to redeem your voucher and collect
-              your product here{" "}
-              <a href="https://myita.com.ng/pick-up/" target="_blank">how to redeem voucher</a>
-            </h4>
+              your product{" "}
+              <a
+                href="https://myita.com.ng/pick-up/"
+                target="_blank"
+                style={{ fontWeight: "500" }}
+              >
+                here
+              </a>
+            </text>
             <br />
           </Text>
-          <Text style={paragraph}>
-            Best Regards,
+          Best Regards,
+          <Text
+            style={{ ...paragraph, fontWeight: "500", fontStyle: "italic;" }}
+          >
             <br />
             Team POC, <br />
-            Petroleum Personnel Privilege (PPP)
+            Petroleum Personnel Privilege (PPP) <br />
+            MYITA FARMER MPCS, Delta State, Nigeria
           </Text>
           <Hr style={hr} />
           <Text style={footer}>
             MYITA Farmers Multipurpose Cooperative Society Limited This message
-            and any files transmitted with it email is intended only for the
-            use of the person(s) to whom it is addressed Intended Recipient.
-            The email may contain information which is privileged, confidential
-            or protected by other intellectual property rights. If you are not
-            the Intended Recipient you should notify the sender immediately and
+            and any files transmitted with it email is intended only for the use
+            of the person(s) to whom it is addressed Intended Recipient. The
+            email may contain information which is privileged, confidential or
+            protected by other intellectual property rights. If you are not the
+            Intended Recipient you should notify the sender immediately and
             delete the email from your system, any use, disclosure,
             dissemination, forwarding, printing or copying is prohibited and
             will be considered a legal infringement. Any views or opinions
