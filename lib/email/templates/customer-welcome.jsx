@@ -16,7 +16,7 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
   return (
     <Html>
       <Head />
-      <Preview>Petroleum Personnel Privilege (PPP) Onboard Email</Preview>
+      <Preview>MEMBER ONBOARDING - Welcome to PPP.</Preview>
       <Body style={main}>
         <Container style={container}>
           <img
@@ -37,57 +37,63 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
             Congratulations {firstName},
           </Text>
           <Text style={paragraph}>
-            We sincerely hope this mail meets you well. Your pre-enrolment form
-            was received, reviewed and you have been recommended for immediate
-            enlisting in the Petroleum Personnel Privilege (PPP) system.
-            <br/>
-            Congratulations, once again. With this mail, we hereby acknowledge
-            your genuine interest in joining our exclusive community whose
-            membership guarantees you access to the essential products offered
-            through the PPP system at highly discounted prices. Therefore,
-            kindly see this mail as an official “ACCEPTANCE LETTER” requiring
+            We sincerely hope this mail meets you well.
+            <br />
+            <br />
+            Your pre-enrolment form was received, reviewed and you have been
+            recommended for immediate enlisting in the Petroleum Personnel
+            Privilege (PPP) system.
+            <br />
+            <br />
+            Kindly see this mail as an official “ACCEPTANCE LETTER” requiring
             your full consent to validate your willingness to join the PPP
-            community. 
-            <br/>
-            We enjoin you to carefully read through the guidelines of
-            the PPP system, make effort to understand each one, so you can make
-            the most of your membership. Now, you can accept this offer of
-            membership which expressly communicates that you agree to follow the
-            guidelines as presented above.
-            <br/>
-            To accept this offer of membership,
-            learn more about the guidelines of the PPP system, and agree to
-            follow the guidelines above, kindly click on the links below.
+            community. Use the link below to access the guideline you saw during
+            pre-enrollment for reference purpose. We enjoin you to carefully
+            read through the guidelines of the PPP system, make effort to
+            understand each one, so you can make the most of your membership.
             <br />
             <br />
-            Click on the button below to verify your profile.
+            <span>
+              <h2
+                style={{
+                  color: "#fff",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <a
+                  href="https://myita.com.ng/ppp-documentation/"
+                  target="_blank"
+                  style={{ color: "#047857;" }}
+                >
+                  PPP GUIDELINES
+                </a>
+              </h2>
+            </span>
+            <br/>
+            To verify your member account in the PPP system, click below
           </Text>
+          <br />
           <Section style={btnContainer}>
             <Button
               style={button}
               href={`https://ppp-base.vercel.app/verification/${token}`}
             >
-              verify my profile
+              VERIFY YOUR PROFILE
             </Button>
           </Section>
           <br />
-          <h2
-            style={{
-              color: "#333",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
-            <a href="https://myita.com.ng/ppp-documentation/" target="_blank">
-              Terms and Conditions Guidelines
-            </a>
-          </h2>
           <br />
-          <Text style={paragraph}>
-            Once again, congratulations!
+          Best Regards,
+          <Text
+            style={{ ...paragraph, fontWeight: "500", fontStyle: "italic;" }}
+          >
             <br />
-            Onboard Team, Petroleum Personnel Privilege (PPP)
+            Team POC, <br />
+            Petroleum Personnel Privilege (PPP) <br />
+            MYITA FARMER MPCS, Delta State, Nigeria
           </Text>
+          <br/>
           <Hr style={hr} />
           <Text style={footer}>
             MYITA Farmers Multipurpose Cooperative Society Limited This message

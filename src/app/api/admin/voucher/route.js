@@ -437,6 +437,6 @@ export async function sendVoucherCreationEmail({ email, firstName }) {
       firstName: firstName,
     }),
     email: email,
-    subject: "VOUCHER CREATION NOTIFICATION",
+    subject: "YOUR RFDA HAS BEEN PROCESSED",
   });
 }
