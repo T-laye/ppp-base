@@ -12,11 +12,12 @@ export default function VoucherList({ id, name, index, approved, term }) {
     router.push(`/ad300/vouchers/${id}`);
   };
 
+  // console.log(id);
   const approveVoucherManually = async () => {
     try {
-      const res = await axios.patch(`/api/ad300/voucher/verify/${id}`);
+      const res = await axios.patch(`/api/admin/voucher/verify/${id}`);
       if (res) {
-        // console.log(res);
+        console.log(res);
         toast.success(res.data.message);
         window.location.reload();
       }
