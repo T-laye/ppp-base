@@ -16,7 +16,7 @@ const VoucherCreationEmail = ({ firstName }) => {
   return (
     <Html>
       <Head />
-      <Preview>Petroleum Personnel Privilege (PPP) Notification</Preview>
+      <Preview>YOUR RFDA HAS BEEN PROCESSED</Preview>
       <Body style={main}>
         <Container style={container}>
           <img
@@ -40,6 +40,7 @@ const VoucherCreationEmail = ({ firstName }) => {
             This mail is to notify you that the deposit for your voucher was
             received and processed successfully.
             <br />
+            <br />
             Going forward, a{" "}
             <span style={{ fontWeight: "bold" }}>
               REQUEST FOR DISCOUNT APPROVAL (RFDA)
@@ -47,22 +48,26 @@ const VoucherCreationEmail = ({ firstName }) => {
             has been raised on your behalf and you will be notified once your
             approval is issued which may take between one(1) to ten (10) days.
             <br />
+            <br />
             We advise patience and wish you all the best.
           </Text>
-          <Text style={paragraph}>
-            Best Regards,
+          Best Regards,
+          <Text
+            style={{ ...paragraph, fontWeight: "500", fontStyle: "italic;" }}
+          >
             <br />
             Team POC, <br />
-            Petroleum Personnel Privilege (PPP)
+            Petroleum Personnel Privilege (PPP) <br />
+            MYITA FARMER MPCS, Delta State, Nigeria
           </Text>
           <Hr style={hr} />
           <Text style={footer}>
             MYITA Farmers Multipurpose Cooperative Society Limited This message
-            and any files transmitted with it email is intended only for the
-            use of the person(s) to whom it is addressed Intended Recipient.
-            The email may contain information which is privileged, confidential
-            or protected by other intellectual property rights. If you are not
-            the Intended Recipient you should notify the sender immediately and
+            and any files transmitted with it email is intended only for the use
+            of the person(s) to whom it is addressed Intended Recipient. The
+            email may contain information which is privileged, confidential or
+            protected by other intellectual property rights. If you are not the
+            Intended Recipient you should notify the sender immediately and
             delete the email from your system, any use, disclosure,
             dissemination, forwarding, printing or copying is prohibited and
             will be considered a legal infringement. Any views or opinions

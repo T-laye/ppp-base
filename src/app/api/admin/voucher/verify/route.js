@@ -5,6 +5,7 @@ import { getAuthUser } from "../../../../../../lib/get-auth-user";
 import { isVoucherValidHelper } from "../../../../../../lib/hashHelper";
 import { sendEmailHelper } from "../../../../../../lib/email/email-transport";
 import ProductNotificationEmail from "../../../../../../lib/email/templates/product-notification";
+import VoucherDispenseNotification from "../../../../../../lib/email/templates/voucher-dispense";
 
 export async function POST(req, res) {
   try {
@@ -32,6 +33,9 @@ export async function POST(req, res) {
     const findVoucher = await prisma.voucher.findUnique({
       where: {
         voucherCode: voucherCode,
+      },
+      include: {
+        customer: true,
       },
     });
 
@@ -160,6 +164,9 @@ export async function POST(req, res) {
           },
         },
       },
+      include: {
+        poc: true,
+      },
     });
 
     await prisma.voucher.update({
@@ -186,6 +193,21 @@ export async function POST(req, res) {
         ...createVDispenseData,
         updateProduct: u,
       },
+    });
+    await pickUpNotification({
+      email: findVoucher.customer.email,
+      firstName: findVoucher.customer.name,
+      person: createVDispenseData.thirdPartyName
+        ? createVDispenseData.thirdPartyName.replace(/\b\w/g, (char) => char.toUpperCase())
+        : findVoucher.customer.name.replace(/\b\w/g, (c) => c.toUpperCase()),
+      pocName: createVDispenseData.poc.name.replace(/\b\w/g, (c) => c.toUpperCase()),
+      timeStamp: `${createVDispenseData.createdAt.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })} : ${createVDispenseData.createdAt.toLocaleTimeString()}`,
+      vehicleNumber: createVDispenseData.vehicleNUmber,
+      vehicleType: createVDispenseData.vehicleType,
     });
     return NextResponse.json(data, {
       status: 200,
@@ -241,4 +263,27 @@ export async function GET(req, res) {
   } catch (err) {
     return NextResponse.json({ message: err.message, status: 500 });
   }
+}
+
+async function pickUpNotification({
+  firstName,
+  person,
+  vehicleType,
+  vehicleNumber,
+  timeStamp,
+  pocName,
+  email,
+}) {
+  await sendEmailHelper({
+    email,
+    subject: "PRODUCT PICKUP NOTIFICATION",
+    Body: VoucherDispenseNotification({
+      firstName: firstName.split(" ")[0],
+      pickUpName: person,
+      pocName,
+      timeStamp,
+      vehicleNumber,
+      vehicleType,
+    }),
+  });
 }

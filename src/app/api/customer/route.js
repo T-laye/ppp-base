@@ -63,13 +63,12 @@ export async function POST(req, res) {
     });
     const sendEmail = await sendEmailHelper({
       email: addCustomer.email,
-      subject: "Customer Welcome",
+      subject: "MEMBER ONBOARDING - Welcome to PPP",
       Body: CustomerWelcomeEmail({
         firstName: name.split(" ")[0],
         token: addCustomer.verificationToken,
       }),
     });
-    console.log(sendEmail);
     const newCustomer = {
       ...addCustomer,
       image: `data:image/jpeg;base64,${addCustomer?.profilePicture?.toString(
