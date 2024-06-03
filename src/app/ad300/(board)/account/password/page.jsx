@@ -9,16 +9,20 @@ import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { edit_password_validate } from "../../../../../../lib/validate";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 export default function Password() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const { userInfo } = useSelector((state) => state.auth);
 
   const viewPassword = () => {
     setShowPassword(!showPassword);
   };
+  // console.log(userInfo.email);
 
   const viewNewPassword = () => {
     setShowNewPassword(!showNewPassword);
@@ -40,12 +44,26 @@ export default function Password() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    console.log(values);
+    const { password, newPassword } = values;
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await axios.post("/api/admin", {
+        email: userInfo?.email,
+        password: newPassword,
+        oldPassword: password,
+      });
+      console.log(res);
+      if (res) {
+        setIsLoading(false);
+        toast.success("Update successful");
+        router.back();
+      }
+      console.log(values, userInfo.email);
+    } catch (e) {
+      toast.error(e.response.data.message);
       setIsLoading(false);
-      toast.success("Successful");
-    }, 2000);
+      // console.log(e.response.data.message);
+    }
   }
 
   const getInputClassNames = (fieldName) =>
