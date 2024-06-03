@@ -68,7 +68,7 @@ export default function Profile() {
       const res = await axios.patch(
         `/api/admin/staff/${userInfo?.id}?email=${email}&name=${fullName}&phoneNumber=${phone}&address=${address}`
       );
-      console.log(res);
+      // console.log(res);
       if (res) {
         setIsLoading(false);
         toast.success("update successful");
