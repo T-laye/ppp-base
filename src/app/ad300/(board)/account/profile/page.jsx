@@ -11,6 +11,9 @@ import Loader from "@/components/Loader.jsx";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { edit_profile_validate } from "../../../../../../lib/validate";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getWorker } from "@/redux/slices/getWorkerSlice";
 // import { edit_profile_validate } from "../../../../../lib/validate";
 
 export default function Profile() {
@@ -18,6 +21,21 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const { worker } = useSelector((state) => state.worker);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { userInfo } = useSelector((state) => state.auth);
+  // console.log(worker);
+
+  useEffect(() => {
+    const getWorkerDetails = async () => {
+      const res = await axios.get(`/api/admin/staff/${userInfo?.id}`);
+      //  console.log(res);
+      dispatch(getWorker({ ...res.data.data }));
+    };
+
+    getWorkerDetails();
+  }, [dispatch, userInfo.id]);
 
   const viewPassword = () => {
     setShowPassword(!showPassword);
@@ -27,16 +45,12 @@ export default function Profile() {
     setShowNewPassword(!showNewPassword);
   };
 
-  const router = useRouter();
-
   const formik = useFormik({
     initialValues: {
-      fullName: "John",
-      email: "jon@kocm.cmc",
-      phone: "093039200200",
-      address: "2222 ckonc  caiokc nlkncaoikncas",
-      //   password: "",
-      //   newPassword: "",
+      fullName: worker?.name,
+      email: worker?.email,
+      phone: worker?.phoneNumber,
+      address: worker?.address,
     },
     validate: edit_profile_validate,
     onSubmit: handleSubmit,
@@ -48,13 +62,24 @@ export default function Profile() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    // const { email, password } = values;
-    console.log(values);
+    const { fullName, email, phone, address } = values;
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await axios.patch(
+        `/api/admin/staff/${userInfo?.id}?email=${email}&name=${fullName}&phoneNumber=${phone}&address=${address}`
+      );
+      console.log(res);
+      if (res) {
+        setIsLoading(false);
+        toast.success("update successful");
+        router.back();
+      }
+      // console.log(values);
+    } catch (e) {
+      toast.error("update failed");
       setIsLoading(false);
-      toast.success("Successful");
-    }, 2000);
+      console.log(e);
+    }
   }
 
   const getInputClassNames = (fieldName) =>
