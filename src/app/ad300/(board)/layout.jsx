@@ -28,6 +28,7 @@ import {
   fetchQueuedVouchers,
   fetchVouchers,
 } from "@/redux/slices/fetchVouchersSlice";
+import { getWorker } from "@/redux/slices/getWorkerSlice";
 // import { useGetCustomersMutation } from "@/redux/slices/takeSlice";
 
 export default function Layout({ children }) {
@@ -77,6 +78,17 @@ export default function Layout({ children }) {
       }
     })();
   }, [dispatch, isAuth, pageNumber, take, productName]);
+
+  useEffect(() => {
+    const getWorkerDetails = async () => {
+      const res = await axios.get(`/api/admin/staff/${userInfo?.id}`);
+      //  console.log(res);
+      dispatch(getWorker({ ...res.data.data }));
+    };
+    if (userInfo?.id) {
+      getWorkerDetails();
+    }
+  }, [dispatch, userInfo?.id]);
 
   useEffect(() => {
     (async () => {
