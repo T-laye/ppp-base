@@ -14,7 +14,7 @@ import { MdAttachEmail, MdVerifiedUser } from "react-icons/md";
 import { FaUser } from "react-icons/fa6";
 import { useLogoutMutation } from "@/redux/slices/usersApiSlice";
 import { logout } from "../../../redux/slices/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
 export default function Header() {
@@ -22,6 +22,8 @@ export default function Header() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [logoutApiCall] = useLogoutMutation();
+  const { worker } = useSelector((state) => state.worker);
+  console.log(worker);
 
   const logoutHandler = async () => {
     try {
@@ -33,6 +35,27 @@ export default function Header() {
       console.log(err);
     }
   };
+  function getLastWord(sentence) {
+    if (typeof sentence !== "string") {
+      throw new Error("Input must be a string");
+    }
+    const words = sentence?.trim().split(/\s+/);
+    return words[words?.length - 1];
+  }
+
+  function capitalizeWords(sentence) {
+    // Split the sentence into an array of words
+    let words = sentence?.split(" ");
+
+    // Iterate over each word
+    for (let i = 0; i < words?.length; i++) {
+      // Capitalize the first letter of each word
+      words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+    }
+
+    // Join the words back into a sentence
+    return words?.join(" ");
+  }
 
   const handleNav = () => {
     setOpenNav(!openNav);
@@ -41,7 +64,11 @@ export default function Header() {
     <header className=" lg:max-w-2xl mx-auto bg-white h-14 fixed top-0 left-0 right-0 shadow-sm  z-10">
       <div className="relative flex justify-between items-center px-4 py-1">
         <Logo />
-        <div className="cursor-pointer" onClick={handleNav}>
+        <div
+          className="cursor-pointer flex items-center justify-center gap-2"
+          onClick={handleNav}
+        >
+          <p>Welcome, {capitalizeWords(getLastWord(worker?.name))}</p>
           <IoIosMenu size={28} />
         </div>
         <nav
