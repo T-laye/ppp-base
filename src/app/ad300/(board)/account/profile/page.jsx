@@ -14,6 +14,8 @@ import { edit_profile_validate } from "../../../../../../lib/validate";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getWorker } from "@/redux/slices/getWorkerSlice";
+import { logout } from "@/redux/slices/authSlice";
+import { useLogoutMutation } from "@/redux/slices/usersApiSlice";
 // import { edit_profile_validate } from "../../../../../lib/validate";
 
 export default function Profile() {
@@ -25,6 +27,7 @@ export default function Profile() {
   const dispatch = useDispatch();
   const router = useRouter();
   const { userInfo } = useSelector((state) => state.auth);
+  const [logoutApiCall] = useLogoutMutation();
   // console.log(worker);
 
   useEffect(() => {
@@ -37,13 +40,6 @@ export default function Profile() {
     getWorkerDetails();
   }, [dispatch, userInfo.id]);
 
-  const viewPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const viewNewPassword = () => {
-    setShowNewPassword(!showNewPassword);
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -61,6 +57,17 @@ export default function Profile() {
     setIsFormValid(formik.isValid);
   }, [formik.values, formik.errors, formik.isValid]);
 
+   const logoutHandler = async () => {
+     try {
+       await logoutApiCall().unwrap();
+       dispatch(logout());
+       router.push("/ad300");
+       // console.log("log out");
+     } catch (err) {
+       console.log(err);
+     }
+   };
+
   async function handleSubmit(values) {
     const { fullName, email, phone, address } = values;
     setIsLoading(true);
@@ -72,7 +79,8 @@ export default function Profile() {
       if (res) {
         setIsLoading(false);
         toast.success("update successful");
-        router.back();
+        logoutHandler();
+        router.push("/ad300");
       }
       // console.log(values);
     } catch (e) {

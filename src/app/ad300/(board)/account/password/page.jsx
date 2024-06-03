@@ -52,13 +52,13 @@ export default function Password() {
         password: newPassword,
         oldPassword: password,
       });
-      console.log(res);
+      // console.log(res);
       if (res) {
         setIsLoading(false);
         toast.success("Update successful");
         router.back();
       }
-      console.log(values, userInfo.email);
+      // console.log(values, userInfo.email);
     } catch (e) {
       toast.error(e.response.data.message);
       setIsLoading(false);
