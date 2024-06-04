@@ -23,7 +23,7 @@ export default function Header() {
   const router = useRouter();
   const [logoutApiCall] = useLogoutMutation();
   const { worker } = useSelector((state) => state.worker);
-  // console.log(worker);
+  console.log(worker);
 
   const logoutHandler = async () => {
     try {
@@ -36,11 +36,13 @@ export default function Header() {
     }
   };
   function getLastWord(sentence) {
-    if (typeof sentence !== "string") {
-      throw new Error("Input must be a string");
+    // if (typeof sentence !== "string") {
+    //   throw new Error("Input must be a string");
+    // }
+    if (worker?.name) {
+      const words = sentence?.trim().split(/\s+/);
+      return words[words?.length - 1];
     }
-    const words = sentence?.trim().split(/\s+/);
-    return words[words?.length - 1];
   }
 
   function capitalizeWords(sentence) {
@@ -68,7 +70,10 @@ export default function Header() {
           className="cursor-pointer flex items-center justify-center gap-2"
           onClick={handleNav}
         >
-          <p>Welcome, {capitalizeWords(getLastWord(worker?.name))}</p>
+          <p>
+            Welcome, {worker?.gender === "MALE" ? "Mr" : "Ma"}{" "}
+            {capitalizeWords(getLastWord(worker?.name))}
+          </p>
           <IoIosMenu size={28} />
         </div>
         <nav
