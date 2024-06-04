@@ -75,7 +75,7 @@ export default function Page() {
     } catch (e) {
       toast.error('update failed');
       setIsLoading(false);
-      console.log(e);
+      // console.log(e);
     }
   }
 

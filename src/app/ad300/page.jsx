@@ -55,7 +55,7 @@ export default function AdminSignIn() {
       router.push("/ad300/stats");
     } catch (e) {
       toast.error(e.data.message);
-      console.log(e);
+      // console.log(e);
     }
   }
 

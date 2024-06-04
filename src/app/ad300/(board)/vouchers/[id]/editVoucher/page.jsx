@@ -36,7 +36,7 @@ export default function Page() {
   }, [formik.values, formik.errors, formik.isValid]);
   async function handleSubmit(values) {
     // const { email, password } = values;
-    console.log(values);
+    // console.log(values);
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);

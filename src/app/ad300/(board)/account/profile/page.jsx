@@ -64,7 +64,7 @@ export default function Profile() {
        router.push("/ad300");
        // console.log("log out");
      } catch (err) {
-       console.log(err);
+      //  console.log(err);
      }
    };
 
@@ -86,7 +86,7 @@ export default function Profile() {
     } catch (e) {
       toast.error("update failed");
       setIsLoading(false);
-      console.log(e);
+      // console.log(e);
     }
   }
 

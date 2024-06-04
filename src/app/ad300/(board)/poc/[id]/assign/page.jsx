@@ -72,7 +72,7 @@ export default function Page() {
         toast.success("Successfully Assigned");
         window.location.reload();
       }
-      console.log(res);
+      // console.log(res);
       setShowAssignModal(!showAssignModal);
     } catch (err) {
       // console.error(err);

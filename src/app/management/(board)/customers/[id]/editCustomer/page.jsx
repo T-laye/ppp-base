@@ -70,7 +70,7 @@ export default function Page() {
     } catch (e) {
       setIsLoading(true);
       // toast.error(e.data.message);
-      console.log(e);
+      // console.log(e);
     }
   }
   const getInputClassNames = (fieldName) =>

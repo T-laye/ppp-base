@@ -71,7 +71,7 @@ export default function Layout({ children }) {
           // console.log(resProducts);
           dispatch(fetchProducts({ ...resProducts?.data }));
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;
@@ -114,7 +114,7 @@ export default function Layout({ children }) {
           // console.log(resPocs);
           dispatch(fetchPocs({ ...resPocs?.data }));
         } catch (err) {
-          console.log(err);
+          // console.log(err);
         }
       } else {
         return;
@@ -153,7 +153,7 @@ export default function Layout({ children }) {
           // console.log(resVouchers);
           // console.log(resPocs)
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;
@@ -172,7 +172,7 @@ export default function Layout({ children }) {
           // console.log(resQueueVouchers);
           // console.log(resPocs)
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;
@@ -210,7 +210,7 @@ export default function Layout({ children }) {
           // console.log(resCollectedVouchers);
           // console.log(resPocs)
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;

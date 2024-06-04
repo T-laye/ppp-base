@@ -147,7 +147,7 @@ export default function Layout({ children }) {
           // console.log(resVouchers);
           // console.log(resPocs)
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;
@@ -166,7 +166,7 @@ export default function Layout({ children }) {
           // console.log(resQueueVouchers);
           // console.log(resPocs)
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;
@@ -185,7 +185,7 @@ export default function Layout({ children }) {
           // console.log(resApprovedVouchers);
           // console.log(resPocs)
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;
@@ -204,7 +204,7 @@ export default function Layout({ children }) {
           // console.log(resCollectedVouchers);
           // console.log(resPocs)
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;

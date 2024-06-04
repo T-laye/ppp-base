@@ -105,7 +105,7 @@ export default function NewCustomer() {
       setIsLoading(false);
       // Handle errors
       toast.error(e.response.data.message);
-      console.log(e);
+      // console.log(e);
     }
   }
 

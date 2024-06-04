@@ -36,7 +36,7 @@ export default function Page() {
         `/api/admin/email?type=${formik.values.email_template}`
       );
 
-      console.log(res);
+      // console.log(res);
     };
 
     getEmail();
@@ -55,9 +55,9 @@ export default function Page() {
         body,
         type: email_template,
       });
-      console.log(values);
+      // console.log(values);
       if (res) {
-        console.log(res);
+        // console.log(res);
         setIsLoading(false);
       }
     } catch (err) {

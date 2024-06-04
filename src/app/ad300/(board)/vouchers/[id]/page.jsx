@@ -36,7 +36,7 @@ export default function Page() {
     setLoading(true);
     try {
       const res = await axios.delete(`/api/admin/voucher/verify/${id}`);
-      console.log(res);
+      // console.log(res);
       if (res.data) {
         setLoading(false);
         // console.log(res.data);
@@ -56,13 +56,13 @@ export default function Page() {
         //   `/api/admin/voucher?product_name=${productName}&verifiedBy=${personnelId}&collected=true&av4D&customer=${search}&take=${take}&pageNumber=${pageNumber}`
         // );
         const res = await axios.get(`/api/admin/voucher/verify/${id}`);
-        console.log(res);
+        // console.log(res);
         if (res.data.data) {
-          console.log(res.data);
+          // console.log(res.data);
           dispatch(getVoucher({ ...res.data.data }));
         }
       } catch (err) {
-        console.error(err);
+        // console.error(err);
       }
     };
 
