@@ -25,16 +25,15 @@ export async function PATCH(req, context) {
         status: 403,
       });
     }
-    const searchParams = req.nextUrl.searchParams;
     const formData = await req.formData();
     const { params } = context;
     const getUserId = params.customerId;
-    const email = searchParams.get("email");
+    const email = formData.get("email");
     const pfp = formData.get("profilePicture");
     const compressedImage = pfp ? await CompressImageHelper(pfp) : undefined;
-    const name = searchParams.get("name");
-    const address = searchParams.get("address");
-    const phoneNumber = searchParams.get("phoneNumber");
+    const name = formData.get("name");
+    const address = formData.get("address");
+    const phoneNumber = formData.get("phoneNumber");
     const addJ = {
       email: email ? email : undefined,
       name: name ? name : undefined,
