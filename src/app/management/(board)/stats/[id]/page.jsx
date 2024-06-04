@@ -33,7 +33,7 @@ export default function Page() {
   const pocs = useSelector((state) => state.pocs);
   const { personnels } = useSelector((state) => state.personnels);
   const { pageNumber, take, pocName } = useSelector((state) => state.variables);
-  // console.log(pocs);
+  // console.log(id);
   // console.log(managementPoc);
 
   const editPOC = () => {
@@ -43,7 +43,7 @@ export default function Page() {
   useEffect(() => {
     const getPocDetails = async () => {
       const res = await axios.get(`/api/poc/${id}`);
-      // console.log(res);
+      console.log(res);
 
       dispatch(getPoc({ ...res.data.data }));
     };

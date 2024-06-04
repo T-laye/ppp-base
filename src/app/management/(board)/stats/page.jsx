@@ -25,7 +25,7 @@ export default function Stats() {
     ?.map((a) => a?.product?.voucherAllocation)
     .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-  // console.log(getAllocation);
+  // console.log(pocs);
 
   useEffect(() => {
     dispatch(handleProductName(""));
@@ -45,9 +45,9 @@ export default function Stats() {
       if (activeTab !== "" && productNames?.includes(activeTab)) {
         return (
           <PocList
-            key={p?.id}
+            key={p?.poc_id}
             name={capitalizeWords(p?.name)}
-            id={p?.id}
+            id={p?.poc_id}
             product={p?.productAllocation}
             // available={p.stockLimit}
             // total={p.stockAvailable}
@@ -56,9 +56,9 @@ export default function Stats() {
       } else if (activeTab === "") {
         return (
           <PocList
-            key={p?.id}
+            key={p?.poc_id}
             name={capitalizeWords(p?.name)}
-            id={p?.id}
+            id={p?.poc_id}
             product={p?.productAllocation}
             // available={p.stockLimit}
             // total={p.stockAvailable}
