@@ -28,7 +28,6 @@ const validationSchema = Yup.object().shape({
     ),
 });
 
-
 export default function Page() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +36,8 @@ export default function Page() {
   const { customer } = useSelector((state) => state.customer);
   const dispatch = useDispatch();
   const [previewImage, setPreviewImage] = useState(null);
+
+  console.log(customer);
 
   useEffect(() => {
     const getCustomerDetails = async () => {
@@ -61,13 +62,10 @@ export default function Page() {
     onSubmit: handleSubmit,
   });
 
-  
   const handleRemovePreview = () => {
     setPreviewImage(null);
   };
 
-
-  
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setFieldValue("image", file);
@@ -89,13 +87,13 @@ export default function Page() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    const { fullName, email, phone } = values;
+    const { fullName, email, phone, image,address } = values;
     setIsLoading(true);
     try {
       const res = await axios.patch(
-        `/api/customer/${id}?email=${email}&name=${fullName}&phoneNumber=${phone}`
+        `/api/customer/${id}?email=${email}&name=${fullName}&phoneNumber=${phone}&profilePicture=${image}&address=${address}`
       );
-      // console.log(res);
+      console.log(res);
       if (res) {
         setIsLoading(true);
         toast.success(res.message);
@@ -103,8 +101,8 @@ export default function Page() {
       }
       // console.log(values);
     } catch (e) {
-      toast.error(e.data.message);
-      // console.log(e);
+      // toast.error(e.data.message);
+      console.log(e);
     }
   }
   const getInputClassNames = (fieldName) =>
