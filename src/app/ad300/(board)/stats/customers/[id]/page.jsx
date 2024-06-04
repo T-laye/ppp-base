@@ -56,9 +56,9 @@ export default function Page() {
       dispatch(fetchCustomers({ ...resCustomers?.data }));
       setIsLoading(false);
       toast.success(res.data.message);
-      // router.back();
+      router.back();
     }
-    console.log(res);
+    // console.log(res);
   };
   // console.log(id);
 
