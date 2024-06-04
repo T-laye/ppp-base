@@ -23,7 +23,7 @@ export default function Header() {
   const router = useRouter();
   const [logoutApiCall] = useLogoutMutation();
   const { worker } = useSelector((state) => state.worker);
-  console.log(worker);
+  // console.log(worker);
 
   const logoutHandler = async () => {
     try {

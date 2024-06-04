@@ -25,5 +25,4 @@ export default function RootLayout({ children }) {
   );
 }
 
-// localStorage: window.localStorage
-// url: window.localStorage.href
+
