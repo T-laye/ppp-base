@@ -62,7 +62,7 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
                 }}
               >
                 <a
-                  href="https://myita.com.ng/ppp-documentation/"
+                  href="https://myita.com.ng/ppp-guidelines/"
                   target="_blank"
                   style={{ color: "#047857;" }}
                 >
