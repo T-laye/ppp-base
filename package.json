@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build-local": "next build",
-    "local": "npx prisma migrate dev --name init && next dev",
+    "build-local": "npm install && next build",
+    "local-dev": "npx prisma generate && next dev",
     "build": "npm install && npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
