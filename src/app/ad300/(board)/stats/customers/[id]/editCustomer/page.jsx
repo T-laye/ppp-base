@@ -38,6 +38,7 @@ export default function Page() {
   const [previewImage, setPreviewImage] = useState(null);
 
   console.log(customer);
+  console.log(isFormValid);
 
   useEffect(() => {
     const getCustomerDetails = async () => {
@@ -58,9 +59,24 @@ export default function Page() {
       image: customer?.image,
     },
     validate: new_customer_validate,
-    validationSchema,
+    // validationSchema,
     onSubmit: handleSubmit,
   });
+
+  useEffect(() => {
+    // Update form values when constraintData changes
+    if (customer?.name) {
+      formik.setValues({
+        fullName: customer?.name || "",
+        email: customer?.email || "",
+        phone: customer?.phoneNumber || "",
+        address: customer?.address || "",
+        image: customer?.image || "",
+      });
+    }
+    setPreviewImage(customer?.image);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customer]);
 
   const handleRemovePreview = () => {
     setPreviewImage(null);
@@ -87,12 +103,22 @@ export default function Page() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    const { fullName, email, phone, image,address } = values;
+    const { fullName, email, phone, image, address } = values;
     setIsLoading(true);
+    // Create FormData object
+    const formData = new FormData();
+
+    // Append all form data fields
+    formData.append("name", fullName);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("address", address);
+    if (image) {
+      formData.append("profilePicture", image);
+    }
+
     try {
-      const res = await axios.patch(
-        `/api/customer/${id}?email=${email}&name=${fullName}&phoneNumber=${phone}&profilePicture=${image}&address=${address}`
-      );
+      const res = await axios.patch(`/api/customer/${id}`, formData);
       console.log(res);
       if (res) {
         setIsLoading(true);
@@ -105,6 +131,8 @@ export default function Page() {
       console.log(e);
     }
   }
+  // console.log(formik?.values?.image);
+
   const getInputClassNames = (fieldName) =>
     `${
       formik.errors[fieldName] && formik.touched[fieldName]
@@ -152,7 +180,7 @@ export default function Page() {
               <div className="h-full  top-0 right-0 left-0 bottom-0 bg-white">
                 {previewImage && (
                   <Image
-                    src={previewImage || customer?.image}
+                    src={previewImage || formik?.values?.image}
                     alt="Preview"
                     className="h-full w-full object-center object-cover rounded-md"
                     width={500}

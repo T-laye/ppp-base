@@ -92,7 +92,11 @@ export default function NewCustomer() {
       // console.log("FormData:", formData);
 
       // Make Axios request
-      const res = await axios.post("/api/customer", formData);
+      const res = await axios.post("/api/customer", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       if (res) {
         setIsLoading(false);
