@@ -22,7 +22,7 @@ export default function Header() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [logoutApiCall] = useLogoutMutation();
-  const { worker } = useSelector((state) => state.worker);
+  const { userInfo } = useSelector((state) => state.auth);
   // console.log(worker);
 
   const logoutHandler = async () => {
@@ -70,10 +70,10 @@ export default function Header() {
           className="cursor-pointer flex items-center justify-center gap-2"
           onClick={handleNav}
         >
-          <p>
+          {/* <p>
             Welcome, {worker?.gender === "MALE" ? "Mr." : "Ma."}{" "}
             {capitalizeWords(getLastWord(worker?.name))}
-          </p>
+          </p> */}
           <IoIosMenu size={28} />
         </div>
         <nav
