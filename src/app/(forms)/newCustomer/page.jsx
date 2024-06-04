@@ -33,10 +33,6 @@ export default function NewCustomer() {
   const [previewImage, setPreviewImage] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
 
-  const handleRemovePreview = () => {
-    setPreviewImage(null);
-  };
-
   const router = useRouter();
 
   const formik = useFormik({
@@ -60,6 +56,7 @@ export default function NewCustomer() {
       const reader = new FileReader();
       reader.onload = () => {
         setPreviewImage(reader.result);
+        formik.setFieldValue("image", file);
       };
       reader.readAsDataURL(file);
     } else {
@@ -81,12 +78,13 @@ export default function NewCustomer() {
     // Append all form data fields
     formData.append("name", fullName);
     formData.append("email", email);
-    formData.append("phoneNumber", phone);
+    formData.append("phone", phone);
     formData.append("address", address);
     if (image) {
       formData.append("profilePicture", image);
     }
 
+    // console.log(values);
     try {
       // Debugging: Log FormData to ensure all data is appended
       // console.log("FormData:", formData);
@@ -100,16 +98,16 @@ export default function NewCustomer() {
 
       if (res) {
         setIsLoading(false);
-        console.log(res);
-        toast.success(res.data.message);
+        // console.log(res);
+        toast.success("Successfully Created");
         router.back();
       }
       // Handle response
     } catch (e) {
       setIsLoading(false);
       // Handle errors
-      toast.error(e.response.data.message);
-      console.log(e);
+      toast.error("Failed to create");
+      // console.log(e);
     }
   }
 
