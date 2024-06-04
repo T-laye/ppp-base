@@ -40,7 +40,7 @@ export default function Password() {
   }, [formik.values, formik.errors, formik.isValid]);
 
   async function handleSubmit(values) {
-    console.log(values);
+    // console.log(values);
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);

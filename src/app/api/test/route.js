@@ -8,12 +8,12 @@ export async function POST(req, res) {
         const formData = await req.formData();
         const pfp = formData.get("profilePicture");
         
-        console.log(pfp)
+        // console.log(pfp)
         const toBase64 = Buffer.from(await pfp.arrayBuffer()).toString('base64');
         const r = await CompressImageHelper(pfp);
         return NextResponse.json({ reduce: r}, { status: 200 })
     } catch (err) {
-        console.log(err)
+        // console.log(err)
         return NextResponse.json(
             { message: err.message, status: 500 },
             { status: 500 }

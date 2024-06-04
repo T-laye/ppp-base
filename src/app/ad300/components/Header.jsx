@@ -32,7 +32,7 @@ export default function Header() {
       router.push("/ad300");
       // console.log("log out");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
   function getLastWord(sentence) {

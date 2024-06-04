@@ -16,12 +16,12 @@ export default function VoucherList({ id, name, index, approved }) {
     try {
       const res = await axios.patch(`/api/admin/voucher/verify/${id}`);
       if (res) {
-        console.log(res);
+        // console.log(res);
         toast.success(res.data.message);
         window.location.reload();
       }
     } catch (err) {
-      console.error(err);
+      // console.error(err);
     }
   };
 

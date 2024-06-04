@@ -43,7 +43,7 @@ export default function Page() {
     try {
       const res = await axios.delete(`/api/product/${productId}`);
 
-      console.log(res)
+      // console.log(res)
       if (res) {
         setIsLoading(false);
         toast.success(res.data.message);
@@ -59,7 +59,7 @@ export default function Page() {
     } catch (err) {
       setIsLoading(false);
       // toast.success(err.data.message);
-      console.log(err);
+      // console.log(err);
     }
   };
 

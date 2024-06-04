@@ -64,7 +64,7 @@ export default function NewProduct() {
     } catch (e) {
        setIsLoading(false);
        toast.error(e.data.message);
-      console.log(e);
+      // console.log(e);
     }
   }
 

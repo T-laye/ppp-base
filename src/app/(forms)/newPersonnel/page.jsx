@@ -65,7 +65,7 @@ export default function NewPersonnel() {
       // console.log(res);
     } catch (e) {
       toast.error(e.data.message);
-      console.log(e);
+      // console.log(e);
     }
   }
 
