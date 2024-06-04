@@ -71,7 +71,7 @@ export default function Header() {
           onClick={handleNav}
         >
           <p>
-            Welcome, {worker?.gender === "MALE" ? "Mr" : "Ma"}{" "}
+            Welcome, {worker?.gender === "MALE" ? "Mr." : "Ma."}{" "}
             {capitalizeWords(getLastWord(worker?.name))}
           </p>
           <IoIosMenu size={28} />
