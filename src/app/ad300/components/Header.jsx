@@ -31,13 +31,13 @@ export default function Header() {
 
   useEffect(() => {
     const getWorkerDetails = async () => {
-      const res = await axios.get(`/api/admin/staff/${userInfo.id}`);
+      const res = await axios.get(`/api/admin/staff/${userInfo?.id}`);
       // console.log(res?.data?.data);
       setUser(res?.data?.data);
     };
 
     getWorkerDetails();
-  }, [userInfo.id]);
+  }, [userInfo?.id]);
 
    useEffect(() => {
      const getGreeting = () => {

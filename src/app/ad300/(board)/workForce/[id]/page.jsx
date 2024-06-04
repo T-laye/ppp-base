@@ -41,8 +41,6 @@ export default function Page() {
     getWorkerDetails();
   }, [dispatch, id]);
 
-  
-
   const handleDeletePersonnel = async () => {
     setIsLoading(true);
     const res = await axios.delete(`/api/admin/staff/${id}`);
@@ -62,14 +60,12 @@ export default function Page() {
     // console.log(edit);
 
     try {
-      const res = await axios.patch(
-        `/api/admin/staff/${id}?edit=${edit}&`
-      );
+      const res = await axios.patch(`/api/admin/staff/${id}?edit=${edit}&`);
       // console.log(res);
       if (res) {
         // setIsLoading(false);
         toast.success(res.data.data.message);
-        window.location.reload()
+        router.back();
       }
     } catch (e) {
       toast.error(e.data.message);

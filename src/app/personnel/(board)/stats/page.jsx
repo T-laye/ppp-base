@@ -19,7 +19,7 @@ export default function Stats() {
     ?.map((a) => a?.voucher?.product.voucherAllocation)
     .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-  // console.log(getAllocation);
+  // console.log(personnelPoc);
   function capitalizeWords(sentence) {
     // Split the sentence into an array of words
     let words = sentence?.split(" ");
@@ -38,14 +38,20 @@ export default function Stats() {
     if (personnelPoc?.length === 0) {
       return <div>No Point of Consumption Assigned</div>;
     } else {
-      return personnelPoc?.map((p, i) => (
-        <PocList
-          key={p.id}
-          id={p.id}
-          name={capitalizeWords(p.name)}
-          product={p?.productAllocation}
-        />
-      ));
+      return personnelPoc?.map((p, i) => {
+        if (p.name) {
+          return (
+            <PocList
+              key={p.id}
+              id={p.id}
+              name={capitalizeWords(p.name)}
+              product={p?.productAllocation}
+            />
+          );
+        } else {
+          return <div key={i}>No Point of Consumption Assigned</div>;
+        }
+      });
     }
   };
 
@@ -76,8 +82,6 @@ export default function Stats() {
         </h4>
         <div>{renderPoc()}</div>
       </div>
-
-      
     </section>
   );
 }
