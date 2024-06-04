@@ -41,7 +41,7 @@ export default function Layout({ children }) {
           // console.log(resProducts);
           dispatch(fetchProducts({ ...resProducts?.data }));
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;
@@ -100,7 +100,7 @@ export default function Layout({ children }) {
           // console.log(resCollectedVouchers);
           // console.log(resPocs)
         } catch (e) {
-          console.log(e);
+          // console.log(e);
         }
       } else {
         return;

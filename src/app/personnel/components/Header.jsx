@@ -34,7 +34,7 @@ export default function Header() {
       router.push("/");
       // console.log("log out");
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 

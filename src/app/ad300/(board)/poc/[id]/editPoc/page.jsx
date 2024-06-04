@@ -62,7 +62,7 @@ export default function Page() {
         p.product.id.trim().includes(formik.values.product)
       );
 
-      console.log(getProduct)
+      // console.log(getProduct)
       formik.setFieldValue(
         "capacity",
         getProduct?.capacity || 0
@@ -89,7 +89,7 @@ export default function Page() {
       const res = await axios.patch(
         `/api/poc/${id}?email=${email}&poc_name=${name}&phoneNumber=${phone}&address=${address}&stockLimit=${limit}&stockAvailable=${available}&productId=${product}&capacity=${capacity}&allocationId=${allocationId}`
       );
-      console.log(res);
+      // console.log(res);
       if (res) {
         setIsLoading(false);
         toast.success(res.data.message);
@@ -100,7 +100,7 @@ export default function Page() {
     } catch (e) {
       setIsLoading(false);
       // toast.error(e.data.message);
-      console.log(e);
+      // console.log(e);
     }
   }
 

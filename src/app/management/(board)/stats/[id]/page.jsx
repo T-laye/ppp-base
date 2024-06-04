@@ -91,7 +91,7 @@ export default function Page() {
     setIsLoading(true);
     try {
       const res = await axios.delete(`/api/poc/${id}`);
-      console.log(res);
+      // console.log(res);
       if (res) {
         const resPocs = await axios.get(
           `/api/poc?take=${take}&pageNumber=${pageNumber}&name=${pocName}`
@@ -104,7 +104,7 @@ export default function Page() {
     } catch (e) {
       // toast.success(res.data.message);
       setIsLoading(false);
-      console.log(e);
+      // console.log(e);
     }
     // console.log(res);
   };

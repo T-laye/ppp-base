@@ -34,7 +34,7 @@ export default function Page() {
   useEffect(() => {
     const getWorkerDetails = async () => {
       const res = await axios.get(`/api/admin/staff/${id}`);
-      console.log(res);
+      // console.log(res);
       dispatch(getWorker({ ...res.data.data }));
     };
 
@@ -53,7 +53,7 @@ export default function Page() {
       toast.success(res.data.message);
       router.back();
     }
-    console.log(res);
+    // console.log(res);
   };
 
   async function handleCanEdit(edit) {
@@ -63,7 +63,7 @@ export default function Page() {
       const res = await axios.patch(
         `/api/admin/staff/${id}?edit=${edit}&`
       );
-      console.log(res);
+      // console.log(res);
       if (res) {
         // setIsLoading(false);
         toast.success(res.data.data.message);

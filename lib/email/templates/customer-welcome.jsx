@@ -20,7 +20,7 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
       <Body style={main}>
         <Container style={container}>
           <img
-            src={`https://ppp-base.vercel.app/_next/image?url=%2Fimages%2Flogo-removebg.png&w=256&q=75`}
+            src={`http://ppp.com.ng/_next/image?url=%2Fimages%2Flogo-removebg.png&w=256&q=75`}
             width="50"
             height="50"
             alt="ppp-base logo"
@@ -70,14 +70,14 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
                 </a>
               </h2>
             </span>
-            <br/>
+            <br />
             To verify your member account in the PPP system, click below
           </Text>
           <br />
           <Section style={btnContainer}>
             <Button
               style={button}
-              href={`https://ppp-base.vercel.app/verification/${token}`}
+              href={`https://ppp.com.ng/verification/${token}`}
             >
               VERIFY YOUR PROFILE
             </Button>
@@ -93,7 +93,7 @@ const CustomerWelcomeEmail = ({ firstName, token }) => {
             Petroleum Personnel Privilege (PPP) <br />
             MYITA FARMER MPCS, Delta State, Nigeria
           </Text>
-          <br/>
+          <br />
           <Hr style={hr} />
           <Text style={footer}>
             MYITA Farmers Multipurpose Cooperative Society Limited This message

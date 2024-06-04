@@ -3,7 +3,6 @@ import ApiResponseDto from "../../../../lib/apiResponseHelper";
 import { prisma } from "../../../../config/prisma.connect";
 import { getAuthUser } from "../../../../lib/get-auth-user";
 
-
 export async function POST(req, res) {
   try {
     const authResponse = await getAuthUser(req, true);
@@ -22,12 +21,7 @@ export async function POST(req, res) {
       });
     }
     const body = await req.json();
-    const {
-      poc_name,
-      phoneNumber,
-      address,
-      email,
-    } = body;
+    const { poc_name, phoneNumber, address, email } = body;
     const createPOC = await prisma.pointOfConsumption.create({
       data: {
         address: address.toLowerCase(),
@@ -98,7 +92,7 @@ export async function GET(req, res) {
     const totalCount = await prisma.pointOfConsumption.count();
     const totalPages = Math.ceil(totalCount / take);
     const offset = (pageNumber - 1) * take;
-    if (offset >= totalCount) {
+    if (totalCount > 0 && offset >= totalCount) {
       return NextResponse.json(
         {
           message:
@@ -117,19 +111,19 @@ export async function GET(req, res) {
         user: true,
         management: {
           include: {
-            user: true
-          }
+            user: true,
+          },
         },
         personnel: {
           include: {
-            user: true
-          }
+            user: true,
+          },
         },
         productAllocation: {
           include: {
             product: true,
-          }
-        }
+          },
+        },
       },
       take: take,
       skip: offset,
