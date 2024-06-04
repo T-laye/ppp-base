@@ -1,7 +1,7 @@
 "use client";
 import Logo from "@/components/Logo";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsCardList, BsPersonFillGear } from "react-icons/bs";
 import { FaListAlt } from "react-icons/fa";
 import { BsPersonPlus } from "react-icons/bs";
@@ -16,6 +16,7 @@ import { useLogoutMutation } from "@/redux/slices/usersApiSlice";
 import { logout } from "../../../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function Header() {
   const [openNav, setOpenNav] = useState(false);
@@ -23,7 +24,37 @@ export default function Header() {
   const router = useRouter();
   const [logoutApiCall] = useLogoutMutation();
   const { userInfo } = useSelector((state) => state.auth);
-  // console.log(worker);
+  const [user, setUser] = useState({});
+  const [greeting, setGreeting] = useState("");
+
+  // console.log(userInfo);
+
+  useEffect(() => {
+    const getWorkerDetails = async () => {
+      const res = await axios.get(`/api/admin/staff/${userInfo.id}`);
+      // console.log(res?.data?.data);
+      setUser(res?.data?.data);
+    };
+
+    getWorkerDetails();
+  }, [userInfo.id]);
+
+   useEffect(() => {
+     const getGreeting = () => {
+       const now = new Date();
+       const hours = now.getHours();
+
+       if (hours < 12) {
+         return "Good morning!";
+       } else if (hours < 18) {
+         return "Good afternoon!";
+       } else {
+         return "Good evening!";
+       }
+     };
+
+     setGreeting(getGreeting());
+   }, []); 
 
   const logoutHandler = async () => {
     try {
@@ -39,7 +70,7 @@ export default function Header() {
     // if (typeof sentence !== "string") {
     //   throw new Error("Input must be a string");
     // }
-    if (worker?.name) {
+    if (user?.name) {
       const words = sentence?.trim().split(/\s+/);
       return words[words?.length - 1];
     }
@@ -70,10 +101,11 @@ export default function Header() {
           className="cursor-pointer flex items-center justify-center gap-2"
           onClick={handleNav}
         >
-          {/* <p>
-            Welcome, {worker?.gender === "MALE" ? "Mr." : "Ma."}{" "}
-            {capitalizeWords(getLastWord(worker?.name))}
-          </p> */}
+          {user?.gender && <p>
+            <span className="text-xl">👋</span> {greeting}{' '}
+            {user?.gender === "MALE" ? "Mr." : "Ma."}{" "}
+            {capitalizeWords(getLastWord(user?.name))}
+          </p>}
           <IoIosMenu size={28} />
         </div>
         <nav

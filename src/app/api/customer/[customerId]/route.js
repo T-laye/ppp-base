@@ -189,9 +189,9 @@ export async function DELETE(req, context) {
         id: getUserId,
       },
       include: {
-        poc: true,
-        user: true,
-        voucher: true,
+        // poc: true,
+        // user: true,
+        // voucher: true,
       },
     });
     if (!getCustomer) {
@@ -205,12 +205,12 @@ export async function DELETE(req, context) {
     }
     await prisma.customer.delete({
       where: {
-        id: getUserId,
+        id: getCustomer.id,
       },
-      include: {
-        poc: true,
-        voucher: true,
-      },
+      // include: {
+      //   poc: true,
+      //   voucher: true,
+      // },
     });
     return NextResponse.json(
       ApiResponseDto({

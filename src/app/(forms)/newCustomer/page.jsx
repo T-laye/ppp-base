@@ -81,7 +81,7 @@ export default function NewCustomer() {
     // Append all form data fields
     formData.append("name", fullName);
     formData.append("email", email);
-    formData.append("phone", phone);
+    formData.append("phoneNumber", phone);
     formData.append("address", address);
     if (image) {
       formData.append("profilePicture", image);
@@ -100,7 +100,7 @@ export default function NewCustomer() {
 
       if (res) {
         setIsLoading(false);
-        // console.log(res);
+        console.log(res);
         toast.success(res.data.message);
         router.back();
       }
@@ -109,7 +109,7 @@ export default function NewCustomer() {
       setIsLoading(false);
       // Handle errors
       toast.error(e.response.data.message);
-      // console.log(e);
+      console.log(e);
     }
   }
 

@@ -41,6 +41,8 @@ export default function Page() {
     getWorkerDetails();
   }, [dispatch, id]);
 
+  
+
   const handleDeletePersonnel = async () => {
     setIsLoading(true);
     const res = await axios.delete(`/api/admin/staff/${id}`);

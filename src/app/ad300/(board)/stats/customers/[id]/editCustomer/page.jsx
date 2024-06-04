@@ -37,8 +37,8 @@ export default function Page() {
   const dispatch = useDispatch();
   const [previewImage, setPreviewImage] = useState(null);
 
-  console.log(customer);
-  console.log(isFormValid);
+  // console.log(customer);
+  // console.log(isFormValid);
 
   useEffect(() => {
     const getCustomerDetails = async () => {
@@ -71,7 +71,7 @@ export default function Page() {
         email: customer?.email || "",
         phone: customer?.phoneNumber || "",
         address: customer?.address || "",
-        image: customer?.image || "",
+        // image: customer?.image || "",
       });
     }
     setPreviewImage(customer?.image);
@@ -119,7 +119,7 @@ export default function Page() {
 
     try {
       const res = await axios.patch(`/api/customer/${id}`, formData);
-      console.log(res);
+      // console.log(res);
       if (res) {
         setIsLoading(true);
         toast.success(res.message);
