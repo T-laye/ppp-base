@@ -182,7 +182,7 @@ export async function POST(req, res) {
       });
     }
     const body = await req.json();
-    const { customerId, productId } = body;
+    const { customerId, productId, note } = body;
     const getCustomer = await prisma.customer.findUnique({
       where: {
         id: customerId,
@@ -234,6 +234,7 @@ export async function POST(req, res) {
           },
           is4FirstTime: check ? false : true,
           is3FirstTime: check ? false : true,
+          note: note
         },
         include: {
           customer: true,
