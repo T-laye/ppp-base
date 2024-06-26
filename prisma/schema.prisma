@@ -176,6 +176,7 @@ model Voucher {
   userId               String
   availableForDispense Boolean          @default(false)
   approvedByAdmin      Boolean          @default(false)
+  note String?
 
   @@index([id, voucherCode, is3FirstTime, is4FirstTime])
 }

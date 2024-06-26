@@ -127,6 +127,7 @@ function mapFindVData(data) {
     createdById: data.userId,
     availableForDispense: data.availableForDispense,
     approvedByAdmin: data.approvedByAdmin,
+    note: data.note,
     customer: {
       id: data?.customer?.id,
       name: data.customer.name,
