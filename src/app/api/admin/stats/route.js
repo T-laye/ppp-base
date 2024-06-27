@@ -37,6 +37,7 @@ export async function GET(req, res) {
       where: {
         approvedByAdmin: true,
         availableForDispense: true,
+        collected: false
       },
     });
     const usedVouchers = await prisma.voucherDispense.count();
