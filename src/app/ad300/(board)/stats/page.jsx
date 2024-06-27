@@ -28,7 +28,7 @@ export default function Stats() {
     ?.map((a) => a?.product?.voucherAllocation)
     .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-  // console.log(getAllocation);
+  console.log(collectedVouchers);
 
   const available = productDetails
     ?.map((p) => p.stockAvailable)

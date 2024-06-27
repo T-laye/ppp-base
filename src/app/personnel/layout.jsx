@@ -90,7 +90,7 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     (async () => {
-      if (isAuth) {
+      if (isAuth) { 
         try {
           const resCollectedVouchers = await axios.get(
             `/api/admin/voucher/personnel?customer=${search}&product_name=${productName}&date=${date}`
