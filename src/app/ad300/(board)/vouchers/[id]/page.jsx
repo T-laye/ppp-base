@@ -3,7 +3,7 @@ import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
 import React, { useEffect, useState } from "react";
 import { ImDroplet } from "react-icons/im";
-import { MdAssignmentTurnedIn } from "react-icons/md";
+import { MdAssignmentTurnedIn, MdNoteAlt } from "react-icons/md";
 import { TbRulerMeasure } from "react-icons/tb";
 import { PiBatteryVerticalFullFill } from "react-icons/pi";
 import { PiDropHalfBottomFill } from "react-icons/pi";
@@ -152,6 +152,12 @@ export default function Page() {
                 icon={<ImDroplet size={16} />}
               />
               <DetailList
+                title="Note"
+                value={voucher?.note}
+                // value={voucher?.createdAt}
+                icon={<MdNoteAlt size={16} />}
+              />
+              <DetailList
                 title="Created At"
                 value={formatDate(voucher?.createdDate)}
                 // value={voucher?.createdAt}
@@ -170,7 +176,7 @@ export default function Page() {
               {/* <button className="btn bg-primary w-full mt-5">
                 Approve Voucher
               </button> */}
-              
+
               <button
                 onClick={deleteVoucher}
                 className={`btn w-full mt-5 flex justify-center items-center text-lg text-white font-medium duration-200 rounded-xl ${
@@ -178,7 +184,6 @@ export default function Page() {
                 } `}
                 disabled={loading}
               >
-                
                 {loading ? <Loader /> : "Delete Voucher"}
               </button>
             </div>

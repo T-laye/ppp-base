@@ -44,6 +44,7 @@ export default function NewVoucher() {
       phone: customer?.phoneNumber,
       address: customer?.address,
       product: "",
+      note: "",
       // third_party: "",
     },
     validate: new_voucher_validate,
@@ -61,10 +62,11 @@ export default function NewVoucher() {
       const res = await axios.post(`/api/admin/voucher/`, {
         customerId: newVoucher,
         productId: values.product,
+        note: values.note,
       });
 
+      // console.log(res);
       if (res) {
-        // console.log(res);
         setIsLoading(false);
         toast.success("Successful");
         router.back();
@@ -212,6 +214,26 @@ export default function NewVoucher() {
                   )}
                 </div>
 
+                <div className="flex flex-col mb-4">
+                  <label className="text-sm mb-2" htmlFor="note">
+                    Note
+                  </label>
+                  <input
+                    maxLength={10}
+                    minLength={2}
+                    id="note"
+                    name="note"
+                    type="text"
+                    placeholder="Enter note"
+                    className={getInputClassNames("note")}
+                    {...formik.getFieldProps("note")}
+                  />
+                  {formik.touched.note && formik.errors.note && (
+                    <div className="text-error text-sm">
+                      {formik.errors.note}
+                    </div>
+                  )}
+                </div>
                 {/* <div className="flex items-center mt-6 ">
                   <div>
                     <input

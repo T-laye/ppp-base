@@ -31,6 +31,8 @@ export default function Vouchers() {
     ? approvedVouchers.totalPages
     : queuedVouchers.totalPages;
 
+  // console.log(voucherList);
+
   useEffect(() => {
     const activeProduct = products?.data?.find((p, i) => i === activeTab);
     setActiveTabProduct(activeProduct?.name?.toLowerCase());
@@ -133,6 +135,7 @@ export default function Vouchers() {
             index={i}
             approved={approved}
             term={term}
+            note={c?.note}
           />
         ));
     } else {
@@ -145,6 +148,7 @@ export default function Vouchers() {
         .reverse()
         .map((c, i) => (
           <VoucherList
+            note={c?.note}
             approved={approved}
             key={i}
             name={capitalizeWords(c.customer?.name)}

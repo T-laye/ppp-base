@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useEffect } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import QuantityCards from "../../components/QuantityCards";
 import StatsCard from "../../components/StatsCard";
 import { GiGasPump } from "react-icons/gi";
@@ -12,8 +12,10 @@ import Loading from "@/components/Loading";
 import { BsPersonFillGear } from "react-icons/bs";
 import { handleProductName } from "@/redux/slices/variableSlice";
 import { PiDropFill } from "react-icons/pi";
+import axios from "axios";
 
 export default function Stats() {
+  const [stats, setStats] = useState({});
   const dispatch = useDispatch();
   const { customers } = useSelector((state) => state.customers);
   const { products } = useSelector((state) => state.products);
@@ -24,11 +26,14 @@ export default function Stats() {
   );
   const { data, count } = products;
   const productDetails = pocs?.data?.map((p) => p.productAllocation).flat();
-  const getAllocation = collectedVouchers?.data
-    ?.map((a) => a?.product?.voucherAllocation)
+  // const getAllocation = collectedVouchers?.data
+  //   ?.map((a) => a?.product?.voucherAllocation)
+  //   .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const getAllocation = stats?.totalDispensedVouchers
+    ?.map((a) => a?.totalDispensedVouchers)
     .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
 
-  console.log(collectedVouchers);
+  // console.log(getAllocation);
 
   const available = productDetails
     ?.map((p) => p.stockAvailable)
@@ -77,6 +82,20 @@ export default function Stats() {
   };
   // }
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const stats = await axios.get(`/api/admin/stats`);
+        // console.log(stats?.data?.data);
+        setStats(stats?.data?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+
+  console.log(stats);
+
   return (
     <section className="pt-4 pb-20 bg-red-40 min-h-screen">
       <div>
@@ -88,20 +107,20 @@ export default function Stats() {
           <StatsCard
             link="/ad300/stats/customers"
             color="bg-error"
-            number={customers?.count ?? 0}
+            number={stats?.totalCustomers ?? 0}
             title="Customers"
             icon={<FaUsers size={26} />}
           />
           <StatsCard
             link="/ad300/poc"
-            number={pocs.count ?? 0}
+            number={stats?.totalPoc ?? 0}
             color="bg-blue-400"
             title="POC"
             icon={<GiGasPump size={24} />}
           />
           <StatsCard
             link="/ad300/workForce"
-            number={personnels?.count ?? 0}
+            number={stats?.totalWorkforce ?? 0}
             color="bg-blue-900"
             title="Work Force"
             icon={<BsPersonFillGear size={24} />}
@@ -115,21 +134,20 @@ export default function Stats() {
           <StatsCard
             link="/ad300/vouchers"
             color="bg-yellow-500"
-            number={queuedVouchers?.count ?? 0}
+            number={stats?.totalVQueue ?? 0}
             title="Queue"
             icon={<IoMdTimer size={24} />}
           />
           <StatsCard
             link="/ad300/vouchers"
-            number={approvedVouchers?.count ?? 0}
+            number={stats?.totalApprovedV ?? 0}
             color="bg-green-500"
             title="Approved"
             icon={<IoCheckmarkDoneCircle size={24} />}
           />
-
           <StatsCard
             link="/ad300/stats/usedVoucher"
-            number={collectedVouchers?.count ?? 0}
+            number={stats?.usedV ?? 0}
             color="bg-customGray"
             title="Used Vouchers"
             icon={<MdVerifiedUser size={24} />}

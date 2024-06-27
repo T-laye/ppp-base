@@ -3,7 +3,7 @@ import DetailList from "@/components/DetailList";
 import GoBack from "@/components/GoBack";
 import React, { useEffect } from "react";
 import { ImDroplet } from "react-icons/im";
-import { MdAssignmentTurnedIn } from "react-icons/md";
+import { MdAssignmentTurnedIn, MdNoteAlt } from "react-icons/md";
 import { TbRulerMeasure } from "react-icons/tb";
 import { PiBatteryVerticalFullFill } from "react-icons/pi";
 import { PiDropHalfBottomFill } from "react-icons/pi";
@@ -108,6 +108,12 @@ export default function Page() {
                 title="Voucher Name"
                 value={capitalizeWords(voucher?.customer?.name)}
                 icon={<FaUser size={16} />}
+              />
+              <DetailList
+                title="Note"
+                value={voucher?.note}
+                // value={voucher?.createdAt}
+                icon={<MdNoteAlt size={16} />}
               />
               <DetailList
                 title="Voucher Number"
